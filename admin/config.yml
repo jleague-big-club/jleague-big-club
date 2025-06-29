@@ -1,6 +1,8 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: jleague-big-club/jleague-big-club
   branch: main
+  client_id: "Ov23liBdFV2nnGCvZYNT"  # ← あなたのGitHub OAuth AppのClient ID
 media_folder: "img"
 public_folder: "/img"
 collections:
