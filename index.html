@@ -581,12 +581,10 @@ Jリーグ各クラブがどれだけ「ビッグクラブ」に近づいてい�
 
 <!-- ★★★ ここまで ★★★ -->
     <div id="blog" class="page-section">
-      <ul class="blog-list">
-        <li><a href="https://note.com/あなたのnote記事URL" target="_blank" rel="noopener">Jリーグビッグクラブを「数値」で分解してみた【note記事例】</a></li>
-        <li><a href="#">観客動員数の経年変化（準備中）</a></li>
-        <li><a href="#">コラム：Jリーグ観戦の楽しみ方（準備中）</a></li>
-      </ul>
-    </div>
+  <ul class="blog-list" id="blog-list"></ul>
+  <div id="blog-content" style="max-width:700px;margin:32px auto 0 auto;display:none;background:#fff3;color:#222;padding:30px 22px 25px 22px;border-radius:12px;"></div>
+</div>
+
   </main>
 <!-- スコア計算方法ボタン＆ポップアップ -->
 <button id="score-method-btn"
@@ -1195,10 +1193,10 @@ function setFormation(form, btn) {
 }
   // ▼これを追加
   const formationLabels = { "343": "3-4-3", "433": "4-3-3" };
-  const formationTitle = document.getElementById("formation-title");
-  if (formationTitle) {
-    formationTitle.textContent = "フォーメーション：" + (formationLabels[form] || form);
-  }
+const formationTitle = document.getElementById("formation-title");
+if (formationTitle) {
+  formationTitle.textContent = "フォーメーション：" + (formationLabels[best11Formation] || best11Formation);
+}
 
 
 function choosePlayer(posKey, name) {
@@ -1401,7 +1399,45 @@ document.addEventListener("click", function(e){
     board.style.display = "none";
   }
 });
+<!-- marked.js（CDN）を読み込み -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  // 記事一覧読み込み
+  fetch("posts/index.json")
+    .then(res => res.json())
+    .then(posts => {
+      const ul = document.getElementById("blog-list");
+      ul.innerHTML = "";
+      posts.sort((a,b)=>b.date.localeCompare(a.date)); // 新しい順
+      posts.forEach(post => {
+        const li = document.createElement("li");
+        li.innerHTML = `<a href="#" data-slug="${post.slug}">${post.title} <span style="font-size:0.92em;color:#aac;">(${post.date})</span></a>`;
+        li.querySelector("a").onclick = function(e){
+          e.preventDefault();
+          showBlogContent(post.slug, post.title);
+        };
+        ul.appendChild(li);
+      });
+    });
 
+  window.showBlogContent = function(slug, title){
+    // .md取得→HTML変換
+    fetch(`posts/${slug}.md`)
+      .then(res => res.text())
+      .then(md => {
+        // YAML frontmatter除去
+        md = md.replace(/^---[\s\S]*?---/,'').trim();
+        const html = marked.parse(md);
+        const div = document.getElementById("blog-content");
+        div.innerHTML = `<h2 style="margin-bottom:0.8em;">${title}</h2>`+html+`<div style="margin-top:2em;"><a href="#" onclick="this.closest('#blog-content').style.display='none';return false;" style="color:#299ad3;text-decoration:underline;">一覧に戻る</a></div>`;
+        div.style.display = "block";
+        // スクロール
+        div.scrollIntoView({behavior:"smooth"});
+      });
+  };
+});
+</script>
 
 </script>
 
