@@ -425,22 +425,149 @@
         width: 95%;
     }
 }
+/* =============================================== */
+/* === ハンバーガーメニュー用のスタイル === */
+/* =============================================== */
+.hamburger-btn {
+  display: none; /* PCでは非表示 */
+  flex-direction: column;
+  justify-content: space-around;
+  width: 2rem;
+  height: 2rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1001; /* メニューより手前に */
+}
+
+.hamburger-btn span {
+  width: 2rem;
+  height: 0.25rem;
+  background: #fff;
+  border-radius: 10px;
+  transition: all 0.3s linear;
+  position: relative;
+  transform-origin: 1px;
+}
+
+
+/* =============================================== */
+/* === スマートフォン向けレスポンシブ対応CSS === */
+/* =============================================== */
+@media (max-width: 768px) {
+
+    /* --- 全体・基本スタイル --- */
+    body {
+        font-size: 15px; /* 基本の文字サイズを少し大きく */
+    }
+    main {
+        padding: 0 4vw 80px 4vw; /* 左右の余白を調整 */
+    }
+    .page-title-row h1 {
+        font-size: 1.6rem; /* ページタイトルをスマホ向けに調整 */
+    }
+    table {
+        font-size: 13px; /* テーブル内の文字を調整 */
+    }
+    
+    /* --- ハンバーガーメニューの表示とスタイル --- */
+    nav {
+        justify-content: space-between; /* ロゴとメニューボタンを両端に */
+        align-items: center;
+        padding: 10px 20px;
+        position: relative;
+    }
+    .hamburger-btn {
+        display: flex; /* スマホで表示 */
+    }
+
+    /* --- ナビゲーションリンクのスタイル --- */
+    .nav-links {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: #232947;
+        position: fixed; /* 画面に固定 */
+        top: 0;
+        right: 0;
+        height: 100vh;
+        width: 70%;
+        max-width: 250px;
+        transform: translateX(100%); /* 初期状態では画面外に隠す */
+        transition: transform 0.3s ease-in-out;
+        padding-top: 4rem;
+        z-index: 1000;
+    }
+    .nav-links.open {
+        transform: translateX(0); /* openクラスが付いたら表示 */
+    }
+    .nav-links button {
+        width: 80%;
+        text-align: center;
+        margin-bottom: 15px;
+        font-size: 1.1rem;
+    }
+    .nav-dropdown {
+        width: 80%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .nav-dropdown-content {
+        position: static; /* dropdownの位置を調整 */
+        display: block;
+        background: none;
+        box-shadow: none;
+        border: none;
+        width: 100%;
+        margin-top: 5px;
+    }
+
+    /* --- ビッグクラブ指数ページ --- */
+    .big5-row {
+        flex-direction: column; /* 縦並びに変更 */
+        gap: 12px;
+        width: 100%;
+    }
+    .club-card {
+        width: 90%;
+        margin: 0 auto;
+    }
+
+    /* --- スコア計算方法ボタン --- */
+    #score-method-btn {
+        padding: 9px 18px;
+        font-size: 1rem;
+    }
+}
   </style>
 </head>
 <body>
 <main>
-  <nav>
-    <button onclick="showPage('top', this)" class="active">ビッグクラブ指数</button>
-    <button onclick="showPage('metrics', this)">クラブ指標</button>
-    <button onclick="showPage('history', this)">過去10年順位</button>
-    <button onclick="showPage('introduce', this)">各クラブ紹介</button>
-    <span class="nav-dropdown">
-      <button onclick="showPage('europe', this)" id="nav-europe-btn">5大リーグ日本人選手</button>
-      <span class="nav-dropdown-content">
-        <button onclick="event.stopPropagation();showPage('best11',this);">ベスト11を作る</button>
+    <nav>
+    <!-- ハンバーガーメニュー用のボタン（スマホでのみ表示） -->
+    <button id="hamburger-btn" class="hamburger-btn">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    
+    <!-- ナビゲーションリンクのコンテナ -->
+    <div id="nav-links" class="nav-links">
+      <button onclick="showPage('top', this)" class="active">ビッグクラブ指数</button>
+      <button onclick="showPage('metrics', this)">クラブ指標</button>
+      <button onclick="showPage('history', this)">過去10年順位</button>
+      <button onclick="showPage('introduce', this)">各クラブ紹介</button>
+      <span class="nav-dropdown">
+        <button onclick="showPage('europe', this)" id="nav-europe-btn">5大リーグ日本人選手</button>
+        <span class="nav-dropdown-content">
+          <button onclick="event.stopPropagation();showPage('best11',this);">ベスト11を作る</button>
+        </span>
       </span>
-    </span>
-    <button onclick="showPage('blog', this)">記事</button>
+      <button onclick="showPage('blog', this)">記事</button>
+    </div>
   </nav>
 
   <div id="page-title-top" class="page-title-row" style="display:flex;">
@@ -595,7 +722,7 @@
     let europePlayers = [];
     let metricChart;
 
-    // === ページ切り替え ===
+        // === ページ切り替え ===
     function showPage(id, btn) {
         document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('visible'));
         document.getElementById(id).classList.add('visible');
@@ -612,13 +739,25 @@
             }
         }
         
-        // ▼▼▼ 「5大リーグ」ページ表示時の初期化処理を追加 ▼▼▼
+        // ▼▼▼ ここから修正 ▼▼▼
+        const scoreBtn = document.getElementById('score-method-btn');
+        const scorePop = document.getElementById('score-method-pop');
+        const detailPop = document.getElementById('score-detail-pop');
+        
+        // 'top'ページの場合のみスコア計算ボタンを表示する
+        if (id === 'top') {
+            if (scoreBtn) scoreBtn.style.display = 'block';
+        } else {
+            // 他のページではボタンと関連ポップアップを非表示にする
+            if (scoreBtn) scoreBtn.style.display = 'none';
+            if (scorePop) scorePop.style.display = 'none';
+            if (detailPop) detailPop.style.display = 'none';
+        }
+        // ▲▲▲ ここまで修正 ▲▲▲
+        
         if (id === 'europe' && europePlayers.length > 0) {
             showPlayerTable(); // 引数なしで呼び出し、全選手を表示
         }
-        // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
-        
-        if(window.updateScoreBtnDisplay) window.updateScoreBtnDisplay();
         
         if (id === 'introduce' && clubLeagueList.length > 0) {
             const activeBtn = document.querySelector('.league-tab-btn.active');
@@ -860,8 +999,8 @@
         "433": [{key:"GK",label:"GK"},{key:"CB1",label:"CB1"},{key:"CB2",label:"CB2"},{key:"CB3",label:"CB3"},{key:"CB4",label:"CB4"},{key:"MF1",label:"MF1"},{key:"MF2",label:"MF2"},{key:"MF3",label:"CM3"},{key:"MF4",label:"MF4"},{key:"MF5",label:"MF5"},{key:"FW",label:"FW"}]
     };
     const best11PosCoords = {
-        "343":{GK:{top:290,left:140},CB1:{top:225,left:50},CB2:{top:235,left:140},CB3:{top:225,left:230},MF1:{top:120,left:40},MF2:{top:120,left:240},MF3:{top:165,left:90},MF4:{top:165,left:190},MF5:{top:60,left:70},FW:{top:25,left:140},MF6:{top:60,left:210}},
-        "433":{GK:{top:290,left:140},CB1:{top:200,left:38},CB2:{top:235,left:100},CB3:{top:235,left:190},CB4:{top:200,left:240},MF1:{top:130,left:55},MF2:{top:155,left:140},MF3:{top:130,left:225},MF4:{top:70,left:70},FW:{top:25,left:140},MF5:{top:70,left:210}}
+        "343":{GK:{top:290,left:140},CB1:{top:225,left:50},CB2:{top:235,left:140},CB3:{top:225,left:230},MF3:{top:120,left:40},MF4:{top:120,left:240},MF1:{top:165,left:90},MF2:{top:165,left:190},MF5:{top:60,left:70},FW:{top:25,left:140},MF6:{top:60,left:210}},
+        "433":{GK:{top:290,left:140},CB1:{top:200,left:38},CB2:{top:235,left:100},CB3:{top:235,left:190},CB4:{top:200,left:240},MF2:{top:130,left:55},MF1:{top:155,left:140},MF3:{top:130,left:225},MF4:{top:70,left:70},FW:{top:25,left:140},MF5:{top:70,left:210}}
     };
     function initBest11Page() { renderPositionTabs(); renderBest11Table(); renderCourtPlayers(); }
     window.setFormation = function(form, btn) {
@@ -1059,6 +1198,114 @@
             });
     }
     window.showBlogList = function() { renderArticleList(currentPage); }
+// ▼▼▼ showPage関数をこちらに置き換えてください ▼▼▼
+function showPage(id, btn) {
+    document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('visible'));
+    document.getElementById(id).classList.add('visible');
+
+    document.querySelectorAll('.page-title-row').forEach(row => row.style.display = 'none');
+    const pageTitleDiv = document.getElementById('page-title-' + id);
+    if (pageTitleDiv) pageTitleDiv.style.display = 'flex';
+
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    if (btn) {
+        btn.classList.add('active');
+        if(btn.closest('.nav-dropdown')) {
+            btn.closest('.nav-dropdown').querySelector('button').classList.add('active');
+        }
+    }
+    
+    // --- スコア計算ボタンの表示制御 ---
+    const scoreBtn = document.getElementById('score-method-btn');
+    const scorePop = document.getElementById('score-method-pop');
+    const detailPop = document.getElementById('score-detail-pop');
+    if (id === 'top') {
+        if (scoreBtn) scoreBtn.style.display = 'block';
+    } else {
+        if (scoreBtn) scoreBtn.style.display = 'none';
+        if (scorePop) scorePop.style.display = 'none';
+        if (detailPop) detailPop.style.display = 'none';
+    }
+    
+    // --- ページ切り替え時にスマホメニューを閉じる ---
+    const navLinks = document.getElementById('nav-links');
+    if (navLinks.classList.contains('open')) {
+        navLinks.classList.remove('open');
+    }
+
+    // --- 各ページの初期化処理 ---
+    if (id === 'europe' && europePlayers.length > 0) {
+        showPlayerTable();
+    }
+    if (id === 'introduce' && clubLeagueList.length > 0) {
+        const activeBtn = document.querySelector('.league-tab-btn.active');
+        renderClubLeagueTable(activeBtn ? activeBtn.dataset.league : "J1");
+    }
+}
+
+
+// ▼▼▼ setupEventListeners関数をこちらに置き換えてください ▼▼▼
+function setupEventListeners() {
+    // --- ハンバーガーメニューのクリックイベント ---
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const navLinks = document.getElementById('nav-links');
+    hamburgerBtn.addEventListener('click', () => {
+        navLinks.classList.toggle('open');
+    });
+
+    // --- 国別ボタンのイベント ---
+    document.querySelectorAll(".country-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            document.querySelectorAll(".country-btn").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            showPlayerTable(btn.dataset.country);
+        });
+    });
+
+    // --- リーグタブのイベント ---
+    document.querySelectorAll(".league-tab-btn").forEach(btn => {
+        btn.addEventListener("click", function() {
+            document.querySelectorAll(".league-tab-btn").forEach(b => b.classList.remove("active"));
+            this.classList.add("active");
+            renderClubLeagueTable(this.dataset.league);
+        });
+    });
+
+    // --- ベスト11関連のイベント ---
+    document.querySelector('.nav-dropdown-content button[onclick*="best11"]').addEventListener("click", () => setTimeout(initBest11Page, 50));
+    document.getElementById("copy-best11-img-btn").onclick = function() {
+        const captureElem = document.getElementById('best11-capture-area');
+        const btn = this;
+        const selectedLabel = captureElem.querySelector('.best11-player-label.selected');
+        if (selectedLabel) { selectedLabel.classList.remove('selected'); }
+        btn.style.visibility = 'hidden';
+        html2canvas(captureElem, { backgroundColor: null, scale: 2, useCORS: true }).then(canvas => {
+            btn.style.visibility = 'visible';
+            if (selectedLabel) { selectedLabel.classList.add('selected'); }
+            canvas.toBlob(blob => {
+                navigator.clipboard.write([new ClipboardItem({ "image/png": blob })])
+                    .then(() => document.getElementById('copy-best11-img-msg').textContent = 'コピーしました！')
+                    .catch(() => document.getElementById('copy-best11-img-msg').textContent = 'コピー失敗');
+            });
+        });
+    };
+
+    // --- スコア計算方法ポップアップのイベント ---
+    const scoreBtn = document.getElementById("score-method-btn");
+    const scorePop = document.getElementById("score-method-pop");
+    const detailLink = document.getElementById("score-detail-link");
+    const detailPop = document.getElementById("score-detail-pop");
+    if(scoreBtn) scoreBtn.onclick = (e) => { e.stopPropagation(); scorePop.style.display = 'block'; };
+    if(detailLink) detailLink.onclick = (e) => { e.preventDefault(); detailPop.style.display = "block"; };
+    
+    // --- クリックで閉じるイベント ---
+    document.addEventListener("click", (e) => {
+        const board = document.getElementById("club-status-board");
+        if (board && board.style.display === "block" && !board.contains(e.target) && !e.target.matches("td[onclick^='showClubStatus']")) board.style.display = "none";
+        if (scorePop && scorePop.style.display === "block" && !scorePop.contains(e.target) && e.target !== scoreBtn) scorePop.style.display = "none";
+        if (detailPop && detailPop.style.display === "block" && !detailPop.contains(e.target) && e.target !== detailLink) detailPop.style.display = "none";
+    });
+}
 </script>
 </body>
 </html>
