@@ -1,10 +1,9 @@
 backend:
   name: github
+  repo: jleague-big-club/jleague-big-club
   branch: main
-
 media_folder: "img"
 public_folder: "/img"
-
 collections:
   - name: "blog"
     label: "ブログ"
