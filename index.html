@@ -4,8 +4,10 @@
   <meta charset="UTF-8">
   <title>Jリーグビッグクラブ分析</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <style>
-    /* ここはあなたの元のCSSそのまま */
+    /* CSSは変更ありませんので、そのままです */
     body {
       font-family: 'Segoe UI', 'Noto Sans JP', Arial, sans-serif;
       margin: 0;
@@ -67,660 +69,641 @@
     .blog-list a { color: #21c0ee; font-weight: bold; text-decoration: none; transition: color 0.17s;}
     .blog-list a:hover { color: #f86565; text-decoration: underline; }
     .country-btn {
-  background: rgba(255,240,70,0.07);  /* ←うすい黄色で常に場所が分かる */
-  border: 2px solid rgba(255,240,70,0.15);
-  cursor: pointer;
-  border-radius: 18px;
-  outline: none;
-  z-index: 5;
-  transition: background 0.17s, box-shadow 0.17s, border-color 0.17s;
+      background: rgba(255,240,70,0.07);
+      border: 2px solid rgba(255,240,70,0.15);
+      cursor: pointer;
+      border-radius: 18px;
+      outline: none;
+      z-index: 5;
+      transition: background 0.17s, box-shadow 0.17s, border-color 0.17s;
+    }
+    .country-btn:hover, .country-btn.active {
+      background: rgba(255,240,70,0.36);
+      border: 2.5px solid #ffe552cc;
+      box-shadow: 0 0 14px 6px #ffe55288;
+      outline: 2px solid #ffe552bb;
+    }
+    .nav-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .nav-dropdown-content {
+      display: none;
+      position: absolute;
+      left: 0;
+      top: 46px;
+      background: #fff;
+      min-width: 165px;
+      max-width: 220px;
+      border-radius: 11px;
+      box-shadow: 0 4px 14px 0 #2223;
+      z-index: 100;
+      padding: 0;
+      border: 1.3px solid #29b6e6;
+    }
+    .nav-dropdown-content button {
+      width: 100%;
+      background: none;
+      border: none;
+      color: #21304c;
+      padding: 11px 0 11px 0;
+      text-align: center;
+      font-size: 1.11rem;
+      font-weight: bold;
+      border-radius: 8px;
+      margin: 3px 0;
+      cursor: pointer;
+      box-shadow: none;
+      transition: background 0.14s, color 0.12s;
+    }
+    .nav-dropdown-content button:hover,
+    .nav-dropdown-content button:focus {
+      background: #e8faff;
+      color: #12b7ea;
+    }
+    .nav-dropdown:hover .nav-dropdown-content,
+    .nav-dropdown:focus-within .nav-dropdown-content {
+      display: block;
+    }
+    .best11-player-label {
+      position: absolute;
+      min-width: 62px;
+      max-width: 68px;
+      width: 68px;
+      height: 24px;
+      padding: 3.5px 8px 2.5px 8px;
+      background: rgba(36,48,78,0.87);
+      color: #ffd700;
+      font-size: 0.90rem;
+      font-weight: bold;
+      text-align: center;
+      border-radius: 13px;
+      border: 1.2px solid #ffd70066;
+      z-index: 5;
+      box-shadow: 0 1px 7px #1128;
+      user-select: none;
+      transition: background 0.14s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      line-height: 1.15;
+    }
+    .best11-player-label span {
+      display: block;
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 1em;
+      transition: font-size 0.15s;
+    }
+    .best11-player-label.unselected {
+      background:rgba(90,100,120,0.43);
+      color:#fff7;
+      border:1.2px dashed #fff3;
+    }
+    .position-btn.active {
+      background: linear-gradient(90deg, #27aee7 60%, #aaf7fd 100%);
+      color: #143060;
+      border: 2px solid #299ad3;
+      box-shadow: 0 2px 6px #27aee74c;
+      transform: scale(1.08);
+    }
+    .best11-player-label.selected {
+      background: linear-gradient(90deg, #27aee7 60%, #aaf7fd 100%);
+      color: #143060;
+      border: 2px solid #299ad3;
+      box-shadow: 0 2px 9px #27aee777, 0 1px 7px #1128;
+      z-index: 10;
+    }
+    #best11-table table {
+      width: 100%;
+      max-width: 700px;
+      min-width: 220px;
+      margin: 0 auto 18px auto;
+      background: #f9fcff;
+      color: #21304c;
+      border-radius: 16px;
+      box-shadow: 0 2px 18px #2330461a;
+      border-collapse: separate;
+      border-spacing: 0;
+      overflow: hidden;
+      font-size: 0.96rem;
+    }
+    #best11-table th, #best11-table td {
+      padding: 5px 7px !important;
+      line-height: 1.1;
+      text-align: center;
+      border-bottom: 1.5px solid #e8edf6;
+    }
+    #best11-table th {
+      background: linear-gradient(90deg, #27aee7 65%, #b0e7fa 100%);
+      color: #fff;
+      font-size: 1.13rem;
+      font-weight: bold;
+      letter-spacing: 0.06em;
+    }
+    #best11-table tr:last-child td {
+      border-bottom: none;
+    }
+    #best11-table tr:nth-child(even) td { background: #f2f6fa; }
+    #best11-table tr:nth-child(odd) td { background: #ffffff; }
+    #best11-table td.unselected { color: #c5c5c5; font-style: italic; }
+    #court-area {
+      position:absolute; top:0; left:0; width:360px; height:350px; z-index:2;
+      min-width: 360px; max-width: 360px;
+      min-height: 350px; max-height: 350px;
+      margin-bottom: 0;
+    }
+    #best11-capture-area {
+    position: relative; /* ← これを追加、またはコメントを外す */
+    width: 1050px; 
+    min-width: 900px; 
+    max-width: 1050px;
+    padding: 26px 22px 22px 22px; 
+    border-radius:28px;
+    box-shadow:0 4px 26px #2237,0 2px 8px #2236; 
+    border:2.2px solid #29b6e6;
+    display:flex; 
+    flex-direction:column; 
+    align-items:center;
+    margin: 40px auto;
+    background: linear-gradient(135deg, #232947 0%, #24304e 100%);
 }
-.country-btn:hover, .country-btn.active {
-  background: rgba(255,240,70,0.36);
-  border: 2.5px solid #ffe552cc;
-  box-shadow: 0 0 14px 6px #ffe55288;
-  outline: 2px solid #ffe552bb;
+    #best11-capture-core {
+  display: flex;
+  gap: 25px; /* 隙間を少し狭める */
+  align-items: flex-start;
+  justify-content: center;
+  width: 980px; /* ←横幅を広げる */
+  max-width: 100vw;
+  margin: 0 auto 18px auto;
 }
+    #table-footer {
+      text-align: right; font-size: 20px; color: #888; margin-top: 4px;
+      user-select: none; font-weight: bold; letter-spacing: 0.08em;
+    }
+    .league-tab-btn {
+      font-size: 1.04rem; padding: 6px 23px; margin: 0 6px 6px 0; border-radius: 20px;
+      border: none; background: linear-gradient(90deg, #41cdf4 0%, #274266 100%);
+      color: #fff; font-weight: bold; letter-spacing: 0.08em; cursor: pointer;
+      transition: background 0.18s, color 0.1s;
+    }
+    .league-tab-btn.active, .league-tab-btn:focus {
+      background: linear-gradient(90deg, #274266 0%, #41cdf4 100%);
+      color: #21304c; transform: scale(1.07);
+    }
+    #club-status-board {
+      position: fixed; left: 50%; top: 50%;
+      transform: translate(-50%, -53%); z-index: 9999;
+      max-width: 97vw; width: 480px;
+      background: linear-gradient(115deg, #1e283f 80%, #299ad3 100%);
+      color: #fff; border-radius: 17px; box-shadow: none;
+      padding: 32px 28px 20px 28px; font-size: 1.11rem; display: none;
+    }
+    .blog-card {
+      width: 30%; background: #fff; border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1); overflow: hidden;
+      text-align: left; cursor: pointer; transition: transform 0.2s;
+    }
+    .blog-card:hover { transform: translateY(-6px); }
+    .blog-card img { width: 100%; height: 160px; object-fit: cover; }
+    .blog-card-content { padding: 12px; }
+    .blog-card-title { font-weight: bold; margin-bottom: 5px; color: #333; font-size: 1.05em; }
+    .blog-card-date { color: #888; font-size: 0.9em; }
+    .position-btn-row {
+      display: flex; flex-wrap: wrap; gap: 3px 7px;
+      justify-content: center; margin-bottom: 14px;
+    }
+    #player-choice-list {
+      width: auto !important; min-width: 0 !important; max-width: 100% !important;
+      display: flex; justify-content: center;
+    }
+    .player-choice-row { width: auto !important; }
+    #position-tabs { margin-top: 13px; margin-bottom: 0; text-align: center; }
 
+    @media (max-width: 900px) {
+      #europe-flex-row { flex-direction: column !important; gap: 24px !important; align-items: center !important; }
+      #map-container { margin: 0 auto !important; }
+      #player-table-wrap { max-width: 98vw !important; min-width: unset !important; }
+    }
     @media (max-width: 700px) {
       main { padding: 0 2vw 30vw 2vw;}
       .big5-row { flex-direction: column; gap: 17px;}
       .club-card { width: 90vw; max-width: 310px; min-width: 0;}
       table { width: 100%; }
       .metrics-chart-wrap { max-width: 99vw; }
+      #club-status-board {
+        width: 97vw !important; min-width: unset !important; max-width: 99vw !important;
+        left: 50vw; top: 50vh; transform: translate(-50%, -50%);
+        padding: 18px 3vw 10px 3vw;
+      }
     }
-/* 追加：スマホ時は縦並び */
-@media (max-width: 900px) {
-  #europe-flex-row {
-    flex-direction: column !important;
-    gap: 24px !important;
-    align-items: center !important;
-  }
-  #map-container {
-    margin: 0 auto !important;
-  }
-  #player-table-wrap {
-    max-width: 98vw !important;
-    min-width: unset !important;
-  }
-}
-.nav-dropdown {
-  position: relative;
-  display: inline-block;
-}
-.nav-dropdown-content {
-  display: none;
-  position: absolute;
-  left: 0;
-  top: 42px;
-  background: linear-gradient(90deg, #41cdf4 30%, #274266 100%);
-  min-width: 170px;
-  border-radius: 17px;
-  box-shadow: 0 3px 14px 0 #1d2c4b40;
-  z-index: 100;
-  padding: 5px 0 5px 0;
-  border: none;
+/* =============================================== */
+/* === スマートフォン向けレスポンシブ対応CSS === */
+/* =============================================== */
+@media (max-width: 768px) {
+
+    /* --- 全体・ナビゲーション --- */
+    body {
+        /* スマホでは文字を少し小さく */
+        font-size: 14px;
+    }
+    main {
+        /* 左右の余白を調整 */
+        padding: 0 4vw 80px 4vw;
+    }
+    nav {
+        /* ナビゲーションボタンを横スクロール可能に */
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding: 12px 10px 8px 10px;
+        -webkit-overflow-scrolling: touch; /* iOSでのスムーズなスクロール */
+    }
+    nav button {
+        /* ボタンが縮まないように */
+        flex-shrink: 0;
+        padding: 6px 18px;
+        font-size: 0.95rem;
+    }
+    .page-title-row h1 {
+        /* ページタイトルを少し小さく */
+        font-size: 1.8rem;
+    }
+    
+    /* --- ビッグクラブ指数ページ --- */
+    .big5-row {
+        /* 横並びから縦並びに変更 */
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+    }
+    .club-card {
+        width: 90%;
+        margin: 0 auto;
+    }
+
+    /* --- クラブ指標ページ --- */
+    .metrics-chart-wrap {
+        /* チャートの高さを調整 */
+        height: 600px;
+    }
+    
+    /* --- 5大リーグ日本人選手ページ --- */
+    #europe-flex-row {
+        /* 横並びから縦並びに変更 */
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+    #map-container {
+        /* 地図のサイズを画面幅に合わせる */
+        width: 90vw;
+        max-width: 380px;
+        height: auto;
+    }
+    #map-container img {
+        width: 100%;
+        height: auto;
+    }
+    #player-table-wrap {
+        width: 100%;
+        overflow-x: auto; /* テーブルがはみ出たら横スクロール */
+    }
+
+    /* --- ベスト11ページ --- */
+    #best11-capture-area {
+        /* 全体の幅を画面に合わせる */
+        width: 96vw;
+        min-width: 0;
+        padding: 15px 2vw;
+        margin-top: 20px;
+    }
+    #best11-capture-core {
+        /* 横並びから縦並びに変更 */
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        gap: 20px;
+    }
+    .best11-player-label {
+        /* スマホ用にラベルサイズを少し調整 */
+        width: 60px;
+        height: 22px;
+        font-size: 0.85rem;
+    }
+    #best11-table {
+        width: 100%;
+        overflow-x: auto; /* テーブルがはみ出たら横スクロール */
+    }
+    #copy-best11-img-btn {
+        /* ボタンの位置とサイズを調整 */
+        padding: 8px 15px;
+        font-size: 0.9rem;
+        top: 10px;
+        right: 10px;
+    }
+
+    /* --- 記事ページ --- */
+    .blog-card {
+        /* 2列表示にする */
+        width: 48%;
+    }
 }
 
-.nav-dropdown-content {
-  display: none;
-  position: absolute;
-  left: 0;
-  top: 46px;
-  background: #fff;
-  min-width: 165px;
-  max-width: 220px;
-  border-radius: 11px;
-  box-shadow: 0 4px 14px 0 #2223;
-  z-index: 100;
-  padding: 0;
-  border: 1.3px solid #29b6e6;
+@media (max-width: 480px) {
+    /* さらに小さい画面用の調整 */
+    .page-title-row h1 {
+        font-size: 1.5rem;
+        flex-direction: column; /* タイトルと説明ボタンを縦並び */
+        gap: 10px;
+    }
+    .blog-card {
+        /* 1列表示にする */
+        width: 95%;
+    }
 }
-.nav-dropdown-content button {
-  width: 100%;
-  background: none;
-  border: none;
-  color: #21304c;
-  padding: 11px 0 11px 0;
-  text-align: center;
-  font-size: 1.11rem;
-  font-weight: bold;
-  border-radius: 8px;
-  margin: 3px 0;
-  cursor: pointer;
-  box-shadow: none;
-  transition: background 0.14s, color 0.12s;
-}
-.nav-dropdown-content button:hover,
-.nav-dropdown-content button:focus {
-  background: #e8faff;
-  color: #12b7ea;
-}
-
-
-.nav-dropdown:hover .nav-dropdown-content,
-.nav-dropdown:focus-within .nav-dropdown-content {
-  display: block;
-}
-.best11-player-label {
-  position: absolute;
-  min-width: 62px;
-  max-width: 68px;     /* ←追加: 最大幅を決めて… */
-  width: 68px;         /* ←追加: 固定幅推奨（必要なら調整） */
-  height: 24px;        /* ←追加: 高さも統一、必要に応じて調整 */
-  padding: 3.5px 8px 2.5px 8px;
-  background: rgba(36,48,78,0.87);
-  color: #ffd700;
-  font-size: 0.90rem;
-  font-weight: bold;
-  text-align: center;
-  border-radius: 13px;
-  border: 1.2px solid #ffd70066;
-  z-index: 5;
-  box-shadow: 0 1px 7px #1128;
-  user-select: none;
-  transition: background 0.14s;
-  display: flex;                /* ←追加: Flex化 */
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;             /* ←追加: はみ出し防止 */
-  line-height: 1.15;
-}
-.best11-player-label span {
-  display: block;
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: 1em;
-  transition: font-size 0.15s;
-}
-
-.best11-player-label.unselected {
-  background:rgba(90,100,120,0.43);
-  color:#fff7;
-  border:1.2px dashed #fff3;
-}
-#best11-table table {
-  width: 100%;
-  max-width: 700px;
-  min-width: 220px;
-  margin: 0 auto 18px auto;
-  background: #f9fcff;
-  color: #21304c;
-  border-radius: 16px;
-  box-shadow: 0 2px 18px #2330461a;
-  font-size: 1.08rem;
-  border-collapse: separate;
-  border-spacing: 0;
-  overflow: hidden;
-}
-#best11-table th, #best11-table td {
-  padding: 13px 8px;
-  text-align: center;
-  border-bottom: 1.5px solid #e8edf6;
-}
-#best11-table th {
-  background: linear-gradient(90deg, #27aee7 65%, #b0e7fa 100%);
-  color: #fff;
-  font-size: 1.13rem;
-  font-weight: bold;
-  letter-spacing: 0.06em;
-}
-#best11-table tr:last-child td {
-  border-bottom: none;
-}
-#best11-table tr:nth-child(even) td {
-  background: #f2f6fa;
-}
-#best11-table tr:nth-child(odd) td {
-  background: #ffffff;
-}
-#best11-table td.unselected {
-  color: #c5c5c5;
-  font-style: italic;
-}
-#best11-table table {
-  font-size: 0.96rem;        /* 小さめ */
-}
-#best11-table th, #best11-table td {
-  padding: 5px 7px !important;  /* 上下paddingを小さく */
-  line-height: 1.1;
-}
-#court-area {
-  margin: 0 auto 8px auto;
-}
-#position-tabs {
-  margin-top: 13px;
-  margin-bottom: 0;
-  text-align: center;
-}
-.position-btn.active {
-  background: linear-gradient(90deg, #27aee7 60%, #aaf7fd 100%);
-  color: #143060;
-  border: 2px solid #299ad3;
-  box-shadow: 0 2px 6px #27aee74c;
-  transform: scale(1.08);
-}
-.best11-player-label.selected {
-  background: linear-gradient(90deg, #27aee7 60%, #aaf7fd 100%);
-  color: #143060;
-  border: 2px solid #299ad3;
-  box-shadow: 0 2px 9px #27aee777, 0 1px 7px #1128;
-  z-index: 10;
-}
-#best11-flex {
-  display: flex;
-  gap: 38px;
-  align-items: flex-start;
-  min-height: 420px;
-  /* 横幅も固定！ */
-  width: 820px;  /* 必要なら好みに合わせて */
-  max-width: 820px;
-}
-
-#court-area {
-  min-width: 360px;
-  max-width: 360px;
-  width: 360px;
-  min-height: 350px;
-  max-height: 350px;
-  height: 350px;
-}
-
-#best11-table {
-  min-width: 370px;
-  max-width: 510px;
-  width: 510px;
-}
-#player-choice-list {
-  min-width: 370px;
-  max-width: 370px;
-  width: 370px;
-}
-#best11-capture-core {
-  display: flex;
-  flex-direction: row;
-  gap: 25px;
-  align-items: flex-start;
-  justify-content: center;
-  width: 790px;   /* 横幅は好みで調整可 */
-  max-width: 100vw;
-  margin: 0 auto 18px auto;
-}
-#best11-capture-core {
-  /* 既存の幅やflex指定はそのまま */
-  padding: 38px 48px 38px 48px;  /* ←上下左右に余白（お好みで調整） */
-  background: null;              /* 画像用なので白背景にするのがおすすめ */
-  border-radius: 22px;           /* 角丸も好みに応じて */
-  box-shadow: 0 2px 28px #23304612; /* 軽い影もつけると画像として映える */
-}
-
-#court-area {
-  min-width: 360px;
-  max-width: 360px;
-  width: 360px;
-  min-height: 350px;
-  max-height: 350px;
-  height: 350px;
-  margin-bottom: 0;
-}
-#best11-table {
-  min-width: 370px;
-  max-width: 510px;
-  width: 510px;
-}
-#best11-capture-area {
-  padding-top: 44px;   /* ← 好きな数値で */
-  /* 例: 36px、50pxなどお好みで */
-}
-#best11-capture-area {
-  /* 以下をCSSまたはstyle属性で指定 */
-  width: 1200px;
-  min-width: 900px;  /* ここでコート＋テーブルが収まる幅に調整 */
-  max-width: 1200px; /* 必要なら */
-  box-sizing: border-box;
-  padding: 26px 22px 22px 22px;
-  /* その他、borderやbackgroundはそのまま */
-}
-#best11-capture-area {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 1200px;  /* ← 追加。中身の幅にフィット */
-  min-width: 900px;    /* 必要に応じて調整 */
-  max-width: 1200px;
-  margin: 100px auto 40px auto;
-  padding: 26px 22px 22px 22px;
-  /* ...他はそのまま */
-}
-#best11-capture-area {
-  background: linear-gradient(135deg, #232947 0%, #24304e 100%);
-  /* これ以外はそのまま */
-}
-
-.position-btn-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 3px 7px;
-  justify-content: center;   /* ←中央寄せ追加 */
-  margin-bottom: 14px;
-}
-#player-choice-list {
-  width: auto !important;
-  min-width: 0 !important;
-  max-width: 100% !important;
-  display: flex;
-  justify-content: center;
-}
-.player-choice-row {
-  width: auto !important;
-}
-#best11-table-container {
-  position: relative;
-}
-
-#table-footer {
-  text-align: right;
-  font-size: 20px;    /* ←ここを大きく（例: 1.4rem） */
-  color: #888;
-  margin-top: 4px;
-  user-select: none;
-  font-weight: bold;    /* 太字にするなら追加 */
-  letter-spacing: 0.08em; /* 少し間隔あけるなら */
-}
-.league-tab-btn {
-  font-size: 1.04rem;
-  padding: 6px 23px;
-  margin: 0 6px 6px 0;
-  border-radius: 20px;
-  border: none;
-  background: linear-gradient(90deg, #41cdf4 0%, #274266 100%);
-  color: #fff;
-  font-weight: bold;
-  letter-spacing: 0.08em;
-  cursor: pointer;
-  transition: background 0.18s, color 0.1s;
-}
-.league-tab-btn.active,
-.league-tab-btn:focus {
-  background: linear-gradient(90deg, #274266 0%, #41cdf4 100%);
-  color: #21304c;
-  transform: scale(1.07);
-}
-#club-status-board {
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -53%);
-  z-index: 9999;
-  max-width: 97vw;
-  width: 480px;
-  background: linear-gradient(115deg, #1e283f 80%, #299ad3 100%);
-  color: #fff;
-  border-radius: 17px;
-  box-shadow: none;
-  padding: 32px 28px 20px 28px;
-  font-size: 1.11rem;
-  display: none;
-}
-@media (max-width: 700px) {
-  #club-status-board {
-    width: 97vw !important;
-    min-width: unset !important;
-    max-width: 99vw !important;
-    left: 50vw;
-    top: 50vh;
-    transform: translate(-50%, -50%);
-    padding: 18px 3vw 10px 3vw;
-  }
-}
-
   </style>
 </head>
 <body>
-  <main>
-<nav>
-  <button onclick="showPage('top', this)" class="active">ビッグクラブ指数</button>
-  <button onclick="showPage('metrics', this)">クラブ指標</button>
-  <button onclick="showPage('history', this)">過去10年順位</button>
-  <button onclick="showPage('introduce', this)">各クラブ紹介</button>
-  <!-- ▼ここだけ追加（サブメニュー） -->
-  <span class="nav-dropdown">
-    <button onclick="showPage('europe', this)" id="nav-europe-btn">5大リーグ日本人選手</button>
-    <span class="nav-dropdown-content">
-      <button onclick="event.stopPropagation();showPage('best11',this);">ベスト11を作る</button>
+<main>
+  <nav>
+    <button onclick="showPage('top', this)" class="active">ビッグクラブ指数</button>
+    <button onclick="showPage('metrics', this)">クラブ指標</button>
+    <button onclick="showPage('history', this)">過去10年順位</button>
+    <button onclick="showPage('introduce', this)">各クラブ紹介</button>
+    <span class="nav-dropdown">
+      <button onclick="showPage('europe', this)" id="nav-europe-btn">5大リーグ日本人選手</button>
+      <span class="nav-dropdown-content">
+        <button onclick="event.stopPropagation();showPage('best11',this);">ベスト11を作る</button>
+      </span>
     </span>
-  </span>
-  <button onclick="showPage('blog', this)">記事</button>
-</nav>
+    <button onclick="showPage('blog', this)">記事</button>
+  </nav>
 
-    <!-- タイトル（中略） -->
-    <div id="page-title-top" class="page-title-row" style="display:flex;">
-      <h1>
-        Jリーグ ビッグクラブ指数📊
-        <span class="score-calc-btn" tabindex="0">ビッグクラブ指数とは
-  <span class="score-calc-pop">
-Jリーグ各クラブがどれだけ「ビッグクラブ」に近づいているのかを、実績や人気など4つの指標を基にスコア化したものです。
-
-・<b>50以上</b>：<span style="color:#ffd700;font-weight:bold;">ビッグクラブ</span>
-・<b>30～49.9</b>：<span style="color:#e94444;font-weight:bold;">有望ビッグクラブ</span>
-・<b>20～29.9</b>：<span style="color:#22bbf0;font-weight:bold;">潜在的ビッグクラブ</span>
-・<b>5～19.9</b>：<span style="color:#999;font-weight:bold;">中堅クラブ</span>
-・<b>4.9以下</b>：<span style="color:#aaa;font-weight:bold;">ローカルクラブ</span>
-    <div class="calc-note">
-※2024年までのデータで計算
-※詳しくはスコア計算方法ボタンをクリック
-    </div>
-  </span>
-</span>
-
-      </h1>
-    </div>
-    <div id="page-title-metrics" class="page-title-row" style="display:none;"><h1>クラブ指標</h1></div>
-    <div id="page-title-history" class="page-title-row" style="display:none;"><h1>Jリーグ過去データ</h1></div>
-    <div id="page-title-introduce" class="page-title-row" style="display:none;"><h1>各クラブ紹介</h1></div>
-   <div id="page-title-europe" class="page-title-row" style="display:none;"><h1>25-26シーズン 5大リーグ日本人選手</h1></div>
-<div id="page-title-best11" class="page-title-row" style="display:none;"><h1>ベスト11を作る</h1></div>
-<div id="page-title-blog" class="page-title-row" style="display:none;"><h1>記事・ブログ</h1></div>
-
-    
-    <!-- 各ページ -->
-    <div id="top" class="page-section visible">
-      <div class="big5-container" id="big5-cards"></div>
-      <div class="club-table-container">
-        <h2 style="text-align:center; margin-bottom:8px; color:#baf7fa; font-size:1.25rem;">6位以下クラブ</h2>
-        <div id="club-categories"></div>
-      </div>
-    </div>
-    <div id="metrics" class="page-section">
-      <span class="table-note">
-※並びはビッグクラブスコア順<br>
-※柏・湘南の売上は2023年</span>
-      <div class="metric-btn-row">
-        <button class="metric-btn active" onclick="showMetricChart('revenue')">売上高（2024）</button>
-        <button class="metric-btn" onclick="showMetricChart('audience')">観客動員数（2024）</button>
-        <button class="metric-btn" onclick="showMetricChart('titles')">タイトル数（2024まで）</button>
-      </div>
-      <div class="metrics-chart-wrap">
-        <canvas id="metricChart" width="1000" height="520"></canvas>
-      </div>
-    </div>
-    <div id="history" class="page-section">
-      <span class="table-note">
-※並びはビッグクラブスコア順<br>
-※在籍していない年は21位で計算</span>
-      <div id="jleague-history"></div>
-    </div>
-    <div id="introduce" class="page-section">
-<div id="club-status-board" style="display:none;"></div>
-  <div id="club-league-tabs" style="text-align:center; margin-bottom:20px;">
-    <button class="league-tab-btn active" data-league="J1">J1</button>
-    <button class="league-tab-btn" data-league="J2">J2</button>
-    <button class="league-tab-btn" data-league="J3">J3</button>
-    <button class="league-tab-btn" data-league="JFL">JFL</button>
+  <div id="page-title-top" class="page-title-row" style="display:flex;">
+    <h1>
+      Jリーグ ビッグクラブ指数📊
+      <span class="score-calc-btn" tabindex="0">ビッグクラブ指数とは
+        <span class="score-calc-pop">
+          Jリーグ各クラブがどれだけ「ビッグクラブ」に近づいているのかを、実績や人気など4つの指標を基にスコア化したものです。
+          ・<b>50以上</b>：<span style="color:#ffd700;font-weight:bold;">ビッグクラブ</span>
+          ・<b>30～49.9</b>：<span style="color:#e94444;font-weight:bold;">有望ビッグクラブ</span>
+          ・<b>20～29.9</b>：<span style="color:#22bbf0;font-weight:bold;">潜在的ビッグクラブ</span>
+          ・<b>5～19.9</b>：<span style="color:#999;font-weight:bold;">中堅クラブ</span>
+          ・<b>4.9以下</b>：<span style="color:#aaa;font-weight:bold;">ローカルクラブ</span>
+          <div class="calc-note">
+            ※2024年までのデータで計算
+            ※詳しくはスコア計算方法ボタンをクリック
+          </div>
+        </span>
+      </span>
+    </h1>
   </div>
-  <div id="club-league-table"></div>
-</div>
-
-  <!-- ★★★ ここからヨーロッパ日本人選手ページ（新仕様） ★★★ -->
-<div id="europe" class="page-section" style="display:none;">
-  <h2 style="text-align:center;"></h2>
-  <div id="europe-flex-row" style="display:flex; flex-direction:row; gap:36px; align-items:flex-start; justify-content:flex-start;">
-    <!-- 地図＋クリックエリア -->
-    <div id="map-container" style="position:relative; width:430px; height:410px; flex-shrink:0;">
-      <img src="img/europe.png" alt="ヨーロッパ地図" width="430" height="410" style="border-radius:13px; display:block;">
-      <!-- イングランド -->
-      <button class="country-btn" data-country="イングランド" style="position:absolute; left:30px; top:200px; width:60px; height:70px;"></button>
-      <!-- スペイン -->
-      <button class="country-btn" data-country="スペイン"   style="position:absolute; left:10px; top:335px; width:70px; height:60px;"></button>
-      <!-- フランス -->
-      <button class="country-btn" data-country="フランス"   style="position:absolute; left:70px; top:280px; width:65px; height:60px;"></button>
-      <!-- イタリア -->
-      <button class="country-btn" data-country="イタリア"   style="position:absolute; left:160px; top:320px; width:50px; height:80px;"></button>
-      <!-- ドイツ -->
-      <button class="country-btn" data-country="ドイツ"     style="position:absolute; left:130px; top:240px; width:60px; height:60px;"></button>
+  <div id="page-title-metrics" class="page-title-row" style="display:none;"><h1>クラブ指標</h1></div>
+  <div id="page-title-history" class="page-title-row" style="display:none;"><h1>Jリーグ過去データ</h1></div>
+  <div id="page-title-introduce" class="page-title-row" style="display:none;"><h1>各クラブ紹介</h1></div>
+  <div id="page-title-europe" class="page-title-row" style="display:none;"><h1>25-26シーズン 5大リーグ日本人選手</h1></div>
+  <div id="page-title-best11" class="page-title-row" style="display:none;"><h1>ベスト11を作る</h1></div>
+  <div id="page-title-blog" class="page-title-row" style="display:none;"><h1>記事・ブログ</h1></div>
+  
+  <div id="top" class="page-section visible">
+    <div class="big5-container" id="big5-cards"></div>
+    <div class="club-table-container">
+      <h2 style="text-align:center; margin-bottom:8px; color:#baf7fa; font-size:1.25rem;">6位以下クラブ</h2>
+      <div id="club-categories"></div>
     </div>
-    <!-- 表表示エリア -->
-    <div id="player-table-wrap" style="min-width:280px; max-width:1000px; width:100%; padding-top:9px;"></div>
   </div>
-</div>
-<div id="best11" class="page-section" style="display:none;">
-  <!-- キャプチャ枠（タイトル＋コート＋テーブル）-->
-  <div id="best11-capture-area"
-    style="position:relative; max-width:950px; padding:26px 22px 22px 22px; border-radius:28px; box-shadow:0 4px 26px #2237,0 2px 8px #2236; border:2.2px solid #29b6e6; display:flex; flex-direction:column; align-items:center;">
-    <div style="font-size:2.1em; font-weight:bold; color:#fff; margin-bottom:8px;">#あなたのベストイレブン</div>
-    <div id="formation-title" style="font-size:1.13em; color:#eaf7fc; margin-bottom:14px;">フォーメーション：3-4-3</div>
-    <div id="best11-capture-core" style="display:flex; gap:36px; align-items:flex-start;">
-      <div style="min-width:370px; max-width:380px; position:relative;">
-        <img src="img/court.png"
-          style="width:360px;height:350px;border-radius:16px;box-shadow:0 2px 10px #0017;display:block;position:absolute;left:0;top:0;z-index:1;">
-        <div id="court-area" style="position:absolute;top:0;left:0;width:360px;height:350px;z-index:2;"></div>
+  <div id="metrics" class="page-section">
+    <span class="table-note">※並びはビッグクラブスコア順<br>※柏・湘南の売上は2023年</span>
+    <div class="metric-btn-row">
+      <button class="metric-btn active" onclick="showMetricChart('revenue')">売上高（2024）</button>
+      <button class="metric-btn" onclick="showMetricChart('audience')">観客動員数（2024）</button>
+      <button class="metric-btn" onclick="showMetricChart('titles')">タイトル数（2024まで）</button>
+    </div>
+    <div class="metrics-chart-wrap">
+      <canvas id="metricChart" width="1000" height="520"></canvas>
+    </div>
+  </div>
+  <div id="history" class="page-section">
+    <span class="table-note">※並びはビッグクラブスコア順<br>※在籍していない年は21位で計算</span>
+    <div id="jleague-history"></div>
+  </div>
+  <div id="introduce" class="page-section">
+    <div id="club-status-board" style="display:none;"></div>
+    <div id="club-league-tabs" style="text-align:center; margin-bottom:20px;">
+      <button class="league-tab-btn active" data-league="J1">J1</button>
+      <button class="league-tab-btn" data-league="J2">J2</button>
+      <button class="league-tab-btn" data-league="J3">J3</button>
+      <button class="league-tab-btn" data-league="JFL">JFL</button>
+    </div>
+    <div id="club-league-table"></div>
+  </div>
+  <div id="europe" class="page-section" style="display:none;">
+    <h2 style="text-align:center;"></h2>
+    <div id="europe-flex-row" style="display:flex; flex-direction:row; gap:36px; align-items:flex-start; justify-content:flex-start;">
+      <div id="map-container" style="position:relative; width:430px; height:410px; flex-shrink:0;">
+        <img src="img/europe.png" alt="ヨーロッパ地図" width="430" height="410" style="border-radius:13px; display:block;">
+        <button class="country-btn" data-country="イングランド" style="position:absolute; left:30px; top:200px; width:60px; height:70px;"></button>
+        <button class="country-btn" data-country="スペイン"   style="position:absolute; left:10px; top:335px; width:70px; height:60px;"></button>
+        <button class="country-btn" data-country="フランス"   style="position:absolute; left:70px; top:280px; width:65px; height:60px;"></button>
+        <button class="country-btn" data-country="イタリア"   style="position:absolute; left:160px; top:320px; width:50px; height:80px;"></button>
+        <button class="country-btn" data-country="ドイツ"     style="position:absolute; left:130px; top:240px; width:60px; height:60px;"></button>
       </div>
-<div style="flex:1; position: relative; max-width: 510px; margin: 0 auto;">
-  <div id="best11-table"></div>
-  <div id="table-footer" style="text-align: right; color: #888; margin-top: 4px; user-select: none;">
-    Jleague-big-club.com
+      <div id="player-table-wrap" style="min-width:280px; max-width:1000px; width:100%; padding-top:9px;"></div>
+    </div>
   </div>
-</div>
-
-
-    <!-- コピーボタン（絶対配置、キャプチャ範囲外） -->
-    <button id="copy-best11-img-btn" style="position:absolute; right:24px; top:18px; background:#2ab8f2; color:#fff; border:none; border-radius:12px; padding:10px 23px; font-size:1.08em; font-weight:bold; z-index:100; box-shadow:0 2px 12px #0003; cursor:pointer;">画像をコピー</button>
-    <span id="copy-best11-img-msg" style="position:absolute; right:26px; top:65px; color:#fff970; font-size:1em;"></span>
+  <div id="best11" class="page-section" style="display:none;">
+    <div id="best11-capture-area">
+      <div style="font-size:2.1em; font-weight:bold; color:#fff; margin-bottom:8px;">#あなたのベストイレブン</div>
+      <div id="formation-title" style="font-size:1.13em; color:#eaf7fc; margin-bottom:14px;">フォーメーション：3-4-3</div>
+      <div id="best11-capture-core">
+        <div style="min-width:370px; max-width:380px; position:relative;">
+          <img src="img/court.png" style="width:360px;height:350px;border-radius:16px;box-shadow:0 2px 10px #0017;display:block;position:absolute;left:0;top:0;z-index:1;">
+          <div id="court-area"></div>
+        </div>
+        <div style="flex:1; position: relative; max-width: 510px; margin: 0 auto;">
+          <div id="best11-table"></div>
+          <div id="table-footer">Jleague-big-club.com</div>
+        </div>
+      </div>
+      <button id="copy-best11-img-btn" style="position:absolute; right:24px; top:18px; background:#2ab8f2; color:#fff; border:none; border-radius:12px; padding:10px 23px; font-size:1.08em; font-weight:bold; z-index:100; box-shadow:0 2px 12px #0003; cursor:pointer;">画像をコピー</button>
+      <span id="copy-best11-img-msg" style="position:absolute; right:26px; top:65px; color:#fff970; font-size:1em;"></span>
+    </div>
+    <div id="best11-controls">
+      <div id="formation-buttons" style="text-align:center;margin:19px auto 8px auto;">
+        <button class="formation-btn active" onclick="setFormation('343', this)">3-4-3</button>
+        <button class="formation-btn" onclick="setFormation('433', this)">4-3-3</button>
+      </div>
+      <div id="position-tabs" style="max-width:950px; margin:0 auto 26px auto;"></div>
+    </div>
   </div>
-</div>
-<!-- フォーメーション＆選手選択は枠の下 -->
-  <div id="best11-controls">
-<div id="formation-buttons" style="text-align:center;margin:19px auto 8px auto;">
-  <button class="formation-btn active" onclick="setFormation('343', this)">3-4-3</button>
-  <button class="formation-btn" onclick="setFormation('433', this)">4-3-3</button>
-</div>
-<div id="position-tabs" style="max-width:950px; margin:0 auto 26px auto;"></div>
-</div>
+  <div id="blog" class="page-section" style="display:none;">
+    <div id="blog-content" style="display: none; text-align: left; max-width: 800px; margin: 20px auto; padding: 25px; background: #fff; color: #333; border-radius: 12px; box-shadow: 0 2px 10px #0002;"></div>
+    <div id="blog-list-container" style="display:flex; flex-wrap:wrap; gap:20px; justify-content:center;"></div>
+    <div id="pagination" style="text-align:center; margin-top:20px;"></div>
+  </div>
+</main>
 
-<!-- ★★★ ここまで ★★★ -->
-    <div id="blog" class="page-section">
-  <ul class="blog-list" id="blog-list"></ul>
-  <div id="blog-content" style="max-width:700px;margin:32px auto 0 auto;display:none;background:#fff3;color:#222;padding:30px 22px 25px 22px;border-radius:12px;"></div>
-</div>
-
-  </main>
-<!-- スコア計算方法ボタン＆ポップアップ -->
-<button id="score-method-btn"
-  style="position: fixed; bottom: 27px; right: 24px; z-index: 9999; background: #fff; color: #232947;
-         font-weight: bold; border: none; border-radius: 28px; box-shadow: 0 2px 14px #2222;
-         padding: 11px 21px; font-size: 1.10rem; cursor: pointer; display: none;">
+<button id="score-method-btn" style="position: fixed; bottom: 27px; right: 24px; z-index: 9999; background: #fff; color: #232947; font-weight: bold; border: none; border-radius: 28px; box-shadow: 0 2px 14px #2222; padding: 11px 21px; font-size: 1.10rem; cursor: pointer;">
   スコア計算方法
 </button>
-
-<div id="score-method-pop"
-  style="display:none; position: fixed; bottom: 77px; right: 33px; min-width: 330px; max-width: 95vw;
-         background: #fff; color: #222; border-radius: 17px; box-shadow: 0 2px 19px #2226;
-         padding: 22px 22px 18px 24px; z-index: 10001; font-size: 1.04rem; line-height: 1.7;
-         border: 1.4px solid #29b6e6;">
+<div id="score-method-pop" style="display:none; position: fixed; bottom: 77px; right: 33px; min-width: 330px; max-width: 95vw; background: #fff; color: #222; border-radius: 17px; box-shadow: 0 2px 19px #2226; padding: 22px 22px 18px 24px; z-index: 10001; font-size: 1.04rem; line-height: 1.7; border: 1.4px solid #29b6e6;">
   <div style="font-size: 1.18em; font-weight: bold; margin-bottom: 11px;">ビッグクラブ指数の計算方法</div>
   <ul style="margin:0 0 0 1em; padding: 0 0 0 0.6em;">
     <li><b>売上スコア：</b> = 売上高（億円） ÷ 200 × 100</li>
     <li><b>観客スコア：</b> = 平均観客動員数 ÷ 45,000 × 100</li>
     <li><b>タイトルスコア：</b> = タイトル数（スーパー杯除く） ÷ 98 × 100</li>
     <li><b>J1在籍10年平均順位スコア：</b> = 21 − J1在籍10年平均順位</li>
-    <li style="margin-top:7px;"><b>ビッグクラブスコア：</b><br>
-      = 売上スコア × 0.3 ＋ 観客スコア × 0.15 ＋ タイトルスコア × 0.25 ＋ 平均順位スコア × 0.3
-    </li>
+    <li style="margin-top:7px;"><b>ビッグクラブスコア：</b><br> = 売上スコア × 0.3 ＋ 観客スコア × 0.15 ＋ タイトルスコア × 0.25 ＋ 平均順位スコア × 0.3</li>
   </ul>
-  <!-- ここにリンクを追加 -->
   <div style="text-align:right; margin-top:14px;">
-    <a href="#" id="score-detail-link"
-       style="color:#299ad3; text-decoration:underline; font-weight:bold; font-size:0.98em; cursor:pointer;">
-      数値の設定など詳細
-    </a>
+    <a href="#" id="score-detail-link" style="color:#299ad3; text-decoration:underline; font-weight:bold; font-size:0.98em; cursor:pointer;">数値の設定など詳細</a>
   </div>
-<div id="score-detail-pop"
-     style="display:none; position: fixed; bottom: 77px; right: 33px; min-width: 330px; max-width: 95vw;
-            background: #fff; color: #222; border-radius: 17px; box-shadow: 0 2px 19px #2226;
-            padding: 22px 22px 18px 24px; z-index: 10001; font-size: 1.04rem; line-height: 1.7;
-            border: 1.4px solid #29b6e6;
-            max-height: 72vh; overflow-y: auto;">
- <div style="font-size: 1.06em; margin-top: 19px; line-height: 1.85;">
-  <b>なぜこの指標を使うのか？</b><br>
-  <ul style="margin-top: 8px;">
-    <li>本サイトの「ビッグクラブ指数」は、<b>日本サッカー界で“ビッグクラブ”とされる条件</b>をできるだけ数値で可視化するために作成しました。</li>
-    <li>「ビッグクラブ」と呼ばれるクラブは、<b>経営規模（売上）</b>・<b>観客動員</b>・<b>タイトル獲得数</b>・<b>J1での実績</b>という4つの側面で明らかな強みを持っています。</li>
-    <li>ヨーロッパ主要リーグのビッグクラブ（例：マンチェスターU、レアル・マドリードなど）も、経営規模や観客数、タイトル獲得、安定した上位成績といった指標が注目されています。</li>
-    <li>Jリーグでも同じ視点で比較できるよう、<b>4つの指標</b>を組み合わせてスコア化しています。</li>
-  </ul>
-  <b>なぜこの比率（重み）なのか？</b><br>
-  <ul style="margin-top: 8px;">
-    <li>売上高や観客動員は“人気”や“影響力”の指標、タイトルや順位は“実績”や“強さ”の指標です。</li>
-    <li>クラブの総合力・“ビッグクラブらしさ”が最も反映されるよう、<b>売上/順位=30%ずつ、タイトル=25%、観客動員=15%</b>の比率で調整しています。※観客動員は無料観客も含むので比重は低く設定</li>
-  </ul>
-  <b>【例】浦和レッズのスコア</b><br>
-  <ul style="margin-top: 8px;">
-    <li>2024年時点で、浦和レッズは「過去10年のJ1平均順位」は7.2位ですが、「売上高」「観客動員数」「タイトル数」はJリーグトップクラスです。</li>
-    <li>そのため、指標の合計スコアがもっとも高く、ビッグクラブ指数1位となります。</li>
-    <li>このように、<b>経営規模・人気・強さの全てで際立つクラブが“ビッグクラブ”と評価される構造</b>になっています。</li>
-<li>また、当サイトで基準とするビッグクラブスコア(50以上)を超えるには、浦和の場合、売上が約180億円、平均観客が40500人、過去10年J1平均順位が4.5位以上が必要になります</li>  
-</ul>
-  <span style="color: #18a; font-size: 0.98em;">
-    ※ 今後も最新データや意見をもとにアップデート予定です。
-  </span>
+</div>
+<div id="score-detail-pop" style="display:none; position: fixed; bottom: 77px; right: 33px; min-width: 330px; max-width: 95vw; background: #fff; color: #222; border-radius: 17px; box-shadow: 0 2px 19px #2226; padding: 22px 22px 18px 24px; z-index: 10001; font-size: 1.04rem; line-height: 1.7; border: 1.4px solid #29b6e6; max-height: 72vh; overflow-y: auto;">
+  <div style="font-size: 1.06em; margin-top: 19px; line-height: 1.85;">
+    <b>なぜこの指標を使うのか？</b><br>
+    <ul style="margin-top: 8px;">
+      <li>本サイトの「ビッグクラブ指数」は、<b>日本サッカー界で“ビッグクラブ”とされる条件</b>をできるだけ数値で可視化するために作成しました。</li>
+      <li>「ビッグクラブ」と呼ばれるクラブは、<b>経営規模（売上）</b>・<b>観客動員</b>・<b>タイトル獲得数</b>・<b>J1での実績</b>という4つの側面で明らかな強みを持っています。</li>
+      <li>ヨーロッパ主要リーグのビッグクラブ（例：マンチェスターU、レアル・マドリードなど）も、経営規模や観客数、タイトル獲得、安定した上位成績といった指標が注目されています。</li>
+      <li>Jリーグでも同じ視点で比較できるよう、<b>4つの指標</b>を組み合わせてスコア化しています。</li>
+    </ul>
+    <b>なぜこの比率（重み）なのか？</b><br>
+    <ul style="margin-top: 8px;">
+      <li>売上高や観客動員は“人気”や“影響力”の指標、タイトルや順位は“実績”や“強さ”の指標です。</li>
+      <li>クラブの総合力・“ビッグクラブらしさ”が最も反映されるよう、<b>売上/順位=30%ずつ、タイトル=25%、観客動員=15%</b>の比率で調整しています。※観客動員は無料観客も含むので比重は低く設定</li>
+    </ul>
+    <b>【例】浦和レッズのスコア</b><br>
+    <ul style="margin-top: 8px;">
+      <li>2024年時点で、浦和レッズは「過去10年のJ1平均順位」は7.2位ですが、「売上高」「観客動員数」「タイトル数」はJリーグトップクラスです。</li>
+      <li>そのため、指標の合計スコアがもっとも高く、ビッグクラブ指数1位となります。</li>
+      <li>このように、<b>経営規模・人気・強さの全てで際立つクラブが“ビッグクラブ”と評価される構造</b>になっています。</li>
+      <li>また、当サイトで基準とするビッグクラブスコア(50以上)を超えるには、浦和の場合、売上が約180億円、平均観客が40500人、過去10年J1平均順位が4.5位以上が必要になります</li>
+    </ul>
+    <span style="color: #18a; font-size: 0.98em;">※ 今後も最新データや意見をもとにアップデート予定です。</span>
+  </div>
 </div>
 
-  <script>
-    // ページ切替
-    function showPage(id, btn) {
-  // すべてのページを非表示
-  document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('visible'));
-  // 指定のページだけ表示
-  document.getElementById(id).classList.add('visible');
-  // タイトル表示切替
-  ["top", "metrics", "history", "introduce", "europe", "best11", "blog"].forEach(pid => {
-    const elem = document.getElementById("page-title-" + pid);
-    if (elem) elem.style.display = (id === pid) ? "flex" : "none";
-  });
-  // navボタンのactive制御
-  if (btn) {
-    document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    // スコア計算方法ボタンの表示・非表示
-// スコア計算方法ボタンの表示・非表示
-if (typeof window.updateScoreBtnDisplay === 'function') window.updateScoreBtnDisplay();
-
-}
-}
-
-    // CSV読込・データ表示
+<script>
+    // === グローバル変数 ===
     let clubData = [];
+    let clubLeagueList = [];
+    let europePlayers = [];
     let metricChart;
+
+    // === ページ切り替え ===
+    function showPage(id, btn) {
+        document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('visible'));
+        document.getElementById(id).classList.add('visible');
+
+        document.querySelectorAll('.page-title-row').forEach(row => row.style.display = 'none');
+        const pageTitleDiv = document.getElementById('page-title-' + id);
+        if (pageTitleDiv) pageTitleDiv.style.display = 'flex';
+
+        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+        if (btn) {
+            btn.classList.add('active');
+            if(btn.closest('.nav-dropdown')) {
+                btn.closest('.nav-dropdown').querySelector('button').classList.add('active');
+            }
+        }
+        
+        // ▼▼▼ 「5大リーグ」ページ表示時の初期化処理を追加 ▼▼▼
+        if (id === 'europe' && europePlayers.length > 0) {
+            showPlayerTable(); // 引数なしで呼び出し、全選手を表示
+        }
+        // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+        
+        if(window.updateScoreBtnDisplay) window.updateScoreBtnDisplay();
+        
+        if (id === 'introduce' && clubLeagueList.length > 0) {
+            const activeBtn = document.querySelector('.league-tab-btn.active');
+            renderClubLeagueTable(activeBtn ? activeBtn.dataset.league : "J1");
+        }
+    }
+    
+    // === 初期化処理 ===
     document.addEventListener("DOMContentLoaded", () => {
-      fetch("data/data.csv")
-        .then(response => response.text())
-        .then(text => {
-          const lines = text.trim().split("\n");
-          const headers = lines[0].split(",");
-          const dataRows = lines.slice(1).map(line => line.split(","));
-          clubData = dataRows.map(row => ({
-            name: row[0],
-            revenue: parseFloat(row[1]),
-            revenueScore: parseFloat(row[6]),
-            audience: parseInt(row[2]),
-            audienceScore: parseFloat(row[7]),
-            titles: parseInt(row[5]),
-            titleScore: parseFloat(row[8]),
-            avgRankScore: parseFloat(row[11]),
-            sum: parseFloat(row[10]), 
-            l: row[11],
-            m: row[12],
-            n: row[13],
-            o: row[14],
-            p: row[15]
-          }));
-          clubData.sort((a, b) => b.sum - a.sum);
-          renderBig5(clubData);
-          renderOthers(clubData);
-          renderHistory(clubData);
-          showMetricChart('revenue');
-        });
+        // --- Jリーグクラブデータ ---
+        fetch("data/data.csv")
+            .then(response => {
+                if (!response.ok) throw new Error(`CSVの読み込みに失敗しました: ${response.status}`);
+                return response.text();
+            })
+            .then(text => {
+                const lines = text.trim().split("\n");
+                const headers = lines[0].split(",").map(h => h.trim());
+                const dataRows = lines.slice(1);
+                clubData = dataRows.map(line => {
+                    const values = line.split(",");
+                    const obj = {};
+                    headers.forEach((h, i) => obj[h] = values[i] ? values[i].trim() : '');
+                    obj.name = obj["クラブ名"] || 'N/A';
+                    obj.revenue = parseFloat(obj["売上高（億円）"]) || 0;
+                    obj.audience = parseInt(obj["平均観客動員数"]) || 0;
+                    obj.titles = parseInt(obj["タイトル計"]) || 0;
+                    obj.sum = parseFloat(obj["総合的ビッグクラブスコア"]) || 0;
+                    obj.l = obj["過去10年J1在籍年数"] || '0';
+                    obj.m = obj["J1在籍10年平均順位"] || 'N/A';
+                    obj.o = obj["J1在籍10年平均順位スコア"] || 'N/A';
+                    obj.p = obj["所属リーグ"] || 'N/A';
+                    return obj;
+                });
+                clubData.sort((a, b) => b.sum - a.sum);
+                clubLeagueList = clubData;
+                renderBig5(clubData);
+                renderOthers(clubData);
+                renderHistory(clubData);
+                showMetricChart('revenue');
+                renderClubLeagueTable("J1"); 
+            })
+            .catch(err => {
+                console.error("CSVデータの処理中にエラーが発生しました:", err);
+                document.getElementById('top').innerHTML = `<div style="color:red; text-align:center; padding: 20px;">クラブデータの読み込みに失敗しました。CSVファイルを確認してください。</div>`;
+            });
+
+        // --- ヨーロッパ日本人選手データ ---
+        fetch("data/europe.csv")
+            .then(res => res.text())
+            .then(text => {
+                const lines = text.trim().split("\n");
+                const headers = lines[0].split(",");
+                europePlayers = lines.slice(1).map(line => {
+                    const vals = line.split(",");
+                    const obj = {};
+                    headers.forEach((h, i) => obj[h] = vals[i]);
+                    return obj;
+                });
+                // ページが既に開かれていたら再描画
+                if (document.getElementById('europe').classList.contains('visible')) {
+                    showPlayerTable();
+                }
+            });
+
+        // --- イベントリスナー設定 ---
+        setupEventListeners();
     });
+
+    // === ビッグクラブ指数ページ ===
     function renderBig5(clubs) {
       const big5 = clubs.slice(0, 5);
       const big5Div = document.getElementById("big5-cards");
       big5Div.innerHTML = "";
-      const row1 = document.createElement("div");
-      row1.className = "big5-row";
-      const row2 = document.createElement("div");
-      row2.className = "big5-row";
+      const row1 = document.createElement("div"); row1.className = "big5-row";
+      const row2 = document.createElement("div"); row2.className = "big5-row";
       big5.forEach((club, i) => {
         let colorClass = "local";
-        if (club.sum >= 30)      colorClass = "top-club";
+        if (club.sum >= 30) colorClass = "top-club";
         else if (club.sum >= 20) colorClass = "potential-big";
-        else if (club.sum >= 5)  colorClass = "middle";
+        else if (club.sum >= 5) colorClass = "middle";
         const isLong = club.name.length >= 10;
         const card = document.createElement("div");
         card.className = `club-card ${colorClass} rank-${i+1}` + (isLong ? " long-title" : "");
-        card.innerHTML =
-          `<h3 class="club-title">${club.name}</h3><div class="score-val">スコア：${club.sum.toFixed(1)}</div>`;
+        card.innerHTML = `<h3 class="club-title">${club.name}</h3><div class="score-val">スコア：${club.sum.toFixed(1)}</div>`;
         if (i < 3) row1.appendChild(card); else row2.appendChild(card);
       });
       big5Div.appendChild(row1); big5Div.appendChild(row2);
@@ -730,12 +713,9 @@ if (typeof window.updateScoreBtnDisplay === 'function') window.updateScoreBtnDis
       const tableDiv = document.getElementById("club-categories");
       tableDiv.innerHTML = "";
       const table = document.createElement("table");
-      const thead = table.createTHead();
-      const headerRow = thead.insertRow();
+      const thead = table.createTHead(); const headerRow = thead.insertRow();
       ["順位", "クラブ名", "合算スコア", "区分"].forEach(h => {
-        const th = document.createElement("th");
-        th.textContent = h;
-        headerRow.appendChild(th);
+        const th = document.createElement("th"); th.textContent = h; headerRow.appendChild(th);
       });
       const tbody = table.createTBody();
       others.forEach((club, idx) => {
@@ -747,45 +727,17 @@ if (typeof window.updateScoreBtnDisplay === 'function') window.updateScoreBtnDis
         const tr = tbody.insertRow();
         tr.className = colorClass;
         [idx + 6, club.name, club.sum.toFixed(1), category].forEach(val => {
-          const td = document.createElement("td");
-          td.textContent = val;
-          tr.appendChild(td);
+          const td = document.createElement("td"); td.textContent = val; tr.appendChild(td);
         });
       });
       tableDiv.appendChild(table);
     }
-    function renderHistory(clubs) {
-      const historyDiv = document.getElementById("jleague-history");
-      historyDiv.innerHTML = "";
-      const hisTable = document.createElement("table");
-      const hisThead = hisTable.createTHead();
-      const hisHeader = hisThead.insertRow();
-      ["クラブ名", "J1過去10年在籍年数", "J1過去10年平均順位", "J1過去10年在籍スコア"].forEach(h => {
-        const th = document.createElement("th");
-        th.textContent = h;
-        hisHeader.appendChild(th);
-      });
-      const hisTbody = hisTable.createTBody();
-      clubs.forEach(club => {
-        const tr = hisTbody.insertRow();
-        [
-          club.name,
-          club.l,
-          club.m,
-          (club.o === "#N/A" ? 21 : club.o)
-        ].forEach(val => {
-          const td = document.createElement("td");
-          td.textContent = val;
-          tr.appendChild(td);
-        });
-      });
-      historyDiv.appendChild(hisTable);
-    }
+
+    // === クラブ指標ページ ===
     function showMetricChart(key) {
       document.querySelectorAll('.metric-btn').forEach(btn => btn.classList.remove('active'));
-      if (key === 'revenue') document.querySelector('.metric-btn:nth-child(1)').classList.add("active");
-      if (key === 'audience') document.querySelector('.metric-btn:nth-child(2)').classList.add("active");
-      if (key === 'titles')   document.querySelector('.metric-btn:nth-child(3)').classList.add("active");
+      const activeBtn = Array.from(document.querySelectorAll('.metric-btn')).find(btn => btn.getAttribute('onclick').includes(key));
+      if (activeBtn) activeBtn.classList.add("active");
       const chartData = clubData.map(club => club[key]);
       const labels = clubData.map(club => club.name);
       if (metricChart) metricChart.destroy();
@@ -795,651 +747,318 @@ if (typeof window.updateScoreBtnDisplay === 'function') window.updateScoreBtnDis
         data: {
           labels: labels,
           datasets: [{
-            label: {
-              revenue: "売上高（億円）",
-              audience: "平均観客動員（人数）",
-              titles: "タイトル数"
-            }[key],
+            label: { revenue: "売上高（億円）", audience: "平均観客動員（人数）", titles: "タイトル数" }[key],
             data: chartData,
             backgroundColor: labels.map((_, i) => {
               let sum = clubData[i].sum;
-              if (sum >= 30) return "#e94444bb";
-              else if (sum >= 20) return "#22bbf0cc";
-              else if (sum >= 5) return "#bbbbbbc8";
-              else return "#232947bb";
+              if (sum >= 30) return "#e94444bb"; else if (sum >= 20) return "#22bbf0cc";
+              else if (sum >= 5) return "#bbbbbbc8"; else return "#232947bb";
             }),
             borderWidth: 1
           }]
         },
         options: {
-          indexAxis: 'y',
-          responsive: true,
-          maintainAspectRatio: false,
+          indexAxis: 'y', responsive: true, maintainAspectRatio: false,
           scales: {
             x: { beginAtZero: true, ticks: { color: "#111" } },
             y: { ticks: { autoSkip: false, color: "#111" } }
           },
-          plugins: {
-            legend: { labels: { color: '#111' } },
-            title: {
-              display: false
-            }
-          }
+          plugins: { legend: { labels: { color: '#111' } }, title: { display: false } }
         }
       });
     }
-    // ==== ヨーロッパ日本人選手ページ用 ====
-    // europe.csvの読み込み
-    let europePlayers = [];
-    fetch("data/europe.csv")
-      .then(res => res.text())
-      .then(text => {
-        const lines = text.trim().split("\n");
-        const headers = lines[0].split(",");
-        europePlayers = lines.slice(1).map(line => {
-          const vals = line.split(",");
-          const obj = {};
-          headers.forEach((h, i) => obj[h] = vals[i]);
-          return obj;
+
+        // === 過去10年順位ページ ===
+    function renderHistory(clubs) {
+      const historyDiv = document.getElementById("jleague-history");
+      historyDiv.innerHTML = "";
+      const hisTable = document.createElement("table");
+      const hisThead = hisTable.createTHead(); const hisHeader = hisThead.insertRow();
+      ["クラブ名", "J1過去10年在籍年数", "J1過去10年平均順位", "J1過去10年在籍スコア"].forEach(h => {
+        const th = document.createElement("th"); th.textContent = h; hisHeader.appendChild(th);
+      });
+      const hisTbody = hisTable.createTBody();
+      clubs.forEach(club => {
+        const tr = hisTbody.insertRow();
+        // データをそのまま表示するように修正
+        [club.name, club.l, club.m, club.o].forEach(val => {
+          const td = document.createElement("td"); td.textContent = val; tr.appendChild(td);
         });
       });
-    // 地図ボタンのイベント
-    document.addEventListener("DOMContentLoaded", () => {
-      const btns = document.querySelectorAll(".country-btn");
-      btns.forEach(btn => {
-        btn.addEventListener("mouseenter", () => btn.classList.add("active"));
-        btn.addEventListener("mouseleave", () => btn.classList.remove("active"));
-        btn.addEventListener("click", () => {
-          btns.forEach(b => b.classList.remove("active"));
-          btn.classList.add("active");
-          showPlayerTable(btn.dataset.country);
-        });
-      });
-    });
-    // 表表示（★ここだけ変更★）
+      historyDiv.appendChild(hisTable);
+    }
+
+    // === 各クラブ紹介ページ ===
+    function renderClubLeagueTable(league) {
+        if (clubLeagueList.length === 0) return;
+        const tableDiv = document.getElementById("club-league-table");
+        const rows = clubLeagueList.filter(club => club.p === league);
+        if (!rows.length) {
+            tableDiv.innerHTML = `<div style="padding:16px; color:white;">このリーグのクラブデータはありません</div>`;
+            return;
+        }
+        let html = `<table><thead><tr><th>クラブ名</th></tr></thead><tbody>
+            ${rows.map(club => `<tr><td style="cursor:pointer; color:#3cf;" onclick="showClubStatus('${club.name}')">${club.name}</td></tr>`).join("")}
+            </tbody></table>`;
+        tableDiv.innerHTML = html;
+    }
+    function showClubStatus(clubName) {
+      const club = clubData.find(c => c.name === clubName);
+      if (!club) return;
+      const rank = clubData.findIndex(c => c.name === clubName) + 1;
+      const html = `<div style="font-size:1.36em; font-weight:bold; color:#97d7ff; margin-bottom:8px; letter-spacing:0.06em;">${clubName}</div>
+          <div style="display:flex; flex-wrap:wrap; gap:13px 38px; font-size:1.13em;">
+            <div>🏅 <b>所属リーグ:</b> ${club.p || '-'}</div>
+            <div>👑 <b>ビッグクラブスコア:</b> ${club.sum ? club.sum.toFixed(1) : '-'} <span style="font-size:0.97em;">（${rank}位）</span></div>
+            <div>💰 <b>売上高:</b> ${club.revenue || '-'} 億円</div>
+            <div>👥 <b>平均観客数:</b> ${(club.audience || '-').toLocaleString()} 人</div>
+            <div>🏆 <b>タイトル獲得数:</b> ${club.titles || '-'}</div>
+            <div>📊 <b>J1在籍10年平均順位:</b> ${club.m || '-' } 位</div>
+          </div>
+          <button onclick="document.getElementById('club-status-board').style.display='none';" style="position:absolute;top:13px;right:14px; background:#29b6e6; border:none; border-radius:7px; color:#fff; padding:5px 13px; font-size:1.01em; cursor:pointer;">閉じる</button>`;
+      const board = document.getElementById("club-status-board");
+      board.innerHTML = html; board.style.display = "block";
+    }
+
+    // === ヨーロッパ日本人選手ページ ===
     function showPlayerTable(country) {
       const div = document.getElementById("player-table-wrap");
-      const rows = europePlayers.filter(row => (row.国 || row.Country) === country);
+      
+      let rows;
+      // もしcountryが指定されていれば、その国でフィルタリング
+      if (country) {
+        rows = europePlayers.filter(row => (row.国 || row.Country) === country);
+      } else {
+      // 指定されていなければ、全選手を対象にする
+        rows = [...europePlayers]; // 全選手のコピーを作成
+      }
+      
+      // 年齢の若い順に並び替え
+      rows.sort((a, b) => (parseInt(a.年齢) || 99) - (parseInt(b.年齢) || 99));
+
       if (!rows.length) {
         div.innerHTML = `<div style="color:#ffe;padding:16px;">データがありません</div>`;
         return;
       }
-      let html = `<h3 style="text-align:center;color:#ffd700;">${country}の日本人選手</h3>`;
-      html += `
-        <div style="display:flex; justify-content:center;">
-          <table style="width:100%; max-width:1000px; min-width:320px; background:#fff; color:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.18); margin:auto;">
-            <thead>
-              <tr>
-                ${Object.keys(rows[0]).map(h => `<th style="padding:10px; background:#299ad3; color:#fff;">${h}</th>`).join("")}
-              </tr>
-            </thead>
-            <tbody>
-              ${rows.map(row =>
-                `<tr>${Object.values(row).map(val => `<td style="padding:9px; text-align:center; border-bottom:1px solid #e4e4e4;">${val}</td>`).join("")}</tr>`
-              ).join("")}
-            </tbody>
-          </table>
-        </div>
-      `;
+      
+      // countryが指定されている場合のみタイトルを表示
+      const titleHtml = country ? `<h3 style="text-align:center;color:#ffd700;">${country}の日本人選手</h3>` : '';
+
+      // テーブルのHTML生成
+      let html = titleHtml;
+      html += `<div style="display:flex; justify-content:center;"><table style="width:100%; max-width:1000px; min-width:320px; background:transparent; color:#f0f0f0; border-radius:12px; box-shadow:none; margin:auto; border-collapse:collapse;">
+            <thead><tr>${Object.keys(rows[0]).map(h => `<th style="padding:10px; background:#299ad3; color:#fff;">${h}</th>`).join("")}</tr></thead>
+            <tbody>${rows.map(row => `<tr>${Object.values(row).map(val => `<td style="padding:9px; text-align:center; border-bottom:1px solid #ffffff44;">${val}</td>`).join("")}</tr>`).join("")}</tbody>
+          </table></div>`;
       div.innerHTML = html;
     }
-// --- ベスト11ページ ロジック ---
-window.nowSelectedPosKey = null;
 
-let best11Formation = "343"; // デフォルト:3-4-3
-let best11Selected = {};     // ポジションごとの選手名
-let best11Positions = {
-  "343": [
-    {key:"GK", label:"GK"},
-    {key:"CB1", label:"CB1"}, {key:"CB2", label:"CB2"}, {key:"CB3", label:"CB3"},
-    {key:"MF1", label:"MF1"}, {key:"MF2", label:"MF2"},
-    {key:"MF3", label:"MF3"}, {key:"MF4", label:"MF4"},
-    {key:"MF5", label:"MF5"}, {key:"MF6", label:"MF6"}, {key:"FW", label:"FW"}
-  ],
-  "433": [
-    {key:"GK", label:"GK"},
-    {key:"CB1", label:"CB1"}, {key:"CB2", label:"CB2"}, {key:"CB3", label:"CB3"}, {key:"CB4", label:"CB4"},
-    {key:"MF1", label:"MF1"}, {key:"MF2", label:"MF2"}, {key:"MF3", label:"CM3"},
-    {key:"MF4", label:"MF4"}, {key:"MF5", label:"MF5"}, {key:"FW", label:"FW"}
-  ]
-};
-
-// europePlayersは既存fetchで読み込まれている前提
-function setFormation(form, btn) {
-  best11Formation = form;
-  document.querySelectorAll('.formation-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  best11Selected = {};
-  renderPositionTabs();
-  renderBest11Table();
-}
-function renderPositionTabs() {
-  const posDiv = document.getElementById("position-tabs");
-  if (!posDiv) return;
-  const positions = best11Positions[best11Formation];
-  let html = '<div style="margin-bottom:7px;font-weight:bold;">ポジションを選んでください</div>';
-html += '<div class="position-btn-row">';
-positions.forEach((pos, i) => {
-  html += `<button class="position-btn${i===0?' active':''}" data-pos="${pos.key}" onclick="selectPosition('${pos.key}', this)">
-    ${pos.label}
-  </button>`;
-});
-html += '</div>';
-
-  // 選手リスト部
-  html += '<div id="player-choice-list"></div>';
-  posDiv.innerHTML = html;
-  // 初期選択
-  setTimeout(()=>{
-    selectPosition(positions[0].key, posDiv.querySelector('.position-btn'));
-  },10);
-}
-
-
-function selectPosition(posKey, btn) {
-window.nowSelectedPosKey = posKey;
-  document.querySelectorAll('#position-tabs .position-btn').forEach(b=>b.classList.remove('active'));
-  if(btn) btn.classList.add('active');
-  let listDiv = document.getElementById('player-choice-list');
-  if (!listDiv) return;
-
-  // ポジション名（例: "CB1"→"CB"、"CB"→"DF"も許容）
-  const searchKey = posKey.replace(/[0-9]/g, '').toUpperCase();
-
-  // まず完全一致
-  let players = europePlayers.filter(p => {
-    let pos = (p['ポジション']||p['Position']||"").toUpperCase();
-    return pos === searchKey;
-  });
-
-  // それでも見つからなければ、DF/GK/MF/FWの広義で再検索
-  if(players.length === 0) {
-    players = europePlayers.filter(p => {
-      let pos = (p['ポジション']||p['Position']||"").toUpperCase();
-      // 例: CB,SB,LB,RBはすべてDF扱い
-      if(searchKey === 'CB' || searchKey === 'SB' || searchKey === 'LB' || searchKey === 'RB') {
-        return pos === 'DF';
-      }
-      if(searchKey === 'CM' || searchKey === 'DM' || searchKey === 'OM' || searchKey === 'LM' || searchKey === 'RM') {
-        return pos === 'MF';
-      }
-      if(searchKey === 'FW' || searchKey === 'ST' || searchKey === 'CF' || searchKey === 'RW' || searchKey === 'LW') {
-        return pos === 'FW';
-      }
-      return pos === searchKey;
-    });
-  }
-
-  // それでもなければ全体から一部一致
-  if(players.length === 0) {
-    players = europePlayers.filter(p => {
-      let pos = (p['ポジション']||p['Position']||"").toUpperCase();
-      return pos.includes(searchKey);
-    });
-  }
-
-  // 表示
-  if(players.length === 0) {
-    listDiv.innerHTML = `<div style="color:#ffd700;padding:7px;">選手データがありません</div>`;
-    return;
-  }
-listDiv.innerHTML =
-  '<div class="player-choice-row">' +
-  players.map(p =>
-  `<button style="margin:0 6px 6px 0;
-      padding:6px 16px;
-      border-radius:12px;
-      border:1.4px solid #299ad3;
-      background:#fff;
-      color:#232947;
-      font-weight:bold;
-      font-size:1.09em;
-      cursor:pointer;"
-    onclick="choosePlayer('${posKey}','${p['名前']||p['Name']}')">
-    ${p['名前']||p['Name']}
-   </button>`
-)
-.join('') +
-  '</div>';
-
-renderCourtPlayers();
-}
-
-// 表描画
-function renderBest11Table() {
-  const tableDiv = document.getElementById("best11-table");
-  const positions = best11Positions[best11Formation];
-  // 並び順をFW→MF(数字大きい順)→CB(数字大きい順)→GK
-  const posOrder = positions.slice().sort((a, b) => {
-    // 1. FW（複数ある場合は番号順に上）
-    if (a.key.startsWith('FW') && !b.key.startsWith('FW')) return -1;
-    if (!a.key.startsWith('FW') && b.key.startsWith('FW')) return 1;
-    if (a.key.startsWith('FW') && b.key.startsWith('FW')) {
-      const an = parseInt(a.key.replace('FW','')) || 0;
-      const bn = parseInt(b.key.replace('FW','')) || 0;
-      return an - bn;
-    }
-    // 2. MF（数字大きい順）
-    if (a.key.startsWith('MF') && !b.key.startsWith('MF')) return -1;
-    if (!a.key.startsWith('MF') && b.key.startsWith('MF')) return 1;
-    if (a.key.startsWith('MF') && b.key.startsWith('MF')) {
-      const an = parseInt(a.key.replace('MF','')) || 0;
-      const bn = parseInt(b.key.replace('MF','')) || 0;
-      return bn - an;
-    }
-    // 3. CB（数字大きい順）
-    if (a.key.startsWith('CB') && !b.key.startsWith('CB')) return -1;
-    if (!a.key.startsWith('CB') && b.key.startsWith('CB')) return 1;
-    if (a.key.startsWith('CB') && b.key.startsWith('CB')) {
-      const an = parseInt(a.key.replace('CB','')) || 0;
-      const bn = parseInt(b.key.replace('CB','')) || 0;
-      return bn - an;
-    }
-    // 4. GKは一番下
-    if (a.key === 'GK') return 1;
-    if (b.key === 'GK') return -1;
-    // その他は元の順番
-    return 0;
-  });
-
-  let html = `
-  <table>
-    <thead>
-      <tr>
-        <th>ポジション</th>
-        <th>選手</th>
-        <th>クラブ</th>
-        <th>リーグ</th>
-      </tr>
-    </thead>
-    <tbody>
-  `;
-
-  posOrder.forEach(pos => {
-    let name = best11Selected[pos.key] || '';
-    let club = '', league = '';
-    if (name) {
-      // 「名前」または「Name」列で該当選手を検索
-      const player = europePlayers.find(p =>
-        (p['名前'] || p['Name']) === name
-      );
-      if (player) {
-        club = player['チーム名'] || player['Club'] || '';
-        league = player['リーグ'] || player['League'] || '';
-      }
-    }
-    html += `<tr>
-      <td style="font-weight:bold;">${pos.label}</td>
-      <td${name ? '' : ' class="unselected"'}>${name || '未選択'}</td>
-      <td>${club || '-'}</td>
-      <td>${league || '-'}</td>
-    </tr>`;
-  });
-
-  html += "</tbody></table>";
-  tableDiv.innerHTML = html;
-}
-
-
-// ベスト11ページ初期化フック
-document.addEventListener("DOMContentLoaded", ()=>{
-  // ユーザーが「ベスト11ページ」を開いた時だけ描画
-  document.getElementById("nav-europe-btn").addEventListener("click", ()=>{
-    setTimeout(()=>{ renderPositionTabs(); renderBest11Table(); }, 80);
-  });
-  // サブメニュークリックにもhook
-  let bestBtn = document.querySelector('.nav-dropdown-content button');
-  if(bestBtn){
-    bestBtn.addEventListener("click", ()=>{
-      setTimeout(()=>{ renderPositionTabs(); renderBest11Table(); }, 80);
-    });
-  }
-});
-// --- court画像上に選手名を配置するための座標 ---
-const best11PosCoords = {
-  "343": {
-    GK:   {top: 290, left: 140},
-    CB1:  {top: 225, left: 50},
-    CB2:  {top: 235, left: 140},
-    CB3:  {top: 225, left: 230},
-    MF1:  {top: 120, left: 40},
-    MF2:  {top: 120, left: 240},
-    MF3:  {top: 165, left: 90},
-    MF4:  {top: 165, left: 190},
-    MF5:  {top: 60,  left: 70},
-    FW:  {top: 25,  left: 140},
-    MF6:  {top: 60,  left: 210}
-  },
-  "433": {
-    GK:   {top: 290, left: 140},
-    CB1:   {top: 200, left: 38},
-    CB2:  {top: 235, left: 100},
-    CB3:  {top: 235, left: 190},
-    CB4:   {top: 200, left: 240},
-    MF1:  {top: 130, left: 55},
-    MF2:  {top: 155, left: 140},
-    MF3:  {top: 130, left: 225},
-    MF4:  {top: 70,  left: 70},
-    FW:  {top: 25,  left: 140},
-    MF5:  {top: 70,  left: 210}
-  }
-};
-const best11DisplayLabel = {
-  GK: 'GK',
-  CB1: 'DF', CB2: 'DF', CB3: 'DF',
-  C4: 'DF',
-  MF1: 'MF', MF2: 'MF',
-  MF3: 'MF', MF4: 'MF', MF5: 'MF',
-  FW: 'FW',
-};
-
-// 画像上に選手名を配置（文字数で自動縮小B案）
-function renderCourtPlayers() {
-  const area = document.getElementById('court-area');
-  if (!area) return;
-  area.querySelectorAll('.best11-player-label').forEach(e => e.remove());
-  const positions = best11Positions[best11Formation];
-  positions.forEach(pos => {
-    const c = best11PosCoords[best11Formation][pos.key];
-    if (!c) return;
-    const label = document.createElement('div');
-    label.className =
-  'best11-player-label'
-  + (best11Selected[pos.key] ? '' : ' unselected')
-  + (pos.key === window.nowSelectedPosKey ? ' selected' : '');
-    label.style.top = `${c.top}px`;
-    label.style.left = `${c.left}px`;
-
-    let name = best11Selected[pos.key] ? best11Selected[pos.key] : pos.label;
-    let fontSize = '1em';
-    if (name.length >= 7) fontSize = '0.80em';
-    else if (name.length >= 6) fontSize = '0.89em';
-    // 5文字以下は標準
-
-    label.innerHTML = `<span style="font-size:${fontSize};">${name}</span>`;
-    label.onclick = function() {
-      selectPosition(pos.key, null); // 第二引数は未使用なのでnullでOK
+    // === ベスト11ページ ===
+    window.nowSelectedPosKey = null; let best11Formation = "343"; let best11Selected = {};
+    const best11Positions = {
+        "343": [{key:"GK",label:"GK"},{key:"CB1",label:"CB1"},{key:"CB2",label:"CB2"},{key:"CB3",label:"CB3"},{key:"MF1",label:"MF1"},{key:"MF2",label:"MF2"},{key:"MF3",label:"MF3"},{key:"MF4",label:"MF4"},{key:"MF5",label:"MF5"},{key:"MF6",label:"MF6"},{key:"FW",label:"FW"}],
+        "433": [{key:"GK",label:"GK"},{key:"CB1",label:"CB1"},{key:"CB2",label:"CB2"},{key:"CB3",label:"CB3"},{key:"CB4",label:"CB4"},{key:"MF1",label:"MF1"},{key:"MF2",label:"MF2"},{key:"MF3",label:"CM3"},{key:"MF4",label:"MF4"},{key:"MF5",label:"MF5"},{key:"FW",label:"FW"}]
     };
-    label.style.cursor = "pointer";
-    area.appendChild(label);
-  });
-}
-
-
-
-
-// 既存の「選手選択時」「フォーメーション切替時」などで
-// 必ず renderCourtPlayers() を呼ぶようにしてください。
-
-// 例えば...
-function setFormation(form, btn) {
-  best11Formation = form;
-
-  const formationTitle = document.getElementById('formation-title');
-  if (formationTitle) {
-    let text = '';
-    if (form === '343') text = '3-4-3';
-    else if (form === '433') text = '4-3-3';
-    else text = form;
-    formationTitle.textContent = `フォーメーション：${text}`;
-  }
-
-  document.querySelectorAll('.formation-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  best11Selected = {};
-  renderPositionTabs();
-  renderBest11Table();
-  renderCourtPlayers(); // ← ここ追加！
-}
-  // ▼これを追加
-  const formationLabels = { "343": "3-4-3", "433": "4-3-3" };
-const formationTitle = document.getElementById("formation-title");
-if (formationTitle) {
-  formationTitle.textContent = "フォーメーション：" + (formationLabels[best11Formation] || best11Formation);
-}
-
-
-function choosePlayer(posKey, name) {
-  best11Selected[posKey]=name;
-  renderBest11Table();
-  renderCourtPlayers(); // ← ここ追加！
-}
-
-// ページ開いた時も
-document.addEventListener("DOMContentLoaded", ()=>{
-  let bestBtn = document.querySelector('.nav-dropdown-content button');
-  if(bestBtn){
-    bestBtn.addEventListener("click", ()=>{
-      setTimeout(()=>{ renderPositionTabs(); renderBest11Table(); renderCourtPlayers(); }, 80);
-    });
-  }
-});
-
-
-  </script>
-<!-- ...あなたの他のJS... -->
-
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-<script>
-  // 👇これを追記（または既存のDOMContentLoaded内に追加）
-document.addEventListener("DOMContentLoaded", function() {
-  var btn = document.getElementById("copy-best11-img-btn");
-  if(btn){
-    btn.onclick = function() {
-      const captureElem = document.getElementById('best11-capture-area');
-      // ★「青色ラベル（.selected）」を一時的に外す
-      const selectedLabels = captureElem.querySelectorAll('.best11-player-label.selected');
-      selectedLabels.forEach(e => e.classList.remove('selected'));
-
-      btn.style.visibility = 'hidden'; // ボタン隠す
-
-      html2canvas(captureElem, {
-        backgroundColor: null // 必要なら"#fff"
-      }).then(canvas => {
-        btn.style.visibility = 'visible';
-
-        // キャプチャ後に「selected」クラスを元に戻す
-        selectedLabels.forEach(e => e.classList.add('selected'));
-
-        canvas.toBlob(blob => {
-          if (navigator.clipboard && navigator.clipboard.write) {
-            const item = new ClipboardItem({ "image/png": blob });
-            navigator.clipboard.write([item]).then(function() {
-              document.getElementById('copy-best11-img-msg').textContent = 'コピーしました！';
-            }).catch(function(e){
-              document.getElementById('copy-best11-img-msg').textContent = 'コピー失敗（権限/HTTPS？）';
-            });
-          } else {
-            document.getElementById('copy-best11-img-msg').textContent = '対応していません（Chrome推奨）';
-          }
+    const best11PosCoords = {
+        "343":{GK:{top:290,left:140},CB1:{top:225,left:50},CB2:{top:235,left:140},CB3:{top:225,left:230},MF1:{top:120,left:40},MF2:{top:120,left:240},MF3:{top:165,left:90},MF4:{top:165,left:190},MF5:{top:60,left:70},FW:{top:25,left:140},MF6:{top:60,left:210}},
+        "433":{GK:{top:290,left:140},CB1:{top:200,left:38},CB2:{top:235,left:100},CB3:{top:235,left:190},CB4:{top:200,left:240},MF1:{top:130,left:55},MF2:{top:155,left:140},MF3:{top:130,left:225},MF4:{top:70,left:70},FW:{top:25,left:140},MF5:{top:70,left:210}}
+    };
+    function initBest11Page() { renderPositionTabs(); renderBest11Table(); renderCourtPlayers(); }
+    window.setFormation = function(form, btn) {
+        best11Formation = form;
+        const formationLabels = { "343": "3-4-3", "433": "4-3-3" };
+        document.getElementById("formation-title").textContent = "フォーメーション：" + (formationLabels[best11Formation] || best11Formation);
+        document.querySelectorAll('.formation-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active'); best11Selected = {}; initBest11Page();
+    }
+    function renderPositionTabs() {
+        const posDiv = document.getElementById("position-tabs"); if (!posDiv) return;
+        const positions = best11Positions[best11Formation];
+        let html = '<div style="margin-bottom:7px;font-weight:bold;">ポジションを選んでください</div><div class="position-btn-row">';
+        positions.forEach((pos, i) => { html += `<button class="position-btn${i===0?' active':''}" data-pos="${pos.key}" onclick="selectPosition('${pos.key}', this)">${pos.label}</button>`; });
+        html += '</div><div id="player-choice-list"></div>';
+        posDiv.innerHTML = html;
+        setTimeout(() => selectPosition(positions[0].key, posDiv.querySelector('.position-btn')), 10);
+    }
+    window.selectPosition = function(posKey, btn) {
+        window.nowSelectedPosKey = posKey;
+        document.querySelectorAll('#position-tabs .position-btn').forEach(b => b.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+        let listDiv = document.getElementById('player-choice-list'); if (!listDiv) return;
+        const searchKey = posKey.replace(/[0-9]/g, '').toUpperCase();
+        let players = europePlayers.filter(p => {
+            const playerPos = (p['ポジション'] || p['Position'] || "").toUpperCase();
+            if (playerPos === searchKey) return true;
+            if (searchKey === 'CB' && playerPos === 'DF') return true;
+            return false;
         });
-      });
+        if (players.length === 0) { listDiv.innerHTML = `<div style="color:white; padding: 10px;">このポジションの選手データがありません。</div>`; }
+        else { listDiv.innerHTML = `<div class="player-choice-row">${players.map(p => `<button style="margin:0 6px 6px 0; padding:6px 16px; border-radius:12px; border:1.4px solid #299ad3; background:#fff; color:#232947; font-weight:bold; font-size:1.09em; cursor:pointer;" onclick="choosePlayer('${posKey}','${p['名前']||p['Name']}')">${p['名前']||p['Name']}</button>`).join('')}</div>`; }
+        renderCourtPlayers();
     }
-  }
-});
-
-// クラブリーグ紹介タブ
-let clubLeagueList = [];
-let clubLeagueHeaders = [];
-fetch("data/data.csv")
-  .then(res => res.text())
-  .then(text => {
-    const lines = text.trim().split("\n");
-    clubLeagueHeaders = lines[0].split(",");
-    clubLeagueList = lines.slice(1).map(line => {
-      const vals = line.split(",");
-      const obj = {};
-      clubLeagueHeaders.forEach((h, i) => obj[h] = vals[i]);
-      return obj;
-    });
-    renderClubLeagueTable("J1"); // 初期表示
-  });
-
-function renderClubLeagueTable(league) {
-  const tableDiv = document.getElementById("club-league-table");
-  // 所属リーグの列名を確認（例："所属リーグ"や"リーグ"など）
-  let leagueCol = clubLeagueHeaders.find(h => h.includes("所属リーグ"));
-  if (!leagueCol) { tableDiv.innerHTML = "CSVに所属リーグ列がありません"; return; }
-  let nameCol = clubLeagueHeaders[0]; // 最初の列がクラブ名前提
-  // フィルタ
-  const rows = clubLeagueList.filter(club => club[leagueCol] === league);
-  if (!rows.length) {
-    tableDiv.innerHTML = `<div style="padding:16px;">このリーグのクラブデータはありません</div>`;
-    return;
-  }
-  let html = `
-  <table>
-    <thead><tr><th>クラブ名</th></tr></thead>
-    <tbody>
-      ${rows.map(club => 
-        `<tr>
-           <td style="cursor:pointer; color:#3cf;" onclick="showClubStatus('${club[nameCol]}')">${club[nameCol]}</td>
-         </tr>`
-      ).join("")}
-    </tbody>
-  </table>
-`;
-
-  tableDiv.innerHTML = html;
-}
-
-// タブイベント
-document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll(".league-tab-btn").forEach(btn => {
-    btn.addEventListener("click", function() {
-      document.querySelectorAll(".league-tab-btn").forEach(b => b.classList.remove("active"));
-      this.classList.add("active");
-      renderClubLeagueTable(this.dataset.league);
-    });
-  });
-});
-function showClubStatus(clubName) {
-  // clubData（全クラブデータ配列）から該当クラブを探す
-  const club = clubData.find(c => c.name === clubName || c["クラブ名"] === clubName);
-  if (!club) return;
-
-  // 全クラブのスコア順で順位を出す
-  const sorted = [...clubData].sort((a, b) => b.sum - a.sum);
-  const rank = sorted.findIndex(c => c.name === clubName || c["クラブ名"] === clubName) + 1;
-
-  // HTML生成（デザイン例：自由に調整可）
-  const html = `
-      <div style="font-size:1.36em; font-weight:bold; color:#97d7ff; margin-bottom:8px; letter-spacing:0.06em;">
-        ${clubName}
-      </div>
-      <div style="display:flex; flex-wrap:wrap; gap:13px 38px; font-size:1.13em;">
-        <div>🏅 <b>所属リーグ:</b> ${club.p || club["所属リーグ"] || '-'}</div>
-        <div>👑 <b>ビッグクラブスコア:</b> ${club.sum ? club.sum.toFixed(1) : '-'} <span style="font-size:0.97em;">（${rank}位）</span></div>
-        <div>💰 <b>売上高:</b> ${club.revenue || club["売上高（億円）"] || '-'} 億円</div>
-        <div>👥 <b>平均観客数:</b> ${(club.audience || club["平均観客動員数"] || '-').toLocaleString()} 人</div>
-        <div>🏆 <b>タイトル獲得数:</b> ${club.titles || club["タイトル計"] || '-'}</div>
-        <div>📊 <b>J1在籍10年平均順位:</b> ${club["J1在籍10年平均順位"] || club.m || '-' } 位</div>
-      </div>
-      <button onclick="document.getElementById('club-status-board').style.display='none';"
-        style="position:absolute;top:13px;right:14px; background:#29b6e6; border:none; border-radius:7px; color:#fff; padding:5px 13px; font-size:1.01em; cursor:pointer;">閉じる</button>
-  `;
-  const board = document.getElementById("club-status-board");
-  board.innerHTML = html;
-  board.style.display = "block";
-}
-// スコア計算方法ボタンの制御（1か所だけでOK！）
-document.addEventListener("DOMContentLoaded", function() {
-  const scoreBtn = document.getElementById("score-method-btn");
-  const scorePop = document.getElementById("score-method-pop");
-
-  // ページ切替時に表示/非表示制御（showPageの中にも同じロジック必要）
-  function updateScoreBtnDisplay() {
-    const id = document.querySelector('.page-section.visible')?.id;
-    if (scoreBtn) scoreBtn.style.display = (id === "top") ? "block" : "none";
-    if (scorePop) scorePop.style.display = "none";
-  }
-  updateScoreBtnDisplay();
-
-  // ページ切替時も呼び出すため、グローバルに公開
-  window.updateScoreBtnDisplay = updateScoreBtnDisplay;
-
-  // ボタンクリックでポップアップ表示
-  if(scoreBtn && scorePop){
-    scoreBtn.onclick = function(e){
-      e.stopPropagation();
-      scorePop.style.display = (scorePop.style.display==="none"||!scorePop.style.display) ? "block" : "none";
-    };
-    // ポップアップ以外クリックで閉じる
-    document.addEventListener("click", function(e){
-      if(scorePop.style.display==="block" && !scorePop.contains(e.target) && e.target !== scoreBtn){
-        scorePop.style.display="none";
-      }
-    });
-  }
-});
-document.addEventListener("DOMContentLoaded", function() {
-  // 詳細リンククリックで中央ポップアップ表示
-  const detailLink = document.getElementById("score-detail-link");
-  const detailPop = document.getElementById("score-detail-pop");
-  if(detailLink && detailPop){
-    detailLink.onclick = function(e){
-      e.preventDefault();
-      detailPop.style.display = "block";
-    };
-    // ポップアップ外クリックで閉じる（×ボタンのみが良ければ↓は消してもOK）
-    document.addEventListener("click", function(e){
-      if(detailPop.style.display==="block" && !detailPop.contains(e.target) && e.target !== detailLink){
-        detailPop.style.display="none";
-      }
-    });
-  }
-});
-// 各クラブ紹介ボードを外クリックで閉じる
-document.addEventListener("click", function(e){
-  const board = document.getElementById("club-status-board");
-  // 表示中 かつ クリック先がボード内や「クラブ名セル」でなければ閉じる
-  if (board.style.display === "block" && !board.contains(e.target)) {
-    // 「クラブ名セル」のクリックで即消え防止
-    if (e.target.matches("td[onclick^='showClubStatus']")) return;
-    board.style.display = "none";
-  }
-});
-<!-- marked.js（CDN）を読み込み -->
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  // 記事一覧読み込み
-  fetch("posts/index.json")
-    .then(res => res.json())
-    .then(posts => {
-      const ul = document.getElementById("blog-list");
-      ul.innerHTML = "";
-      posts.sort((a,b)=>b.date.localeCompare(a.date)); // 新しい順
-      posts.forEach(post => {
-        const li = document.createElement("li");
-        li.innerHTML = `<a href="#" data-slug="${post.slug}">${post.title} <span style="font-size:0.92em;color:#aac;">(${post.date})</span></a>`;
-        li.querySelector("a").onclick = function(e){
-          e.preventDefault();
-          showBlogContent(post.slug, post.title);
+    function renderBest11Table() {
+        const tableDiv = document.getElementById("best11-table");
+        const positions = best11Positions[best11Formation];
+        const posOrder = [...positions].sort((a,b) => (a.key.startsWith('FW')?-1:1) - (b.key.startsWith('FW')?-1:1) || (b.key.startsWith('MF')?1:-1) - (a.key.startsWith('MF')?1:-1) || (b.key.startsWith('CB')?1:-1) - (a.key.startsWith('CB')?1:-1) || (a.key==='GK'?1:-1));
+        let html = '<table><thead><tr><th>ポジション</th><th>選手</th><th>クラブ</th><th>リーグ</th></tr></thead><tbody>';
+        posOrder.forEach(pos => {
+            let name = best11Selected[pos.key] || ''; let club = '', league = '';
+            if (name) {
+                const player = europePlayers.find(p => (p['名前']||p['Name']) === name);
+                if (player) { club = player['チーム名']||player['Club']||''; league = player['リーグ']||player['League']||''; }
+            }
+            html += `<tr><td style="font-weight:bold;">${pos.label}</td><td${name ? '' : ' class="unselected"'}>${name || '未選択'}</td><td>${club || '-'}</td><td>${league || '-'}</td></tr>`;
+        });
+        html += "</tbody></table>"; tableDiv.innerHTML = html;
+    }
+    function renderCourtPlayers() {
+        const area = document.getElementById('court-area'); if (!area) return;
+        area.innerHTML = '';
+        best11Positions[best11Formation].forEach(pos => {
+            const c = best11PosCoords[best11Formation][pos.key]; if (!c) return;
+            const label = document.createElement('div');
+            label.className = 'best11-player-label' + (best11Selected[pos.key] ? '' : ' unselected') + (pos.key === window.nowSelectedPosKey ? ' selected' : '');
+            label.style.top = `${c.top}px`; label.style.left = `${c.left}px`;
+            let name = best11Selected[pos.key] ? best11Selected[pos.key] : pos.label;
+            let fontSize = name.length >= 7 ? '0.80em' : (name.length >= 6 ? '0.89em' : '1em');
+            label.innerHTML = `<span style="font-size:${fontSize};">${name}</span>`;
+            label.onclick = () => selectPosition(pos.key, document.querySelector(`.position-btn[data-pos="${pos.key}"]`));
+            label.style.cursor = "pointer"; area.appendChild(label);
+        });
+    }
+    window.choosePlayer = function(posKey, name) { best11Selected[posKey] = name; renderBest11Table(); renderCourtPlayers(); }
+    
+    // === イベントリスナー設定関数 ===
+    function setupEventListeners() {
+        document.querySelectorAll(".country-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                document.querySelectorAll(".country-btn").forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                showPlayerTable(btn.dataset.country);
+            });
+        });
+        document.querySelectorAll(".league-tab-btn").forEach(btn => {
+            btn.addEventListener("click", function() {
+                document.querySelectorAll(".league-tab-btn").forEach(b => b.classList.remove("active"));
+                this.classList.add("active");
+                renderClubLeagueTable(this.dataset.league);
+            });
+        });
+        document.querySelector('.nav-dropdown-content button[onclick*="best11"]').addEventListener("click", () => setTimeout(initBest11Page, 50));
+        document.getElementById("copy-best11-img-btn").onclick = function() {
+            const captureElem = document.getElementById('best11-capture-area');
+            const btn = this;
+            const selectedLabel = captureElem.querySelector('.best11-player-label.selected');
+            if (selectedLabel) { selectedLabel.classList.remove('selected'); }
+            btn.style.visibility = 'hidden';
+            html2canvas(captureElem, { backgroundColor: null, scale: 2, useCORS: true }).then(canvas => {
+                btn.style.visibility = 'visible';
+                if (selectedLabel) { selectedLabel.classList.add('selected'); }
+                canvas.toBlob(blob => {
+                    navigator.clipboard.write([new ClipboardItem({ "image/png": blob })])
+                        .then(() => document.getElementById('copy-best11-img-msg').textContent = 'コピーしました！')
+                        .catch(() => document.getElementById('copy-best11-img-msg').textContent = 'コピー失敗');
+                });
+            });
         };
-        ul.appendChild(li);
-      });
-    });
+        const scoreBtn = document.getElementById("score-method-btn");
+        const scorePop = document.getElementById("score-method-pop");
+        const detailLink = document.getElementById("score-detail-link");
+        const detailPop = document.getElementById("score-detail-pop");
+        window.updateScoreBtnDisplay = () => {
+          if (scorePop) scorePop.style.display = "none";
+          if (detailPop) detailPop.style.display = "none";
+        }
+        if(scoreBtn) scoreBtn.onclick = (e) => { e.stopPropagation(); scorePop.style.display = 'block'; };
+        if(detailLink) detailLink.onclick = (e) => { e.preventDefault(); detailPop.style.display = "block"; };
+        document.addEventListener("click", (e) => {
+          const board = document.getElementById("club-status-board");
+          if (board && board.style.display === "block" && !board.contains(e.target) && !e.target.matches("td[onclick^='showClubStatus']")) board.style.display = "none";
+          if (scorePop && scorePop.style.display === "block" && !scorePop.contains(e.target) && e.target !== scoreBtn) scorePop.style.display = "none";
+          if (detailPop && detailPop.style.display === "block" && !detailPop.contains(e.target) && e.target !== detailLink) detailPop.style.display = "none";
+        });
+    }
 
-  window.showBlogContent = function(slug, title){
-    // .md取得→HTML変換
-    fetch(`posts/${slug}.md`)
-      .then(res => res.text())
-      .then(md => {
-        // YAML frontmatter除去
-        md = md.replace(/^---[\s\S]*?---/,'').trim();
-        const html = marked.parse(md);
-        const div = document.getElementById("blog-content");
-        div.innerHTML = `<h2 style="margin-bottom:0.8em;">${title}</h2>`+html+`<div style="margin-top:2em;"><a href="#" onclick="this.closest('#blog-content').style.display='none';return false;" style="color:#299ad3;text-decoration:underline;">一覧に戻る</a></div>`;
-        div.style.display = "block";
-        // スクロール
-        div.scrollIntoView({behavior:"smooth"});
-      });
-  };
-});
+    // === ブログ機能 ===
+    let blogPosts = []; let blogInitialized = false;
+    const listContainer = document.getElementById('blog-list-container');
+    const paginationContainer = document.getElementById('pagination');
+    const contentDiv = document.getElementById('blog-content');
+    const blogPageSection = document.getElementById('blog');
+    
+    if (!listContainer || !paginationContainer || !contentDiv || !blogPageSection) {
+        console.error("ブログ機能に必要なHTML要素が見つかりません。");
+    } else {
+        const observer = new MutationObserver((mutationsList) => {
+            for (const mutation of mutationsList) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class' && blogPageSection.classList.contains('visible')) {
+                    if (!blogInitialized) initializeAndRenderBlog();
+                }
+            }
+        });
+        observer.observe(blogPageSection, { attributes: true });
+    }
+    function initializeAndRenderBlog() {
+        if (blogInitialized) return;
+        fetch("posts/index.json")
+            .then(res => {
+                if (!res.ok) throw new Error(`index.jsonの読み込みに失敗しました。ステータス: ${res.status}`);
+                return res.json();
+            })
+            .then(data => {
+                if (!Array.isArray(data)) throw new Error("JSONデータが配列形式ではありません。");
+                blogPosts = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+                blogInitialized = true;
+                renderArticleList(1);
+            })
+            .catch(err => {
+                console.error("ブログ機能の初期化中にエラー:", err);
+                const errorMessage = `<div style="background:#332222; border:2px solid red; color:white; padding:20px; margin: 20px; text-align:left; font-family:monospace; white-space:pre-wrap; border-radius: 8px;"><h3 style="margin-top:0; color:red;">エラーが発生しました</h3><p style="margin-bottom: 5px;"><strong>エラーの種類:</strong></p><p style="background: #553333; padding: 5px;">${err.name || '不明'}</p><p style="margin-bottom: 5px;"><strong>エラーメッセージ:</strong></p><p style="background: #553333; padding: 5px;">${err.message || '詳細不明'}</p><hr><p>このメッセージをコピーして、開発者に伝えてください。</p></div>`;
+                listContainer.innerHTML = errorMessage;
+            });
+    }
+    const articlesPerPage = 18; let currentPage = 1;
+    function renderArticleList(page) {
+        currentPage = page; listContainer.innerHTML = "";
+        listContainer.style.display = 'flex'; contentDiv.style.display = 'none'; paginationContainer.style.display = 'block';
+        const start = (page - 1) * articlesPerPage;
+        const currentPosts = blogPosts.slice(start, start + articlesPerPage);
+        currentPosts.forEach(post => {
+            const card = document.createElement('div');
+            card.className = 'blog-card';
+            card.innerHTML = `<img src="${post.thumbnail}" alt="${post.title}"><div class="blog-card-content"><div class="blog-card-title">${post.title}</div><div class="blog-card-date">${post.date}</div></div>`;
+            card.onclick = () => showArticleDetail(post.slug, post.title);
+            listContainer.appendChild(card);
+        });
+        renderPagination();
+    }
+    function renderPagination() {
+        paginationContainer.innerHTML = "";
+        const totalPages = Math.ceil(blogPosts.length / articlesPerPage);
+        if (totalPages <= 1) return;
+        for (let i = 1; i <= totalPages; i++) {
+            const btn = document.createElement('button'); btn.textContent = i;
+            btn.style.cssText = `margin:0 5px; padding:6px 14px; border:none; border-radius:5px; cursor:pointer; background:${i === currentPage ? '#299ad3' : '#eee'}; color:${i === currentPage ? '#fff' : '#333'};`;
+            btn.onclick = () => { renderArticleList(i); window.scrollTo({ top: 0, behavior: "smooth" }); };
+            paginationContainer.appendChild(btn);
+        }
+    }
+    function showArticleDetail(slug, title) {
+        listContainer.style.display = 'none'; paginationContainer.style.display = 'none';
+        fetch(`posts/${slug}.md`)
+            .then(res => { if (!res.ok) throw new Error(`Markdownファイルが見つかりません: ${slug}.md`); return res.text(); })
+            .then(md => {
+                const html = marked.parse(md.replace(/^---[\s\S]*?---/, '').trim());
+                contentDiv.innerHTML = `<h2>${title}</h2>${html}<div style="text-align:center; margin-top:2em;"><a href="#" onclick="event.preventDefault(); window.showBlogList();" style="color:#299ad3; font-weight:bold; text-decoration:none; border:1px solid #299ad3; padding: 8px 20px; border-radius:8px;">« 記事一覧に戻る</a></div>`;
+                contentDiv.style.display = "block"; contentDiv.scrollIntoView({ behavior: "smooth" });
+            })
+            .catch(err => {
+                console.error("記事詳細の読み込みエラー:", err);
+                contentDiv.innerHTML = `記事の読み込みに失敗しました。<br><br><a href="#" onclick="event.preventDefault(); window.showBlogList();">一覧に戻る</a>`;
+                contentDiv.style.display = 'block';
+            });
+    }
+    window.showBlogList = function() { renderArticleList(currentPage); }
 </script>
-
-</script>
-
 </body>
 </html>

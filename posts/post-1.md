@@ -2,5 +2,3 @@
 title: test
 ---
 t﻿est
-
-![](/img/ball.png)

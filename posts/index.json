@@ -1,12 +1,26 @@
 [
   {
-    "title": "テスト記事",
-    "slug": "2025-06-29-test",
+    "title": "記事タイトル1",
+    "slug": "post-1",
+    "thumbnail": "posts/img/thumbnail.png",
     "date": "2025-06-29"
   },
   {
-    "title": "CMSで書いた2本目",
-    "slug": "2025-06-29-test2",
-    "date": "2025-06-29"
+    "title": "記事タイトル2",
+    "slug": "post-2",
+    "thumbnail": "posts/img/thumbnail2.png",
+    "date": "2025-06-28"
+  },
+  {
+    "title": "記事タイトル2",
+    "slug": "post-3",
+    "thumbnail": "posts/img/thumbnail3.png",
+    "date": "2025-06-25"
+  },
+  {
+    "title": "記事タイトル2",
+    "slug": "post-4",
+    "thumbnail": "posts/img/thumbnail4.png",
+    "date": "2025-06-23"
   }
 ]
