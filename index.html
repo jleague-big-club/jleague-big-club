@@ -214,9 +214,13 @@
       main {
           padding: 0 4vw 80px 4vw;
       }
-      .page-title-row h1 {
+            .page-title-row h1 {
           font-size: 1.6rem;
           text-align: center;
+          /* ▼▼▼ ここから3行を追加 ▼▼▼ */
+          flex-direction: column-reverse; /* 要素を縦に並べ、順序を逆にする */
+          align-items: center;            /* 中央揃え */
+          gap: 12px;                      /* ボタンとタイトルの間の余白 */
       }
       table {
           font-size: 13px;
@@ -294,43 +298,64 @@
         background: #232947e8;
         backdrop-filter: blur(5px);
         flex-direction: column;
-        justify-content: center;
+        
+        /* ▼▼▼ 修正点1: 中央揃えをやめ、上からの余白を設定 ▼▼▼ */
+        justify-content: flex-start; /* 上揃えに変更 */
+        padding-top: 80px;           /* 上部に80pxの余白を追加 */
+
         align-items: stretch;
         gap: 0;
         transform: translateX(-100%);
         transition: transform 0.3s ease-in-out;
-        /* ▼▼▼ 修正点1: z-indexを高くする ▼▼▼ */
         z-index: 11000;
         box-sizing: border-box;
-        padding: 0 10px;
+        padding-left: 10px;  /* padding-top との重複を避けるため変更 */
+        padding-right: 10px; /* padding-top との重複を避けるため変更 */
       }
       .nav-links.open {
         transform: translateX(0);
       }
       .nav-links button, .nav-links .nav-dropdown > button {
         width: 100%;
-        margin-bottom: 15px;
+        margin-bottom: 0; /* 下マージンは親要素で統一するためリセット */
         font-size: 1.1rem;
         box-sizing: border-box;
       }
-      .nav-links .nav-dropdown {
+
+      /* ▼▼▼ 修正点2: ボタンとドロップダウンの間隔を統一 ▼▼▼ */
+      .nav-links > button, 
+      .nav-links > .nav-dropdown {
         width: 100%;
-        margin-bottom: 15px;
+        margin-bottom: 18px; /* すべてのメニュー項目に共通のマージンを設定 */
       }
-      .nav-dropdown-content {
-          display: none;
+
+            .nav-dropdown-content {
+          display: none; /* 普段は非表示が基本 */
           position: static;
           background: none;
           box-shadow: none;
           border: none;
           width: 100%;
           padding-left: 20px;
-          margin-top: 10px;
+          margin-top: 15px; /* 親ボタンとの間隔を調整 */
           box-sizing: border-box;
       }
+      .nav-dropdown-content button {
+        margin-bottom: 12px; /* サブメニュー内のボタン間隔 */
+      }
+      
+      /* ▼▼▼ このブロックを追加・修正 ▼▼▼ */
+      /* PC用のホバー/フォーカスによる表示を、スマホでは無効化する */
+      .nav-dropdown:hover .nav-dropdown-content,
+      .nav-dropdown:focus-within .nav-dropdown-content {
+          display: none;
+      }
+      /* JavaScriptでクラスを付けた時だけ表示する（上記ルールより優先される） */
       .nav-dropdown.menu-open .nav-dropdown-content {
           display: block;
       }
+      /* ▲▲▲ ここまで ▲▲▲ */
+
       .nav-dropdown.menu-open > button {
           background: #354a6b !important;
       }
@@ -847,6 +872,16 @@
         if (banner) {
             banner.style.display = (id === 'top') ? 'block' : 'none';
         }
+        
+        // ▼▼▼ このifブロックをまるごと追加してください ▼▼▼
+        if (id === 'blog' && !isShowingArticleDetail) {
+            // ユーザーがナビから直接「記事」ページを開こうとした場合、
+            // 強制的に記事一覧ページの状態に戻す
+            const pageTitle = document.querySelector('#page-title-blog h1');
+            if (pageTitle) pageTitle.textContent = '記事・ブログ';
+            renderArticleList(currentPage);
+        }
+        // ▲▲▲ 追加はここまで ▲▲▲
 
         if (id === 'europe' && playerData.length > 0) {
             document.querySelectorAll(".country-btn").forEach(b => b.classList.remove("active"));
@@ -872,21 +907,20 @@
         }
     }
 
-    function toggleSubMenu(btn, event) {
+            function toggleSubMenu(btn, event) {
         event.preventDefault();
         event.stopPropagation();
 
         const parentDropdown = btn.parentElement;
-        const currentlyOpen = parentDropdown.classList.contains('menu-open');
 
-        // すべての開いているメニューを閉じる
+        // クリックされたメニュー以外の、他の開いているメニューをすべて閉じる
         document.querySelectorAll('.nav-links .nav-dropdown.menu-open').forEach(openMenu => {
-            if(openMenu !== parentDropdown) {
-               openMenu.classList.remove('menu-open');
+            if (openMenu !== parentDropdown) {
+                openMenu.classList.remove('menu-open');
             }
         });
 
-        // クリックしたメニューの開閉をトグル
+        // クリックされたメニューの 'menu-open' クラスの有無を切り替える（トグル）
         parentDropdown.classList.toggle('menu-open');
     }
 
