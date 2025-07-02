@@ -99,8 +99,26 @@
     .metric-btn-row { display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; margin-top: 18px;}
     .metric-btn { background: linear-gradient(90deg, #1fb8e4 70%, #b8f4ff 100%); border: none; color: #202947; font-size: 1.03rem; border-radius: 16px; padding: 6px 22px; font-weight: bold; cursor: pointer; margin: 0 2px; transition: background 0.16s, color 0.1s, transform 0.1s;}
     .metric-btn.active, .metric-btn:focus { background: linear-gradient(90deg, #299ad3 80%, #1fb8e4 100%); color: #fff; transform: scale(1.06);}
-    .metrics-chart-wrap { width: 100%; max-width: 1100px; margin: 0 auto 40px auto; background: #fff; border-radius: 18px; padding: 18px 9px 15px 9px; box-shadow: 0 2px 9px #23304622;}
-    canvas { width: 100% !important; max-width: 1060px; height: 520px !important; background: #fff; margin-bottom: 10px;}
+    
+    /* ▼▼▼【修正点1】グラフのコンテナの横幅を狭くする ▼▼▼ */
+    .metrics-chart-wrap {
+        width: 100%;
+        max-width: 900px; /* 1100pxから変更 */
+        margin: 0 auto 40px auto;
+        background: #fff;
+        border-radius: 18px;
+        padding: 18px 9px 15px 9px;
+        box-shadow: 0 2px 9px #23304622;
+    }
+    /* ▼▼▼【修正点2】グラフ本体の縦幅を長くし、固定の横幅を削除 ▼▼▼ */
+    canvas {
+        width: 100% !important;
+        /* max-width: 1060px; を削除 */
+        height: 900px !important; /* 520pxから変更 */
+        background: #fff;
+        margin-bottom: 10px;
+    }
+
     .blog-list { margin-top: 28px; text-align: left; max-width: 700px; margin-left: auto; margin-right: auto;}
     .blog-list li { margin-bottom: 17px; font-size: 1.09rem; border-left: 4px solid #28c9ed; background: #24334d77; padding: 9px 16px 9px 19px; border-radius: 7px; transition: background 0.18s;}
     .blog-list li:hover { background: #b9e7f826; }
@@ -200,6 +218,13 @@
     #europe-top20 { position: relative; }
     #europe-top20 .data-source-note { position: absolute; top: -25px; right: 1%; font-size: 0.8em; color: #aabbcc; }
     #player-table-wrap table { font-size: 1rem; width: 100%; }
+    
+    #score-method-pop, #score-detail-pop {
+      display: none;
+    }
+    .popup-visible {
+      display: block !important;
+    }
 
     /* 
     ================================================
@@ -214,13 +239,12 @@
       main {
           padding: 0 4vw 80px 4vw;
       }
-            .page-title-row h1 {
+      .page-title-row h1 {
           font-size: 1.6rem;
           text-align: center;
-          /* ▼▼▼ ここから3行を追加 ▼▼▼ */
-          flex-direction: column-reverse; /* 要素を縦に並べ、順序を逆にする */
-          align-items: center;            /* 中央揃え */
-          gap: 12px;                      /* ボタンとタイトルの間の余白 */
+          flex-direction: column-reverse;
+          align-items: center;
+          gap: 12px;
       }
       table {
           font-size: 13px;
@@ -243,27 +267,17 @@
           position: static;
           transform: none;
       }
-      
-      /* ▼▼▼【ここからが修正箇所です】▼▼▼ */
-      
-      /* PC用の<nav>をdisplay:noneで消す代わりに、見た目だけを消してコンテナとして残します */
       nav {
-        /* display: none; を削除 */
-        position: static; /* position:relativeをリセット */
-        background-color: transparent; /* 背景を透明に */
-        padding: 0; /* paddingを削除 */
-        height: 0; /* 高さをなくしてレイアウトに影響させない */
+        position: static;
+        background-color: transparent;
+        padding: 0;
+        height: 0;
       }
-      
-      /* PC用<nav>の中にあるホームアイコンを非表示にします */
       nav .home-icon-link {
           display: none;
       }
 
-      /* ▲▲▲【修正はここまでです】▲▲▲ */
-
-            /* --- ハンバーガーボタンの新しいスタイル --- */
-            /* --- ハンバーガーボタンの新しいスタイル --- */
+      /* --- ハンバーガーボタンの新しいスタイル --- */
       .hamburger-btn {
         display: flex;
         flex-direction: column;
@@ -275,10 +289,10 @@
         cursor: pointer;
         padding: 8px;
         box-sizing: border-box;
-        position: fixed; /* 画面基準で位置を固定 */
+        position: fixed;
         left: 10px;
-        top: 8px; /* 上からの位置を固定値に */
-        z-index: 11001; /* 最も手前に表示 */
+        top: 8px;
+        z-index: 11001;
       }
       .hamburger-btn span {
         width: 100%;
@@ -287,7 +301,7 @@
         border-radius: 10px;
       }
       
-            /* --- スマホ用のナビゲーションリンク（スライドメニュー） --- */
+      /* --- スマホ用のナビゲーションリンク（スライドメニュー） --- */
       .nav-links {
         position: fixed;
         top: 0;
@@ -298,68 +312,55 @@
         background: #232947e8;
         backdrop-filter: blur(5px);
         flex-direction: column;
-        
-        /* ▼▼▼ 修正点1: 中央揃えをやめ、上からの余白を設定 ▼▼▼ */
-        justify-content: flex-start; /* 上揃えに変更 */
-        padding-top: 80px;           /* 上部に80pxの余白を追加 */
-
+        justify-content: flex-start;
+        padding-top: 80px;
         align-items: stretch;
         gap: 0;
         transform: translateX(-100%);
         transition: transform 0.3s ease-in-out;
         z-index: 11000;
         box-sizing: border-box;
-        padding-left: 10px;  /* padding-top との重複を避けるため変更 */
-        padding-right: 10px; /* padding-top との重複を避けるため変更 */
+        padding-left: 10px;
+        padding-right: 10px;
       }
       .nav-links.open {
         transform: translateX(0);
       }
       .nav-links button, .nav-links .nav-dropdown > button {
         width: 100%;
-        margin-bottom: 0; /* 下マージンは親要素で統一するためリセット */
+        margin-bottom: 0;
         font-size: 1.1rem;
         box-sizing: border-box;
       }
-
-      /* ▼▼▼ 修正点2: ボタンとドロップダウンの間隔を統一 ▼▼▼ */
       .nav-links > button, 
       .nav-links > .nav-dropdown {
         width: 100%;
-        margin-bottom: 18px; /* すべてのメニュー項目に共通のマージンを設定 */
+        margin-bottom: 18px;
       }
-
-            .nav-dropdown-content {
-          display: none; /* 普段は非表示が基本 */
+      .nav-dropdown-content {
+          display: none;
           position: static;
           background: none;
           box-shadow: none;
           border: none;
           width: 100%;
           padding-left: 20px;
-          margin-top: 15px; /* 親ボタンとの間隔を調整 */
+          margin-top: 15px;
           box-sizing: border-box;
       }
       .nav-dropdown-content button {
-        margin-bottom: 12px; /* サブメニュー内のボタン間隔 */
+        margin-bottom: 12px;
       }
-      
-      /* ▼▼▼ このブロックを追加・修正 ▼▼▼ */
-      /* PC用のホバー/フォーカスによる表示を、スマホでは無効化する */
       .nav-dropdown:hover .nav-dropdown-content,
       .nav-dropdown:focus-within .nav-dropdown-content {
           display: none;
       }
-      /* JavaScriptでクラスを付けた時だけ表示する（上記ルールより優先される） */
       .nav-dropdown.menu-open .nav-dropdown-content {
           display: block;
       }
-      /* ▲▲▲ ここまで ▲▲▲ */
-
       .nav-dropdown.menu-open > button {
           background: #354a6b !important;
       }
-      
       .menu-overlay {
         display: none;
         position: fixed;
@@ -368,13 +369,13 @@
         width: 100%;
         height: 100%;
         background-color: rgba(0, 0, 0, 0.6);
-        /* ▼▼▼ 修正点2: z-indexを高くする（メニュー本体よりは低く）▼▼▼ */
         z-index: 10999;
         cursor: pointer;
       }
       .menu-overlay.open {
         display: block;
       }
+
       /* --- カルーセル（バナー）のスマホ向け調整 --- */
       .carousel-container {
         margin: 0 auto 25px auto;
@@ -384,11 +385,11 @@
         background-color: transparent;
       }
       .carousel-item {
-          min-width: 100%;  /* 1つずつ表示 */
+          min-width: 100%;
           padding: 0 5px;
       }
       .carousel-item img {
-          max-height: 200px; /* 高さを広げる */
+          max-height: 200px;
       }
       .banner-text {
           font-size: 1.05em;
@@ -426,12 +427,33 @@
           margin: 0 auto;
       }
       
-      /* 5大リーグテーブルの列をスマホでのみ非表示にする */
+            /* ▼▼▼【修正】スマホ用のグラフスタイルを追加・修正 ▼▼▼ */
+      .metrics-chart-wrap {
+          padding: 12px 5px;      /* 左右の余白を調整 */
+          max-width: 100%;        /* ★★★PC用のmax-widthを上書きして、はみ出しを解消★★★ */
+          box-sizing: border-box; /* paddingを含めて幅を100%に収める */
+      }
+      canvas {
+          height: 800px !important; /* スマホでのグラフの高さを設定 */
+      }
+      /* ▲▲▲ 修正はここまで ▲▲▲ */
+      
       #player-table-wrap th:nth-child(2),
-      #player-table-wrap td:nth-child(2),
-      #player-table-wrap th:nth-child(3),
-      #player-table-wrap td:nth-child(3) {
+      #player-table-wrap td:nth-child(2),{
           display: none;
+      }
+      
+      #score-method-pop.popup-visible,
+      #score-detail-pop.popup-visible {
+        bottom: auto;
+        right: auto;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 88vw;
+        max-width: 88vw;
+        max-height: 85vh;
+        overflow-y: auto;
       }
     }
 </style>
@@ -554,7 +576,7 @@
   <!-- (以下、mainタグの中身は変更なし) -->
   <div id="page-title-top" class="page-title-row" style="display:flex;">
     <h1>
-      Jリーグ ビッグクラブ指数📊
+      Jリーグ ビッグクラブ指数
       <span class="score-calc-btn" tabindex="0">ビッグクラブ指数とは
         <span class="score-calc-pop">
           Jリーグ各クラブがどれだけ「ビッグクラブ」に近づいているのかを、実績や人気など4つの指標を基にスコア化したものです。
@@ -792,7 +814,7 @@
 <button id="score-method-btn" style="position: fixed; bottom: 27px; right: 24px; z-index: 9999; background: #fff; color: #232947; font-weight: bold; border: none; border-radius: 28px; box-shadow: 0 2px 14px #2222; padding: 11px 21px; font-size: 1.10rem; cursor: pointer;">
   スコア計算方法
 </button>
-<div id="score-method-pop" style="display:none; position: fixed; bottom: 77px; right: 33px; min-width: 330px; max-width: 95vw; background: #fff; color: #222; border-radius: 17px; box-shadow: 0 2px 19px #2226; padding: 22px 22px 18px 24px; z-index: 10001; font-size: 1.04rem; line-height: 1.7; border: 1.4px solid #29b6e6;">
+<div id="score-method-pop" style="position: fixed; bottom: 77px; right: 33px; min-width: 330px; max-width: 450px; background: #fff; color: #222; border-radius: 17px; box-shadow: 0 2px 19px #2226; padding: 22px 22px 18px 24px; z-index: 10001; font-size: 1.04rem; line-height: 1.7; border: 1.4px solid #29b6e6;">
   <div style="font-size: 1.18em; font-weight: bold; margin-bottom: 11px;">ビッグクラブ指数の計算方法</div>
   <ul style="margin:0 0 0 1em; padding: 0 0 0 0.6em;">
     <li><b>売上スコア：</b> = 売上高（億円） ÷ 200 × 100</li>
@@ -805,7 +827,7 @@
     <a href="#" id="score-detail-link" style="color:#299ad3; text-decoration:underline; font-weight:bold; font-size:0.98em; cursor:pointer;">数値の設定など詳細</a>
   </div>
 </div>
-<div id="score-detail-pop" style="display:none; position: fixed; bottom: 77px; right: 33px; min-width: 330px; max-width: 95vw; background: #fff; color: #222; border-radius: 17px; box-shadow: 0 2px 19px #2226; padding: 22px 22px 18px 24px; z-index: 10001; font-size: 1.04rem; line-height: 1.7; border: 1.4px solid #29b6e6; max-height: 72vh; overflow-y: auto;">
+<div id="score-detail-pop" style="position: fixed; bottom: 77px; right: 33px; min-width: 330px; max-width: 450px; background: #fff; color: #222; border-radius: 17px; box-shadow: 0 2px 19px #2226; padding: 22px 22px 18px 24px; z-index: 10001; font-size: 1.04rem; line-height: 1.7; border: 1.4px solid #29b6e6; max-height: 72vh; overflow-y: auto;">
   <div style="font-size: 1.06em; margin-top: 19px; line-height: 1.85;">
     <b>なぜこの指標を使うのか？</b><br>
     <ul style="margin-top: 8px;">
@@ -899,11 +921,16 @@
         if (id === 'attendance' && attendanceData.length > 0) initAttendancePage();
         
         // ▼▼▼【修正点】メニューとオーバーレイを閉じる処理 ▼▼▼
+                // ▼▼▼【修正点】メニューとオーバーレイ、及びサブメニューを閉じる処理 ▼▼▼
         const navLinks = document.getElementById('nav-links');
         const menuOverlay = document.getElementById('menu-overlay');
         if (navLinks && navLinks.classList.contains('open')) {
             navLinks.classList.remove('open');
             menuOverlay.classList.remove('open');
+            // ★★★ 開いているサブメニューを全て閉じる処理を追加 ★★★
+            document.querySelectorAll('.nav-dropdown.menu-open').forEach(menu => {
+                menu.classList.remove('menu-open');
+            });
         }
     }
 
@@ -1045,7 +1072,7 @@
         }
         
         const titleHtml = `<h3 style="text-align:center;color:#ffd700;">${leagueName}の日本人選手</h3>`;
-        const headers = ['No.', '国', 'リーグ', '所属クラブ', '選手名', '年齢', 'ポジション', '詳細'];
+        const headers = ['No.', '国', '所属クラブ', '選手名', '年齢', 'ポジション', '詳細'];
         
         let html = titleHtml + `<table style="font-size: 0.88rem;"><thead><tr>${headers.map(h => `<th>${h}</th>`).join("")}</tr></thead><tbody>`;
         
@@ -1073,17 +1100,25 @@
     function renderCourtPlayers() { const area = document.getElementById('court-area'); if (!area) return; area.innerHTML = ''; best11Positions[best11Formation].forEach(pos => { const c = best11PosCoords[best11Formation][pos.key]; if (!c) return; const label = document.createElement('div'); label.className = 'best11-player-label' + (best11Selected[pos.key] ? '' : ' unselected') + (pos.key === window.nowSelectedPosKey ? ' selected' : ''); label.style.top = `${c.top}px`; label.style.left = `${c.left}px`; let name = best11Selected[pos.key] ? best11Selected[pos.key] : pos.label; let fontSize = name.length >= 7 ? '0.80em' : (name.length >= 6 ? '0.89em' : '1em'); label.innerHTML = `<span style="font-size:${fontSize};">${name}</span>`; label.onclick = () => selectPosition(pos.key, document.querySelector(`.position-btn[data-pos="${pos.key}"]`)); label.style.cursor = "pointer"; area.appendChild(label); }); }
     window.choosePlayer = function(posKey, name) { if (name) { best11Selected[posKey] = name; } else { delete best11Selected[posKey]; } renderBest11Table(); renderCourtPlayers(); }
     
-    // ▼▼▼【修正点】この setupEventListeners 関数全体を置き換えてください ▼▼▼
-    function setupEventListeners() {
+        function setupEventListeners() {
         // --- ハンバーガーメニューの制御 ---
+                // --- ハンバーガーメニューの制御 ---
         const hamburgerBtn = document.getElementById('hamburger-btn');
         const navLinks = document.getElementById('nav-links');
         const menuOverlay = document.getElementById('menu-overlay');
 
         if (hamburgerBtn && navLinks && menuOverlay) {
             const toggleMenu = () => {
-                navLinks.classList.toggle('open');
+                // メニューの表示状態を切り替え、現在の状態を取得
+                const isOpen = navLinks.classList.toggle('open');
                 menuOverlay.classList.toggle('open');
+
+                // ★★★ もしメニューが閉じられたら、開いているサブメニューも全て閉じる ★★★
+                if (!isOpen) {
+                    document.querySelectorAll('.nav-dropdown.menu-open').forEach(menu => {
+                        menu.classList.remove('menu-open');
+                    });
+                }
             };
             hamburgerBtn.addEventListener('click', toggleMenu);
             menuOverlay.addEventListener('click', toggleMenu);
@@ -1117,6 +1152,7 @@
         };
 
         document.getElementById("copy-best11-img-btn").onclick = function() {
+            // (この中の処理は変更なし)
             const copyBtn = this;
             const postBtn = document.getElementById('post-to-x-btn');
             const captureElem = document.getElementById('best11-capture-area');
@@ -1156,26 +1192,94 @@
             });
         };
 
+                // ▼▼▼ このスコア計算ポップアップの制御部分を、まるごと置き換えてください ▼▼▼
         const scoreBtn = document.getElementById("score-method-btn");
         const scorePop = document.getElementById("score-method-pop");
         const detailLink = document.getElementById("score-detail-link");
         const detailPop = document.getElementById("score-detail-pop");
 
-        if(scoreBtn) scoreBtn.onclick = (e) => {
-            e.stopPropagation();
-            scorePop.style.display = 'block';
-        };
-        if(detailLink) detailLink.onclick = (e) => {
-            e.preventDefault();
-            detailPop.style.display = "block";
-        };
+        if (scoreBtn) {
+            scoreBtn.onclick = (e) => {
+                e.stopPropagation(); // 他のクリックイベントに影響しないようにする
+                // ポップアップの表示/非表示を切り替える（toggle）
+                scorePop.classList.toggle('popup-visible');
+                // もし詳細ポップアップが開いていたら、それは閉じる
+                detailPop.classList.remove('popup-visible');
+            };
+        }
 
+        if (detailLink) {
+            detailLink.onclick = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                // 詳細ポップアップを表示する
+                detailPop.classList.add('popup-visible');
+            };
+        }
+
+        // ページ全体でのクリックを監視し、ポップアップの外側がクリックされたら閉じる
         document.addEventListener("click", (e) => {
             const board = document.getElementById("club-status-board");
-            if (board && board.style.display === "block" && !board.contains(e.target) && !e.target.matches("td[onclick^='showClubStatus']")) board.style.display = "none";
-            if (scorePop && scorePop.style.display === "block" && !scorePop.contains(e.target) && e.target !== scoreBtn) scorePop.style.display = "none";
-            if (detailPop && detailPop.style.display === "block" && !detailPop.contains(e.target) && e.target !== detailLink) detailPop.style.display = "none";
+            if (board && board.style.display === "block" && !board.contains(e.target) && !e.target.matches("td[onclick^='showClubStatus']")) {
+                board.style.display = "none";
+            }
+            
+            // スコア計算ポップアップが表示されていて、クリックされた場所がポップアップの外の場合
+            if (scorePop && scorePop.classList.contains('popup-visible') && !scorePop.contains(e.target)) {
+                scorePop.classList.remove('popup-visible');
+            }
+            // 詳細ポップアップが表示されていて、クリックされた場所がポップアップの外の場合
+            if (detailPop && detailPop.classList.contains('popup-visible') && !detailPop.contains(e.target) && !detailLink.contains(e.target)) {
+                detailPop.classList.remove('popup-visible');
+            }
         });
+        const scoreCalcBtn = document.querySelector('.score-calc-btn');
+        if (scoreCalcBtn) {
+            const scoreCalcPop = scoreCalcBtn.querySelector('.score-calc-pop');
+            if(scoreCalcPop) {
+                // PC用のホバー動作を維持しつつ、クリック/タップでのトグル機能を追加
+                let isVisibleByClick = false;
+
+                scoreCalcBtn.addEventListener('click', (e) => {
+                    e.preventDefault(); // リンクのデフォルト動作を防ぐ
+                    
+                    if (window.innerWidth <= 768) { // スマホの場合
+                        // シンプルに表示を切り替える
+                        if (scoreCalcPop.style.display === 'block') {
+                            scoreCalcPop.style.display = 'none';
+                        } else {
+                            scoreCalcPop.style.display = 'block';
+                        }
+                    } else { // PCの場合
+                        // クリックで表示状態を切り替える
+                        isVisibleByClick = !isVisibleByClick;
+                        scoreCalcPop.style.display = isVisibleByClick ? 'block' : 'none';
+                    }
+                });
+
+                // PCでボタンからマウスが離れたら、クリックで表示されていない限り非表示にする
+                scoreCalcBtn.addEventListener('mouseleave', () => {
+                    if (window.innerWidth > 768 && !isVisibleByClick) {
+                        scoreCalcPop.style.display = 'none';
+                    }
+                });
+
+                // PCでフォーカスが外れた時も同様
+                scoreCalcBtn.addEventListener('focusout', () => {
+                     if (window.innerWidth > 768 && !isVisibleByClick) {
+                        scoreCalcPop.style.display = 'none';
+                    }
+                });
+
+                // ポップアップの外側をクリックしたら、クリックで表示されたポップアップを閉じる
+                document.addEventListener('click', (e) => {
+                    if (isVisibleByClick && !scoreCalcBtn.contains(e.target)) {
+                        isVisibleByClick = false;
+                        scoreCalcPop.style.display = 'none';
+                    }
+                });
+            }
+        }
     }
 
     let blogPosts = []; let blogInitialized = false; const listContainer = document.getElementById('blog-list-container'); const paginationContainer = document.getElementById('pagination'); const contentDiv = document.getElementById('blog-content'); const blogPageSection = document.getElementById('blog');
