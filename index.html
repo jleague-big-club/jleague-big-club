@@ -339,23 +339,29 @@
           font-size: 13px;
       }
 
-      /* --- スマホ用のナビゲーションスタイル --- */
-      nav {
-        justify-content: flex-end; /* ハンバーガーボタンを右端に配置 */
-        padding: 10px 20px;
-      }
-      .hamburger-btn {
-        display: flex; /* スマホでは表示 */
-        flex-direction: column;
-        justify-content: space-around;
-        width: 2rem;
-        height: 2rem;
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        padding: 0;
-        z-index: 1001; /* メニュー本体より手前に */
-      }
+      /* ▼▼▼ このCSSルールに置き換えてください ▼▼▼ */
+.hamburger-btn {
+  display: flex; /* スマホでは表示 */
+  flex-direction: column;
+  justify-content: space-around;
+  width: 40px;   /* サイズをpx指定に変更 */
+  height: 40px;  /* サイズをpx指定に変更 */
+  background: rgba(37, 48, 74, 0.8); /* 半透明の背景を追加 */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* 薄い枠線を追加 */
+  border-radius: 8px; /* 角を丸くする */
+  cursor: pointer;
+  padding: 8px; /* 内側に余白を追加 */
+  z-index: 1001;
+  
+  /* ★★★ ここからが追従させるための重要な設定 ★★★ */
+  position: fixed; /* 画面に固定 */
+  top: 10px;       /* 上から10pxの位置 */
+  right: 15px;     /* 右から15pxの位置 */
+  
+  box-sizing: border-box; /* paddingを含めてサイズ計算 */
+  -webkit-backdrop-filter: blur(3px); /* 背景をぼかす(iOS向け) */
+  backdrop-filter: blur(3px);       /* 背景をぼかす */
+}
       .hamburger-btn span {
         width: 2rem;
         height: 0.25rem;
