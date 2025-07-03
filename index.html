@@ -31,25 +31,46 @@
       position: relative;
       padding-left: 80px; /* アイコン用のスペースを確保 */
     }
-    .home-icon-link {
+            .home-icon-link {
         position: absolute;
-        left: 15px; /* ヘッダー左端からの位置 */
+        left: 15px;
         top: 50%;
         transform: translateY(-50%);
-        height: 40px; /* ヘッダーの高さに合わせてアイコンサイズを調整 */
-        z-index: 1002; /* 他の要素より手前に */
+        z-index: 1002;
         display: flex;
         align-items: center;
-        transition: transform 0.2s;
+        gap: 10px;
+        padding: 6px 14px;
+        /* ▼▼▼【ここからスタイルを刷新】▼▼▼ */
+        background-color: transparent; /* 背景を透明に */
+        border: 1.5px solid rgba(255, 255, 255, 0.4); /* 枠線を半透明の白に */
+        border-radius: 30px; /* 角を丸くして柔らかい印象に */
+        color: #eaf7fc;
+        font-size: 1.1rem; /* 少しサイズ調整 */
+        font-weight: 700; /* 太字を強調 */
+        letter-spacing: 0.05em; /* 文字間隔を少し空ける */
+        text-decoration: none;
+        transition: all 0.25s ease;
+        /* ▲▲▲【ここまでスタイルを刷新】▲▲▲ */
     }
     .home-icon-link:hover {
-        transform: translateY(-50%) scale(1.08);
+        transform: translateY(-50%) scale(1.05);
+        background-color: rgba(255, 255, 255, 0.1); /* ホバー時に背景を少し白く */
+        border-color: #fff; /* ホバー時に枠線を不透明の白に */
+        color: #fff;
     }
-    .home-icon {
-        height: 100%;
-        width: auto;
-        border-radius: 8px;
-        cursor: pointer;
+        .home-icon-link svg {
+        transition: transform 0.3s ease;
+        /* ▼▼▼【ここを修正】アイコンに色付け ▼▼▼ */
+        fill: rgba(41, 182, 246, 0.15); /* 塗りつぶしを半透明の青に */
+        stroke: rgba(41, 182, 246, 0.8);  /* 線を少し濃い青に */
+    }
+    .home-icon-link:hover svg {
+        fill: rgba(41, 182, 246, 0.3);  /* ホバーで塗りつぶしを少し濃く */
+        stroke: #fff;                  /* ホバーで線を白に */
+    }
+    .home-icon-link:hover svg {
+        transform: rotate(360deg); /* ホバー時にアイコンを回転させるアニメーション */
     }
     .nav-links {
       display: flex;
@@ -280,9 +301,16 @@
         justify-content: center;
       }
       #mobile-header .home-icon-link {
-          height: 38px;
           position: static;
           transform: none;
+          /* ▼▼▼【ここから追加】スマホ用にロゴのサイズを調整 ▼▼▼ */
+          padding: 4px 12px;
+          gap: 8px;
+          font-size: 1rem;
+      }
+      #mobile-header .home-icon-link svg {
+          width: 20px;
+          height: 20px;
       }
       nav {
         position: static;
@@ -643,16 +671,15 @@
 </button>
 
 <header id="mobile-header">
-    <!-- ▲▲▲ ここからハンバーガーボタンがなくなりました ▲▲▲ -->
-    <!-- 中央に配置するホームアイコン -->
-    <a href="javascript:void(0)" onclick="showPage('top', null);" class="home-icon-link">
-        <img src="img/banner4.png" alt="ホーム" class="home-icon">
+<a href="javascript:void(0)" onclick="showPage('top', null);" class="home-icon-link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 0-3.54 19.53m7.08-19.53A10 10 0 0 1 15.54 21.53M2 12h20M12 2v20"></path></svg>
+        <span>Big Club Japan</span>
     </a>
 </header>
 <nav>
 <a href="javascript:void(0)" onclick="showPage('top', document.querySelector('nav button'));" class="home-icon-link">
-        <img src="img/banner4.png" alt="ホーム" class="home-icon">
-    </a>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 0-3.54 19.53m7.08-19.53A10 10 0 0 1 15.54 21.53M2 12h20M12 2v20"></path></svg>
+    <span>Big Club Japan</span>    </a>
     <!-- ナビゲーションリンクのコンテナ -->
     <div id="nav-links" class="nav-links">
 
@@ -862,7 +889,7 @@
         </div>
         <div style="flex:1; position: relative;">
           <div id="best11-table"></div>
-          <div id="table-footer">Jleague-big-club.com</div>
+          <div id="table-footer">BigClub-Japan.com</div>
         </div>
       </div>
             <!-- ボタンを横並びにするためのコンテナ -->
@@ -1545,61 +1572,60 @@ function showMetricChart(key) {
                 detailPop.classList.remove('popup-visible');
             }
         });
+// ...
         const scoreCalcBtn = document.querySelector('.score-calc-btn');
         if (scoreCalcBtn) {
             const scoreCalcPop = scoreCalcBtn.querySelector('.score-calc-pop');
             if(scoreCalcPop) {
-                // PC用のホバー動作を維持しつつ、クリック/タップでのトグル機能を追加
-                let isVisibleByClick = false;
-
+                // ボタンがクリックされたときの処理
                 scoreCalcBtn.addEventListener('click', (e) => {
-                    e.preventDefault(); // リンクのデフォルト動作を防ぐ
-                    
-                    if (window.innerWidth <= 768) { // スマホの場合
-                        // シンプルに表示を切り替える
-                        if (scoreCalcPop.style.display === 'block') {
-                            scoreCalcPop.style.display = 'none';
-                        } else {
-                            scoreCalcPop.style.display = 'block';
-                        }
-                    } else { // PCの場合
-                        // クリックで表示状態を切り替える
-                        isVisibleByClick = !isVisibleByClick;
-                        scoreCalcPop.style.display = isVisibleByClick ? 'block' : 'none';
-                    }
-                });
+                    e.preventDefault();
+                    e.stopPropagation(); // 他のクリックイベントへの伝播を停止
 
-                // PCでボタンからマウスが離れたら、クリックで表示されていない限り非表示にする
-                scoreCalcBtn.addEventListener('mouseleave', () => {
-                    if (window.innerWidth > 768 && !isVisibleByClick) {
-                        scoreCalcPop.style.display = 'none';
-                    }
-                });
-
-                // PCでフォーカスが外れた時も同様
-                scoreCalcBtn.addEventListener('focusout', () => {
-                     if (window.innerWidth > 768 && !isVisibleByClick) {
-                        scoreCalcPop.style.display = 'none';
-                    }
-                });
-
-// ...
-                // ポップアップの外側をクリックしたら、クリックで表示されたポップアップを閉じる
-                document.addEventListener('click', (e) => {
-                    if (isVisibleByClick && !scoreCalcBtn.contains(e.target)) {
-                        isVisibleByClick = false;
-                        scoreCalcPop.style.display = 'none';
-                    }
-                
-                    /* ▼▼▼【ここから移動】カスタムドロップダウンの外側クリックで閉じる処理 ▼▼▼ */
-                    const openSelect = document.querySelector('.custom-select-container.open');
-                    if (openSelect && !openSelect.contains(e.target)) {
-                        openSelect.classList.remove('open');
-                    }
-                    /* ▲▲▲【ここまで移動】▲▲▲ */
+                    // ポップアップの表示/非表示を切り替える
+                    const isVisible = scoreCalcPop.style.display === 'block';
+                    scoreCalcPop.style.display = isVisible ? 'none' : 'block';
                 });
             }
         }
+
+        // ページ全体でのクリックを監視し、ポップアップの外側がクリックされたら閉じる
+        document.addEventListener("click", (e) => {
+            const board = document.getElementById("club-status-board");
+            if (board && board.style.display === "block" && !board.contains(e.target) && !e.target.matches("td[onclick^='showClubStatus']")) {
+                board.style.display = "none";
+            }
+            
+            // 「スコア計算方法」ポップアップの処理
+            const scorePop = document.getElementById("score-method-pop");
+            if (scorePop && scorePop.classList.contains('popup-visible') && !scorePop.contains(e.target)) {
+                scorePop.classList.remove('popup-visible');
+            }
+
+            // 「詳細」ポップアップの処理
+            const detailPop = document.getElementById("score-detail-pop");
+            if (detailPop && detailPop.classList.contains('popup-visible') && !detailPop.contains(e.target) && !document.getElementById("score-detail-link").contains(e.target)) {
+                detailPop.classList.remove('popup-visible');
+            }
+
+            // ▼▼▼【ここを修正】「ビッグクラブ指数とは」ポップアップの処理 ▼▼▼
+            const scoreCalcPop = document.querySelector('.score-calc-pop');
+            const scoreCalcBtn = document.querySelector('.score-calc-btn');
+            if (scoreCalcPop && scoreCalcBtn) {
+                // ポップアップが表示されていて、かつクリックがボタンとその中身（ポップアップ）の外だった場合
+                if (scoreCalcPop.style.display === 'block' && !scoreCalcBtn.contains(e.target)) {
+                    scoreCalcPop.style.display = 'none';
+                }
+            }
+            // ▲▲▲【ここまで修正】▲▲▲
+
+            /* カスタムドロップダウンの外側クリックで閉じる処理 */
+            const openSelect = document.querySelector('.custom-select-container.open');
+            if (openSelect && !openSelect.contains(e.target)) {
+                openSelect.classList.remove('open');
+            }
+        });
+// ...
     }
 // ...
 
@@ -1615,7 +1641,26 @@ function showMetricChart(key) {
     function initSimulationPage() { if (simInitialized) return; const leagueSelect = document.getElementById('sim-league-select'); const clubSelect = document.getElementById('sim-club-select'); const inputs = document.querySelectorAll('.sim-input'); leagueSelect.innerHTML = '<option value="">まずリーグを選択...</option>'; ['J1', 'J2', 'J3'].forEach(league => { leagueSelect.innerHTML += `<option value="${league}">${league}</option>`; }); leagueSelect.addEventListener('change', () => { populateClubSelect(leagueSelect.value); }); clubSelect.addEventListener('change', () => { displayClubData(clubSelect.value); }); inputs.forEach(input => { input.addEventListener('input', runSimulation); }); simInitialized = true; }
     function populateClubSelect(league) { const clubSelect = document.getElementById('sim-club-select'); const inputs = document.querySelectorAll('.sim-input'); clubSelect.innerHTML = '<option value="">クラブを選択...</option>'; clubSelect.disabled = true; inputs.forEach(input => { input.value = ''; input.disabled = true; }); document.getElementById('sim-result-area').innerHTML = '<p>クラブを選択すると、ここにスコアが表示されます。</p>'; if (!league) return; const clubsInLeague = clubData.filter(c => c.p === league).sort((a, b) => a.name.localeCompare(b.name, 'ja')); clubsInLeague.forEach(club => { clubSelect.innerHTML += `<option value="${club.name}">${club.name}</option>`; }); clubSelect.disabled = false; }
     function displayClubData(clubName) { const inputs = document.querySelectorAll('.sim-input'); const resultArea = document.getElementById('sim-result-area'); if (!clubName) { inputs.forEach(input => { input.value = ''; input.disabled = true; }); resultArea.innerHTML = '<p>クラブを選択すると、ここにスコアが表示されます。</p>'; return; } inputs.forEach(input => input.disabled = false); const club = clubData.find(c => c.name === clubName); if (!club) return; document.getElementById('sim-revenue').value = club.revenue || ''; document.getElementById('sim-audience').value = club.audience || ''; document.getElementById('sim-titles').value = club.titles || ''; document.getElementById('sim-avg-rank').value = club.m || ''; const currentScore = club.sum || 0; const currentCategory = getCategoryInfo(currentScore); resultArea.innerHTML = ` <div class="sim-current-score"> 現在の区分: <span style="color: ${currentCategory.color}; font-weight: bold;">${currentCategory.text}</span><br> 現在のビッグクラブスコア: <strong>${currentScore.toFixed(2)}</strong> </div> <div class="sim-new-score"> <p style="margin:0; font-size:0.8em; color:#ccc;">数値を変更してください</p> </div> `; }
-    function runSimulation() { const clubName = document.getElementById('sim-club-select').value; if (!clubName) return; const club = clubData.find(c => c.name === clubName); if (!club) return; const revenue = parseFloat(document.getElementById('sim-revenue').value) || club.revenue; const audience = parseInt(document.getElementById('sim-audience').value) || club.audience; const titles = parseInt(document.getElementById('sim-titles').value) || club.titles; const avgRank = parseFloat(document.getElementById('sim-avg-rank').value) || parseFloat(club.m); const currentScore = club.sum || 0; const currentCategory = getCategoryInfo(currentScore); const newScore = calculateBigClubScore(revenue, audience, titles, avgRank); const newCategory = getCategoryInfo(newScore); const resultArea = document.getElementById('sim-result-area'); resultArea.innerHTML = ` <div class="sim-current-score"> 現在の区分: <span style="color: ${newCategory.color}; font-weight: bold;">${currentCategory.text}</span><br> 現在のビッグクラブスコア: <strong>${currentScore.toFixed(2)}</strong> </div> <div class="sim-new-score"> 予測区分: <span style="color: ${newCategory.color}; font-weight: bold;">${newCategory.text}</span><br> 予測スコア <span class="arrow">→</span> <span class="score-value">${newScore.toFixed(2)}</span> </div> `; }
+    // ...
+    function runSimulation() {
+        const clubName = document.getElementById('sim-club-select').value;
+        if (!clubName) return;
+        const club = clubData.find(c => c.name === clubName);
+        if (!club) return;
+        const revenue = parseFloat(document.getElementById('sim-revenue').value) || club.revenue;
+        const audience = parseInt(document.getElementById('sim-audience').value) || club.audience;
+        const titles = parseInt(document.getElementById('sim-titles').value) || club.titles;
+        const avgRank = parseFloat(document.getElementById('sim-avg-rank').value) || parseFloat(club.m);
+        const currentScore = club.sum || 0;
+        const currentCategory = getCategoryInfo(currentScore);
+        const newScore = calculateBigClubScore(revenue, audience, titles, avgRank);
+        const newCategory = getCategoryInfo(newScore);
+        const resultArea = document.getElementById('sim-result-area');
+        
+        // ★★★ この行の ${newCategory.color} を ${currentCategory.color} に変更しました ★★★
+        resultArea.innerHTML = ` <div class="sim-current-score"> 現在の区分: <span style="color: ${currentCategory.color}; font-weight: bold;">${currentCategory.text}</span><br> 現在のビッグクラブスコア: <strong>${currentScore.toFixed(2)}</strong> </div> <div class="sim-new-score"> 予測区分: <span style="color: ${newCategory.color}; font-weight: bold;">${newCategory.text}</span><br> 予測スコア <span class="arrow">→</span> <span class="score-value">${newScore.toFixed(2)}</span> </div> `;
+    }
+// ...
     function calculateBigClubScore(revenue, audience, titles, avgRank) { if (isNaN(revenue) || isNaN(audience) || isNaN(titles) || isNaN(avgRank) || avgRank > 21) { return 0; } const revenueScore = (revenue / 200) * 100; const audienceScore = (audience / 45000) * 100; const titleScore = (titles / 98) * 100; const rankScore = 21 - avgRank; const totalScore = (revenueScore * 0.3) + (audienceScore * 0.15) + (titleScore * 0.25) + (rankScore * 0.3); return Math.max(0, totalScore); }
     const originalShowPage = window.showPage; window.showPage = function(id, btn) { originalShowPage(id, btn); if (id === 'simulation') { initSimulationPage(); } if (btn && btn.parentElement.classList.contains('nav-dropdown-content')) { document.querySelectorAll('.nav-links > .nav-dropdown > button').forEach(b => b.classList.remove('active')); btn.closest('.nav-dropdown').querySelector('button').classList.add('active'); } };
     function setupCarousel(carouselId, interval) { const carousel = document.getElementById(carouselId); if (!carousel) return; const track = carousel.querySelector('.carousel-track'); const items = Array.from(track.children); const prevBtn = document.getElementById('carousel-prev-btn'); const nextBtn = document.getElementById('carousel-next-btn'); const originalItemCount = items.length; if (originalItemCount === 0) return; const itemsPerScreen = 2; const totalSets = Math.ceil(originalItemCount / itemsPerScreen); let currentSetIndex = 0; let autoPlayInterval; let isAnimating = false; items.forEach(item => { track.appendChild(item.cloneNode(true)); }); function moveToSet(newIndex) { if (isAnimating) return; isAnimating = true; track.style.transition = 'transform 0.5s ease-in-out'; track.style.transform = `translateX(-${newIndex * 100}%)`; currentSetIndex = newIndex; setTimeout(() => { isAnimating = false; }, 500); } function moveToNextSet() { let nextIndex = currentSetIndex + 1; moveToSet(nextIndex); if (nextIndex >= totalSets) { setTimeout(() => { track.style.transition = 'none'; track.style.transform = 'translateX(0)'; currentSetIndex = 0; }, 500); } } function moveToPrevSet() { let prevIndex = currentSetIndex - 1; if (prevIndex < 0) { track.style.transition = 'none'; track.style.transform = `translateX(-${totalSets * 100}%)`; setTimeout(() => { moveToSet(totalSets - 1); }, 20); } else { moveToSet(prevIndex); } } function startAutoPlay() { stopAutoPlay(); autoPlayInterval = setInterval(moveToNextSet, interval); } function stopAutoPlay() { clearInterval(autoPlayInterval); } function resetAutoPlay() { stopAutoPlay(); startAutoPlay(); } nextBtn.addEventListener('click', () => { moveToNextSet(); resetAutoPlay(); }); prevBtn.addEventListener('click', () => { moveToPrevSet(); resetAutoPlay(); }); carousel.addEventListener('mouseenter', stopAutoPlay); carousel.addEventListener('mouseleave', startAutoPlay); startAutoPlay(); }
