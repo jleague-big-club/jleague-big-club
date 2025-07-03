@@ -1079,8 +1079,37 @@
     let best11Filter = { type: 'all', value: null };
     let rankingData = {};
     let isShowingArticleDetail = false;
+    let bannerAutoPlayInterval;
     const majorLeagues = ["プレミアリーグ", "ラ・リーガ", "ブンデスリーガ", "セリエA", "リーグ・アン"];
+const clubAbbreviations = {
+    // J1
+    "北海道コンサドーレ札幌": "札幌", "鹿島アントラーズ": "鹿島", "浦和レッズ": "浦和",
+    "柏レイソル": "柏", "ＦＣ東京": "F東京", "東京ヴェルディ": "V東京",
+    "ＦＣ町田ゼルビア": "町田", "川崎フロンターレ": "川崎F", "横浜Ｆ・マリノス": "横浜FM",
+    "湘南ベルマーレ": "湘南", "アルビレックス新潟": "新潟", "ジュビロ磐田": "磐田",
+    "名古屋グランパス": "名古屋", "京都サンガF.C.": "京都", "ガンバ大阪": "G大阪",
+    "セレッソ大阪": "C大阪", "ヴィッセル神戸": "神戸", "サンフレッチェ広島": "広島",
+    "アビスパ福岡": "福岡", "サガン鳥栖": "鳥栖",
 
+    // J2
+    "ベガルタ仙台": "仙台", "ブラウブリッツ秋田": "秋田", "モンテディオ山形": "山形",
+    "いわきＦＣ": "いわき", "水戸ホーリーホック": "水戸", "栃木ＳＣ": "栃木",
+    "ザスパ群馬": "群馬", "ジェフユナイテッド千葉": "千葉", "横浜ＦＣ": "横浜FC",
+    "ヴァンフォーレ甲府": "甲府", "清水エスパルス": "清水", "藤枝ＭＹＦＣ": "藤枝",
+    "ファジアーノ岡山": "岡山", "レノファ山口ＦＣ": "山口", "徳島ヴォルティス": "徳島",
+    "愛媛ＦＣ": "愛媛", "Ｖ・ファーレン長崎": "長崎", "ロアッソ熊本": "熊本",
+    "大分トリニータ": "大分", "鹿児島ユナイテッドＦＣ": "鹿児島", "ＦＣ今治": "今治",
+
+    // J3
+    "ヴァンラーレ八戸": "八戸", "いわてグルージャ盛岡": "岩手", "福島ユナイテッドＦＣ": "福島",
+    "ＲＢ大宮アルディージャ": "RB大宮", "Ｙ．Ｓ．Ｃ．Ｃ．横浜": "YS横浜", "ＳＣ相模原": "相模原",
+    "松本山雅ＦＣ": "松本", "ＡＣ長野パルセイロ": "長野", "カターレ富山": "富山",
+    "ツエーゲン金沢": "金沢", "アスルクラロ沼津": "沼津", "ＦＣ岐阜": "岐阜",
+    "ＦＣ大阪": "FC大阪", "奈良クラブ": "奈良", "ガイナーレ鳥取": "鳥取",
+    "カマタマーレ讃岐": "讃岐", "ギラヴァンツ北九州": "北九州", "テゲバジャーロ宮崎": "宮崎",
+    "ＦＣ琉球": "琉球", "栃木シティ": "栃木C", "高知ユナイテッドＳＣ": "高知",
+    // JFLなどは必要に応じて追加　　
+};
 function showPage(id, btn) {
     // ▼▼▼【ここに追加】ページ表示時に一番上にスクロールする ▼▼▼
     window.scrollTo(0, 0);
@@ -1108,10 +1137,36 @@ function showPage(id, btn) {
             document.getElementById('score-detail-pop').style.display = 'none';
         }
     }
+    // ...
     const banner = document.querySelector('.carousel-container');
     if (banner) {
-        banner.style.display = (id === 'top') ? 'block' : 'none';
+        if (id === 'top') {
+            banner.style.display = 'block';
+            
+            // ▼▼▼【ここから修正】カルーセルを毎回クリーンな状態から再開させます ▼▼▼
+            const track = banner.querySelector('.carousel-track');
+            
+            // クローンが増え続けるのを防ぐため、元のアイテム(4つ)のみにリセット
+            if (track.children.length > 4) {
+                const originalItems = Array.from(track.querySelectorAll('.carousel-item')).slice(0, 4);
+                track.innerHTML = '';
+                originalItems.forEach(item => track.appendChild(item));
+            }
+            
+            // 再表示時の不自然なジャンプを防ぐため、アニメーションを停止して位置をリセット
+            track.style.transition = 'none';
+            track.style.transform = 'translateX(0)';
+            
+            // 完全にリセットされた状態で、カルーセルを再セットアップ
+            setupCarousel('banner-carousel', 4000);
+            // ▲▲▲【ここまで修正】▲▲▲
+
+        } else {
+            banner.style.display = 'none';
+            stopBannerAutoPlay(); // 他のページでは自動再生を停止
+        }
     }
+// ...
 
     // 【★重要★】ページ表示時の初期化処理
     // 「クラブ指標」ページが表示された瞬間に、現在選択されているプルダウンの値でグラフを再描画する
@@ -1162,7 +1217,6 @@ function showPage(id, btn) {
         });
     }
 }
-// ▲▲▲ ここまで ▲▲▲
 
             function toggleSubMenu(btn, event) {
         event.preventDefault();
@@ -1240,7 +1294,7 @@ function showPage(id, btn) {
         });
         
         setupEventListeners();
-        setupCarousel('banner-carousel', 4500);
+        setupCarousel('banner-carousel', 2000);
     });
 
     function renderEuropeTop20Table() {
@@ -1636,7 +1690,58 @@ function showMetricChart(key) {
     function renderPagination() { if(!paginationContainer) return; paginationContainer.innerHTML = ""; const totalPages = Math.ceil(blogPosts.length / articlesPerPage); if (totalPages <= 1) return; for (let i = 1; i <= totalPages; i++) { const btn = document.createElement('button'); btn.textContent = i; btn.style.cssText = `margin:0 5px; padding:6px 14px; border:none; border-radius:5px; cursor:pointer; background:${i === currentPage ? '#299ad3' : '#eee'}; color:${i === currentPage ? '#fff' : '#333'};`; btn.onclick = () => { renderArticleList(i); window.scrollTo({ top: 0, behavior: "smooth" }); }; paginationContainer.appendChild(btn); } }
     function showArticleDetail(slug, title) { isShowingArticleDetail = true; if(listContainer) listContainer.style.display = 'none'; if(paginationContainer) paginationContainer.style.display = 'none'; fetch(`posts/${slug}.md`) .then(res => { if (!res.ok) throw new Error(`Markdownファイルが見つかりません: ${slug}.md`); return res.text(); }) .then(md => { const bodyContent = md.replace(/^---[\s\S]*?---/, '').trim(); const html = marked.parse(bodyContent); if(contentDiv) { const buttonsHtml = ` <div style="text-align:center; margin-top:3em; display:flex; justify-content:center; gap:20px;"> <a href="#" onclick="event.preventDefault(); showPage('top', document.querySelector('#nav-analysis-btn'));" style="color:#aaa; font-weight:bold; text-decoration:none; border:1px solid #aaa; padding: 8px 20px; border-radius:8px; transition: all 0.2s;"> « ホームに戻る </a> <a href="#" onclick="event.preventDefault(); window.showBlogList();" style="color:#299ad3; font-weight:bold; text-decoration:none; border:1px solid #299ad3; padding: 8px 20px; border-radius:8px; transition: all 0.2s;"> 記事一覧に戻る » </a> </div> `; contentDiv.innerHTML = `<h2>${title}</h2>${html}${buttonsHtml}`; contentDiv.style.display = "block"; showPage('blog', Array.from(document.querySelectorAll('.nav-links button')).find(b => b.textContent === '記事')); const pageTitle = document.querySelector('#page-title-blog h1'); if(pageTitle) pageTitle.textContent = title; window.scrollTo({ top: 0, behavior: 'smooth' }); } }) .catch(err => { console.error("記事詳細の読み込みエラー:", err); if(contentDiv) { contentDiv.innerHTML = `記事の読み込みに失敗しました。<br><br><a href="#" onclick="event.preventDefault(); window.showBlogList();">一覧に戻る</a>`; contentDiv.style.display = 'block'; showPage('blog', Array.from(document.querySelectorAll('.nav-links button')).find(b => b.textContent === '記事')); } }) .finally(() => { isShowingArticleDetail = false; }); }
     window.showBlogList = function() { document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('visible')); const blogPage = document.getElementById('blog'); if (blogPage) { blogPage.classList.add('visible'); } document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active')); const blogNavBtn = Array.from(document.querySelectorAll('.nav-links button')).find(b => b.textContent === '記事'); if (blogNavBtn) { blogNavBtn.classList.add('active'); } const pageTitle = document.querySelector('#page-title-blog h1'); if(pageTitle) pageTitle.textContent = '記事・ブログ'; renderArticleList(currentPage); window.scrollTo({ top: 0, behavior: 'smooth' }); }
-    function showRankingTable(league) { document.querySelectorAll('.rank-tab-btn').forEach(btn => btn.classList.remove('active')); const activeBtn = document.querySelector(`.rank-tab-btn[onclick="showRankingTable('${league}')"]`); if(activeBtn) activeBtn.classList.add('active'); const container = document.getElementById('ranking-table-container'); if (!container) return; const { headers, data, updated } = rankingData[league]; if (!headers || !data || data.length === 0) { container.innerHTML = "<p>順位データがありません。</p>"; return; } let dateHtml = ''; if (updated) { const updatedDate = new Date(updated); const formattedDate = updatedDate.toLocaleString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }); dateHtml = `<p class="update-date-note">更新日時: ${formattedDate}</p>`; } let tableHTML = `<table><thead><tr>`; headers.forEach(h => tableHTML += `<th>${h}</th>`); tableHTML += `</tr></thead><tbody>`; data.forEach(row => { tableHTML += `<tr>`; headers.forEach(h => tableHTML += `<td>${row[h] || ''}</td>`); tableHTML += `</tr>`; }); tableHTML += `</tbody></table>`; container.innerHTML = dateHtml + tableHTML; }
+    // 既存の showRankingTable 関数を、以下のコードで置き換える
+
+function showRankingTable(league) {
+    document.querySelectorAll('.rank-tab-btn').forEach(btn => btn.classList.remove('active'));
+    const activeBtn = document.querySelector(`.rank-tab-btn[onclick="showRankingTable('${league}')"]`);
+    if (activeBtn) activeBtn.classList.add('active');
+
+    const container = document.getElementById('ranking-table-container');
+    if (!container) return;
+
+    const { headers, data, updated } = rankingData[league];
+    if (!headers || !data || data.length === 0) {
+        container.innerHTML = "<p>順位データがありません。</p>";
+        return;
+    }
+
+    const isMobile = window.innerWidth <= 768;
+
+    let dateHtml = '';
+    if (updated) {
+        const updatedDate = new Date(updated);
+        const formattedDate = updatedDate.toLocaleString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        dateHtml = `<p class="update-date-note">更新日時: ${formattedDate}</p>`;
+    }
+
+    // スマホでは「勝点」列を除外する
+    const displayHeaders = isMobile ? headers.filter(h => h !== '勝点') : headers;
+
+    let tableHTML = `<table><thead><tr>`;
+    displayHeaders.forEach(h => {
+        tableHTML += `<th>${h}</th>`;
+    });
+    tableHTML += `</tr></thead><tbody>`;
+
+    data.forEach(row => {
+        tableHTML += `<tr>`;
+        displayHeaders.forEach(h => {
+            let cellValue = row[h] || '';
+
+            // ▼▼▼【ここを修正】 'クラブ' から 'チーム名' に変更しました ▼▼▼
+            if (h === 'チーム名' && isMobile) {
+                cellValue = clubAbbreviations[cellValue] || cellValue;
+            }
+            
+            tableHTML += `<td>${cellValue}</td>`;
+        });
+        tableHTML += `</tr>`;
+    });
+    
+    tableHTML += `</tbody></table>`;
+    container.innerHTML = dateHtml + tableHTML;
+}
     let simInitialized = false; function getCategoryInfo(score) { if (score >= 50) return { text: 'ビッグクラブ', color: '#ffd700' }; if (score >= 30) return { text: '有望ビッグクラブ', color: '#e94444' }; if (score >= 20) return { text: '潜在的ビッグクラブ', color: '#41cdf4' }; if (score >= 5) return { text: '中堅クラブ', color: '#bbb' }; return { text: 'ローカルクラブ', color: '#999' }; }
     function initSimulationPage() { if (simInitialized) return; const leagueSelect = document.getElementById('sim-league-select'); const clubSelect = document.getElementById('sim-club-select'); const inputs = document.querySelectorAll('.sim-input'); leagueSelect.innerHTML = '<option value="">まずリーグを選択...</option>'; ['J1', 'J2', 'J3'].forEach(league => { leagueSelect.innerHTML += `<option value="${league}">${league}</option>`; }); leagueSelect.addEventListener('change', () => { populateClubSelect(leagueSelect.value); }); clubSelect.addEventListener('change', () => { displayClubData(clubSelect.value); }); inputs.forEach(input => { input.addEventListener('input', runSimulation); }); simInitialized = true; }
     function populateClubSelect(league) { const clubSelect = document.getElementById('sim-club-select'); const inputs = document.querySelectorAll('.sim-input'); clubSelect.innerHTML = '<option value="">クラブを選択...</option>'; clubSelect.disabled = true; inputs.forEach(input => { input.value = ''; input.disabled = true; }); document.getElementById('sim-result-area').innerHTML = '<p>クラブを選択すると、ここにスコアが表示されます。</p>'; if (!league) return; const clubsInLeague = clubData.filter(c => c.p === league).sort((a, b) => a.name.localeCompare(b.name, 'ja')); clubsInLeague.forEach(club => { clubSelect.innerHTML += `<option value="${club.name}">${club.name}</option>`; }); clubSelect.disabled = false; }
@@ -1663,7 +1768,102 @@ function showMetricChart(key) {
 // ...
     function calculateBigClubScore(revenue, audience, titles, avgRank) { if (isNaN(revenue) || isNaN(audience) || isNaN(titles) || isNaN(avgRank) || avgRank > 21) { return 0; } const revenueScore = (revenue / 200) * 100; const audienceScore = (audience / 45000) * 100; const titleScore = (titles / 98) * 100; const rankScore = 21 - avgRank; const totalScore = (revenueScore * 0.3) + (audienceScore * 0.15) + (titleScore * 0.25) + (rankScore * 0.3); return Math.max(0, totalScore); }
     const originalShowPage = window.showPage; window.showPage = function(id, btn) { originalShowPage(id, btn); if (id === 'simulation') { initSimulationPage(); } if (btn && btn.parentElement.classList.contains('nav-dropdown-content')) { document.querySelectorAll('.nav-links > .nav-dropdown > button').forEach(b => b.classList.remove('active')); btn.closest('.nav-dropdown').querySelector('button').classList.add('active'); } };
-    function setupCarousel(carouselId, interval) { const carousel = document.getElementById(carouselId); if (!carousel) return; const track = carousel.querySelector('.carousel-track'); const items = Array.from(track.children); const prevBtn = document.getElementById('carousel-prev-btn'); const nextBtn = document.getElementById('carousel-next-btn'); const originalItemCount = items.length; if (originalItemCount === 0) return; const itemsPerScreen = 2; const totalSets = Math.ceil(originalItemCount / itemsPerScreen); let currentSetIndex = 0; let autoPlayInterval; let isAnimating = false; items.forEach(item => { track.appendChild(item.cloneNode(true)); }); function moveToSet(newIndex) { if (isAnimating) return; isAnimating = true; track.style.transition = 'transform 0.5s ease-in-out'; track.style.transform = `translateX(-${newIndex * 100}%)`; currentSetIndex = newIndex; setTimeout(() => { isAnimating = false; }, 500); } function moveToNextSet() { let nextIndex = currentSetIndex + 1; moveToSet(nextIndex); if (nextIndex >= totalSets) { setTimeout(() => { track.style.transition = 'none'; track.style.transform = 'translateX(0)'; currentSetIndex = 0; }, 500); } } function moveToPrevSet() { let prevIndex = currentSetIndex - 1; if (prevIndex < 0) { track.style.transition = 'none'; track.style.transform = `translateX(-${totalSets * 100}%)`; setTimeout(() => { moveToSet(totalSets - 1); }, 20); } else { moveToSet(prevIndex); } } function startAutoPlay() { stopAutoPlay(); autoPlayInterval = setInterval(moveToNextSet, interval); } function stopAutoPlay() { clearInterval(autoPlayInterval); } function resetAutoPlay() { stopAutoPlay(); startAutoPlay(); } nextBtn.addEventListener('click', () => { moveToNextSet(); resetAutoPlay(); }); prevBtn.addEventListener('click', () => { moveToPrevSet(); resetAutoPlay(); }); carousel.addEventListener('mouseenter', stopAutoPlay); carousel.addEventListener('mouseleave', startAutoPlay); startAutoPlay(); }
+    // ...
+    // ▼▼▼【ここから変更】自動再生の制御関数を外に出す ▼▼▼
+    function startBannerAutoPlay(interval, nextFunc) {
+        stopBannerAutoPlay();
+        bannerAutoPlayInterval = setInterval(nextFunc, interval);
+    }
+    function stopBannerAutoPlay() {
+        clearInterval(bannerAutoPlayInterval);
+    }
+    // ▲▲▲【ここまで変更】▲▲▲
+
+    function setupCarousel(carouselId, interval) {
+        const carousel = document.getElementById(carouselId);
+        if (!carousel) return;
+
+        const track = carousel.querySelector('.carousel-track');
+        const items = Array.from(track.children);
+        const prevBtn = document.getElementById('carousel-prev-btn');
+        const nextBtn = document.getElementById('carousel-next-btn');
+        
+        const itemsPerScreen = window.innerWidth > 768 ? 2 : 1;
+        
+        if (items.length <= itemsPerScreen) {
+            if(prevBtn) prevBtn.style.display = 'none';
+            if(nextBtn) nextBtn.style.display = 'none';
+            return;
+        }
+
+        const originalItemCount = items.length;
+        for (let i = 0; i < itemsPerScreen; i++) {
+            track.appendChild(items[i].cloneNode(true));
+        }
+        
+        let currentIndex = 0;
+        let isAnimating = false;
+
+        function updateTrackPosition() {
+            const movePercentage = 100 / itemsPerScreen;
+            track.style.transform = `translateX(-${currentIndex * movePercentage}%)`;
+        }
+        
+        track.addEventListener('transitionend', () => {
+            isAnimating = false;
+            if (currentIndex >= originalItemCount) {
+                track.style.transition = 'none';
+                currentIndex = 0;
+                updateTrackPosition();
+            }
+        });
+
+        function moveToNext() {
+            if (isAnimating) return;
+            isAnimating = true;
+            track.style.transition = 'transform 0.4s ease-in-out';
+            currentIndex++;
+            updateTrackPosition();
+        }
+
+        function moveToPrev() {
+            if (isAnimating) return;
+            isAnimating = true;
+
+            if (currentIndex <= 0) {
+                track.style.transition = 'none';
+                currentIndex = originalItemCount;
+                updateTrackPosition();
+                
+                setTimeout(() => {
+                    track.style.transition = 'transform 0.4s ease-in-out';
+                    currentIndex--;
+                    updateTrackPosition();
+                }, 20);
+            } else {
+                track.style.transition = 'transform 0.4s ease-in-out';
+                currentIndex--;
+                updateTrackPosition();
+            }
+        }
+        
+        nextBtn.addEventListener('click', () => {
+            stopBannerAutoPlay();
+            moveToNext();
+            startBannerAutoPlay(interval, moveToNext);
+        });
+        prevBtn.addEventListener('click', () => {
+            stopBannerAutoPlay();
+            moveToPrev();
+            startBannerAutoPlay(interval, moveToNext);
+        });
+
+        carousel.addEventListener('mouseenter', stopBannerAutoPlay);
+        carousel.addEventListener('mouseleave', () => startBannerAutoPlay(interval, moveToNext));
+
+        startBannerAutoPlay(interval, moveToNext);
+    }
+// ...
     let attendanceInitialized = false; let attendanceChart = null; function initAttendancePage() { if (attendanceInitialized) return; const yearSelect = document.getElementById('attendance-year-select'); const years = [...new Set(attendanceData.map(d => d.年))].sort((a, b) => b - a); yearSelect.innerHTML = ''; years.forEach(year => { yearSelect.innerHTML += `<option value="${year}">${year}年</option>`; }); yearSelect.addEventListener('change', updateAttendanceFilters); const leagueBtnContainer = document.getElementById('attendance-league-btns'); let leagueBtnsHtml = `<button class="rank-tab-btn active" data-league="all">全て</button>`; const leagues = [...new Set(attendanceData.map(d => d.リーグ))].filter(Boolean).sort(); leagues.forEach(league => { leagueBtnsHtml += `<button class="rank-tab-btn" data-league="${league}">${league}</button>`; }); leagueBtnContainer.innerHTML = leagueBtnsHtml; leagueBtnContainer.querySelectorAll('.rank-tab-btn').forEach(btn => { btn.addEventListener('click', () => { leagueBtnContainer.querySelectorAll('.rank-tab-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); updateAttendanceFilters(); }); }); document.getElementById('attendance-club-select').addEventListener('change', (e) => { if (e.target.value && e.target.value !== 'all') { renderAttendanceChart(e.target.value); } else { updateAttendanceFilters(); } }); updateAttendanceFilters(); attendanceInitialized = true; }
     function updateAttendanceFilters() { const selectedYear = parseInt(document.getElementById('attendance-year-select').value); const activeLeagueBtn = document.querySelector('#attendance-league-btns .rank-tab-btn.active'); const selectedLeague = activeLeagueBtn ? activeLeagueBtn.dataset.league : 'all'; const clubSelect = document.getElementById('attendance-club-select'); const clubsForDropdown = attendanceData.filter(d => d.年 === selectedYear && (selectedLeague === 'all' || d.リーグ === selectedLeague)); const clubNames = [...new Set(clubsForDropdown.map(d => d.クラブ))].sort((a, b) => a.localeCompare(b, 'ja')); let optionsHtml = '<option value="all">クラブを選択...</option>'; clubNames.forEach(name => { optionsHtml += `<option value="${name}">${name}</option>`; }); clubSelect.innerHTML = optionsHtml; const dataForTable = attendanceData.filter(d => d.年 === selectedYear && (selectedLeague === 'all' || d.リーグ === selectedLeague)); renderAttendanceTable(dataForTable); }
     function renderAttendanceTable(dataToRender) { document.getElementById('attendance-chart-wrap').style.display = 'none'; const outputContainer = document.getElementById('attendance-output-container'); outputContainer.style.display = 'block'; const tableData = dataToRender || []; const headers = ['順位', 'リーグ', 'クラブ', '平均観客数', '年間最高観客数', '年間最低観客数', 'ゲーム数']; const leagueColorMap = { 'J1': '#e94444', 'J2': '#29b6e6', 'J3': '#6cbf6b', 'JFL': '#f2a136', 'default': '#ffffff' }; let dateHtml = ''; if (attendanceData.lastModified) { const updatedDate = new Date(attendanceData.lastModified); const formattedDate = updatedDate.toLocaleString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }); dateHtml = `<div style="text-align: right; font-size: 0.85em; color: #aabbcc; margin-bottom: 8px;"> 更新日時: ${formattedDate} </div>`; } let tableHtml = `<table style="background: #f9fcff; color: #21304c;"> <thead><tr>`; headers.forEach(h => tableHtml += `<th style="background: linear-gradient(90deg, #27aee7 65%, #b0e7fa 100%); color: #fff;">${h}</th>`); tableHtml += `</tr></thead> <tbody>`; tableData.sort((a, b) => b.平均観客数 - a.平均観客数).forEach((row, index) => { const leagueColor = leagueColorMap[row.リーグ] || leagueColorMap['default']; tableHtml += `<tr style="cursor: pointer; background: ${index % 2 === 0 ? '#f2f6fa' : '#ffffff'};" onclick="renderAttendanceChart('${row.クラブ}')" onmouseover="this.style.backgroundColor='#e0f7ff';" onmouseout="this.style.backgroundColor='${index % 2 === 0 ? '#f2f6fa' : '#ffffff'}';">`; tableHtml += `<td>${index + 1}</td>`; tableHtml += `<td style="background-color: ${leagueColor}; color: #fff; font-weight: bold;">${row.リーグ}</td>`; tableHtml += `<td>${row.クラブ}</td>`; tableHtml += `<td>${row.平均観客数.toLocaleString()}</td>`; tableHtml += `<td>${row.年間最高観客数.toLocaleString()}</td>`; tableHtml += `<td>${row.年間最低観客数.toLocaleString()}</td>`; tableHtml += `<td>${row.ゲーム数}</td></tr>`; }); tableHtml += `</tbody></table>`; outputContainer.innerHTML = dateHtml + tableHtml; }
