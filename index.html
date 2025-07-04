@@ -1650,14 +1650,22 @@ function showMetricChart(key) {
             });
         });
 
-        document.getElementById("post-to-x-btn").onclick = function() {
+                document.getElementById("post-to-x-btn").onclick = function() {
             const text = "私のベストイレブンはこちら！\n#あなたのベストイレブン";
-            const url = "https://jleague-big-club.com";
+            const url = "https://jleague-big-club.com"; // 適切なURLに更新してください
             const tweetUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
             window.open(tweetUrl, '_blank');
+            
             const msgSpan = document.getElementById('copy-best11-img-msg');
-            msgSpan.textContent = 'Xの投稿画面で画像を貼り付けてください！';
-            setTimeout(() => msgSpan.textContent = '', 4000);
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            
+            if (isIOS) {
+                msgSpan.textContent = 'Xの投稿画面で、ダウンロードした画像を添付してください。';
+            } else {
+                msgSpan.textContent = 'Xの投稿画面で、画像を貼り付けてください。';
+            }
+            
+            setTimeout(() => msgSpan.textContent = '', 5000); // メッセージを5秒後に消す
         };
 
                 document.getElementById("copy-best11-img-btn").onclick = function() {
@@ -1690,7 +1698,7 @@ function showMetricChart(key) {
                     if (navigator.clipboard && navigator.clipboard.write) {
                         navigator.clipboard.write([new ClipboardItem({ "image/png": blob })])
                             .then(() => {
-                                msgSpan.textContent = '画像をコピーしました！Xに貼り付け可能です';
+                                msgSpan.textContent = '';
                                 setTimeout(() => msgSpan.textContent = '', 3000); // 3秒後にメッセージを消す
                             })
                             .catch(err => {
@@ -1716,7 +1724,7 @@ function showMetricChart(key) {
             });
         };
 
-        // この関数は前回の修正で追加済みのはずですが、念のため再掲します。
+                // この関数は前回の修正で追加済みのはずですが、念のため再掲します。
         // 同じ関数が複数定義されないように注意してください。
         function downloadImage(canvas, filename, msgSpan) {
             try {
@@ -1732,8 +1740,15 @@ function showMetricChart(key) {
                 a.click();
                 document.body.removeChild(a); // ダウンロード後に削除
                 
-                msgSpan.textContent = '画像をダウンロードしました！';
-                setTimeout(() => msgSpan.textContent = '', 3000); // 3秒後にメッセージを消す
+                // OSに応じたメッセージを表示
+                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+                if (isIOS) {
+                    msgSpan.textContent = '画像をダウンロードしました！(Safari:開いた画像を長押しで保存, Chrome:ファイルアプリで保存)';
+                } else {
+                    msgSpan.textContent = '画像をダウンロードしました！(通常はダウンロードフォルダに保存されます)';
+                }
+                
+                setTimeout(() => msgSpan.textContent = '', 5000); // メッセージを5秒後に消す
             } catch (e) {
                 console.error("画像のダウンロードに失敗しました:", e);
                 msgSpan.textContent = 'エラー: 画像のダウンロードに失敗しました';
