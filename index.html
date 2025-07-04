@@ -560,6 +560,10 @@
             padding: 7px 4px;   /* ヘッダーの余白を詰める */
             line-height: 1.2;   /* 2行になった場合の間隔を調整 */
         }
+#attendance-output-container th:nth-child(7),
+        #attendance-output-container td:nth-child(7) {
+            display: none;
+        }
         /* ▼▼▼【ここから追加】クラブ詳細ポップアップのスマホ用スタイル ▼▼▼ */
         #club-status-board .club-status-grid {
             display: grid;
@@ -588,7 +592,11 @@
             color: #ffd700; /* スコアだけ色を変える */
             font-size: 1.15rem;
         }
-        /* ▲▲▲【ここまで追加】▲▲▲ */
+        #jleague-history th {
+            font-size: 0.75rem; /* 既存の1.04remより小さく設定 */
+            padding: 7px 4px;   /* 必要に応じて上下左右の余白を調整 */
+            line-height: 1.2;   /* 文字が2行になる可能性があるので、行の高さを調整 */
+        }
 /* ▼▼▼【ここから追加】カスタムドロップダウン用のスタイル ▼▼▼ */
 .custom-select-container {
   position: relative;
@@ -1402,8 +1410,36 @@ function showMetricChart(key) {
         }
     });
 }
-// ▲▲▲ ここまで ▲▲▲
-    function renderHistory(clubs) { const historyDiv = document.getElementById("jleague-history"); historyDiv.innerHTML = ""; const hisTable = document.createElement("table"); const hisThead = hisTable.createTHead(); const hisHeader = hisThead.insertRow(); ["クラブ名", "J1過去10年在籍年数", "J1過去10年平均順位", "J1過去10年在籍スコア"].forEach(h => { const th = document.createElement("th"); th.textContent = h; hisHeader.appendChild(th); }); const hisTbody = hisTable.createTBody(); clubs.forEach(club => { const tr = hisTbody.insertRow(); [club.name, club.l, club.m, club.o].forEach(val => { const td = document.createElement("td"); td.textContent = val; tr.appendChild(td); }); }); historyDiv.appendChild(hisTable); }
+
+        function renderHistory(clubs) {
+        const historyDiv = document.getElementById("jleague-history");
+        historyDiv.innerHTML = "";
+        const hisTable = document.createElement("table");
+        const hisThead = hisTable.createTHead();
+        const hisHeader = hisThead.insertRow();
+        ["クラブ名", "J1過去10年在籍年数", "J1過去10年平均順位", "J1過去10年在籍スコア"].forEach(h => {
+            const th = document.createElement("th");
+            th.textContent = h;
+            hisHeader.appendChild(th);
+        });
+        const hisTbody = hisTable.createTBody();
+        clubs.forEach(club => {
+            const tr = hisTbody.insertRow();
+            
+            // ▼▼▼【ここから修正】スマホ表示の判定と略称の取得 ▼▼▼
+            const isMobile = window.innerWidth <= 768;
+            const clubDisplayName = isMobile ? (clubAbbreviations[club.name] || club.name) : club.name;
+            
+            // データを配列で処理するのではなく、個別にセルを作成して略称を反映させる
+            [clubDisplayName, club.l, club.m, club.o].forEach(val => {
+                const td = document.createElement("td");
+                td.textContent = val;
+                tr.appendChild(td);
+            });
+            // ▲▲▲【ここまで修正】▲▲▲
+        });
+        historyDiv.appendChild(hisTable);
+    }
     function renderClubLeagueTable(league) { if (clubLeagueList.length === 0) return; const tableDiv = document.getElementById("club-league-table"); const rows = clubLeagueList.filter(club => club.p === league); if (!rows.length) { tableDiv.innerHTML = `<div style="padding:16px; color:white;">このリーグのクラブデータはありません</div>`; return; } let html = `<table><thead><tr><th>クラブ名</th></tr></thead><tbody> ${rows.map(club => `<tr><td style="cursor:pointer; color:#3cf;" onclick="showClubStatus('${club.name}')">${club.name}</td></tr>`).join("")} </tbody></table>`; tableDiv.innerHTML = html; }
     // ...
     function showClubStatus(clubName) {
@@ -1624,46 +1660,80 @@ function showMetricChart(key) {
             setTimeout(() => msgSpan.textContent = '', 4000);
         };
 
-        document.getElementById("copy-best11-img-btn").onclick = function() {
-            // (この中の処理は変更なし)
+                document.getElementById("copy-best11-img-btn").onclick = function() {
             const copyBtn = this;
             const postBtn = document.getElementById('post-to-x-btn');
             const captureElem = document.getElementById('best11-capture-area');
             const buttonsContainer = document.getElementById('capture-buttons');
             const msgSpan = document.getElementById('copy-best11-img-msg');
             const selectedLabel = captureElem.querySelector('.best11-player-label.selected');
+            
+            // クリーンアップとUIの状態設定
             if (selectedLabel) selectedLabel.classList.remove('selected');
             copyBtn.disabled = true;
             postBtn.disabled = true;
             buttonsContainer.style.visibility = 'hidden';
             msgSpan.style.visibility = 'hidden';
             msgSpan.textContent = '';
+
             html2canvas(captureElem, { backgroundColor: null, scale: 2, useCORS: true }).then(canvas => {
-                if (selectedLabel) selectedLabel.classList.add('selected');
+                if (selectedLabel) selectedLabel.classList.add('selected'); // 選択状態を戻す
+
                 canvas.toBlob(blob => {
                     if (!blob) {
                         msgSpan.textContent = '画像の生成に失敗しました';
                         return;
                     }
-                    navigator.clipboard.write([new ClipboardItem({ "image/png": blob })])
-                        .then(() => {
-                            msgSpan.textContent = '';
-                        })
-                        .catch(err => {
-                            console.error("コピー失敗:", err);
-                            msgSpan.textContent = 'コピーに失敗しました';
-                        });
+
+                    // #1 クリップボードへのコピーを試みる (PC向け)
+                    if (navigator.clipboard && navigator.clipboard.write) {
+                        navigator.clipboard.write([new ClipboardItem({ "image/png": blob })])
+                            .then(() => {
+                                msgSpan.textContent = '画像をコピーしました！Xに貼り付け可能です';
+                                // コピー成功後も、念のため数秒でメッセージを消す
+                                setTimeout(() => msgSpan.textContent = '', 3000);
+                            })
+                            .catch(err => {
+                                console.warn("クリップボードへのコピーに失敗しました。ダウンロードを試みます:", err);
+                                // #2 クリップボードコピー失敗時のフォールバック (スマホ向け)
+                                downloadImage(canvas, "best11.png", msgSpan);
+                            });
+                    } else {
+                        // #2 クリップボードAPIがない場合のフォールバック (古いブラウザやスマホ向け)
+                        console.warn("Clipboard APIがサポートされていません。画像をダウンロードします。");
+                        downloadImage(canvas, "best11.png", msgSpan);
+                    }
                 }, 'image/png');
             }).catch(err => {
-                console.error("キャプチャエラー:", err);
+                console.error("画像キャプチャ中にエラーが発生しました:", err);
                 msgSpan.textContent = '画像のキャプチャに失敗しました';
             }).finally(() => {
+                // 処理完了後、ボタンとメッセージを再表示
                 copyBtn.disabled = false;
                 postBtn.disabled = false;
                 buttonsContainer.style.visibility = 'visible';
-                msgSpan.style.visibility = 'visible';
+                msgSpan.style.visibility = 'visible'; // メッセージを表示するためにvisiblityを戻す
             });
         };
+
+        // 新しく追加するダウンロード関数
+        function downloadImage(canvas, filename, msgSpan) {
+            try {
+                const url = canvas.toDataURL('image/png');
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                msgSpan.textContent = '画像をダウンロードしました！';
+                // ダウンロード成功後も、念のため数秒でメッセージを消す
+                setTimeout(() => msgSpan.textContent = '', 3000);
+            } catch (e) {
+                console.error("画像のダウンロードに失敗しました:", e);
+                msgSpan.textContent = '画像のダウンロードに失敗しました';
+            }
+        }
 
                 // ▼▼▼ このスコア計算ポップアップの制御部分を、まるごと置き換えてください ▼▼▼
         const scoreBtn = document.getElementById("score-method-btn");
