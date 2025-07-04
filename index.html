@@ -568,6 +568,21 @@
 #best11-capture-area > div:first-child {
         font-size: 1.6rem !important;
       }
+/* ▼▼▼【ここから追加】ベスト11のボタンをスマホ用に調整 ▼▼▼ */
+@media (max-width: 768px) {
+  #capture-buttons {
+    position: relative; /* 絶対配置を解除 */
+    top: auto;          /* topとrightの指定をリセット */
+    right: auto;
+    
+    /* スマホ用に中央揃えにし、余白を追加 */
+    width: 100%;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 25px;
+  }
+}
+/* ▲▲▲【ここまで追加】▲▲▲ */
       .blog-card {
           width: 90%;
           margin: 0 auto;
