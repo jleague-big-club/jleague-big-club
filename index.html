@@ -11,12 +11,14 @@
 <!-- ▼▼▼ この<style>ブロック全体を、既存のものと置き換えてください ▼▼▼ -->
 <style>
     /* 基本的なスタイル */
-    body {
-      font-family: 'Segoe UI', 'Noto Sans JP', Arial, sans-serif;
-      margin: 0;
-      background: linear-gradient(135deg, #232947 0%, #24304e 100%);
-      color: #f0f0f0;
-    }
+body {
+  font-family: 'Segoe UI', 'Noto Sans JP', Arial, sans-serif;
+  margin: 0;
+  background: linear-gradient(135deg, #232947 0%, #24304e 100%);
+  color: #f0f0f0;
+  /* ▼▼▼ この行を追加 ▼▼▼ */
+  padding-bottom: 20px; /* PC表示時のページ最下部の余白 */
+}
     main { max-width: 1140px; margin: 0 auto; padding: 0 14px 40px 14px; }
     .page-section { display: none; }
     .page-section.visible { display: block !important; }
@@ -341,6 +343,7 @@
       /* --- 全体・基本スタイル --- */
       body {
           font-size: 15px;
+          padding-bottom: 0;
       }
       main {
           padding: 0 4vw 80px 4vw;
@@ -709,6 +712,43 @@
     display: block !important;
   }
 }
+/* ▼▼▼【ここから追加】スコア計算ボタンの新しいスタイル ▼▼▼ */
+#score-method-btn {
+  /* 基本のスタイル（フッターの上に配置されるとき）*/
+  position: absolute;
+  bottom: 20px;
+  right: 24px;
+  z-index: 9999;
+  background: #fff;
+  color: #232947;
+  font-weight: bold;
+  border: none;
+  border-radius: 28px;
+  box-shadow: 0 2px 14px #2222;
+  padding: 11px 21px;
+  font-size: 1.10rem;
+  cursor: pointer;
+  transition: transform 0.2s ease-out;
+}
+
+#score-method-btn.fixed-to-viewport {
+  /* 画面に固定するときのスタイル */
+  position: fixed;
+  bottom: 27px;
+  transform: translateY(0);
+}
+/* ▲▲▲【ここまで追加】▲▲▲ */
+
+
+.site-footer {
+  /* ▼▼▼ この行を追加 ▼▼▼ */
+  position: relative; 
+  background-color: #25304a;
+  color: #aabbcc;
+  padding: 40px 20px;
+  margin-top: 50px;
+  border-top: 3px solid #299ad3;
+}
 ================================================
 ★★★ サイトフッターのスタイル（ここから）★★★
 ================================================
@@ -719,6 +759,8 @@
   padding: 40px 20px;
   margin-top: 50px;
   border-top: 3px solid #299ad3;
+  /* ▼▼▼ この行を追加 ▼▼▼ */
+  margin-bottom: 20px; /* PC表示時のフッター下の余白 */
 }
 .footer-container {
   max-width: 1140px;
@@ -776,7 +818,8 @@
 @media (max-width: 768px) {
   .site-footer {
     padding: 30px 15px;
-    margin-top: 30px;
+    margin-top: 0px;
+    margin-bottom: 0;
   }
   .footer-logo a {
     font-size: 1.2rem;
@@ -1174,8 +1217,8 @@
     <div class="footer-links">
       <a href="javascript:void(0)" onclick="showPage('top', document.querySelector('nav button'));">ホーム</a>
       <a href="javascript:void(0)" onclick="showPage('blog', document.querySelector('nav button:last-child'));">記事一覧</a>
-      <a href="#" target="_blank" rel="noopener noreferrer">運営者情報</a>
-      <a href="#" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a>
+       <a href="legal/contact.html" target="_blank" rel="noopener noreferrer">お問い合わせ</a>
+      <a href="legal/privacy-policy.html" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a>
     </div>
     <div class="footer-copyright">
       © 2024 Big Club Japan. All Rights Reserved.
@@ -1183,7 +1226,8 @@
   </div>
 </footer>
 <!-- ▲▲▲ フッターの追加はここまで ▲▲▲ -->
-<button id="score-method-btn" style="position: fixed; bottom: 27px; right: 24px; z-index: 9999; background: #fff; color: #232947; font-weight: bold; border: none; border-radius: 28px; box-shadow: 0 2px 14px #2222; padding: 11px 21px; font-size: 1.10rem; cursor: pointer;">
+<!-- ▼▼▼ style属性を削除 ▼▼▼ -->
+<button id="score-method-btn">
   スコア計算方法
 </button>
 <div id="score-method-pop" style="position: fixed; bottom: 77px; right: 33px; min-width: 330px; max-width: 450px; min-height: 400px; background: #fff; color: #222; border-radius: 17px; box-shadow: 0 2px 19px #2226; padding: 22px 22px 18px 24px; z-index: 10001; font-size: 1.04rem; line-height: 1.7; border: 1.4px solid #29b6e6;">
@@ -2321,7 +2365,91 @@ function renderEuropePlayerList(leagueName) {
     playerList.style.display = 'block';
     window.scrollTo(0, 0);
 }
+// ...（既存の renderEuropePlayerList 関数や initEuropeMobilePage 関数の定義の終わり）...
+function renderEuropePlayerList(leagueName) {
+    // ...
+    playerList.style.display = 'block';
+    window.scrollTo(0, 0);
+}
 // ▲▲▲【ここまで追加】▲▲▲
+
+/* ▼▼▼【ここから新しいJavaScriptコードを追加】▼▼▼ */
+
+// スコア計算ボタンがフッターで止まるように制御する関数
+function setupFooterButtonObserver() {
+    const scoreBtn = document.getElementById('score-method-btn');
+    const footer = document.querySelector('.site-footer');
+
+    // スマホ表示ではこの機能を無効化する
+    if (window.innerWidth <= 768) {
+        // スマホの場合は常に画面固定にする
+        if(scoreBtn) {
+            scoreBtn.classList.add('fixed-to-viewport');
+        }
+        return; 
+    }
+
+    if (!scoreBtn || !footer) {
+        return;
+    }
+
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    scoreBtn.classList.remove('fixed-to-viewport');
+                } else {
+                    scoreBtn.classList.add('fixed-to-viewport');
+                }
+            });
+        },
+        {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0
+        }
+    );
+    observer.observe(footer);
+}
+
+// 既存のshowPage関数を上書きして、ボタン表示ロジックを統合
+const originalShowPageForButton = showPage;
+window.showPage = function(id, btn) {
+    originalShowPageForButton(id, btn); // 元のshowPageを実行
+
+    const scoreBtn = document.getElementById('score-method-btn');
+    if (!scoreBtn) return;
+
+    // トップページでのみ表示
+    if (id === 'top') {
+        scoreBtn.style.display = 'block';
+        // ページ表示時にフッターが見えているか再評価
+        const footer = document.querySelector('.site-footer');
+        if (footer && window.innerWidth > 768) { // PCのみ評価
+            const isFooterVisible = footer.getBoundingClientRect().top < window.innerHeight;
+            if (isFooterVisible) {
+                scoreBtn.classList.remove('fixed-to-viewport');
+            } else {
+                scoreBtn.classList.add('fixed-to-viewport');
+            }
+        } else if (footer && window.innerWidth <= 768) { // スマホは常に固定
+            scoreBtn.classList.add('fixed-to-viewport');
+        }
+
+    } else {
+        scoreBtn.style.display = 'none';
+    }
+};
+
+// 既存のDOMContentLoadedイベントリスナー内の最後に処理を追加
+document.addEventListener("DOMContentLoaded", () => {
+    // ...（既存の処理はすべてそのまま）...
+    
+    // 最後の行にこれを追加
+    setupFooterButtonObserver();
+});
+
+/* ▲▲▲【ここまで追加】▲▲▲ */
 </script>
 </body>
 </html>

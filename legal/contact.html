@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>お問い合わせ - Jリーグビッグクラブ分析</title>
+  <style>
+    /* 既存のページからスタイルを流用 */
+    body {
+      font-family: 'Segoe UI', 'Noto Sans JP', Arial, sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #232947 0%, #24304e 100%);
+      color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    main { 
+      max-width: 800px; 
+      width: 90%;
+      margin: 40px auto; 
+      padding: 30px 20px;
+      background-color: #293352ee;
+      border-radius: 16px;
+      line-height: 1.7;
+      flex-grow: 1;
+    }
+    h1 {
+      color: #baf7fa;
+      border-bottom: 2px solid #299ad3;
+      padding-bottom: 10px;
+      font-size: 1.8rem;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    p {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    /* ▼▼▼ Googleフォームをレスポンシブにするためのスタイル ▼▼▼ */
+    .google-form-container {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+    }
+    .google-form-container iframe {
+        width: 100%;
+        height: 650px; /* フォームの高さに合わせて調整してください */
+        border: none;
+    }
+    /* ▲▲▲ ここまで ▲▲▲ */
+
+    .back-link {
+        display: inline-block;
+        text-align: center;
+        margin-top: 40px;
+        padding: 10px 25px;
+        background-color: #2ab8f2;
+        color: #fff;
+        text-decoration: none;
+        font-weight: bold;
+        border-radius: 8px;
+        transition: background-color 0.2s;
+    }
+    .back-link:hover {
+        filter: brightness(1.1);
+    }
+    .container {
+        text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>お問い合わせ</h1>
+    <p>
+      サイトに関するご質問、データの間違いのご指摘、その他ご連絡はこちらのフォームよりお願いいたします。
+    </p>
+
+    <!-- ▼▼▼ ここにGoogleフォームのコードを貼り付け ▼▼▼ -->
+    <div class="google-form-container">
+      <iframe src="<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfQAAuYExevZlUoDWlFi4y51OCZ83-cdm_CnCAorIqAvwWyvg/viewform?embedded=true" width="640" height="693" frameborder="0" marginheight="0" marginwidth="0">読み込んでいます…</iframe>" width="640" height="650" frameborder="0" marginheight="0" marginwidth="0">読み込んでいます…</iframe>
+    </div>
+    <!-- ▲▲▲ 貼り付けはここまで ▲▲▲ -->
+    
+    <div class="container">
+      <a href="../index.html" class="back-link">トップページに戻る</a>
+    </div>
+  </main>
+</body>
+</html>
