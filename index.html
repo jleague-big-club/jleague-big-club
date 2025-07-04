@@ -265,6 +265,72 @@
     .popup-visible {
       display: block !important;
     }
+/* ▼▼▼【ここから追加】カスタムドロップダウン用のスタイル ▼▼▼ */
+.custom-select-container {
+  position: relative;
+  width: 240px;
+  margin: 0 auto;
+}
+.custom-select-trigger {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #333;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  position: relative;
+  box-sizing: border-box;
+}
+.custom-select-trigger::after {
+    content: '▼';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%) scaleY(0.6);
+    font-size: 0.9em;
+    color: #555;
+}
+.custom-select-container.open .custom-select-trigger::after {
+    transform: translateY(-50%) scaleY(-0.6);
+}
+.custom-options {
+  display: none;
+  position: absolute;
+  /* ★★★常に上に表示するための重要な設定★★★ */
+  bottom: 100%; 
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  max-height: 250px;
+  overflow-y: auto;
+  z-index: 100;
+  margin-bottom: 5px;
+  box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
+}
+.custom-select-container.open .custom-options {
+  display: block;
+}
+.custom-option {
+  padding: 10px 12px;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-weight: 500;
+}
+.custom-option:hover, .custom-option.highlighted {
+  background-color: #e9f5ff;
+}
+.custom-option.selected {
+  background-color: #007bff;
+  color: #fff;
+  font-weight: bold;
+}
 
     /* 
     ================================================
@@ -597,72 +663,6 @@
             padding: 7px 4px;   /* 必要に応じて上下左右の余白を調整 */
             line-height: 1.2;   /* 文字が2行になる可能性があるので、行の高さを調整 */
         }
-/* ▼▼▼【ここから追加】カスタムドロップダウン用のスタイル ▼▼▼ */
-.custom-select-container {
-  position: relative;
-  width: 240px;
-  margin: 0 auto;
-}
-.custom-select-trigger {
-  width: 100%;
-  padding: 8px 12px;
-  font-size: 1.1em;
-  font-weight: bold;
-  color: #333;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  cursor: pointer;
-  text-align: left;
-  position: relative;
-  box-sizing: border-box;
-}
-.custom-select-trigger::after {
-    content: '▼';
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%) scaleY(0.6);
-    font-size: 0.9em;
-    color: #555;
-}
-.custom-select-container.open .custom-select-trigger::after {
-    transform: translateY(-50%) scaleY(-0.6);
-}
-.custom-options {
-  display: none;
-  position: absolute;
-  /* ★★★常に上に表示するための重要な設定★★★ */
-  bottom: 100%; 
-  left: 0;
-  right: 0;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  max-height: 250px;
-  overflow-y: auto;
-  z-index: 100;
-  margin-bottom: 5px;
-  box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
-}
-.custom-select-container.open .custom-options {
-  display: block;
-}
-.custom-option {
-  padding: 10px 12px;
-  color: #333;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  font-weight: 500;
-}
-.custom-option:hover, .custom-option.highlighted {
-  background-color: #e9f5ff;
-}
-.custom-option.selected {
-  background-color: #007bff;
-  color: #fff;
-  font-weight: bold;
-}
 /* ▲▲▲【ここまで追加】▲▲▲ */
 /* PCではスマホ用ビューを非表示 */
 #europe-mobile-view {
@@ -691,6 +691,16 @@
   color: #aabbcc;
   font-weight: normal;
 }
+/* ▼▼▼【ここから追加】欧州TOP20テーブルのスマホ用スタイル ▼▼▼ */
+@media (max-width: 768px) {
+  #europe-top20 th,
+  #europe-top20 td {
+    font-size: 0.56rem;  /* フォントサイズを小さくする */
+    padding: 8px 4px;   /* 余白を詰めて見やすくする */
+    white-space: normal; /* 必要に応じて改行を許可 */
+  }
+}
+/* ▲▲▲【ここまで追加】▲▲▲ */
 
 @media (max-width: 768px) {
   /* PC用ビューを非表示 */
@@ -958,7 +968,7 @@
       </div>
 
       <!-- 2. ポジション選択 -->
-      <div id="position-tabs" style="max-width:950px; margin:0 auto: 15px auto;">
+      <div id="position-tabs" style="max-width:950px; margin:0 auto 15px auto;">
         <div style="margin-bottom:7px; font-weight:bold;">ポジションを選んでください</div>
         <div id="position-btn-container" class="position-btn-row">
           <!-- (ボタンはJSで生成) -->
@@ -1153,6 +1163,28 @@ const clubAbbreviations = {
     "FC琉球": "琉球", "栃木シティ": "栃木C", "高知ユナイテッドSC": "高知",
     // JFLなどは必要に応じて追加　　
 };
+const europeClubAbbreviations = {
+    "レアル・マドリード": "Rマドリード",
+    "マンチェスター・シティ": "マンC",
+    "パリ・サンジェルマン": "PSG",
+    "バイエルン・ミュンヘン": "バイエルン",
+    "マンチェスター・ユナイテッド": "マンU",
+    "トッテナム・ホットスパー": "トッテナム",
+    "リヴァプール": "リヴァプール",
+    "チェルシー": "チェルシー",
+    "アーセナル": "アーセナル",
+    "ユヴェントス": "ユヴェントス",
+    "ボルシア・ドルトムント": "ドルトムント",
+    "アトレティコ・マドリード": "Aマドリード",
+    "インテル・ミラノ": "インテル",
+    "ACミラン": "ミラン",
+    "ウェストハム・ユナイテッド": "ウェストハム",
+    "アストン・ヴィラ": "アストンヴィラ",
+    "ニューカッスル・ユナイテッド": "ニューカッスル",
+    "オリンピック・マルセイユ": "マルセイユ",
+"オリンピック・リヨン": "リヨン",
+    // 必要に応じて他のクラブも追加
+};
 function showPage(id, btn) {
     // ▼▼▼【ここに追加】ページ表示時に一番上にスクロールする ▼▼▼
     window.scrollTo(0, 0);
@@ -1277,7 +1309,17 @@ function showPage(id, btn) {
         // クリックされたメニューの 'menu-open' クラスの有無を切り替える（トグル）
         parentDropdown.classList.toggle('menu-open');
     }
-
+function updateCopyButtonText() {
+    const copyButton = document.getElementById('copy-best11-img-btn');
+    if (copyButton) {
+        if (window.innerWidth <= 768) { // スマートフォン幅の閾値
+            copyButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg><span>画像をダウンロード</span>';
+        } else {
+            // PC表示時
+            copyButton.innerHTML = '画像をコピー'; // PCではテキストのみに戻す
+        }
+    }
+}
     // === 起動時のデータ読み込み ===
     document.addEventListener("DOMContentLoaded", () => {
         const fetchWithMeta = (url) => fetch(url).then(res => {
@@ -1338,29 +1380,60 @@ function showPage(id, btn) {
         
         setupEventListeners();
         setupCarousel('banner-carousel', 2000);
-    });
+     updateCopyButtonText();
+    window.addEventListener('resize', updateCopyButtonText); // ウィンドウサイズ変更時にも更新
+});
 
-    function renderEuropeTop20Table() {
-        const container = document.getElementById('europe-top20');
-        if (!container || europeTopClubs.length === 0) return;
-        const headers = ["順位", "国", "リーグ", "クラブ名", "売上高 (億円)", "平均観客動員数"];
-        let tableHTML = `<div class="data-source-note">※データソース: Deloitte, Transfermarkt (1ユーロ=165円で計算)</div>`;
-        tableHTML += `<table><thead><tr>`;
-        headers.forEach(h => tableHTML += `<th>${h}</th>`);
-        tableHTML += `</tr></thead><tbody>`;
-        europeTopClubs.forEach((club, index) => {
-            tableHTML += `<tr>`;
-            tableHTML += `<td>${index + 1}</td>`;
-            tableHTML += `<td>${club[0] || '-'}</td>`;
-            tableHTML += `<td>${club[1] || '-'}</td>`;
-            tableHTML += `<td>${club[2] || '-'}</td>`;
-            tableHTML += `<td>${club[4] ? parseFloat(club[4]).toLocaleString() : '-'}</td>`;
-            tableHTML += `<td>${club[5] ? parseInt(club[5]).toLocaleString() : '-'}</td>`;
-            tableHTML += `</tr>`;
-        });
-        tableHTML += `</tbody></table>`;
-        container.innerHTML = tableHTML;
-    }
+    // ▼▼▼ この関数をまるごと置き換えてください ▼▼▼
+function renderEuropeTop20Table() {
+    const container = document.getElementById('europe-top20');
+    if (!container || europeTopClubs.length === 0) return;
+
+    // ★★★ スマホ表示かどうかを判定するフラグを追加 ★★★
+    const isMobile = window.innerWidth <= 768;
+
+    const headers = ["順位", "国", "リーグ", "クラブ名", "売上高 (億円)", "平均観客動員数"];
+    let tableHTML = `<div class="data-source-note">※データソース: Deloitte, Transfermarkt (1ユーロ=165円で計算)</div>`;
+    tableHTML += `<table><thead><tr>`;
+    headers.forEach(h => tableHTML += `<th>${h}</th>`);
+    tableHTML += `</tr></thead><tbody>`;
+
+    europeTopClubs.forEach((club, index) => {
+        tableHTML += `<tr>`;
+        tableHTML += `<td>${index + 1}</td>`;          // 順位
+        tableHTML += `<td>${club[0] || '-'}</td>`;    // 国
+        tableHTML += `<td>${club[1] || '-'}</td>`;    // リーグ
+
+        // ★★★ クラブ名をスマホなら略称に ★★★
+        let clubName = club[2] || '-';
+        if (isMobile && europeClubAbbreviations[clubName]) {
+            clubName = europeClubAbbreviations[clubName];
+        }
+        tableHTML += `<td>${clubName}</td>`;
+
+        // ★★★ 売上高をスマホなら整数に ★★★
+        let revenueText = '-';
+        if (club[4]) {
+            const revenueValue = parseFloat(club[4]);
+            if (isMobile) {
+                // スマホの場合：四捨五入して整数にし、桁区切りを追加
+                revenueText = Math.round(revenueValue).toLocaleString();
+            } else {
+                // PCの場合：そのまま桁区切りを追加
+                revenueText = revenueValue.toLocaleString();
+            }
+        }
+        tableHTML += `<td>${revenueText}</td>`;
+
+        // 平均観客動員数（桁区切りを追加）
+        tableHTML += `<td>${club[5] ? parseInt(club[5]).toLocaleString() : '-'}</td>`;
+        
+        tableHTML += `</tr>`;
+    });
+    tableHTML += `</tbody></table>`;
+    container.innerHTML = tableHTML;
+}
+// ▲▲▲ 置き換えはここまで ▲▲▲
     
     function renderBig5(clubs) { const big5 = clubs.slice(0, 5); const big5Div = document.getElementById("big5-cards"); big5Div.innerHTML = ""; const row1 = document.createElement("div"); row1.className = "big5-row"; const row2 = document.createElement("div"); row2.className = "big5-row"; big5.forEach((club, i) => { let colorClass = "local"; if (club.sum >= 30) colorClass = "top-club"; else if (club.sum >= 20) colorClass = "potential-big"; else if (club.sum >= 5) colorClass = "middle"; const isLong = club.name.length >= 10; const card = document.createElement("div"); card.className = `club-card ${colorClass} rank-${i+1}` + (isLong ? " long-title" : ""); card.innerHTML = `<h3 class="club-title">${club.name}</h3><div class="score-val">スコア：${club.sum.toFixed(1)}</div>`; if (i < 3) row1.appendChild(card); else row2.appendChild(card); }); big5Div.appendChild(row1); big5Div.appendChild(row2); }
     function renderOthers(clubs) { const others = clubs.slice(5); const tableDiv = document.getElementById("club-categories"); tableDiv.innerHTML = ""; const table = document.createElement("table"); const thead = table.createTHead(); const headerRow = thead.insertRow(); ["順位", "クラブ名", "合算スコア", "区分"].forEach(h => { const th = document.createElement("th"); th.textContent = h; headerRow.appendChild(th); }); const tbody = table.createTBody(); others.forEach((club, idx) => { let category, colorClass; if (club.sum >= 30) { category = "トップクラブ"; colorClass = "top-club"; } else if (club.sum >= 20) { category = "潜在的ビッグクラブ"; colorClass = "potential-big"; } else if (club.sum >= 5)  { category = "中堅クラブ"; colorClass = "middle"; } else { category = "ローカルクラブ"; colorClass = "local"; } const tr = tbody.insertRow(); tr.className = colorClass; [idx + 6, club.name, club.sum.toFixed(1), category].forEach(val => { const td = document.createElement("td"); td.textContent = val; tr.appendChild(td); }); }); tableDiv.appendChild(table); }
