@@ -1674,64 +1674,69 @@ function showMetricChart(key) {
             postBtn.disabled = true;
             buttonsContainer.style.visibility = 'hidden';
             msgSpan.style.visibility = 'hidden';
-            msgSpan.textContent = '';
+            msgSpan.textContent = ''; // メッセージをクリア
 
             html2canvas(captureElem, { backgroundColor: null, scale: 2, useCORS: true }).then(canvas => {
                 if (selectedLabel) selectedLabel.classList.add('selected'); // 選択状態を戻す
 
+                // まずはBlobとして画像データを取得
                 canvas.toBlob(blob => {
                     if (!blob) {
-                        msgSpan.textContent = '画像の生成に失敗しました';
+                        msgSpan.textContent = 'エラー: 画像データの生成に失敗しました';
                         return;
                     }
 
-                    // #1 クリップボードへのコピーを試みる (PC向け)
+                    // #1 クリップボードへのコピーを試みる（成功したらメッセージ表示、失敗したらダウンロードへ）
                     if (navigator.clipboard && navigator.clipboard.write) {
                         navigator.clipboard.write([new ClipboardItem({ "image/png": blob })])
                             .then(() => {
                                 msgSpan.textContent = '画像をコピーしました！Xに貼り付け可能です';
-                                // コピー成功後も、念のため数秒でメッセージを消す
-                                setTimeout(() => msgSpan.textContent = '', 3000);
+                                setTimeout(() => msgSpan.textContent = '', 3000); // 3秒後にメッセージを消す
                             })
                             .catch(err => {
-                                console.warn("クリップボードへのコピーに失敗しました。ダウンロードを試みます:", err);
-                                // #2 クリップボードコピー失敗時のフォールバック (スマホ向け)
-                                downloadImage(canvas, "best11.png", msgSpan);
+                                console.warn("クリップボードへのコピーに失敗しました (iOSの制限など):", err);
+                                // クリップボードコピーが失敗した場合でもダウンロードを実行
+                                downloadImage(canvas, "best11.png", msgSpan); // ダウンロード実行
                             });
                     } else {
-                        // #2 クリップボードAPIがない場合のフォールバック (古いブラウザやスマホ向け)
+                        // #2 クリップボードAPIがない場合（非対応ブラウザなど）は直接ダウンロード
                         console.warn("Clipboard APIがサポートされていません。画像をダウンロードします。");
-                        downloadImage(canvas, "best11.png", msgSpan);
+                        downloadImage(canvas, "best11.png", msgSpan); // ダウンロード実行
                     }
-                }, 'image/png');
+                }, 'image/png'); // 'image/png' 形式でBlobを生成
             }).catch(err => {
                 console.error("画像キャプチャ中にエラーが発生しました:", err);
-                msgSpan.textContent = '画像のキャプチャに失敗しました';
+                msgSpan.textContent = 'エラー: 画像のキャプチャに失敗しました';
             }).finally(() => {
                 // 処理完了後、ボタンとメッセージを再表示
                 copyBtn.disabled = false;
                 postBtn.disabled = false;
                 buttonsContainer.style.visibility = 'visible';
-                msgSpan.style.visibility = 'visible'; // メッセージを表示するためにvisiblityを戻す
+                msgSpan.style.visibility = 'visible'; // メッセージを表示するためにvisibilityを戻す
             });
         };
 
-        // 新しく追加するダウンロード関数
+        // この関数は前回の修正で追加済みのはずですが、念のため再掲します。
+        // 同じ関数が複数定義されないように注意してください。
         function downloadImage(canvas, filename, msgSpan) {
             try {
-                const url = canvas.toDataURL('image/png');
+                // ダウンロード用の<a>要素を作成
                 const a = document.createElement('a');
+                // Canvasの内容を画像データとして取得
+                const url = canvas.toDataURL('image/png');
                 a.href = url;
-                a.download = filename;
+                a.download = filename; // ダウンロード時のファイル名
+                
+                // <a>要素を一時的にDOMに追加し、クリックしてダウンロードをトリガー
                 document.body.appendChild(a);
                 a.click();
-                document.body.removeChild(a);
+                document.body.removeChild(a); // ダウンロード後に削除
+                
                 msgSpan.textContent = '画像をダウンロードしました！';
-                // ダウンロード成功後も、念のため数秒でメッセージを消す
-                setTimeout(() => msgSpan.textContent = '', 3000);
+                setTimeout(() => msgSpan.textContent = '', 3000); // 3秒後にメッセージを消す
             } catch (e) {
                 console.error("画像のダウンロードに失敗しました:", e);
-                msgSpan.textContent = '画像のダウンロードに失敗しました';
+                msgSpan.textContent = 'エラー: 画像のダウンロードに失敗しました';
             }
         }
 
