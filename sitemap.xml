@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    
+    <!-- トップページ (最重要) -->
+    <url>
+        <loc>https://jleague-big-club.com/index.html</loc>
+        <lastmod>2025-08-01</lastmod> <!-- 最終更新日 -->
+        <priority>1.0</priority>     <!-- 優先度 (0.0〜1.0) -->
+    </url>
+
+    <!-- 法務関連ページ -->
+    <url>
+        <loc>https://jleague-big-club.com/legal/contact.html</loc>
+        <lastmod>2025-08-01</lastmod>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://jleague-big-club.com/legal/privacy-policy.html</loc>
+        <lastmod>2025-08-01</lastmod>
+        <priority>0.5</priority>
+    </url>
+
+    <!-- ブログ記事の例 -->
+    <url>
+        <loc>https://jleague-big-club.com/posts/bigclub-challenge.html</loc>
+        <lastmod>2025-08-01</lastmod> <!-- 記事の更新日 -->
+        <priority>0.8</priority>
+    </url>
+    
+    <!-- 他のブログ記事も同様に追加 -->
+    
+</urlset>

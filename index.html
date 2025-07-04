@@ -749,6 +749,99 @@ body {
   margin-top: 50px;
   border-top: 3px solid #299ad3;
 }
+/* ▼▼▼【ここから追加】順位表・シーズン予測ページのスタイル ▼▼▼ */
+.rank-view-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  background-color: #2a3758;
+  padding: 8px;
+  border-radius: 12px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.rank-view-tab-btn {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 1.05rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background-color: transparent;
+  color: #aab8d8;
+}
+.rank-view-tab-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+.rank-view-tab-btn.active {
+  background: linear-gradient(90deg, #27aee7 60%, #aaf7fd 100%);
+  color: #143060;
+  box-shadow: 0 1px 5px rgba(42, 184, 242, 0.3);
+}
+
+#prediction-container {
+  max-width: 950px;
+  margin: 0 auto;
+}
+.prediction-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+}
+.prediction-card {
+  background-color: #293352;
+  border-radius: 12px;
+  border: 1px solid #4a5a7f;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.prediction-card-header {
+  padding: 12px 15px;
+  font-size: 1.15rem;
+  font-weight: bold;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.prediction-card-header.champion { background: linear-gradient(135deg, #ffd700, #f0c700); color: #332e00; }
+.prediction-card-header.acl     { background: linear-gradient(135deg, #3498db, #2980b9); }
+.prediction-card-header.promotion { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+.prediction-card-header.safe     { background: linear-gradient(135deg, #95a5a6, #7f8c8d); }
+.prediction-card-header.relegation { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+.prediction-card-body {
+  padding: 5px 15px 15px 15px;
+}
+.prediction-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.prediction-list li {
+  display: flex;
+  align-items: center;
+  padding: 10px 8px;
+  border-bottom: 1px solid #3a486b;
+  font-size: 1.05rem;
+}
+.prediction-list li:last-child {
+  border-bottom: none;
+}
+.prediction-list .rank {
+  font-weight: bold;
+  color: #aab8d8;
+  width: 35px;
+  flex-shrink: 0;
+}
+.prediction-list .team-name {
+  font-weight: 600;
+  color: #eaf7fc;
+}
+/* ▲▲▲【ここまで追加】▲▲▲ */
 ================================================
 ★★★ サイトフッターのスタイル（ここから）★★★
 ================================================
@@ -1009,17 +1102,34 @@ body {
     <span class="table-note">※並びはビッグクラブスコア順<br>※在籍していない年は21位で計算</span>
     <div id="jleague-history"></div>
   </div>
-  <!-- ▼▼▼ このdivをまるごと追加してください ▼▼▼ -->
+    <!-- ▼▼▼ このdivをまるごと置き換えてください ▼▼▼ -->
   <div id="rankings" class="page-section">
+    <!-- J1/J2/J3リーグ選択タブ -->
     <div id="rank-buttons" style="text-align:center; margin: 20px 0;">
       <button class="rank-tab-btn active" onclick="showRankingTable('J1')">J1</button>
       <button class="rank-tab-btn" onclick="showRankingTable('J2')">J2</button>
       <button class="rank-tab-btn" onclick="showRankingTable('J3')">J3</button>
     </div>
+
+    <!-- ★★★【ここから追加】順位表/シーズン予測 切り替えタブ ★★★ -->
+    <div class="rank-view-tabs" style="text-align:center; margin: -10px 0 25px 0;">
+      <button id="rank-view-table-btn" class="rank-view-tab-btn active" onclick="showRankingsContent('table')">順位表</button>
+      <button id="rank-view-prediction-btn" class="rank-view-tab-btn" onclick="showRankingsContent('prediction')">シーズン予測</button>
+    </div>
+    <!-- ★★★【ここまで追加】★★★ -->
+
+    <!-- 順位表表示エリア -->
     <div id="ranking-table-container">
       <!-- ランキングテーブルはここに表示されます -->
     </div>
+
+    <!-- ★★★【ここから追加】予測結果表示エリア ★★★ -->
+    <div id="prediction-container" style="display: none;">
+      <!-- 予測結果はここに表示されます -->
+    </div>
+    <!-- ★★★【ここまで追加】★★★ -->
   </div>
+  <!-- ▲▲▲ 置き換えはここまで ▲▲▲ -->
   <div id="introduce" class="page-section">
     <div id="club-status-board" style="display:none;"></div>
     <div id="club-league-tabs" style="text-align:center; margin-bottom:20px;">
@@ -1278,6 +1388,7 @@ body {
     let metricChart;
     let best11Filter = { type: 'all', value: null };
     let rankingData = {};
+    let scheduleData = []; // ★★★ この行を追記 ★★★
     let isShowingArticleDetail = false;
     let bannerAutoPlayInterval;
     const majorLeagues = ["プレミアリーグ", "ラ・リーガ", "ブンデスリーガ", "セリエA", "リーグ・アン"];
@@ -1468,6 +1579,7 @@ function updateCopyButtonText() {
     }
 }
     // === 起動時のデータ読み込み ===
+        // === 起動時のデータ読み込み ===
     document.addEventListener("DOMContentLoaded", () => {
         const fetchWithMeta = (url) => fetch(url).then(res => {
             if (!res.ok) return Promise.reject(`${url}: ${res.status}`);
@@ -1494,6 +1606,7 @@ function updateCopyButtonText() {
             return result;
         };
 
+        // ▼▼▼【ここからが修正箇所】データ読み込み処理を正しい順序に整理します ▼▼▼
         Promise.all([
             fetch("data/data.csv").then(res => res.ok ? res.text() : Promise.reject(`data.csv: ${res.status}`)),
             fetch("data/playerdata.csv").then(res => res.ok ? res.text() : Promise.reject(`playerdata.csv: ${res.status}`)),
@@ -1501,16 +1614,43 @@ function updateCopyButtonText() {
             fetchWithMeta("data/j1rank.csv"),
             fetchWithMeta("data/j2rank.csv"),
             fetchWithMeta("data/j3rank.csv"),
-            fetch("data/europebigclub.csv").then(res => res.ok ? res.text() : Promise.reject(`europebigclub.csv: ${res.status}`))
+            fetch("data/europebigclub.csv").then(res => res.ok ? res.text() : Promise.reject(`europebigclub.csv: ${res.status}`)),
+            fetch("data/schedule.csv").then(res => res.ok ? res.text() : Promise.reject(`schedule.csv: ${res.status}`))
         ])
-        .then(([clubCsvText, playerCsvText, attendanceResponse, j1Response, j2Response, j3Response, europeCsvText]) => {
-            let lines = clubCsvText.trim().split("\n"); let headers = lines[0].split(",").map(h => h.trim()); clubData = lines.slice(1).map(line => { const values = line.split(","); const obj = {}; headers.forEach((h, i) => obj[h] = values[i] ? values[i].trim() : ''); obj.name = obj["クラブ名"] || 'N/A'; obj.revenue = parseFloat(obj["売上高（億円）"]) || 0; obj.audience = parseInt(obj["平均観客動員数"]) || 0; obj.titles = parseInt(obj["タイトル計"]) || 0; obj.sum = parseFloat(obj["総合的ビッグクラブスコア"]) || 0; obj.l = obj["過去10年J1在籍年数"] || '0'; obj.m = obj["J1在籍10年平均順位"] || 'N/A'; obj.o = obj["J1在籍10年平均順位スコア"] || 'N/A'; obj.p = obj["所属リーグ"] || 'N/A'; return obj; }); clubData.sort((a, b) => b.sum - a.sum); clubLeagueList = clubData;
+        .then(([clubCsvText, playerCsvText, attendanceResponse, j1Response, j2Response, j3Response, europeCsvText, scheduleCsvText]) => {
+            
+            // --- ① まず、すべてのデータをパースして準備します ---
+            let lines, headers;
+
+            // clubDataのパース
+            lines = clubCsvText.trim().split("\n"); headers = lines[0].split(",").map(h => h.trim()); clubData = lines.slice(1).map(line => { const values = line.split(","); const obj = {}; headers.forEach((h, i) => obj[h] = values[i] ? values[i].trim() : ''); obj.name = obj["クラブ名"] || 'N/A'; obj.revenue = parseFloat(obj["売上高（億円）"]) || 0; obj.audience = parseInt(obj["平均観客動員数"]) || 0; obj.titles = parseInt(obj["タイトル計"]) || 0; obj.sum = parseFloat(obj["総合的ビッグクラブスコア"]) || 0; obj.l = obj["過去10年J1在籍年数"] || '0'; obj.m = obj["J1在籍10年平均順位"] || 'N/A'; obj.o = obj["J1在籍10年平均順位スコア"] || 'N/A'; obj.p = obj["所属リーグ"] || 'N/A'; return obj; }); clubData.sort((a, b) => b.sum - a.sum); clubLeagueList = clubData;
+            
+            // playerDataのパース
             lines = playerCsvText.trim().split("\n"); headers = lines[0].split(",").map(h => h.trim()); playerData = lines.slice(1).map(line => { const vals = line.split(","); const obj = {}; headers.forEach((h, i) => obj[h] = vals[i] ? vals[i].trim() : ''); return obj; });
+            
+            // attendanceDataのパース
             let attendanceLines = attendanceResponse.text.trim().split("\n"); let attendanceHeaders = attendanceLines[0].split(",").map(h => h.trim()); attendanceData = attendanceLines.slice(1).map(line => { const values = line.split(","); const obj = {}; attendanceHeaders.forEach((h, i) => { const val = values[i] ? values[i].trim() : ''; if (['年', '年間最高観客数', '年間最低観客数', 'ゲーム数'].includes(h)) { obj[h] = parseInt(val) || 0; } else if (h === '平均観客数') { obj[h] = parseFloat(val) || 0; } else { obj[h] = val; } }); return obj; }); attendanceData.lastModified = attendanceResponse.lastModified;
+            
+            // rankingDataのパース
             const parseRankingCsv = (csvText) => { if (!csvText || csvText.trim() === '') return { headers: [], data: [] }; const lines = csvText.trim().split("\n"); const headers = lines[0].split(",").map(h => h.trim()); const data = lines.slice(1).map(line => { const values = line.split(","); const rowObj = {}; headers.forEach((h, i) => { rowObj[h] = values[i] ? values[i].trim() : ''; }); return rowObj; }); return { headers, data }; }; rankingData['J1'] = parseRankingCsv(j1Response.text); rankingData['J1'].updated = j1Response.lastModified; rankingData['J2'] = parseRankingCsv(j2Response.text); rankingData['J2'].updated = j2Response.lastModified; rankingData['J3'] = parseRankingCsv(j3Response.text); rankingData['J3'].updated = j3Response.lastModified;
+            
+            // europeTopClubsのパース
             let europeLines = europeCsvText.trim().split("\n");
             europeTopClubs = europeLines.slice(1).map(line => parseCsvLine(line));
 
+            // scheduleDataのパース
+            const scheduleLines = scheduleCsvText.trim().split("\n");
+            const scheduleHeaders = scheduleLines[0].split(",").map(h => h.trim());
+            scheduleData = scheduleLines.slice(1).map(line => {
+                const values = line.split(",");
+                const rowObj = {};
+                scheduleHeaders.forEach((h, i) => {
+                    rowObj[h] = values[i] ? values[i].trim() : '';
+                });
+                return rowObj;
+            });
+            
+            // --- ② 全てのデータが準備できた後で、画面の描画処理を呼び出します ---
             renderBig5(clubData);
             renderOthers(clubData);
             renderHistory(clubData);
@@ -1518,6 +1658,7 @@ function updateCopyButtonText() {
             renderBest11Filters();
             renderEuropeTop20Table();
 
+            // --- ③ 最後に初期ページを表示します ---
             showPage('top', document.querySelector('nav button'));
 
         }).catch(err => {
@@ -2082,7 +2223,9 @@ function showMetricChart(key) {
     window.showBlogList = function() { document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('visible')); const blogPage = document.getElementById('blog'); if (blogPage) { blogPage.classList.add('visible'); } document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active')); const blogNavBtn = Array.from(document.querySelectorAll('.nav-links button')).find(b => b.textContent === '記事'); if (blogNavBtn) { blogNavBtn.classList.add('active'); } const pageTitle = document.querySelector('#page-title-blog h1'); if(pageTitle) pageTitle.textContent = '記事・ブログ'; renderArticleList(currentPage); window.scrollTo({ top: 0, behavior: 'smooth' }); }
     // 既存の showRankingTable 関数を、以下のコードで置き換える
 
+// ▼▼▼ この関数をまるごと置き換えてください ▼▼▼
 function showRankingTable(league) {
+    // リーグ選択タブのアクティブ状態を更新
     document.querySelectorAll('.rank-tab-btn').forEach(btn => btn.classList.remove('active'));
     const activeBtn = document.querySelector(`.rank-tab-btn[onclick="showRankingTable('${league}')"]`);
     if (activeBtn) activeBtn.classList.add('active');
@@ -2093,6 +2236,8 @@ function showRankingTable(league) {
     const { headers, data, updated } = rankingData[league];
     if (!headers || !data || data.length === 0) {
         container.innerHTML = "<p>順位データがありません。</p>";
+        // ★★★ 予測コンテナも空にする ★★★
+        document.getElementById('prediction-container').innerHTML = '';
         return;
     }
 
@@ -2105,7 +2250,6 @@ function showRankingTable(league) {
         dateHtml = `<p class="update-date-note">更新日時: ${formattedDate}</p>`;
     }
 
-    // スマホでは「勝点」列を除外する
     const displayHeaders = isMobile ? headers.filter(h => h !== '勝点') : headers;
 
     let tableHTML = `<table><thead><tr>`;
@@ -2118,12 +2262,9 @@ function showRankingTable(league) {
         tableHTML += `<tr>`;
         displayHeaders.forEach(h => {
             let cellValue = row[h] || '';
-
-            // ▼▼▼【ここを修正】 'クラブ' から 'チーム名' に変更しました ▼▼▼
             if (h === 'チーム名' && isMobile) {
                 cellValue = clubAbbreviations[cellValue] || cellValue;
             }
-            
             tableHTML += `<td>${cellValue}</td>`;
         });
         tableHTML += `</tr>`;
@@ -2131,8 +2272,13 @@ function showRankingTable(league) {
     
     tableHTML += `</tbody></table>`;
     container.innerHTML = dateHtml + tableHTML;
+
+    // ★★★【ここから追加】予測を描画し、表示を「順位表」に設定 ★★★
+    renderPrediction(league);
+    showRankingsContent('table');
+    // ★★★【ここまで追加】★★★
 }
-    let simInitialized = false; function getCategoryInfo(score) { if (score >= 50) return { text: 'ビッグクラブ', color: '#ffd700' }; if (score >= 30) return { text: '有望ビッグクラブ', color: '#e94444' }; if (score >= 20) return { text: '潜在的ビッグクラブ', color: '#41cdf4' }; if (score >= 5) return { text: '中堅クラブ', color: '#bbb' }; return { text: 'ローカルクラブ', color: '#999' }; }
+// ▲▲▲ 置き換えはここまで ▲▲▲    let simInitialized = false; function getCategoryInfo(score) { if (score >= 50) return { text: 'ビッグクラブ', color: '#ffd700' }; if (score >= 30) return { text: '有望ビッグクラブ', color: '#e94444' }; if (score >= 20) return { text: '潜在的ビッグクラブ', color: '#41cdf4' }; if (score >= 5) return { text: '中堅クラブ', color: '#bbb' }; return { text: 'ローカルクラブ', color: '#999' }; }
     function initSimulationPage() { if (simInitialized) return; const leagueSelect = document.getElementById('sim-league-select'); const clubSelect = document.getElementById('sim-club-select'); const inputs = document.querySelectorAll('.sim-input'); leagueSelect.innerHTML = '<option value="">まずリーグを選択...</option>'; ['J1', 'J2', 'J3'].forEach(league => { leagueSelect.innerHTML += `<option value="${league}">${league}</option>`; }); leagueSelect.addEventListener('change', () => { populateClubSelect(leagueSelect.value); }); clubSelect.addEventListener('change', () => { displayClubData(clubSelect.value); }); inputs.forEach(input => { input.addEventListener('input', runSimulation); }); simInitialized = true; }
     function populateClubSelect(league) { const clubSelect = document.getElementById('sim-club-select'); const inputs = document.querySelectorAll('.sim-input'); clubSelect.innerHTML = '<option value="">クラブを選択...</option>'; clubSelect.disabled = true; inputs.forEach(input => { input.value = ''; input.disabled = true; }); document.getElementById('sim-result-area').innerHTML = '<p>クラブを選択すると、ここにスコアが表示されます。</p>'; if (!league) return; const clubsInLeague = clubData.filter(c => c.p === league).sort((a, b) => a.name.localeCompare(b.name, 'ja')); clubsInLeague.forEach(club => { clubSelect.innerHTML += `<option value="${club.name}">${club.name}</option>`; }); clubSelect.disabled = false; }
     function displayClubData(clubName) { const inputs = document.querySelectorAll('.sim-input'); const resultArea = document.getElementById('sim-result-area'); if (!clubName) { inputs.forEach(input => { input.value = ''; input.disabled = true; }); resultArea.innerHTML = '<p>クラブを選択すると、ここにスコアが表示されます。</p>'; return; } inputs.forEach(input => input.disabled = false); const club = clubData.find(c => c.name === clubName); if (!club) return; document.getElementById('sim-revenue').value = club.revenue || ''; document.getElementById('sim-audience').value = club.audience || ''; document.getElementById('sim-titles').value = club.titles || ''; document.getElementById('sim-avg-rank').value = club.m || ''; const currentScore = club.sum || 0; const currentCategory = getCategoryInfo(currentScore); resultArea.innerHTML = ` <div class="sim-current-score"> 現在の区分: <span style="color: ${currentCategory.color}; font-weight: bold;">${currentCategory.text}</span><br> 現在のビッグクラブスコア: <strong>${currentScore.toFixed(2)}</strong> </div> <div class="sim-new-score"> <p style="margin:0; font-size:0.8em; color:#ccc;">数値を変更してください</p> </div> `; }
@@ -2448,7 +2594,116 @@ document.addEventListener("DOMContentLoaded", () => {
     // 最後の行にこれを追加
     setupFooterButtonObserver();
 });
+/* ▼▼▼【ここから追加】シーズン予測関連の関数 ▼▼▼ */
 
+// 「順位表」「シーズン予測」の表示を切り替える関数
+function showRankingsContent(viewType) {
+    const tableContainer = document.getElementById('ranking-table-container');
+    const predictionContainer = document.getElementById('prediction-container');
+    const tableBtn = document.getElementById('rank-view-table-btn');
+    const predictionBtn = document.getElementById('rank-view-prediction-btn');
+
+    if (viewType === 'prediction') {
+        tableContainer.style.display = 'none';
+        predictionContainer.style.display = 'block';
+        tableBtn.classList.remove('active');
+        predictionBtn.classList.add('active');
+    } else { // 'table' or default
+        tableContainer.style.display = 'block';
+        predictionContainer.style.display = 'none';
+        tableBtn.classList.add('active');
+        predictionBtn.classList.remove('active');
+    }
+}
+
+// シーズン結果を予測する（ダミー）関数
+function predictSeasonOutcome(league) {
+    const teams = rankingData[league]?.data || [];
+    if (teams.length === 0) return null;
+
+    // 現時点では、現在の順位をそのまま最終結果として利用するダミーロジック
+    const predictions = {
+        champion: [],
+        acl: [],
+        promotion: [],
+        safe: [],
+        relegation: []
+    };
+
+    if (league === 'J1') {
+        predictions.champion = teams.slice(0, 3);
+        // ACL Eliteは2位まで、ACL2は3位
+        predictions.acl = teams.slice(0, 3); 
+        predictions.relegation = teams.slice(-5).reverse();
+        // 残留確定は暫定的に10位以上とする
+        predictions.safe = teams.slice(0, 10);
+    } else if (league === 'J2') {
+        predictions.champion = teams.slice(0, 3);
+        predictions.promotion = teams.slice(0, 3); // J1昇格は3位まで
+        predictions.relegation = teams.slice(-5).reverse();
+         // 残留確定は暫定的に10位以上とする
+        predictions.safe = teams.slice(0, 10);
+    } else if (league === 'J3') {
+        predictions.champion = teams.slice(0, 3);
+        predictions.promotion = teams.slice(0, 3); // J2昇格は3位まで
+    }
+
+    return predictions;
+}
+
+// 予測結果をHTMLとして描画する関数
+function renderPrediction(league) {
+    const container = document.getElementById('prediction-container');
+    const predictions = predictSeasonOutcome(league);
+
+    if (!predictions) {
+        container.innerHTML = '<p style="text-align:center;">予測データを生成できませんでした。</p>';
+        return;
+    }
+
+    const categories = [
+        { key: 'champion', title: '🏆 優勝候補 TOP3', icon: '', className: 'champion' },
+        { key: 'acl', title: '🌐 ACL出場圏候補', icon: '', className: 'acl' },
+        { key: 'promotion', title: '⬆️ J1/J2昇格候補', icon: '', className: 'promotion' },
+        { key: 'safe', title: '✅ 残留以上確定濃厚', icon: '', className: 'safe' },
+        { key: 'relegation', title: '⚠️ 降格危険圏 TOP5', icon: '', className: 'relegation' }
+    ];
+    
+    let html = '<div class="prediction-grid">';
+
+    categories.forEach(cat => {
+        const teams = predictions[cat.key];
+        // J1/J2/J3で表示するカテゴリを制御
+        if ((cat.key === 'acl' && league !== 'J1') || 
+            (cat.key === 'promotion' && league === 'J1') || 
+            (cat.key === 'relegation' && league === 'J3') ||
+            teams.length === 0) {
+            return;
+        }
+
+        html += `
+            <div class="prediction-card">
+                <div class="prediction-card-header ${cat.className}">
+                    ${cat.icon} ${cat.title}
+                </div>
+                <div class="prediction-card-body">
+                    <ul class="prediction-list">
+                        ${teams.map(team => `
+                            <li>
+                                <span class="rank">${team['順位']}位</span>
+                                <span class="team-name">${team['チーム名']}</span>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+            </div>
+        `;
+    });
+
+    html += '</div>';
+    container.innerHTML = html;
+}
+/* ▲▲▲【ここまで追加】▲▲▲ */
 /* ▲▲▲【ここまで追加】▲▲▲ */
 </script>
 </body>

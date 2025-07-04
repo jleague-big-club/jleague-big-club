@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>日程テキストを表に変換（コピー機能付き）</title>
+    <style>
+        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; background-color: #f9f9f9; }
+        .container { width: 100%; max-width: 900px; margin-bottom: 20px; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h2 { border-bottom: 2px solid #007bff; padding-bottom: 5px; color: #333; }
+        textarea { width: 100%; height: 300px; font-size: 14px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; padding: 10px; }
+        
+        /* ボタンの共通スタイル */
+        .btn { display: block; margin: 15px auto; padding: 12px 25px; font-size: 16px; cursor: pointer; border: none; border-radius: 4px; transition: background-color 0.3s; color: white; }
+        
+        /* 生成ボタンのスタイル */
+        .btn-primary { background-color: #007bff; }
+        .btn-primary:hover { background-color: #0056b3; }
+
+        /* ★コピーボタンのスタイルを追加 */
+        .btn-secondary { background-color: #6c757d; }
+        .btn-secondary:hover { background-color: #5a6268; }
+        #copyButton { display: none; /* 初期状態では非表示 */ }
+
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
+        th { background-color: #f2f2f2; font-weight: bold; }
+        .section-col { width: 8%; }
+        .date-col { width: 12%; }
+        .team-home { text-align: right; }
+        .team-away { text-align: left; }
+        .score-col { width: 8%; font-weight: bold; font-size: 1.2em; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>1. ここにテキストを貼り付け</h2>
+        <textarea id="inputText" placeholder="Googleなどからコピーした日程テキストをここに貼り付けてください..."></textarea>
+        <button onclick="generateTable()" class="btn btn-primary">試合結果表を生成</button>
+    </div>
+
+    <div class="container">
+        <h2>2. 生成された表</h2>
+        <!-- ★コピーボタンをここに追加 -->
+        <button id="copyButton" onclick="copyTable()" class="btn btn-secondary">表をクリップボードにコピー</button>
+        <div id="resultTable"></div>
+    </div>
+
+    <script>
+        /**
+         * チーム名から重複や不要な語句を削除する
+         */
+        function cleanTeamName(rawName) {
+            if (!rawName) return '';
+            let name = rawName.replace(/レッドカード/g, '').trim();
+            const halfLen = Math.floor(name.length / 2);
+            if (halfLen > 1 && name.substring(0, halfLen) === name.substring(halfLen)) {
+                return name.substring(0, halfLen);
+            }
+            return name;
+        }
+
+        /**
+         * ★新しく追加した、表をコピーする関数
+         */
+        function copyTable() {
+            const resultDiv = document.getElementById('resultTable');
+            const table = resultDiv.querySelector('table');
+
+            if (!table) {
+                alert('コピーする表がありません。');
+                return;
+            }
+
+            // tableのHTMLをクリップボードに書き込む
+            // text/html形式でコピーすることで、対応アプリに表として貼り付けられる
+            const blob = new Blob([table.outerHTML], { type: 'text/html' });
+            const clipboardItem = new ClipboardItem({ 'text/html': blob });
+
+            navigator.clipboard.write([clipboardItem]).then(() => {
+                alert('表をクリップボードにコピーしました！\nExcelやスプレッドシート、メールなどに貼り付けられます。');
+            }).catch(err => {
+                console.error('コピーに失敗しました:', err);
+                alert('クリップボードへのコピーに失敗しました。');
+            });
+        }
+
+        function generateTable() {
+            const rawText = document.getElementById('inputText').value;
+            if (!rawText.trim()) {
+                alert('テキストを入力してください。');
+                return;
+            }
+
+            const lines = rawText.split('\n').map(line => line.trim()).filter(line => line);
+            
+            let tableHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="section-col">節</th>
+                            <th class="date-col">日付</th>
+                            <th class="team-home">ホーム</th>
+                            <th class="score-col"></th>
+                            <th class="score-col"></th>
+                            <th class="team-away">アウェイ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            let currentSection = '';
+            let i = 0;
+            let matchCount = 0; // 試合が1つでも生成されたかカウント
+
+            while (i < lines.length) {
+                let line = lines[i];
+
+                const sectionMatch = line.match(/^第\s*(\d+)\s*(日|節)/);
+                if (sectionMatch) {
+                    currentSection = `第${sectionMatch[1]}節`;
+                    i++;
+                    continue;
+                }
+                
+                const dateRegex = /^(?:\d{2}\/)?\d{1,2}\/\d{1,2}(?:\(.\))?$/;
+                
+                if (dateRegex.test(line) || line === '未定') {
+                    const date = line.replace(/\(.\)/, '');
+                    
+                    let temp_i = i + 1;
+                    const skipKeywords = ['►', '終了', '予定', '明日', 'ライブ', '試合前'];
+                    const timeRegex = /^\d{1,2}:\d{2}$/;
+                    
+                    while (temp_i < lines.length) {
+                        const currentLine = lines[temp_i];
+                        if (skipKeywords.some(keyword => currentLine.includes(keyword)) || timeRegex.test(currentLine)) {
+                            temp_i++;
+                        } else {
+                            break; 
+                        }
+                    }
+
+                    if (temp_i < lines.length) {
+                        let homeTeam = '', awayTeam = '', homeScore = '', awayScore = '';
+                        let processed = false;
+
+                        // Case 1: 日時未定の試合
+                        if (lines[temp_i] === '未定' && temp_i + 2 < lines.length) {
+                            homeTeam = cleanTeamName(lines[temp_i + 1]);
+                            awayTeam = cleanTeamName(lines[temp_i + 2]);
+                            homeScore = '';
+                            awayScore = '';
+                            i = temp_i + 3; 
+                            processed = true;
+                        }
+                        // Case 2: 試合終了（スコアあり）
+                        else if (temp_i + 3 < lines.length && /^\d+$/.test(lines[temp_i + 1])) {
+                            homeTeam = cleanTeamName(lines[temp_i]);
+                            homeScore = lines[temp_i + 1];
+                            awayTeam = cleanTeamName(lines[temp_i + 2]);
+                            awayScore = lines[temp_i + 3];
+                            i = temp_i + 4;
+                            processed = true;
+                        } 
+                        // Case 3: 未消化・予定試合（スコアなし）
+                        else if (temp_i + 1 < lines.length) {
+                            homeTeam = cleanTeamName(lines[temp_i]);
+                            awayTeam = cleanTeamName(lines[temp_i + 1]);
+                            homeScore = '';
+                            awayScore = '';
+                            i = temp_i + 2; 
+                            processed = true;
+                        }
+
+                        if (processed && homeTeam && awayTeam) {
+                            tableHTML += `
+                                <tr>
+                                    <td>${currentSection}</td>
+                                    <td>${date}</td>
+                                    <td class="team-home">${homeTeam}</td>
+                                    <td class="score-col">${homeScore}</td>
+                                    <td class="score-col">${awayScore}</td>
+                                    <td class="team-away">${awayTeam}</td>
+                                </tr>
+                            `;
+                            matchCount++; // 試合が生成されたのでカウントを増やす
+                            continue;
+                        }
+                    }
+                }
+                
+                i++;
+            }
+
+            tableHTML += '</tbody></table>';
+            document.getElementById('resultTable').innerHTML = tableHTML;
+            
+            // ★表が1行でも生成されたら、コピーボタンを表示する
+            const copyButton = document.getElementById('copyButton');
+            if (matchCount > 0) {
+                copyButton.style.display = 'block';
+            } else {
+                copyButton.style.display = 'none'; // 表が生成されなかったら非表示のまま
+            }
+        }
+    </script>
+
+</body>
+</html>

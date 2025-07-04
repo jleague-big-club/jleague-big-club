@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://jleague-big-club.com/sitemap.xml
