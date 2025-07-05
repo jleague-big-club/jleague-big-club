@@ -1254,8 +1254,16 @@ body {
     <!-- テーブルはここに表示 -->
   </div>
   
-  <!-- グラフ用のCanvas（最初は非表示） -->
+     <!-- グラフ用のCanvas（最初は非表示） -->
   <div id="attendance-chart-wrap" class="metrics-chart-wrap" style="display: none;">
+      <!-- ▼▼▼【ここから変更】タイトルと戻るボタンを追加 ▼▼▼ -->
+            <!-- ▼▼▼【ここから変更】タイトルと戻るボタンのレイアウトを修正 ▼▼▼ -->
+      <div style="position: relative; margin-bottom: 15px; text-align: center;">
+        <h3 id="attendance-chart-title" style="margin: 0; color: #333; font-size: 1.1em; padding-bottom: 10px;"></h3>
+        <button id="back-to-attendance-table" style="position: absolute; left: 5px; bottom: -350px; padding: 6px 14px; font-size: 0.9em; font-weight: bold; cursor: pointer; border: 1px solid #ccc; background: #f0f0f0; border-radius: 5px;">‹ 表に戻る</button>
+      </div>
+      <!-- ▲▲▲【ここまで変更】▲▲▲ -->
+      <!-- ▲▲▲【ここまで変更】▲▲▲ -->
       <canvas id="attendanceChart"></canvas>
   </div>
 
@@ -2210,9 +2218,16 @@ function showMetricChart(key) {
                 openSelect.classList.remove('open');
             }
         });
+const backBtn = document.getElementById('back-to-attendance-table');
+        if (backBtn) {
+            backBtn.addEventListener('click', () => {
+                document.getElementById('attendance-chart-wrap').style.display = 'none';
+                document.getElementById('attendance-output-container').style.display = 'block';
+            });
+        }
 // ...
     }
-// ...
+
 
     let blogPosts = []; let blogInitialized = false; const listContainer = document.getElementById('blog-list-container'); const paginationContainer = document.getElementById('pagination'); const contentDiv = document.getElementById('blog-content'); const blogPageSection = document.getElementById('blog');
     if (listContainer && paginationContainer && contentDiv && blogPageSection) { const observer = new MutationObserver((mutationsList) => { for (const mutation of mutationsList) { if (mutation.type === 'attributes' && mutation.attributeName === 'class' && blogPageSection.classList.contains('visible')) { if (isShowingArticleDetail) { continue; } if (!blogInitialized) { initializeAndRenderBlog(); } } } }); observer.observe(blogPageSection, { attributes: true }); } else { console.error("ブログ機能に必要なHTML要素が見つかりません。"); }
@@ -2487,7 +2502,12 @@ function setupCarousel(carouselId, interval) {
         outputContainer.innerHTML = dateHtml + tableHtml;
     }
 // ...
-    function renderAttendanceChart(clubName) { document.getElementById('attendance-output-container').style.display = 'none'; document.getElementById('attendance-chart-wrap').style.display = 'block'; const clubHistory = attendanceData.filter(d => d.クラブ === clubName).sort((a, b) => a.年 - b.年); const labels = clubHistory.map(d => d.年); const colorMap = { 'J1': '#e94444', 'J2': '#29b6e6', 'J3': '#6cbf6b', 'JFL': '#f2a136', 'default': '#aaaaaa' }; if (attendanceChart) { attendanceChart.destroy(); } const ctx = document.getElementById('attendanceChart').getContext('2d'); attendanceChart = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [{ label: `${clubName} の平均観客数推移`, segment: { borderColor: ctx => { const league1 = ctx.p1.raw.league; return colorMap[league1] || colorMap['default']; }, }, data: clubHistory.map(d => ({ x: d.年, y: d.平均観客数, league: d.リーグ })), spanGaps: true, tension: 0.1, pointRadius: 5, pointHoverRadius: 7, pointBackgroundColor: (ctx) => { const index = ctx.dataIndex; const league = clubHistory[index] ? clubHistory[index].リーグ : 'default'; return colorMap[league] || colorMap['default']; }, pointBorderColor: '#fff', pointBorderWidth: 2, pointHitRadius: 20, }] }, options: { responsive: true, maintainAspectRatio: false, scales: { x: { type: 'linear', title: { display: true, text: '年', color: '#333' }, ticks: { stepSize: 1, callback: function(value) { if (Math.floor(value) === value) { return value; } } } }, y: { beginAtZero: true, title: { display: true, text: '平均観客数（人）', color: '#333' } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(context) { const point = context.raw; return ` ${point.league}: ${point.y.toLocaleString()} 人`; }, title: function(context) { return `${context[0].raw.x}年`; } } } } } }); const legendContainer = document.getElementById('attendance-chart-wrap'); const oldLegend = document.getElementById('custom-attendance-legend'); if (oldLegend) { oldLegend.remove(); } const customLegend = document.createElement('div'); customLegend.id = 'custom-attendance-legend'; customLegend.style.cssText = 'display: flex; justify-content: center; gap: 20px; margin-top: 15px;'; const usedLeagues = [...new Set(clubHistory.map(d => d.リーグ))]; usedLeagues.forEach(league => { const color = colorMap[league] || colorMap['default']; const legendItem = ` <div style="display: flex; align-items: center; font-size: 0.9em; color: #333;"> <span style="display: inline-block; width: 25px; height: 4px; background-color: ${color}; margin-right: 8px;"></span> ${league} </div> `; customLegend.innerHTML += legendItem; }); legendContainer.appendChild(customLegend); }
+    function renderAttendanceChart(clubName) { document.getElementById('attendance-output-container').style.display = 'none'; document.getElementById('attendance-chart-wrap').style.display = 'block';
+const chartTitle = document.getElementById('attendance-chart-title');
+    if (chartTitle) {
+        chartTitle.textContent = `${clubName} の平均観客数推移`;
+    }
+ const clubHistory = attendanceData.filter(d => d.クラブ === clubName).sort((a, b) => a.年 - b.年); const labels = clubHistory.map(d => d.年); const colorMap = { 'J1': '#e94444', 'J2': '#29b6e6', 'J3': '#6cbf6b', 'JFL': '#f2a136', 'default': '#aaaaaa' }; if (attendanceChart) { attendanceChart.destroy(); } const ctx = document.getElementById('attendanceChart').getContext('2d'); attendanceChart = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [{ label: `${clubName} の平均観客数推移`, segment: { borderColor: ctx => { const league1 = ctx.p1.raw.league; return colorMap[league1] || colorMap['default']; }, }, data: clubHistory.map(d => ({ x: d.年, y: d.平均観客数, league: d.リーグ })), spanGaps: true, tension: 0.1, pointRadius: 5, pointHoverRadius: 7, pointBackgroundColor: (ctx) => { const index = ctx.dataIndex; const league = clubHistory[index] ? clubHistory[index].リーグ : 'default'; return colorMap[league] || colorMap['default']; }, pointBorderColor: '#fff', pointBorderWidth: 2, pointHitRadius: 20, }] }, options: { responsive: true, maintainAspectRatio: false, scales: { x: { type: 'linear', title: { display: true, text: '年', color: '#333' }, ticks: { stepSize: 1, callback: function(value) { if (Math.floor(value) === value) { return value; } } } }, y: { beginAtZero: true, title: { display: true, text: '平均観客数（人）', color: '#333' } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(context) { const point = context.raw; return ` ${point.league}: ${point.y.toLocaleString()} 人`; }, title: function(context) { return `${context[0].raw.x}年`; } } } } } }); const legendContainer = document.getElementById('attendance-chart-wrap'); const oldLegend = document.getElementById('custom-attendance-legend'); if (oldLegend) { oldLegend.remove(); } const customLegend = document.createElement('div'); customLegend.id = 'custom-attendance-legend'; customLegend.style.cssText = 'display: flex; justify-content: center; gap: 20px; margin-top: 15px;'; const usedLeagues = [...new Set(clubHistory.map(d => d.リーグ))]; usedLeagues.forEach(league => { const color = colorMap[league] || colorMap['default']; const legendItem = ` <div style="display: flex; align-items: center; font-size: 0.9em; color: #333;"> <span style="display: inline-block; width: 25px; height: 4px; background-color: ${color}; margin-right: 8px;"></span> ${league} </div> `; customLegend.innerHTML += legendItem; }); legendContainer.appendChild(customLegend); }
 // ▼▼▼【ここから追加】スマホ用ヨーロッパページの関数 ▼▼▼
 function initEuropeMobilePage() {
     const leagueSelector = document.getElementById('europe-league-selector');
@@ -2534,13 +2554,6 @@ function renderEuropePlayerList(leagueName) {
     playerList.style.display = 'block';
     window.scrollTo(0, 0);
 }
-// ...（既存の renderEuropePlayerList 関数や initEuropeMobilePage 関数の定義の終わり）...
-function renderEuropePlayerList(leagueName) {
-    // ...
-    playerList.style.display = 'block';
-    window.scrollTo(0, 0);
-}
-// ▲▲▲【ここまで追加】▲▲▲
 
 /* ▼▼▼【ここから新しいJavaScriptコードを追加】▼▼▼ */
 
