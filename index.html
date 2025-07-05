@@ -964,9 +964,13 @@ body {
         </div>
       </span>
 
-      <!-- Jリーグ順位表（独立したボタンとして移動） -->
-      <!-- ▼▼▼ このボタンを新しく追加しました ▼▼▼ -->
-      <button onclick="showPage('rankings', this)">Jリーグ順位表</button>
+      <span class="nav-dropdown">
+        <button onclick="toggleSubMenu(this, event)" id="nav-rankings-btn">Jリーグ順位表</button>
+        <div class="nav-dropdown-content">
+          <button onclick="event.stopPropagation(); showPage('rankings', this);">順位表</button>
+          <button onclick="event.stopPropagation(); showPage('prediction', this);">シーズン予測</button>
+        </div>
+      </span>
       
       <!-- シミュレーション -->
       <span class="nav-dropdown">
@@ -1070,7 +1074,8 @@ body {
   <div id="page-title-rankings" class="page-title-row" style="display:none;"><h1>Jリーグ 順位表 2025</h1></div>
   <div id="page-title-introduce" class="page-title-row" style="display:none;"><h1>各クラブ紹介</h1></div>
   <div id="page-title-europe" class="page-title-row" style="display:none;"><h1>25-26シーズン 5大リーグ日本人選手</h1></div>
-  <div id="page-title-europe-top20" class="page-title-row" style="display:none;"><h1>欧州クラブ 推定売上高TOP20（24-25シーズン）</h1></div>
+    <div id="page-title-europe-top20" class="page-title-row" style="display:none;"><h1>欧州クラブ 推定売上高TOP20（24-25シーズン）</h1></div>
+  <div id="page-title-prediction" class="page-title-row" style="display:none;"><h1>Jリーグ シーズン予測 2025</h1></div>
   <div id="europe-top20" class="page-section"></div>
   <div id="page-title-best11" class="page-title-row" style="display:none;"><h1>ベスト11を作る</h1></div>
   <div id="page-title-blog" class="page-title-row" style="display:none;"><h1>記事・ブログ</h1></div>
@@ -1103,7 +1108,7 @@ body {
     <div id="jleague-history"></div>
   </div>
     <!-- ▼▼▼ このdivをまるごと置き換えてください ▼▼▼ -->
-  <div id="rankings" class="page-section">
+      <div id="rankings" class="page-section">
     <!-- J1/J2/J3リーグ選択タブ -->
     <div id="rank-buttons" style="text-align:center; margin: 20px 0;">
       <button class="rank-tab-btn active" onclick="showRankingTable('J1')">J1</button>
@@ -1111,24 +1116,24 @@ body {
       <button class="rank-tab-btn" onclick="showRankingTable('J3')">J3</button>
     </div>
 
-    <!-- ★★★【ここから追加】順位表/シーズン予測 切り替えタブ ★★★ -->
-    <div class="rank-view-tabs" style="text-align:center; margin: -10px 0 25px 0;">
-      <button id="rank-view-table-btn" class="rank-view-tab-btn active" onclick="showRankingsContent('table')">順位表</button>
-      <button id="rank-view-prediction-btn" class="rank-view-tab-btn" onclick="showRankingsContent('prediction')">シーズン予測</button>
-    </div>
-    <!-- ★★★【ここまで追加】★★★ -->
-
     <!-- 順位表表示エリア -->
     <div id="ranking-table-container">
       <!-- ランキングテーブルはここに表示されます -->
     </div>
+  </div>
 
-    <!-- ★★★【ここから追加】予測結果表示エリア ★★★ -->
-    <div id="prediction-container" style="display: none;">
+  <!-- ▼▼▼【ここから新設】シーズン予測ページ ▼▼▼ -->
+  <div id="prediction" class="page-section" style="display:none;">
+    <!-- リーグ選択タブ (J1/J2/J3) -->
+    <div id="prediction-league-tabs" style="text-align:center; margin: 20px 0;">
+        <!-- ボタンはJavaScriptで生成されます -->
+    </div>
+    <!-- 予測結果表示エリア -->
+    <div id="prediction-container">
       <!-- 予測結果はここに表示されます -->
     </div>
-    <!-- ★★★【ここまで追加】★★★ -->
   </div>
+  <!-- ▲▲▲【ここまで新設】▲▲▲ -->
   <!-- ▲▲▲ 置き換えはここまで ▲▲▲ -->
   <div id="introduce" class="page-section">
     <div id="club-status-board" style="display:none;"></div>
@@ -1217,14 +1222,10 @@ body {
           <!-- (プルダウンはJSで生成) -->
       </div>
     </div>
-
-    
-    </div>
-      <!-- (id="blog" の div の前などに追加) -->
+    </div> <!-- ★★★ ここにあった余分な閉じタグを削除しました ★★★ -->
 
 <!-- ▼▼▼ 平均観客数ページのタイトルを追加 ▼▼▼ -->
 <div id="page-title-attendance" class="page-title-row" style="display:none;"><h1>Jリーグ 平均観客数</h1></div>
-
 <!-- ▼▼▼ id="attendance"のdivの中身を以下のように修正 ▼▼▼ -->
 <div id="attendance" class="page-section" style="display:none;">
   
@@ -1259,8 +1260,6 @@ body {
   </div>
 
 </div>
-</div>
-  </div>
   <div id="blog" class="page-section" style="display:none;">
     <div id="blog-content" style="display: none; text-align: left; max-width: 800px; margin: 20px auto; padding: 25px; background: #fff; color: #333; border-radius: 12px; box-shadow: 0 2px 10px #0002;"></div>
     <div id="blog-list-container" style="display:flex; flex-wrap:wrap; gap:20px; justify-content:center;"></div>
@@ -1444,113 +1443,114 @@ const europeClubAbbreviations = {
     // 必要に応じて他のクラブも追加
 };
 function showPage(id, btn) {
-    // ▼▼▼【ここに追加】ページ表示時に一番上にスクロールする ▼▼▼
-    window.scrollTo(0, 0);
-    document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('visible'));
-    const targetPage = document.getElementById(id);
-    if(targetPage) targetPage.classList.add('visible');
-    document.querySelectorAll('.page-title-row').forEach(row => row.style.display = 'none');
-    let titleId = id;
-    if (id === 'europe-top20') titleId = 'europe-top20';
-    const pageTitleDiv = document.getElementById('page-title-' + titleId);
-    if (pageTitleDiv) pageTitleDiv.style.display = 'flex';
-    document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
-    if (btn) {
-        btn.classList.add('active');
-        const parentDropdown = btn.closest('.nav-dropdown');
-        if (parentDropdown) {
-            parentDropdown.querySelector('button').classList.add('active');
+    try {
+        // --- 1. 基本的なページ表示切り替え ---
+        window.scrollTo(0, 0);
+        document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('visible'));
+        const targetPage = document.getElementById(id);
+        if (targetPage) targetPage.classList.add('visible');
+
+        // --- 2. ページタイトルの表示切り替え ---
+        document.querySelectorAll('.page-title-row').forEach(row => row.style.display = 'none');
+        let titleId = (id === 'europe-top20') ? 'europe-top20' : id;
+        const pageTitleDiv = document.getElementById('page-title-' + titleId);
+        if (pageTitleDiv) pageTitleDiv.style.display = 'flex';
+
+        // --- 3. ナビゲーションボタンのアクティブ状態を管理 ---
+        document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
+        if (btn) {
+            btn.classList.add('active');
+            const parentDropdown = btn.closest('.nav-dropdown');
+            if (parentDropdown) {
+                parentDropdown.querySelector('button').classList.add('active');
+            }
         }
-    }
-    const scoreBtn = document.getElementById('score-method-btn');
-    if (scoreBtn) {
-        scoreBtn.style.display = (id === 'top') ? 'block' : 'none';
-        if (id !== 'top') {
-            document.getElementById('score-method-pop').style.display = 'none';
-            document.getElementById('score-detail-pop').style.display = 'none';
-        }
-    }
-    // ...
-    const banner = document.querySelector('.carousel-container');
-    if (banner) {
+
+        // --- 4. トップページ用の要素の表示/非表示 ---
+        const scoreBtn = document.getElementById('score-method-btn');
+        const banner = document.querySelector('.carousel-container');
         if (id === 'top') {
-            banner.style.display = 'block';
-            
-            // ▼▼▼【ここから修正】カルーセルを毎回クリーンな状態から再開させます ▼▼▼
-            const track = banner.querySelector('.carousel-track');
-            
-            // クローンが増え続けるのを防ぐため、元のアイテム(4つ)のみにリセット
-            if (track.children.length > 4) {
-                const originalItems = Array.from(track.querySelectorAll('.carousel-item')).slice(0, 4);
-                track.innerHTML = '';
-                originalItems.forEach(item => track.appendChild(item));
+            if (scoreBtn) {
+                scoreBtn.style.display = 'block';
+                const footer = document.querySelector('.site-footer');
+                if (footer) {
+                    if (window.innerWidth > 768) {
+                        const isFooterVisible = footer.getBoundingClientRect().top < window.innerHeight;
+                        scoreBtn.classList.toggle('fixed-to-viewport', !isFooterVisible);
+                    } else {
+                        scoreBtn.classList.add('fixed-to-viewport');
+                    }
+                }
             }
-            
-            // 再表示時の不自然なジャンプを防ぐため、アニメーションを停止して位置をリセット
-            track.style.transition = 'none';
-            track.style.transform = 'translateX(0)';
-            
-            // 完全にリセットされた状態で、カルーセルを再セットアップ
-            setupCarousel('banner-carousel', 4000);
-            // ▲▲▲【ここまで修正】▲▲▲
-
-        } else {
-            banner.style.display = 'none';
-            stopBannerAutoPlay(); // 他のページでは自動再生を停止
-        }
-    }
-// ...
-
-    // 【★重要★】ページ表示時の初期化処理
-    // 「クラブ指標」ページが表示された瞬間に、現在選択されているプルダウンの値でグラフを再描画する
-    if (id === 'metrics') {
-        setTimeout(() => {
-            const select = document.getElementById('metric-select');
-            if (select) {
-                showMetricChart(select.value);
+            if (banner) {
+                banner.style.display = 'block';
+                const track = banner.querySelector('.carousel-track');
+                if (track && track.children.length > 4) {
+                    const originalItems = Array.from(track.querySelectorAll('.carousel-item')).slice(0, 4);
+                    track.innerHTML = '';
+                    originalItems.forEach(item => track.appendChild(item));
+                }
+                if (track) {
+                    track.style.transition = 'none';
+                    track.style.transform = 'translateX(0)';
+                }
+                setTimeout(() => setupCarousel('banner-carousel', 4000), 0);
             }
-        }, 0); 
-    }
-
-    if (id === 'blog' && !isShowingArticleDetail) {
-        const pageTitle = document.querySelector('#page-title-blog h1');
-        if (pageTitle) pageTitle.textContent = '記事・ブログ';
-        renderArticleList(currentPage);
-    }
-// ...
-    if (id === 'europe' && playerData.length > 0) {
-        // PC/スマホで処理を分岐
-        if (window.innerWidth > 768) {
-            document.querySelectorAll(".country-btn").forEach(b => b.classList.remove("active"));
-            showPlayerTable();
         } else {
-            initEuropeMobilePage();
+            if (scoreBtn) {
+                scoreBtn.style.display = 'none';
+                document.getElementById('score-method-pop').classList.remove('popup-visible');
+                document.getElementById('score-detail-pop').classList.remove('popup-visible');
+            }
+            if (banner) {
+                banner.style.display = 'none';
+                stopBannerAutoPlay();
+            }
         }
-    }
-// ...
-    if (id === 'introduce' && clubData.length > 0) {
-        document.querySelectorAll(".league-tab-btn").forEach(b => b.classList.remove("active"));
-        const j1Tab = document.querySelector('.league-tab-btn[data-league="J1"]');
-        if (j1Tab) j1Tab.classList.add('active');
-        renderClubLeagueTable("J1");
-    }
-    if (id === 'best11' && playerData.length > 0) initBest11Page();
-    if (id === 'rankings' && rankingData['J1']) showRankingTable('J1');
-    if (id === 'simulation') initSimulationPage();
-    if (id === 'attendance' && attendanceData.length > 0) initAttendancePage();
-    
-    // スマホのメニューを閉じる処理
-    const navLinks = document.getElementById('nav-links');
-    const menuOverlay = document.getElementById('menu-overlay');
-    if (navLinks && navLinks.classList.contains('open')) {
-        navLinks.classList.remove('open');
-        menuOverlay.classList.remove('open');
-        document.querySelectorAll('.nav-dropdown.menu-open').forEach(menu => {
-            menu.classList.remove('menu-open');
-        });
+
+        // --- 5. 各ページの初期化処理を呼び出す ---
+        if (id === 'metrics') {
+            setTimeout(() => {
+                const select = document.getElementById('metric-select');
+                if (select) showMetricChart(select.value);
+            }, 0);
+        }
+        if (id === 'blog' && !isShowingArticleDetail) {
+            const pageTitle = document.querySelector('#page-title-blog h1');
+            if (pageTitle) pageTitle.textContent = '記事・ブログ';
+            renderArticleList(currentPage);
+        }
+        if (id === 'europe' && playerData.length > 0) {
+            if (window.innerWidth > 768) {
+                document.querySelectorAll(".country-btn").forEach(b => b.classList.remove("active"));
+                showPlayerTable();
+            } else {
+                initEuropeMobilePage();
+            }
+        }
+        // ▼▼▼【原因だった箇所を修正】.click()をやめ、安全な処理に変更 ▼▼▼
+        if (id === 'introduce' && clubData.length > 0) {
+            document.querySelectorAll('.league-tab-btn').forEach(b => b.classList.remove('active'));
+            const j1Tab = document.querySelector('.league-tab-btn[data-league="J1"]');
+            if (j1Tab) j1Tab.classList.add('active');
+            renderClubLeagueTable("J1");
+        }
+        if (id === 'best11' && playerData.length > 0) initBest11Page();
+               if (id === 'rankings' && rankingData['J1']) showRankingTable('J1');
+        if (id === 'prediction') initPredictionPage();
+        if (id === 'simulation') initSimulationPage();
+        if (id === 'attendance' && attendanceData.length > 0) initAttendancePage();
+
+    } finally {
+        // --- 6. スマホ用メニューを閉じる処理（finallyで必ず実行） ---
+        const navLinks = document.getElementById('nav-links');
+        if (navLinks && navLinks.classList.contains('open')) {
+            navLinks.classList.remove('open');
+            document.getElementById('menu-overlay').classList.remove('open');
+            document.querySelectorAll('.nav-dropdown.menu-open').forEach(menu => menu.classList.remove('menu-open'));
+        }
     }
 }
-
             function toggleSubMenu(btn, event) {
         event.preventDefault();
         event.stopPropagation();
@@ -2223,11 +2223,10 @@ function showMetricChart(key) {
     window.showBlogList = function() { document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('visible')); const blogPage = document.getElementById('blog'); if (blogPage) { blogPage.classList.add('visible'); } document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active')); const blogNavBtn = Array.from(document.querySelectorAll('.nav-links button')).find(b => b.textContent === '記事'); if (blogNavBtn) { blogNavBtn.classList.add('active'); } const pageTitle = document.querySelector('#page-title-blog h1'); if(pageTitle) pageTitle.textContent = '記事・ブログ'; renderArticleList(currentPage); window.scrollTo({ top: 0, behavior: 'smooth' }); }
     // 既存の showRankingTable 関数を、以下のコードで置き換える
 
-// ▼▼▼ この関数をまるごと置き換えてください ▼▼▼
 function showRankingTable(league) {
     // リーグ選択タブのアクティブ状態を更新
-    document.querySelectorAll('.rank-tab-btn').forEach(btn => btn.classList.remove('active'));
-    const activeBtn = document.querySelector(`.rank-tab-btn[onclick="showRankingTable('${league}')"]`);
+    document.querySelectorAll('#rank-buttons .rank-tab-btn').forEach(btn => btn.classList.remove('active'));
+    const activeBtn = document.querySelector(`#rank-buttons .rank-tab-btn[onclick="showRankingTable('${league}')"]`);
     if (activeBtn) activeBtn.classList.add('active');
 
     const container = document.getElementById('ranking-table-container');
@@ -2236,8 +2235,6 @@ function showRankingTable(league) {
     const { headers, data, updated } = rankingData[league];
     if (!headers || !data || data.length === 0) {
         container.innerHTML = "<p>順位データがありません。</p>";
-        // ★★★ 予測コンテナも空にする ★★★
-        document.getElementById('prediction-container').innerHTML = '';
         return;
     }
 
@@ -2272,14 +2269,42 @@ function showRankingTable(league) {
     
     tableHTML += `</tbody></table>`;
     container.innerHTML = dateHtml + tableHTML;
+}let simInitialized = false;
+function getCategoryInfo(score) { if (score >= 50) return { text: 'ビッグクラブ', color: '#ffd700' }; if (score >= 30) return { text: '有望ビッグクラブ', color: '#e94444' }; if (score >= 20) return { text: '潜在的ビッグクラブ', color: '#41cdf4' }; if (score >= 5) return { text: '中堅クラブ', color: '#bbb' }; return { text: 'ローカルクラブ', color: '#999' }; }
 
-    // ★★★【ここから追加】予測を描画し、表示を「順位表」に設定 ★★★
-    renderPrediction(league);
-    showRankingsContent('table');
-    // ★★★【ここまで追加】★★★
+function initSimulationPage() {
+    const leagueSelect = document.getElementById('sim-league-select');
+    // HTML要素が見つからない場合は、処理を中断してエラーを防ぐ
+    if (!leagueSelect) {
+        console.error("シミュレーションページの要素が見つかりませんでした。HTMLの構造を確認してください。");
+        return;
+    }
+
+    // イベントリスナーがまだ設定されていない場合のみ、一度だけ設定する
+    if (!simInitialized) {
+        const clubSelect = document.getElementById('sim-club-select');
+        const inputs = document.querySelectorAll('.sim-input');
+
+        leagueSelect.addEventListener('change', () => {
+            populateClubSelect(leagueSelect.value);
+        });
+        clubSelect.addEventListener('change', () => {
+            displayClubData(clubSelect.value);
+        });
+        inputs.forEach(input => {
+            input.addEventListener('input', runSimulation);
+        });
+        simInitialized = true;
+    }
+
+    // ページ表示のたびにリーグ選択肢を再生成し、フォームを初期状態に戻す
+    leagueSelect.innerHTML = '<option value="">まずリーグを選択...</option>';
+    ['J1', 'J2', 'J3'].forEach(league => {
+        leagueSelect.innerHTML += `<option value="${league}">${league}</option>`;
+    });
+    // クラブ選択と入力フォームをリセット
+    populateClubSelect('');
 }
-// ▲▲▲ 置き換えはここまで ▲▲▲    let simInitialized = false; function getCategoryInfo(score) { if (score >= 50) return { text: 'ビッグクラブ', color: '#ffd700' }; if (score >= 30) return { text: '有望ビッグクラブ', color: '#e94444' }; if (score >= 20) return { text: '潜在的ビッグクラブ', color: '#41cdf4' }; if (score >= 5) return { text: '中堅クラブ', color: '#bbb' }; return { text: 'ローカルクラブ', color: '#999' }; }
-    function initSimulationPage() { if (simInitialized) return; const leagueSelect = document.getElementById('sim-league-select'); const clubSelect = document.getElementById('sim-club-select'); const inputs = document.querySelectorAll('.sim-input'); leagueSelect.innerHTML = '<option value="">まずリーグを選択...</option>'; ['J1', 'J2', 'J3'].forEach(league => { leagueSelect.innerHTML += `<option value="${league}">${league}</option>`; }); leagueSelect.addEventListener('change', () => { populateClubSelect(leagueSelect.value); }); clubSelect.addEventListener('change', () => { displayClubData(clubSelect.value); }); inputs.forEach(input => { input.addEventListener('input', runSimulation); }); simInitialized = true; }
     function populateClubSelect(league) { const clubSelect = document.getElementById('sim-club-select'); const inputs = document.querySelectorAll('.sim-input'); clubSelect.innerHTML = '<option value="">クラブを選択...</option>'; clubSelect.disabled = true; inputs.forEach(input => { input.value = ''; input.disabled = true; }); document.getElementById('sim-result-area').innerHTML = '<p>クラブを選択すると、ここにスコアが表示されます。</p>'; if (!league) return; const clubsInLeague = clubData.filter(c => c.p === league).sort((a, b) => a.name.localeCompare(b.name, 'ja')); clubsInLeague.forEach(club => { clubSelect.innerHTML += `<option value="${club.name}">${club.name}</option>`; }); clubSelect.disabled = false; }
     function displayClubData(clubName) { const inputs = document.querySelectorAll('.sim-input'); const resultArea = document.getElementById('sim-result-area'); if (!clubName) { inputs.forEach(input => { input.value = ''; input.disabled = true; }); resultArea.innerHTML = '<p>クラブを選択すると、ここにスコアが表示されます。</p>'; return; } inputs.forEach(input => input.disabled = false); const club = clubData.find(c => c.name === clubName); if (!club) return; document.getElementById('sim-revenue').value = club.revenue || ''; document.getElementById('sim-audience').value = club.audience || ''; document.getElementById('sim-titles').value = club.titles || ''; document.getElementById('sim-avg-rank').value = club.m || ''; const currentScore = club.sum || 0; const currentCategory = getCategoryInfo(currentScore); resultArea.innerHTML = ` <div class="sim-current-score"> 現在の区分: <span style="color: ${currentCategory.color}; font-weight: bold;">${currentCategory.text}</span><br> 現在のビッグクラブスコア: <strong>${currentScore.toFixed(2)}</strong> </div> <div class="sim-new-score"> <p style="margin:0; font-size:0.8em; color:#ccc;">数値を変更してください</p> </div> `; }
     // ...
@@ -2303,9 +2328,7 @@ function showRankingTable(league) {
     }
 // ...
     function calculateBigClubScore(revenue, audience, titles, avgRank) { if (isNaN(revenue) || isNaN(audience) || isNaN(titles) || isNaN(avgRank) || avgRank > 21) { return 0; } const revenueScore = (revenue / 200) * 100; const audienceScore = (audience / 45000) * 100; const titleScore = (titles / 98) * 100; const rankScore = 21 - avgRank; const totalScore = (revenueScore * 0.3) + (audienceScore * 0.15) + (titleScore * 0.25) + (rankScore * 0.3); return Math.max(0, totalScore); }
-    const originalShowPage = window.showPage; window.showPage = function(id, btn) { originalShowPage(id, btn); if (id === 'simulation') { initSimulationPage(); } if (btn && btn.parentElement.classList.contains('nav-dropdown-content')) { document.querySelectorAll('.nav-links > .nav-dropdown > button').forEach(b => b.classList.remove('active')); btn.closest('.nav-dropdown').querySelector('button').classList.add('active'); } };
-    // ...
-    // ▼▼▼【ここから変更】自動再生の制御関数を外に出す ▼▼▼
+    
     function startBannerAutoPlay(interval, nextFunc) {
         stopBannerAutoPlay();
         bannerAutoPlayInterval = setInterval(nextFunc, interval);
@@ -2558,35 +2581,6 @@ function setupFooterButtonObserver() {
     observer.observe(footer);
 }
 
-// 既存のshowPage関数を上書きして、ボタン表示ロジックを統合
-const originalShowPageForButton = showPage;
-window.showPage = function(id, btn) {
-    originalShowPageForButton(id, btn); // 元のshowPageを実行
-
-    const scoreBtn = document.getElementById('score-method-btn');
-    if (!scoreBtn) return;
-
-    // トップページでのみ表示
-    if (id === 'top') {
-        scoreBtn.style.display = 'block';
-        // ページ表示時にフッターが見えているか再評価
-        const footer = document.querySelector('.site-footer');
-        if (footer && window.innerWidth > 768) { // PCのみ評価
-            const isFooterVisible = footer.getBoundingClientRect().top < window.innerHeight;
-            if (isFooterVisible) {
-                scoreBtn.classList.remove('fixed-to-viewport');
-            } else {
-                scoreBtn.classList.add('fixed-to-viewport');
-            }
-        } else if (footer && window.innerWidth <= 768) { // スマホは常に固定
-            scoreBtn.classList.add('fixed-to-viewport');
-        }
-
-    } else {
-        scoreBtn.style.display = 'none';
-    }
-};
-
 // 既存のDOMContentLoadedイベントリスナー内の最後に処理を追加
 document.addEventListener("DOMContentLoaded", () => {
     // ...（既存の処理はすべてそのまま）...
@@ -2594,28 +2588,34 @@ document.addEventListener("DOMContentLoaded", () => {
     // 最後の行にこれを追加
     setupFooterButtonObserver();
 });
-/* ▼▼▼【ここから追加】シーズン予測関連の関数 ▼▼▼ */
+function initPredictionPage() {
+    const tabsContainer = document.getElementById('prediction-league-tabs');
+    if (!tabsContainer) return;
 
-// 「順位表」「シーズン予測」の表示を切り替える関数
-function showRankingsContent(viewType) {
-    const tableContainer = document.getElementById('ranking-table-container');
-    const predictionContainer = document.getElementById('prediction-container');
-    const tableBtn = document.getElementById('rank-view-table-btn');
-    const predictionBtn = document.getElementById('rank-view-prediction-btn');
+    // リーグ選択タブを生成
+    let tabsHTML = `
+        <button class="rank-tab-btn" onclick="showPredictionView('J1')">J1</button>
+        <button class="rank-tab-btn" onclick="showPredictionView('J2')">J2</button>
+        <button class="rank-tab-btn" onclick="showPredictionView('J3')">J3</button>
+    `;
+    tabsContainer.innerHTML = tabsHTML;
 
-    if (viewType === 'prediction') {
-        tableContainer.style.display = 'none';
-        predictionContainer.style.display = 'block';
-        tableBtn.classList.remove('active');
-        predictionBtn.classList.add('active');
-    } else { // 'table' or default
-        tableContainer.style.display = 'block';
-        predictionContainer.style.display = 'none';
-        tableBtn.classList.add('active');
-        predictionBtn.classList.remove('active');
-    }
+    // 初期表示としてJ1の予測を表示
+    showPredictionView('J1');
 }
 
+function showPredictionView(league) {
+    // リーグ選択タブのアクティブ状態を更新
+    const tabsContainer = document.getElementById('prediction-league-tabs');
+    if(tabsContainer){
+        tabsContainer.querySelectorAll('.rank-tab-btn').forEach(btn => btn.classList.remove('active'));
+        const activeBtn = tabsContainer.querySelector(`.rank-tab-btn[onclick="showPredictionView('${league}')"]`);
+        if (activeBtn) activeBtn.classList.add('active');
+    }
+    
+    // 予測をレンダリング
+    renderPrediction(league);
+}
 // シーズン結果を予測する（ダミー）関数
 function predictSeasonOutcome(league) {
     const teams = rankingData[league]?.data || [];
