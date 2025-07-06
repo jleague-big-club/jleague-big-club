@@ -1,7 +1,13 @@
 [
   {
     "slug": "bigclub-challenge",
-    "title": "2025年シーズン後半戦、ビッグクラブの座を揺るがすのはどこだ？",
+    "title": "データで見るJリーグ・ビッグクラブの夜明け",
+    "date": "2024-08-01",
+    "thumbnail": "img/banner1.png"
+  },
+  {
+    "slug": "prediction-logic-explainer",
+    "title": "なぜ順位と予測が違う？ シミュレーションの裏側を解説",
     "date": "2024-08-01",
     "thumbnail": "img/banner3.png"
   },
