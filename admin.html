@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>管理者用 データ分析ダッシュボード</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div class="container">
+    <header class="main-header">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10M18 20V4M6 20V16"></path></svg>
+        <h1>データ分析ダッシュボード</h1>
+    </header>
+
+    <nav class="dashboard-nav">
+      <button class="nav-btn active" data-panel="panel-graph-generator">📈 グラフ生成</button>
+      <button class="nav-btn" data-panel="panel-attendance">👥 観客数分析</button>
+      <button class="nav-btn" data-panel="panel-prediction">🔮 シーズン予測</button>
+      <button class="nav-btn" data-panel="panel-simulation">⚙️ シミュレーター</button>
+      <button class="nav-btn" data-panel="panel-best11">⚽ ベスト11</button>
+    </nav>
+
+    <!-- ===== 各機能のパネル ===== -->
+    <div id="panel-graph-generator" class="dashboard-panel active">
+      <!-- グラフ生成 (JSで動的生成) -->
+    </div>
+    <div id="panel-attendance" class="dashboard-panel">
+      <!-- 観客数分析 (JSで動的生成) -->
+    </div>
+    <div id="panel-prediction" class="dashboard-panel">
+      <!-- シーズン予測 (JSで動的生成) -->
+    </div>
+    <div id="panel-simulation" class="dashboard-panel">
+       <!-- シミュレーター (JSで動的生成) -->
+    </div>
+    <div id="panel-best11" class="dashboard-panel">
+      <!-- ベスト11 (JSで動的生成) -->
+    </div>
+    
+    <!-- 汎用メッセージエリア -->
+    <div id="message-area"></div>
+  </div>
+  <script src="admin.js"></script>
+</body>
+</html>
