@@ -11,7 +11,8 @@ let scheduleData = [];
 let isShowingArticleDetail = false;
 let bannerAutoPlayInterval;
 let predictionProbabilities = {};
-let predictionDataUpdated = null;
+// let predictionDataUpdated = null; // ★★★ 変更点: この行を削除 ★★★
+let updateDates = {}; // ★★★ 変更点: 新しいグローバル変数を追加 ★★★
 
 function toHalfWidth(str) {
   if (typeof str !== 'string') return str;
@@ -203,11 +204,7 @@ function updateCopyButtonText() {
     }
 }
 document.addEventListener("DOMContentLoaded", () => {
-    const fetchWithMeta = (url) => fetch(url).then(res => {
-        if (!res.ok) return Promise.reject(`${url}: ${res.status}`);
-        const lastModified = res.headers.get('Last-Modified');
-        return res.text().then(text => ({ text, lastModified }));
-    });
+    // ★★★ 変更点: fetchWithMeta関数を削除 ★★★
 
     const parseCsvLine = (line) => {
         const result = [];
@@ -228,22 +225,23 @@ document.addEventListener("DOMContentLoaded", () => {
         return result;
     };
 
+    // ★★★ 変更点: Promise.all の内容を全面的に書き換え ★★★
     Promise.all([
         fetch("data/data.csv").then(res => res.ok ? res.text() : Promise.reject(`data.csv: ${res.status}`)),
         fetch("data/playerdata.csv").then(res => res.ok ? res.text() : Promise.reject(`playerdata.csv: ${res.status}`)),
-        fetchWithMeta("data/attendancefigure.csv"),
-        fetchWithMeta("data/j1rank.csv"),
-        fetchWithMeta("data/j2rank.csv"),
-        fetchWithMeta("data/j3rank.csv"),
+        fetch("data/attendancefigure.csv").then(res => res.ok ? res.text() : Promise.reject(`attendancefigure.csv: ${res.status}`)),
+        fetch("data/j1rank.csv").then(res => res.ok ? res.text() : Promise.reject(`j1rank.csv: ${res.status}`)),
+        fetch("data/j2rank.csv").then(res => res.ok ? res.text() : Promise.reject(`j2rank.csv: ${res.status}`)),
+        fetch("data/j3rank.csv").then(res => res.ok ? res.text() : Promise.reject(`j3rank.csv: ${res.status}`)),
         fetch("data/europebigclub.csv").then(res => res.ok ? res.text() : Promise.reject(`europebigclub.csv: ${res.status}`)),
         fetch("data/schedule.csv").then(res => res.ok ? res.text() : Promise.reject(`schedule.csv: ${res.status}`)),
-        fetchWithMeta("data/prediction_probabilities.json")
+        fetch("data/prediction_probabilities.json").then(res => res.ok ? res.json() : Promise.reject(`prediction_probabilities.json: ${res.status}`)),
+        fetch("data/update_dates.json").then(res => res.ok ? res.json() : Promise.reject(`update_dates.json: ${res.status}`))
     ])
-    .then(([clubCsvText, playerCsvText, attendanceResponse, j1Response, j2Response, j3Response, europeCsvText, scheduleCsvText, predictionResponse]) => {
+    .then(([clubCsvText, playerCsvText, attendanceCsvText, j1RankCsvText, j2RankCsvText, j3RankCsvText, europeCsvText, scheduleCsvText, predictionJson, updateDatesJson]) => {
 
-        const predictionJson = JSON.parse(predictionResponse.text);
-        predictionProbabilities = predictionJson; 
-        predictionDataUpdated = predictionJson.updated;
+        updateDates = updateDatesJson;
+        predictionProbabilities = predictionJson;
 
         let lines, headers;
 
@@ -251,12 +249,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         lines = playerCsvText.trim().split("\n"); headers = lines[0].split(",").map(h => h.trim()); playerData = lines.slice(1).map(line => { const vals = line.split(","); const obj = {}; headers.forEach((h, i) => obj[h] = vals[i] ? vals[i].trim() : ''); return obj; });
 
-        let attendanceLines = attendanceResponse.text.trim().split("\n"); let attendanceHeaders = attendanceLines[0].split(",").map(h => h.trim()); attendanceData = attendanceLines.slice(1).map(line => { const values = line.split(","); const obj = {}; attendanceHeaders.forEach((h, i) => { const val = values[i] ? values[i].trim() : ''; if (['年', '年間最高観客数', '年間最低観客数', 'ゲーム数'].includes(h)) { obj[h] = parseInt(val) || 0; } else if (h === '平均観客数') { obj[h] = parseFloat(val) || 0; } else { obj[h] = val; } }); return obj; }); attendanceData.lastModified = attendanceResponse.lastModified;
+        let attendanceLines = attendanceCsvText.trim().split("\n"); let attendanceHeaders = attendanceLines[0].split(",").map(h => h.trim()); attendanceData = attendanceLines.slice(1).map(line => { const values = line.split(","); const obj = {}; attendanceHeaders.forEach((h, i) => { const val = values[i] ? values[i].trim() : ''; if (['年', '年間最高観客数', '年間最低観客数', 'ゲーム数'].includes(h)) { obj[h] = parseInt(val) || 0; } else if (h === '平均観客数') { obj[h] = parseFloat(val) || 0; } else { obj[h] = val; } }); return obj; });
+        attendanceData.lastModified = updateDates['attendancefigure.csv'];
 
         const parseRankingCsv = (csvText) => { if (!csvText || csvText.trim() === '') return []; const lines = csvText.trim().split("\n"); const headers = lines[0].split(",").map(h => h.trim()); const data = lines.slice(1).map(line => { const values = line.split(","); const rowObj = {}; headers.forEach((h, i) => { rowObj[h] = values[i] ? values[i].trim() : ''; }); return rowObj; }); return data; };
-        rankingData['J1'] = { data: parseRankingCsv(j1Response.text) };
-        rankingData['J2'] = { data: parseRankingCsv(j2Response.text) };
-        rankingData['J3'] = { data: parseRankingCsv(j3Response.text) };
+        rankingData['J1'] = { data: parseRankingCsv(j1RankCsvText), updated: updateDates['j1rank.csv'] };
+        rankingData['J2'] = { data: parseRankingCsv(j2RankCsvText), updated: updateDates['j2rank.csv'] };
+        rankingData['J3'] = { data: parseRankingCsv(j3RankCsvText), updated: updateDates['j3rank.csv'] };
 
         let europeLines = europeCsvText.trim().split("\n");
         europeTopClubs = europeLines.slice(1).map(line => parseCsvLine(line));
@@ -395,14 +394,11 @@ function renderHistory(clubs) {
     clubs.forEach(club => {
         const tr = hisTbody.insertRow();
 
-        // ▼▼▼ ここからが変更箇所 ▼▼▼
-        let clubDisplayName = club.name; // デフォルトは元の名前
+        let clubDisplayName = club.name;
 
         if (isMobile) {
-            // 元のクラブ名を半角に変換
             const normalizedClubName = toHalfWidth(club.name);
             
-            // 省略名リストのキーも半角に変換して比較
             for (const key in clubAbbreviations) {
                 if (toHalfWidth(key) === normalizedClubName) {
                     clubDisplayName = clubAbbreviations[key];
@@ -410,7 +406,6 @@ function renderHistory(clubs) {
                 }
             }
         }
-        // ▲▲▲ ここまで ▲▲▲
 
         [clubDisplayName, club.l, club.m, club.o].forEach(val => {
             const td = document.createElement("td");
@@ -802,22 +797,23 @@ function showArticleDetail(slug, title) { isShowingArticleDetail = true; if (lis
 window.showBlogList = function () { document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('visible')); const blogPage = document.getElementById('blog'); if (blogPage) { blogPage.classList.add('visible'); } document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active')); const blogNavBtn = Array.from(document.querySelectorAll('.nav-links button')).find(b => b.textContent === '記事'); if (blogNavBtn) { blogNavBtn.classList.add('active'); } const pageTitle = document.querySelector('#page-title-blog h1'); if (pageTitle) pageTitle.textContent = '記事・ブログ'; renderArticleList(currentPage); window.scrollTo({ top: 0, behavior: 'smooth' }); }
 function showRankingTable(league) {
     document.querySelectorAll('#rank-buttons .rank-tab-btn').forEach(btn => btn.classList.remove('active'));
-    // ...
+    const activeBtn = document.querySelector(`#rank-buttons .rank-tab-btn[onclick="showRankingTable('${league}')"]`);
+    if (activeBtn) activeBtn.classList.add('active');
+
     const container = document.getElementById('ranking-table-container');
     if (!container) return;
 
-    // ▼▼▼ ここから変更 ▼▼▼
-    const { data } = rankingData[league]; // updatedは取得しない
+    const { data, updated } = rankingData[league];
     if (!data || data.length === 0) {
-        // ...
+        container.innerHTML = "<p>順位データがありません。</p>";
         return;
     }
 
     const isMobile = window.innerWidth <= 768;
 
     let dateHtml = '';
-    if (predictionDataUpdated) { // グローバル変数のpredictionDataUpdatedを参照する
-        const updatedDate = new Date(predictionDataUpdated);
+    if (updated) {
+        const updatedDate = new Date(updated);
         const formattedDate = updatedDate.toLocaleString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
         dateHtml = `<p class="update-date-note">更新日時: ${formattedDate}</p>`;
     }
@@ -835,10 +831,9 @@ function showRankingTable(league) {
         tableHTML += `<tr>`;
         displayHeaders.forEach(h => {
             let cellValue = row[h] || '';
-            // ▼▼▼ ここからが変更箇所 ▼▼▼
             if (h === 'チーム名' && isMobile) {
                 const normalizedTeamName = toHalfWidth(cellValue);
-                let abbreviatedName = cellValue; // デフォルトは元の名前
+                let abbreviatedName = cellValue;
                 for (const key in clubAbbreviations) {
                     if (toHalfWidth(key) === normalizedTeamName) {
                         abbreviatedName = clubAbbreviations[key];
@@ -847,7 +842,6 @@ function showRankingTable(league) {
                 }
                 cellValue = abbreviatedName;
             }
-            // ▲▲▲ ここまで ▲▲▲
             tableHTML += `<td>${cellValue}</td>`;
         });
         tableHTML += `</tr>`;
@@ -917,15 +911,12 @@ function stopBannerAutoPlay() {
 }
 
 function setupCarousel(carouselId, interval) {
-    let carousel = document.getElementById(carouselId); // constからletに変更
+    let carousel = document.getElementById(carouselId);
     if (!carousel) return;
 
-    // --- ▼▼▼ ここから追加 ▼▼▼ ---
-    // イベントリスナーの多重登録を防ぐため、要素ごと再生成して古いリスナーを全てクリアする
     const newCarousel = carousel.cloneNode(true);
     carousel.parentNode.replaceChild(newCarousel, carousel);
     carousel = newCarousel;
-    // --- ▲▲▲ ここまで追加 ▲▲▲ ---
 
     const track = carousel.querySelector('.carousel-track');
     const items = Array.from(track.children);
@@ -1261,6 +1252,7 @@ function showPredictionView(league) {
     renderPrediction(league);
 }
 
+// ★★★ 変更点: renderPrediction関数を書き換え ★★★
 function renderPrediction(league) {
     const container = document.getElementById('prediction-container');
     const leagueProbs = predictionProbabilities[league];
@@ -1271,8 +1263,9 @@ function renderPrediction(league) {
     }
 
     let dateHtml = '';
-    if (predictionDataUpdated) {
-        const updatedDate = new Date(predictionDataUpdated);
+    const updatedTimestamp = updateDates['prediction_probabilities.json'];
+    if (updatedTimestamp) {
+        const updatedDate = new Date(updatedTimestamp);
         const formattedDate = updatedDate.toLocaleString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
         dateHtml = `<p class="update-date-note">更新日時: ${formattedDate}</p>`;
     }
