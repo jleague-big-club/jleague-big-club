@@ -252,12 +252,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let attendanceLines = attendanceResponse.text.trim().split("\n"); let attendanceHeaders = attendanceLines[0].split(",").map(h => h.trim()); attendanceData = attendanceLines.slice(1).map(line => { const values = line.split(","); const obj = {}; attendanceHeaders.forEach((h, i) => { const val = values[i] ? values[i].trim() : ''; if (['年', '年間最高観客数', '年間最低観客数', 'ゲーム数'].includes(h)) { obj[h] = parseInt(val) || 0; } else if (h === '平均観客数') { obj[h] = parseFloat(val) || 0; } else { obj[h] = val; } }); return obj; }); attendanceData.lastModified = attendanceResponse.lastModified;
 
-        // ▼▼▼ この部分を修正 ▼▼▼
-        const parseRankingCsv = (csvText) => { if (!csvText || csvText.trim() === '') return []; const lines = csvText.trim().split("\n"); const headers = lines[0].split(",").map(h => h.trim()); const data = lines.slice(1).map(line => { const values = line.split(","); const rowObj = {}; headers.forEach((h, i) => { rowObj[h] = values[i] ? values[i].trim() : ''; }); return rowObj; }); return data; };
-        rankingData['J1'] = { data: parseRankingCsv(j1Response.text), updated: j1Response.lastModified };
-        rankingData['J2'] = { data: parseRankingCsv(j2Response.text), updated: j2Response.lastModified };
-        rankingData['J3'] = { data: parseRankingCsv(j3Response.text), updated: j3Response.lastModified };
-        // ▲▲▲ この部分を修正 ▲▲▲
+                const parseRankingCsv = (csvText) => { if (!csvText || csvText.trim() === '') return []; const lines = csvText.trim().split("\n"); const headers = lines[0].split(",").map(h => h.trim()); const data = lines.slice(1).map(line => { const values = line.split(","); const rowObj = {}; headers.forEach((h, i) => { rowObj[h] = values[i] ? values[i].trim() : ''; }); return rowObj; }); return data; };
+        
+        // ▼▼▼ この3行を修正 ▼▼▼
+        const rankUpdatedTime = predictionResponse.lastModified || attendanceResponse.lastModified; // どちらかの日時を使う
+        rankingData['J1'] = { data: parseRankingCsv(j1Response.text), updated: rankUpdatedTime };
+        rankingData['J2'] = { data: parseRankingCsv(j2Response.text), updated: rankUpdatedTime };
+        rankingData['J3'] = { data: parseRankingCsv(j3Response.text), updated: rankUpdatedTime };
 
         let europeLines = europeCsvText.trim().split("\n");
         europeTopClubs = europeLines.slice(1).map(line => parseCsvLine(line));
