@@ -13,6 +13,13 @@ let bannerAutoPlayInterval;
 let predictionProbabilities = {};
 let predictionDataUpdated = null;
 
+function toHalfWidth(str) {
+  if (typeof str !== 'string') return str;
+  return str.replace(/[Ａ-Ｚａ-ｚ０-９．・－（）]/g, function(s) {
+    return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
+  }).replace(/　/g, ' '); // 全角スペースを半角スペースに
+}
+
 const majorLeagues = ["プレミアリーグ", "ラ・リーガ", "ブンデスリーガ", "セリエA", "リーグ・アン"];
 const clubAbbreviations = {
     // J1
@@ -26,21 +33,21 @@ const clubAbbreviations = {
 
     // J2
     "ベガルタ仙台": "仙台", "ブラウブリッツ秋田": "秋田", "モンテディオ山形": "山形",
-    "いわきＦＣ": "いわき", "水戸ホーリーホック": "水戸", "栃木SC": "栃木SC",
+    "いわきＦＣ": "いわき", "水戸ホーリーホック": "水戸", "栃木ＳＣ": "栃木SC",
     "ザスパ群馬": "群馬", "ジェフユナイテッド千葉": "千葉", "横浜ＦＣ": "横浜FC",
     "ヴァンフォーレ甲府": "甲府", "清水エスパルス": "清水", "藤枝ＭＹＦＣ": "藤枝",
     "ファジアーノ岡山": "岡山", "レノファ山口ＦＣ": "山口", "徳島ヴォルティス": "徳島",
     "愛媛ＦＣ": "愛媛", "Ｖ・ファーレン長崎": "長崎", "ロアッソ熊本": "熊本",
-    "大分トリニータ": "大分", "鹿児島ユナイテッドFC": "鹿児島", "ＦＣ今治": "今治",
+    "大分トリニータ": "大分", "鹿児島ユナイテッドＦＣ": "鹿児島", "ＦＣ今治":"今治",
 
     // J3
-    "ヴァンラーレ八戸": "八戸", "いわてグルージャ盛岡": "岩手", "福島ユナイテッドFC": "福島",
-    "ＲＢ大宮アルディージャ": "大宮", "Ｙ．Ｓ．Ｃ．Ｃ．横浜": "YS横浜", "SC相模原": "相模原",
-    "松本山雅FC": "松本", "AC長野パルセイロ": "長野", "カターレ富山": "富山",
-    "ツエーゲン金沢": "金沢", "アスルクラロ沼津": "沼津", "FC岐阜": "岐阜",
+    "ヴァンラーレ八戸": "八戸", "いわてグルージャ盛岡": "岩手", "福島ユナイテッドＦＣ": "福島",
+    "ＲＢ大宮アルディージャ": "大宮", "Ｙ．Ｓ．Ｃ．Ｃ．横浜": "YS横浜", "ＳＣ相模原": "相模原",
+    "松本山雅ＦＣ": "松本", "ＡＣ長野パルセイロ": "長野", "カターレ富山": "富山",
+    "ツエーゲン金沢": "金沢", "アスルクラロ沼津": "沼津", "ＦＣ岐阜": "岐阜",
     "ＦＣ大阪": "FC大阪", "奈良クラブ": "奈良", "ガイナーレ鳥取": "鳥取",
     "カマタマーレ讃岐": "讃岐", "ギラヴァンツ北九州": "北九州", "テゲバジャーロ宮崎": "宮崎",
-    "FC琉球": "琉球", "栃木シティ": "栃木C", "高知ユナイテッドSC": "高知",
+    "ＦＣ琉球": "琉球", "栃木シティ": "栃木C", "高知ユナイテッドSC": "高知",
 };
 const europeClubAbbreviations = {
     "レアル・マドリード": "Rマドリード",
@@ -291,7 +298,7 @@ function renderEuropeTop20Table() {
 
     const isMobile = window.innerWidth <= 768;
 
-    const headers = ["順位", "国", "リーグ", "クラブ名", "売上高 (億円)", "平均観客動員数"];
+    const headers = ["順位", "国", "リーグ", "クラブ名", "売上高 (億円)", "平均観客数"];
     let tableHTML = `<div class="data-source-note">※データソース: Deloitte, Transfermarkt (1ユーロ=165円で計算)</div>`;
     tableHTML += `<table><thead><tr>`;
     headers.forEach(h => tableHTML += `<th>${h}</th>`);
@@ -382,11 +389,27 @@ function renderHistory(clubs) {
         hisHeader.appendChild(th);
     });
     const hisTbody = hisTable.createTBody();
+    const isMobile = window.innerWidth <= 768;
+
     clubs.forEach(club => {
         const tr = hisTbody.insertRow();
 
-        const isMobile = window.innerWidth <= 768;
-        const clubDisplayName = isMobile ? (clubAbbreviations[club.name] || club.name) : club.name;
+        // ▼▼▼ ここからが変更箇所 ▼▼▼
+        let clubDisplayName = club.name; // デフォルトは元の名前
+
+        if (isMobile) {
+            // 元のクラブ名を半角に変換
+            const normalizedClubName = toHalfWidth(club.name);
+            
+            // 省略名リストのキーも半角に変換して比較
+            for (const key in clubAbbreviations) {
+                if (toHalfWidth(key) === normalizedClubName) {
+                    clubDisplayName = clubAbbreviations[key];
+                    break;
+                }
+            }
+        }
+        // ▲▲▲ ここまで ▲▲▲
 
         [clubDisplayName, club.l, club.m, club.o].forEach(val => {
             const td = document.createElement("td");
@@ -603,9 +626,9 @@ function setupEventListeners() {
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
         if (isIOS) {
-            msgSpan.textContent = 'Xの投稿画面で、ダウンロードした画像を添付してください。';
+            msgSpan.textContent = '';
         } else {
-            msgSpan.textContent = 'Xの投稿画面で、画像を貼り付けてください。';
+            msgSpan.textContent = '';
         }
 
         setTimeout(() => msgSpan.textContent = '', 5000);
@@ -812,9 +835,19 @@ function showRankingTable(league) {
         tableHTML += `<tr>`;
         displayHeaders.forEach(h => {
             let cellValue = row[h] || '';
+            // ▼▼▼ ここからが変更箇所 ▼▼▼
             if (h === 'チーム名' && isMobile) {
-                cellValue = clubAbbreviations[cellValue] || cellValue;
+                const normalizedTeamName = toHalfWidth(cellValue);
+                let abbreviatedName = cellValue; // デフォルトは元の名前
+                for (const key in clubAbbreviations) {
+                    if (toHalfWidth(key) === normalizedTeamName) {
+                        abbreviatedName = clubAbbreviations[key];
+                        break;
+                    }
+                }
+                cellValue = abbreviatedName;
             }
+            // ▲▲▲ ここまで ▲▲▲
             tableHTML += `<td>${cellValue}</td>`;
         });
         tableHTML += `</tr>`;
@@ -822,8 +855,7 @@ function showRankingTable(league) {
 
     tableHTML += `</tbody></table>`;
     container.innerHTML = dateHtml + tableHTML;
-}
-let simInitialized = false;
+}let simInitialized = false;
 function getCategoryInfo(score) { if (score >= 50) return { text: 'ビッグクラブ', color: '#ffd700' }; if (score >= 30) return { text: '有望ビッグクラブ', color: '#e94444' }; if (score >= 20) return { text: '潜在的ビッグクラブ', color: '#41cdf4' }; if (score >= 5) return { text: '中堅クラブ', color: '#bbb' }; return { text: 'ローカルクラブ', color: '#999' }; }
 
 function initSimulationPage() {
@@ -1143,7 +1175,7 @@ function renderEuropePlayerList(leagueName) {
     const playersInLeague = playerData.filter(p => p['リーグ'] === leagueDataName).sort((a, b) => (parseInt(a['年齢']) || 99) - (parseInt(b['年齢']) || 99));
 
     let listHTML = `<button class="rank-tab-btn" style="width:100%; margin: 6px 0 20px 0; padding: 10px; background: #6c757d;" onclick="initEuropeMobilePage()">‹ リーグ選択に戻る</button>`;
-    listHTML += `<h3>${leagueName} の日本人選手</h3>`;
+    listHTML += `<h3 class="page-subtitle">${leagueName} の日本人選手</h3>`;
 
     if (playersInLeague.length === 0) {
         listHTML += `<p>このリーグに所属する日本人選手の情報はありません。</p>`;
@@ -1151,10 +1183,15 @@ function renderEuropePlayerList(leagueName) {
         playersInLeague.forEach(p => {
             listHTML += `
                 <div class="player-card-mobile">
-                    <h3>${p['選手名']}</h3>
-                    <p><strong>所属クラブ:</strong> ${p['所属クラブ']}</p>
-                    <p><strong>年齢:</strong> ${p['年齢']}</p>
-                    <p><strong>ポジション:</strong> ${p['ポジション']}</p>
+                    <div class="player-info">
+                        <h3>${p['選手名']}</h3>
+                        <p><strong>所属クラブ:</strong> <span>${p['所属クラブ']}</span></p>
+                        <p><strong>年齢:</strong> <span>${p['年齢']}</span></p>
+                        <p><strong>ポジション:</strong> <span>${p['ポジション']}</span></p>
+                    </div>
+                    <div class="player-image">
+                        <img src="img/player.png" alt="選手アイコン">
+                    </div>
                 </div>`;
         });
     }
@@ -1164,7 +1201,6 @@ function renderEuropePlayerList(leagueName) {
     playerList.style.display = 'block';
     window.scrollTo(0, 0);
 }
-
 function setupFooterButtonObserver() {
     const scoreBtn = document.getElementById('score-method-btn');
     const footer = document.querySelector('.site-footer');
