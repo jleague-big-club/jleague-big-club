@@ -800,42 +800,81 @@ function renderPagination() { if (!paginationContainer) return; paginationContai
 function showArticleDetail(slug, title) { isShowingArticleDetail = true; if (listContainer) listContainer.style.display = 'none'; if (paginationContainer) paginationContainer.style.display = 'none'; fetch(`/posts/${slug}.md`).then(res => { if (!res.ok) throw new Error(`Markdownファイルが見つかりません: ${slug}.md`); return res.text(); }).then(md => { const bodyContent = md.replace(/^---[\s\S]*?---/, '').trim(); const html = marked.parse(bodyContent); if (contentDiv) { const buttonsHtml = ` <div style="text-align:center; margin-top:3em; display:flex; justify-content:center; gap:20px;"> <a href="#" onclick="event.preventDefault(); showPage('top', document.querySelector('#nav-analysis-btn'));" style="color:#aaa; font-weight:bold; text-decoration:none; border:1px solid #aaa; padding: 8px 20px; border-radius:8px; transition: all 0.2s;"> « ホームに戻る </a> <a href="#" onclick="event.preventDefault(); window.showBlogList();" style="color:#299ad3; font-weight:bold; text-decoration:none; border:1px solid #299ad3; padding: 8px 20px; border-radius:8px; transition: all 0.2s;"> 記事一覧に戻る » </a> </div> `; contentDiv.innerHTML = `${html}${buttonsHtml}`; contentDiv.style.display = "block"; showPage('blog', Array.from(document.querySelectorAll('.nav-links button')).find(b => b.textContent === '記事')); const pageTitle = document.querySelector('#page-title-blog h1'); if (pageTitle) pageTitle.textContent = title; window.scrollTo({ top: 0, behavior: 'smooth' }); } }).catch(err => { console.error("記事詳細の読み込みエラー:", err); if (contentDiv) { contentDiv.innerHTML = `記事の読み込みに失敗しました。<br><br><a href="#" onclick="event.preventDefault(); window.showBlogList();">一覧に戻る</a>`; contentDiv.style.display = 'block'; showPage('blog', Array.from(document.querySelectorAll('.nav-links button')).find(b => b.textContent === '記事')); } }).finally(() => { isShowingArticleDetail = false; }); }
 window.showBlogList = function () { document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('visible')); const blogPage = document.getElementById('blog'); if (blogPage) { blogPage.classList.add('visible'); } document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active')); const blogNavBtn = Array.from(document.querySelectorAll('.nav-links button')).find(b => b.textContent === '記事'); if (blogNavBtn) { blogNavBtn.classList.add('active'); } const pageTitle = document.querySelector('#page-title-blog h1'); if (pageTitle) pageTitle.textContent = '記事・ブログ'; renderArticleList(currentPage); window.scrollTo({ top: 0, behavior: 'smooth' }); }
 function showRankingTable(league) {
+    // --- ↓↓↓ ここから調査用コード ↓↓↓ ---
+    try {
+        alert(`1. showRankingTableが呼ばれました。リーグ: ${league}`);
+
+        const container = document.getElementById('ranking-table-container');
+        if (!container) {
+            alert("エラー: ID 'ranking-table-container' の要素が見つかりません。");
+            return;
+        }
+
+        const { data, updated } = rankingData[league];
+        if (!data || data.length === 0) {
+            alert(`エラー: ${league}の順位データが見つかりません。`);
+            container.innerHTML = "<p>順位データがありません。</p>";
+            return;
+        }
+
+        alert(`2. 順位データを取得しました。データ数: ${data.length}, 更新日時: ${updated}`);
+
+        const isMobile = window.innerWidth <= 768;
+        alert(`3. 画面サイズを判定しました。isMobile: ${isMobile}`);
+
+        let finalHTML = '';
+
+        if (updated) {
+            const updatedDate = new Date(updated);
+            const formattedDate = updatedDate.toLocaleString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+            finalHTML += `<p class="update-date-note">更新日時: ${formattedDate}</p>`;
+            alert(`4. 更新日時のHTMLを生成しました:\n${finalHTML}`);
+        } else {
+            alert("警告: updated の値がありません。");
+        }
+
+        const headers = Object.keys(data[0]);
+        const displayHeaders = isMobile ? headers.filter(h => h !== '勝点') : headers;
+        let tableHTML = `<table><thead><tr>...</tr></thead><tbody>...</tbody></table>`; // テーブルの中身は長すぎるので省略
+        finalHTML += tableHTML;
+
+        alert(`5. 最終的なHTMLを生成しました。文字数: ${finalHTML.length}`);
+        
+        container.innerHTML = finalHTML;
+
+        alert("6. HTMLの書き込みが完了しました。");
+
+    } catch (e) {
+        alert(`致命的なエラーが発生しました: ${e.message}`);
+    }
+    // --- ↑↑↑ ここまで調査用コード ↑↑↑ ---
+
+    // 元のコードは一時的にコメントアウトします
+    /*
     document.querySelectorAll('#rank-buttons .rank-tab-btn').forEach(btn => btn.classList.remove('active'));
     const activeBtn = document.querySelector(`#rank-buttons .rank-tab-btn[onclick="showRankingTable('${league}')"]`);
     if (activeBtn) activeBtn.classList.add('active');
-
     const container = document.getElementById('ranking-table-container');
     if (!container) return;
-
     const { data, updated } = rankingData[league];
     if (!data || data.length === 0) {
         container.innerHTML = "<p>順位データがありません。</p>";
         return;
     }
-
     const isMobile = window.innerWidth <= 768;
-
-    // --- ▼▼▼ ここからHTML生成ロジックを変更 ▼▼▼ ---
-
-    let finalHTML = ''; // 最終的に出力するHTMLを格納する変数
-
-    // 1. 更新日時HTMLを作成
+    let finalHTML = ''; 
     if (updated) {
         const updatedDate = new Date(updated);
         const formattedDate = updatedDate.toLocaleString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
         finalHTML += `<p class="update-date-note">更新日時: ${formattedDate}</p>`;
     }
-
-    // 2. テーブルHTMLを作成
     const headers = Object.keys(data[0]);
     const displayHeaders = isMobile ? headers.filter(h => h !== '勝点') : headers;
-
     let tableHTML = `<table><thead><tr>`;
     displayHeaders.forEach(h => {
         tableHTML += `<th>${h}</th>`;
     });
     tableHTML += `</tr></thead><tbody>`;
-
     data.forEach(row => {
         tableHTML += `<tr>`;
         displayHeaders.forEach(h => {
@@ -856,14 +895,9 @@ function showRankingTable(league) {
         tableHTML += `</tr>`;
     });
     tableHTML += `</tbody></table>`;
-
-    // 3. 更新日時とテーブルを結合
     finalHTML += tableHTML;
-
-    // 4. コンテナに一括で書き出す
     container.innerHTML = finalHTML;
-    
-    // --- ▲▲▲ ここまでHTML生成ロジックを変更 ▲▲▲ ---
+    */
 }
 let simInitialized = false;
 function getCategoryInfo(score) { if (score >= 50) return { text: 'ビッグクラブ', color: '#ffd700' }; if (score >= 30) return { text: '有望ビッグクラブ', color: '#e94444' }; if (score >= 20) return { text: '潜在的ビッグクラブ', color: '#41cdf4' }; if (score >= 5) return { text: '中堅クラブ', color: '#bbb' }; return { text: 'ローカルクラブ', color: '#999' }; }
