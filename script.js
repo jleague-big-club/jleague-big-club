@@ -239,7 +239,7 @@ document.addEventListener("DOMContentLoaded", () => {
         fetch("data/schedule.csv").then(res => res.ok ? res.text() : Promise.reject(`schedule.csv: ${res.status}`)),
         fetchWithMeta("data/prediction_probabilities.json")
     ])
-    .then(([clubCsvText, playerCsvText, attendanceResponse, j1Response, j2Response, j3Response, europeCsvText, scheduleCsvText, predictionResponse]) => {
+        .then(([clubCsvText, playerCsvText, attendanceResponse, j1Response, j2Response, j3Response, europeCsvText, scheduleCsvText, predictionResponse]) => {
 
         predictionProbabilities = JSON.parse(predictionResponse.text);
         predictionDataUpdated = predictionResponse.lastModified;
@@ -252,10 +252,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let attendanceLines = attendanceResponse.text.trim().split("\n"); let attendanceHeaders = attendanceLines[0].split(",").map(h => h.trim()); attendanceData = attendanceLines.slice(1).map(line => { const values = line.split(","); const obj = {}; attendanceHeaders.forEach((h, i) => { const val = values[i] ? values[i].trim() : ''; if (['年', '年間最高観客数', '年間最低観客数', 'ゲーム数'].includes(h)) { obj[h] = parseInt(val) || 0; } else if (h === '平均観客数') { obj[h] = parseFloat(val) || 0; } else { obj[h] = val; } }); return obj; }); attendanceData.lastModified = attendanceResponse.lastModified;
 
+        // ▼▼▼ この部分を修正 ▼▼▼
         const parseRankingCsv = (csvText) => { if (!csvText || csvText.trim() === '') return []; const lines = csvText.trim().split("\n"); const headers = lines[0].split(",").map(h => h.trim()); const data = lines.slice(1).map(line => { const values = line.split(","); const rowObj = {}; headers.forEach((h, i) => { rowObj[h] = values[i] ? values[i].trim() : ''; }); return rowObj; }); return data; };
         rankingData['J1'] = { data: parseRankingCsv(j1Response.text), updated: j1Response.lastModified };
         rankingData['J2'] = { data: parseRankingCsv(j2Response.text), updated: j2Response.lastModified };
         rankingData['J3'] = { data: parseRankingCsv(j3Response.text), updated: j3Response.lastModified };
+        // ▲▲▲ この部分を修正 ▲▲▲
 
         let europeLines = europeCsvText.trim().split("\n");
         europeTopClubs = europeLines.slice(1).map(line => parseCsvLine(line));
@@ -800,88 +802,45 @@ function renderPagination() { if (!paginationContainer) return; paginationContai
 function showArticleDetail(slug, title) { isShowingArticleDetail = true; if (listContainer) listContainer.style.display = 'none'; if (paginationContainer) paginationContainer.style.display = 'none'; fetch(`/posts/${slug}.md`).then(res => { if (!res.ok) throw new Error(`Markdownファイルが見つかりません: ${slug}.md`); return res.text(); }).then(md => { const bodyContent = md.replace(/^---[\s\S]*?---/, '').trim(); const html = marked.parse(bodyContent); if (contentDiv) { const buttonsHtml = ` <div style="text-align:center; margin-top:3em; display:flex; justify-content:center; gap:20px;"> <a href="#" onclick="event.preventDefault(); showPage('top', document.querySelector('#nav-analysis-btn'));" style="color:#aaa; font-weight:bold; text-decoration:none; border:1px solid #aaa; padding: 8px 20px; border-radius:8px; transition: all 0.2s;"> « ホームに戻る </a> <a href="#" onclick="event.preventDefault(); window.showBlogList();" style="color:#299ad3; font-weight:bold; text-decoration:none; border:1px solid #299ad3; padding: 8px 20px; border-radius:8px; transition: all 0.2s;"> 記事一覧に戻る » </a> </div> `; contentDiv.innerHTML = `${html}${buttonsHtml}`; contentDiv.style.display = "block"; showPage('blog', Array.from(document.querySelectorAll('.nav-links button')).find(b => b.textContent === '記事')); const pageTitle = document.querySelector('#page-title-blog h1'); if (pageTitle) pageTitle.textContent = title; window.scrollTo({ top: 0, behavior: 'smooth' }); } }).catch(err => { console.error("記事詳細の読み込みエラー:", err); if (contentDiv) { contentDiv.innerHTML = `記事の読み込みに失敗しました。<br><br><a href="#" onclick="event.preventDefault(); window.showBlogList();">一覧に戻る</a>`; contentDiv.style.display = 'block'; showPage('blog', Array.from(document.querySelectorAll('.nav-links button')).find(b => b.textContent === '記事')); } }).finally(() => { isShowingArticleDetail = false; }); }
 window.showBlogList = function () { document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('visible')); const blogPage = document.getElementById('blog'); if (blogPage) { blogPage.classList.add('visible'); } document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active')); const blogNavBtn = Array.from(document.querySelectorAll('.nav-links button')).find(b => b.textContent === '記事'); if (blogNavBtn) { blogNavBtn.classList.add('active'); } const pageTitle = document.querySelector('#page-title-blog h1'); if (pageTitle) pageTitle.textContent = '記事・ブログ'; renderArticleList(currentPage); window.scrollTo({ top: 0, behavior: 'smooth' }); }
 function showRankingTable(league) {
-    // --- ↓↓↓ ここから調査用コード ↓↓↓ ---
-    try {
-        alert(`1. showRankingTableが呼ばれました。リーグ: ${league}`);
-
-        const container = document.getElementById('ranking-table-container');
-        if (!container) {
-            alert("エラー: ID 'ranking-table-container' の要素が見つかりません。");
-            return;
-        }
-
-        const { data, updated } = rankingData[league];
-        if (!data || data.length === 0) {
-            alert(`エラー: ${league}の順位データが見つかりません。`);
-            container.innerHTML = "<p>順位データがありません。</p>";
-            return;
-        }
-
-        alert(`2. 順位データを取得しました。データ数: ${data.length}, 更新日時: ${updated}`);
-
-        const isMobile = window.innerWidth <= 768;
-        alert(`3. 画面サイズを判定しました。isMobile: ${isMobile}`);
-
-        let finalHTML = '';
-
-        if (updated) {
-            const updatedDate = new Date(updated);
-            const formattedDate = updatedDate.toLocaleString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-            finalHTML += `<p class="update-date-note">更新日時: ${formattedDate}</p>`;
-            alert(`4. 更新日時のHTMLを生成しました:\n${finalHTML}`);
-        } else {
-            alert("警告: updated の値がありません。");
-        }
-
-        const headers = Object.keys(data[0]);
-        const displayHeaders = isMobile ? headers.filter(h => h !== '勝点') : headers;
-        let tableHTML = `<table><thead><tr>...</tr></thead><tbody>...</tbody></table>`; // テーブルの中身は長すぎるので省略
-        finalHTML += tableHTML;
-
-        alert(`5. 最終的なHTMLを生成しました。文字数: ${finalHTML.length}`);
-        
-        container.innerHTML = finalHTML;
-
-        alert("6. HTMLの書き込みが完了しました。");
-
-    } catch (e) {
-        alert(`致命的なエラーが発生しました: ${e.message}`);
-    }
-    // --- ↑↑↑ ここまで調査用コード ↑↑↑ ---
-
-    // 元のコードは一時的にコメントアウトします
-    /*
     document.querySelectorAll('#rank-buttons .rank-tab-btn').forEach(btn => btn.classList.remove('active'));
     const activeBtn = document.querySelector(`#rank-buttons .rank-tab-btn[onclick="showRankingTable('${league}')"]`);
     if (activeBtn) activeBtn.classList.add('active');
+
     const container = document.getElementById('ranking-table-container');
     if (!container) return;
+
     const { data, updated } = rankingData[league];
     if (!data || data.length === 0) {
         container.innerHTML = "<p>順位データがありません。</p>";
         return;
     }
+
     const isMobile = window.innerWidth <= 768;
-    let finalHTML = ''; 
+
+    let dateHtml = '';
     if (updated) {
         const updatedDate = new Date(updated);
         const formattedDate = updatedDate.toLocaleString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-        finalHTML += `<p class="update-date-note">更新日時: ${formattedDate}</p>`;
+        dateHtml = `<p class="update-date-note">更新日時: ${formattedDate}</p>`;
     }
+
     const headers = Object.keys(data[0]);
     const displayHeaders = isMobile ? headers.filter(h => h !== '勝点') : headers;
+
     let tableHTML = `<table><thead><tr>`;
     displayHeaders.forEach(h => {
         tableHTML += `<th>${h}</th>`;
     });
     tableHTML += `</tr></thead><tbody>`;
+
     data.forEach(row => {
         tableHTML += `<tr>`;
         displayHeaders.forEach(h => {
             let cellValue = row[h] || '';
+            // ▼▼▼ ここからが変更箇所 ▼▼▼
             if (h === 'チーム名' && isMobile) {
                 const normalizedTeamName = toHalfWidth(cellValue);
-                let abbreviatedName = cellValue;
+                let abbreviatedName = cellValue; // デフォルトは元の名前
                 for (const key in clubAbbreviations) {
                     if (toHalfWidth(key) === normalizedTeamName) {
                         abbreviatedName = clubAbbreviations[key];
@@ -890,16 +849,16 @@ function showRankingTable(league) {
                 }
                 cellValue = abbreviatedName;
             }
+            // ▲▲▲ ここまで ▲▲▲
             tableHTML += `<td>${cellValue}</td>`;
         });
         tableHTML += `</tr>`;
     });
+
     tableHTML += `</tbody></table>`;
-    finalHTML += tableHTML;
-    container.innerHTML = finalHTML;
-    */
-}
-let simInitialized = false;
+    container.innerHTML = dateHtml + tableHTML;
+
+}let simInitialized = false;
 function getCategoryInfo(score) { if (score >= 50) return { text: 'ビッグクラブ', color: '#ffd700' }; if (score >= 30) return { text: '有望ビッグクラブ', color: '#e94444' }; if (score >= 20) return { text: '潜在的ビッグクラブ', color: '#41cdf4' }; if (score >= 5) return { text: '中堅クラブ', color: '#bbb' }; return { text: 'ローカルクラブ', color: '#999' }; }
 
 function initSimulationPage() {
