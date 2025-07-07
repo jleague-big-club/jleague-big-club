@@ -815,13 +815,18 @@ function showRankingTable(league) {
 
     const isMobile = window.innerWidth <= 768;
 
-    let dateHtml = '';
+    // --- ▼▼▼ ここからHTML生成ロジックを変更 ▼▼▼ ---
+
+    let finalHTML = ''; // 最終的に出力するHTMLを格納する変数
+
+    // 1. 更新日時HTMLを作成
     if (updated) {
         const updatedDate = new Date(updated);
         const formattedDate = updatedDate.toLocaleString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-        dateHtml = `<p class="update-date-note">更新日時: ${formattedDate}</p>`;
+        finalHTML += `<p class="update-date-note">更新日時: ${formattedDate}</p>`;
     }
 
+    // 2. テーブルHTMLを作成
     const headers = Object.keys(data[0]);
     const displayHeaders = isMobile ? headers.filter(h => h !== '勝点') : headers;
 
@@ -835,10 +840,9 @@ function showRankingTable(league) {
         tableHTML += `<tr>`;
         displayHeaders.forEach(h => {
             let cellValue = row[h] || '';
-            // ▼▼▼ ここからが変更箇所 ▼▼▼
             if (h === 'チーム名' && isMobile) {
                 const normalizedTeamName = toHalfWidth(cellValue);
-                let abbreviatedName = cellValue; // デフォルトは元の名前
+                let abbreviatedName = cellValue;
                 for (const key in clubAbbreviations) {
                     if (toHalfWidth(key) === normalizedTeamName) {
                         abbreviatedName = clubAbbreviations[key];
@@ -847,16 +851,21 @@ function showRankingTable(league) {
                 }
                 cellValue = abbreviatedName;
             }
-            // ▲▲▲ ここまで ▲▲▲
             tableHTML += `<td>${cellValue}</td>`;
         });
         tableHTML += `</tr>`;
     });
-
     tableHTML += `</tbody></table>`;
-    container.innerHTML = dateHtml + tableHTML;
 
-}let simInitialized = false;
+    // 3. 更新日時とテーブルを結合
+    finalHTML += tableHTML;
+
+    // 4. コンテナに一括で書き出す
+    container.innerHTML = finalHTML;
+    
+    // --- ▲▲▲ ここまでHTML生成ロジックを変更 ▲▲▲ ---
+}
+let simInitialized = false;
 function getCategoryInfo(score) { if (score >= 50) return { text: 'ビッグクラブ', color: '#ffd700' }; if (score >= 30) return { text: '有望ビッグクラブ', color: '#e94444' }; if (score >= 20) return { text: '潜在的ビッグクラブ', color: '#41cdf4' }; if (score >= 5) return { text: '中堅クラブ', color: '#bbb' }; return { text: 'ローカルクラブ', color: '#999' }; }
 
 function initSimulationPage() {

@@ -195,9 +195,6 @@ body {
     .rank-tab-btn { font-size: 1.04rem; padding: 6px 23px; margin: 0 6px; border-radius: 20px; border: 1.5px solid #5a75a7; background: linear-gradient(90deg, #44567c 0%, #354a6b 100%); color: #fff; font-weight: bold; letter-spacing: 0.08em; cursor: pointer; transition: all 0.2s; }
     .rank-tab-btn:hover { background: linear-gradient(90deg, #516894 0%, #455f8a 100%); }
     .rank-tab-btn.active { background: linear-gradient(90deg, #27aee7 60%, #aaf7fd 100%); color: #143060; border-color: #299ad3; transform: scale(1.07); }
-#ranking-table-container {
-        overflow: visible; /* 内容がはみ出しても表示されるようにする */
-    }
     #ranking-table-container table { background-color: #f9fcff; color: #21304c; }
     #ranking-table-container tr:nth-child(even) { background: #f2f6fa; }
     #ranking-table-container tr:nth-child(odd)  { background: #ffffff; }
