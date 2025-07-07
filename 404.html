@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jリーグビッグクラブ分析</title>
+  
+  <!-- 外部ライブラリの読み込み -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  
+  <!-- ★★★ ここでCSSファイルを読み込む ★★★ -->
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+<!-- ▼▼▼ ここから元の<body>の中身を全て貼り付けます ▼▼▼ -->
+<button id="hamburger-btn" class="hamburger-btn">
+    <span></span>
+    <span></span>
+    <span></span>
+</button>
+
+<header id="mobile-header">
+<a href="javascript:void(0)" onclick="showPage('top', null);" class="home-icon-link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="12" cy="12" r="10"></circle>
+    <path d="M12 2a10 10 0 0 0-3.54 19.53m7.08-19.53A10 10 0 0 1 15.54 21.53M2 12h20M12 2v20"></path>
+</svg>
+        <span>Big Club Japan</span>
+    </a>
+</header>
+<nav>
+<a href="javascript:void(0)" onclick="showPage('top', document.querySelector('nav button'));" class="home-icon-link">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 0-3.54 19.53m7.08-19.53A10 10 0 0 1 15.54 21.53M2 12h20M12 2v20"></path></svg>
+    <span>Big Club Japan</span>    </a>
+    <div id="nav-links" class="nav-links">
+      <span class="nav-dropdown">
+        <button onclick="toggleSubMenu(this, event)" id="nav-analysis-btn" class="active">Jリーグ分析</button>
+        <div class="nav-dropdown-content">
+          <button onclick="event.stopPropagation(); showPage('top', document.getElementById('nav-analysis-btn'));">ビッグクラブ指数</button>
+          <button onclick="event.stopPropagation(); showPage('metrics', this);">クラブ指標</button>
+          <button onclick="event.stopPropagation(); showPage('attendance', this);">平均観客数</button>
+          <button onclick="event.stopPropagation(); showPage('history', this);">過去10年順位</button>
+          <button onclick="event.stopPropagation(); showPage('introduce', this);">各クラブ紹介</button>
+        </div>
+      </span>
+      <span class="nav-dropdown">
+        <button onclick="toggleSubMenu(this, event)" id="nav-rankings-btn">Jリーグ順位表</button>
+        <div class="nav-dropdown-content">
+          <button onclick="event.stopPropagation(); showPage('rankings', this);">順位表</button>
+          <button onclick="event.stopPropagation(); showPage('prediction', this);">シーズン予測</button>
+        </div>
+      </span>
+      
+      <span class="nav-dropdown">
+        <button onclick="toggleSubMenu(this, event)" id="nav-simulation-btn">シミュレーション</button>
+        <div class="nav-dropdown-content">
+            <button onclick="event.stopPropagation(); showPage('simulation', document.getElementById('nav-simulation-btn'));">ビッグクラブシミュレーター</button>
+            <button onclick="event.stopPropagation(); showPage('best11', this);">ベスト11メーカー</button>
+        </div>
+      </span>
+      
+      <span class="nav-dropdown">
+        <button onclick="toggleSubMenu(this, event)" id="nav-europe-btn">5大リーグ</button>
+        <div class="nav-dropdown-content">
+            <button onclick="event.stopPropagation(); showPage('europe', document.getElementById('nav-europe-btn'));">5大リーグ日本人選手</button>
+            <button onclick="event.stopPropagation(); showPage('europe-top20', this);">売上高TOP20</button>
+        </div>
+      </span>
+      
+      <button onclick="showPage('blog', this)">記事</button>
+
+    </div>
+</nav>
+<div id="menu-overlay" class="menu-overlay"></div>
+<!-- ... <head>や<header>はそのまま ... -->
+
+<main>
+    <div class="page-section visible" style="text-align: center; padding: 50px 20px;">
+        <h1 style="font-size: 2.5em; color: #e94444; margin-bottom: 20px;">404 Not Found</h1>
+        <p style="font-size: 1.2em; color: #fff; margin-bottom: 40px;">
+            お探しのページは見つかりませんでした。<br>
+            URLが間違っているか、ページが移動・削除された可能性があります。
+        </p>
+        <a href="/" style="display: inline-block; padding: 12px 30px; background-color: #29b6e6; color: #fff; text-decoration: none; border-radius: 8px; font-weight: bold; transition: background-color 0.3s;">
+            トップページに戻る
+        </a>
+    </div>
+</main>
+
+<!-- ... <footer>はそのまま ... -->
+<footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-logo">
+      <a href="javascript:void(0)" onclick="showPage('top', document.querySelector('nav button'));">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"></circle>
+    <path d="M12 2a10 10 0 0 0-3.54 19.53m7.08-19.53A10 10 0 0 1 15.54 21.53M2 12h20M12 2v20"></path>
+</svg>
+        <span>Big Club Japan</span>
+      </a>
+    </div>
+    <div class="footer-links">
+      <a href="javascript:void(0)" onclick="showPage('top', document.querySelector('nav button'));">ホーム</a>
+      <a href="javascript:void(0)" onclick="showPage('blog', document.querySelector('nav button:last-child'));">記事一覧</a>
+       <a href="legal/contact.html" target="_blank" rel="noopener noreferrer">お問い合わせ</a>
+      <a href="legal/privacy-policy.html" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a>
+    </div>
+    <div class="footer-copyright">
+      © 2024 Big Club Japan. All Rights Reserved.
+    </div>
+  </div>
+</footer>
+<button id="score-method-btn">
+  スコア計算方法
+</button>
+<div id="score-method-pop" style="position: fixed; bottom: 77px; right: 33px; min-width: 330px; max-width: 450px; min-height: 400px; background: #fff; color: #222; border-radius: 17px; box-shadow: 0 2px 19px #2226; padding: 22px 22px 18px 24px; z-index: 10001; font-size: 1.04rem; line-height: 1.7; border: 1.4px solid #29b6e6;">
+  <div style="font-size: 1.18em; font-weight: bold; margin-bottom: 11px;">ビッグクラブ指数の計算方法</div>
+  <ul style="margin:0 0 0 1em; padding: 0 0 0 0.6em;">
+    <li><b>売上スコア：</b> = 売上高（億円） ÷ 200 × 100</li>
+    <li><b>観客スコア：</b> = 平均観客動員数 ÷ 45,000 × 100</li>
+    <li><b>タイトルスコア：</b> = タイトル数（スーパー杯除く） ÷ 98 × 100</li>
+    <li><b>J1在籍10年平均順位スコア：</b> = 21 − J1在籍10年平均順位</li>
+    <li style="margin-top:7px;"><b>ビッグクラブスコア：</b><br> = 売上スコア × 0.3 ＋ 観客スコア × 0.15 ＋ タイトルスコア × 0.25 ＋ 平均順位スコア × 0.3</li>
+  </ul>
+  <div style="text-align:right; margin-top:14px;">
+    <a href="#" id="score-detail-link" style="color:#299ad3; text-decoration:underline; font-weight:bold; font-size:0.98em; cursor:pointer;">数値の設定など詳細</a>
+  </div>
+</div>
+<div id="score-detail-pop" style="position: fixed; bottom: 77px; right: 33px; min-width: 330px; max-width: 450px; min-height: 450px; background: #fff; color: #222; border-radius: 17px; box-shadow: 0 2px 19px #2226; padding: 22px 22px 18px 24px; z-index: 10001; font-size: 1.04rem; line-height: 1.7; border: 1.4px solid #29b6e6; max-height: 72vh; overflow-y: auto;">
+  <div style="font-size: 1.06em; margin-top: 19px; line-height: 1.85;">
+    <b>なぜこの指標を使うのか？</b><br>
+    <ul style="margin-top: 8px;">
+      <li>本サイトの「ビッグクラブ指数」は、<b>日本サッカー界で“ビッグクラブ”とされる条件</b>をできるだけ数値で可視化するために作成しました。</li>
+      <li>「ビッグクラブ」と呼ばれるクラブは、<b>経営規模（売上）</b>・<b>観客動員</b>・<b>タイトル獲得数</b>・<b>J1での実績</b>という4つの側面で明らかな強みを持っています。</li>
+      <li>ヨーロッパ主要リーグのビッグクラブ（例：マンチェスターU、レアル・マドリードなど）も、経営規模や観客数、タイトル獲得、安定した上位成績といった指標が注目されています。</li>
+      <li>Jリーグでも同じ視点で比較できるよう、<b>4つの指標</b>を組み合わせてスコア化しています。</li>
+    </ul>
+    <b>なぜこの比率（重み）なのか？</b><br>
+    <ul style="margin-top: 8px;">
+      <li>売上高や観客動員は“人気”や“影響力”の指標、タイトルや順位は“実績”や“強さ”の指標です。</li>
+      <li>クラブの総合力・“ビッグクラブらしさ”が最も反映されるよう、<b>売上/順位=30%ずつ、タイトル=25%、観客動員=15%</b>の比率で調整しています。※観客動員は無料観客も含むので比重は低く設定</li>
+    </ul>
+    <b>【例】浦和レッズのスコア</b><br>
+    <ul style="margin-top: 8px;">
+      <li>2024年時点で、浦和レッズは「過去10年のJ1平均順位」は7.2位ですが、「売上高」「観客動員数」「タイトル数」はJリーグトップクラスです。</li>
+      <li>そのため、指標の合計スコアがもっとも高く、ビッグクラブ指数1位となります。</li>
+      <li>このように、<b>経営規模・人気・強さの全てで際立つクラブが“ビッグクラブ”と評価される構造</b>になっています。</li>
+      <li>また、当サイトで基準とするビッグクラブスコア(50以上)を超えるには、浦和の場合、売上が約180億円、平均観客が40500人、過去10年J1平均順位が4.5位以上が必要になります</li>
+    </ul>
+    <span style="color: #18a; font-size: 0.98em;">※ 今後も最新データや意見をもとにアップデート予定です。</span>
+  </div>
+</div>
+<!-- ▲▲▲ <body>の中身はここまで ▲▲▲ -->
+
+<!-- ★★★ ここでJavaScriptファイルを読み込む ★★★ -->
+<script src="script.js"></script>
+
+</body>
+</html>
