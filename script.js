@@ -328,7 +328,7 @@ function renderEuropeTop20Table() {
         tableHTML += `</tr>`;
     });
     tableHTML += `</tbody></table>`;
-    container.innerHTML = dateHtml + tableHTML;
+    container.innerHTML = tableHTML;
 }
 
 function renderBig5(clubs) { const big5 = clubs.slice(0, 5); const big5Div = document.getElementById("big5-cards"); big5Div.innerHTML = ""; const row1 = document.createElement("div"); row1.className = "big5-row"; const row2 = document.createElement("div"); row2.className = "big5-row"; big5.forEach((club, i) => { let colorClass = "local"; if (club.sum >= 30) colorClass = "top-club"; else if (club.sum >= 20) colorClass = "potential-big"; else if (club.sum >= 5) colorClass = "middle"; const isLong = club.name.length >= 10; const card = document.createElement("div"); card.className = `club-card ${colorClass} rank-${i+1}` + (isLong ? " long-title" : ""); card.innerHTML = `<h3 class="club-title">${club.name}</h3><div class="score-val">スコア：${club.sum.toFixed(1)}</div>`; if (i < 3) row1.appendChild(card); else row2.appendChild(card); }); big5Div.appendChild(row1); big5Div.appendChild(row2); }
@@ -855,6 +855,7 @@ function showRankingTable(league) {
 
     tableHTML += `</tbody></table>`;
     container.innerHTML = dateHtml + tableHTML;
+
 }let simInitialized = false;
 function getCategoryInfo(score) { if (score >= 50) return { text: 'ビッグクラブ', color: '#ffd700' }; if (score >= 30) return { text: '有望ビッグクラブ', color: '#e94444' }; if (score >= 20) return { text: '潜在的ビッグクラブ', color: '#41cdf4' }; if (score >= 5) return { text: '中堅クラブ', color: '#bbb' }; return { text: 'ローカルクラブ', color: '#999' }; }
 
