@@ -79,43 +79,61 @@
 
 <div class="carousel-container" id="banner-carousel">
   <div class="carousel-track">
-    <!-- 1番目のバナー：ビッグクラブの解説記事 -->
-<div class="carousel-item">
-  <a href="javascript:void(0)" onclick="showArticleDetail('bigclub-challenge', 'データで見るJリーグ・ビッグクラブの夜明け')">
-    <img src="img/banner3.png" alt="ビッグクラブの挑戦">
-    <div class="banner-text">
-        ビッグクラブの新たな挑戦
-    </div>
-  </a>
-</div>
-    <!-- 2番目のバナー：シーズン予測の解説 -->
-    <div class="carousel-item">
-      <a href="javascript:void(0)" onclick="showArticleDetail('prediction-logic-explainer', 'なぜ順位と予測が違う？ シミュレーションの裏側を解説')">
-        <img src="img/banner2.png" alt="シーズン予測の解説">
-        <div class="banner-text">
-            なぜ順位と予測が違う？ シーズン予測の仕組みを解説
-        </div>
-      </a>
-    </div>
-    <!-- 3番目のバナー -->
-    <div class="carousel-item">
-      <a href="#">
-        <img src="img/banner1.png" alt="若き才能">
-        <div class="banner-text">
-          若き才能がピッチを駆ける
-        </div>
-      </a>
-    </div>
-    <!-- 4番目のバナー -->
-    <div class="carousel-item">
-      <a href="#">
-        <img src="img/banner4.png" alt="欧州の日本人選手">
-        <div class="banner-text">
-          欧州で活躍する日本人選手特集
-        </div>
-      </a>
-    </div>
+  <!-- 1番目のバナー：ビッグクラブの解説記事 -->
+  <div class="carousel-item">
+    <a href="javascript:void(0)" onclick="showArticleDetail('bigclub-challenge', 'データで見るJリーグ・ビッグクラブの夜明け')">
+      <img src="img/banner1.png" alt="ビッグクラブの挑戦">
+      <div class="banner-text">
+        データで見るJリーグ・ビッグクラブの夜明け
+      </div>
+    </a>
   </div>
+  <!-- 2番目のバナー：シーズン予測ページの紹介 -->
+  <div class="carousel-item">
+    <a href="javascript:void(0)" onclick="showArticleDetail('prediction-intro', 'シーズン予測であなたの推しクラブの未来を見よう！')">
+      <img src="img/banner2.png" alt="シーズン予測ページ紹介">
+      <div class="banner-text">
+        シーズン予測で推しクラブの未来を見よう！
+      </div>
+    </a>
+  </div>
+  <!-- 3番目のバナー：ベスト11メーカー -->
+  <div class="carousel-item">
+    <a href="javascript:void(0)" onclick="showArticleDetail('best11-intro', '君だけの最強イレブンを作ろう！')">
+      <img src="img/banner3.png" alt="ベスト11メーカー">
+      <div class="banner-text">
+        君だけの最強イレブンを作ろう！
+      </div>
+    </a>
+  </div>
+  <!-- 4番目のバナー：ビッグクラブシミュレーター -->
+  <div class="carousel-item">
+    <a href="javascript:void(0)" onclick="showArticleDetail('simulation-intro', 'もしも…を試せるビッグクラブシミュレーター')">
+      <img src="img/banner4.png" alt="ビッグクラブシミュレーター">
+      <div class="banner-text">
+        ビッグクラブシミュレーターを使ってみよう！
+      </div>
+    </a>
+  </div>
+  <!-- 5番目のバナー：観客動員ランキング -->
+  <div class="carousel-item">
+    <a href="javascript:void(0)" onclick="showArticleDetail('attendance-intro', 'Jリーグで最も熱いスタジアムはどこ！？')">
+      <img src="img/banner4.png" alt="平均観客数">
+      <div class="banner-text">
+        Jリーグで最も熱いスタジアムはどこだ？
+      </div>
+    </a>
+  </div>
+  <!-- 6番目のバナー：5大リーグ日本人選手 -->
+  <div class="carousel-item">
+    <a href="javascript:void(0)" onclick="showArticleDetail('europe-intro', '世界で戦うサムライたちをチェック！')">
+      <img src="img/banner4.png" alt="欧州の日本人選手">
+      <div class="banner-text">
+        世界で戦うサムライたちをチェック
+      </div>
+    </a>
+  </div>
+</div>
   
   <button class="carousel-btn prev" id="carousel-prev-btn">❮</button>
   <button class="carousel-btn next" id="carousel-next-btn">❯</button>
@@ -143,7 +161,7 @@
   <div id="page-title-metrics" class="page-title-row" style="display:none;"><h1>クラブ指標</h1></div>
   <div id="page-title-history" class="page-title-row" style="display:none;"><h1>Jリーグ過去データ</h1></div>
   <div id="page-title-rankings" class="page-title-row" style="display:none;"><h1>Jリーグ 順位表 2025</h1></div>
-  <div id="page-title-prediction" class="page-title-row" style="display:none;"><h1>Jリーグ シーズン予測 2025</h1></div>
+  <div id="page-title-prediction" class="page-title-row" style="display:none;"><h1>Jリーグ 2025シーズン予測</h1></div>
   <div id="page-title-introduce" class="page-title-row" style="display:none;"><h1>各クラブ紹介</h1></div>
   <div id="page-title-europe" class="page-title-row" style="display:none;"><h1>25-26シーズン 5大リーグ日本人選手</h1></div>
     <div id="page-title-europe-top20" class="page-title-row" style="display:none;"><h1>欧州クラブ 推定売上高TOP20（24-25シーズン）</h1></div>
@@ -221,13 +239,13 @@
             <li><b>✅ 残留以上確率:</b><br>
                 残留以上の順位で終わる回数が多いチームです。</li>
         </ul>
-<div style="text-align: center; margin-top: 25px; padding-top: 15px; border-top: 1px solid #4a5a7f;">
-            <a href="javascript:void(0)" 
-               onclick="document.getElementById('prediction-help-pop').style.display='none'; showArticleDetail('prediction-logic-explainer', 'なぜ順位と予測が違う？ シミュレーションの裏側を解説');"
-               style="color: #ffd700; text-decoration: underline; font-weight: bold; font-size: 1.05em;">
-                さらに詳しく (なぜ順位と予測が違う？)
-            </a>
-        </div>
+ <div style="text-align: center; margin-top: 25px; padding-top: 15px; border-top: 1px solid #4a5a7f;">
+        <a href="javascript:void(0)" 
+           onclick="document.getElementById('prediction-help-pop').style.display='none'; showArticleDetail('prediction-logic-explainer', 'なぜ順位と予測が違う？ シミュレーションの裏側を解説');"
+           style="color: #ffd700; text-decoration: underline; font-weight: bold; font-size: 1.05em;">
+            さらに詳しく (なぜ順位と予測が違う？)
+        </a>
+    </div>
     </div>
   
   </div>

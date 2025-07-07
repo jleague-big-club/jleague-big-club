@@ -1,6 +1,6 @@
 ---
 title: なぜ順位と予測が違う？ シミュレーションの裏側を解説
-date: "2025-07-08"
+date: "2025-07-07"
 thumbnail: "img/banner3.png"
 ---
 

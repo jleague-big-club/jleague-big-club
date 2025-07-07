@@ -1,17 +1,5 @@
 [
   {
-    "slug": "bigclub-challenge",
-    "title": "データで見るJリーグ・ビッグクラブの夜明け",
-    "date": "2024-08-01",
-    "thumbnail": "img/banner1.png"
-  },
-  {
-    "slug": "prediction-logic-explainer",
-    "title": "なぜ順位と予測が違う？ シミュレーションの裏側を解説",
-    "date": "2024-08-01",
-    "thumbnail": "img/banner3.png"
-  },
-  {
     "title": "記事タイトル1",
     "slug": "post-1",
     "thumbnail": "posts/img/thumbnail.png",
