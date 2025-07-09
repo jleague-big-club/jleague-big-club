@@ -1000,3 +1000,15 @@ body {
   transform: scale(1.15);  /* 少し拡大する */
   text-decoration: none;   /* 下線を表示しない */
 }
+/* --- パフォーマンス改善: CLS対策 --- */
+.carousel-container {
+  /* PC表示時のカルーセルの高さを事前に確保 */
+  min-height: 130px; 
+}
+
+@media (max-width: 768px) {
+  .carousel-container {
+    /* モバイル表示時のカルーセルの高さを事前に確保 */
+    min-height: 200px;
+  }
+}
