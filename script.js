@@ -127,8 +127,24 @@ function showArticleDetail(slug, title, fromPopState = false) {
         const bodyContent = md.replace(/^---[\s\S]*?---/, '').trim();
         const html = marked.parse(bodyContent);
         if (contentDiv) {
-            const backButtonHtml = `<div style="text-align:center; margin-top:3em;"> <a href="#blog" onclick="event.preventDefault(); window.history.back();" style="color:#299ad3; font-weight:bold; text-decoration:none; border:1px solid #299ad3; padding: 8px 20px; border-radius:8px;"> « 記事一覧に戻る </a> </div>`;
-            contentDiv.innerHTML = `${html}${backButtonHtml}`;
+            
+            // 「ホームに戻る」ボタンは常に表示
+            const homeButton = `<a href="#top" onclick="event.preventDefault(); showPage('top', null);" style="color:#aaa; font-weight:bold; text-decoration:none; border:1px solid #aaa; padding: 8px 20px; border-radius:8px; transition: all 0.2s;"> « ホームに戻る </a>`;
+
+            let secondaryButton;
+            // slugに応じて2つ目のボタンを定義
+            if (slug === 'prediction-logic-explainer') {
+                // 「シーズン予測の解説」記事の場合
+                secondaryButton = `<a href="#prediction" onclick="event.preventDefault(); showPage('prediction', null);" style="color:#299ad3; font-weight:bold; text-decoration:none; border:1px solid #299ad3; padding: 8px 20px; border-radius:8px; transition: all 0.2s;"> シーズン予測に戻る » </a>`;
+            } else {
+                // それ以外のすべての記事の場合
+                secondaryButton = `<a href="#blog" onclick="event.preventDefault(); showPage('blog', null);" style="color:#299ad3; font-weight:bold; text-decoration:none; border:1px solid #299ad3; padding: 8px 20px; border-radius:8px; transition: all 0.2s;"> 記事一覧に戻る » </a>`;
+            }
+
+            // 2つのボタンを結合して表示
+            const buttonsHtml = ` <div style="text-align:center; margin-top:3em; display:flex; justify-content:center; gap:20px;"> ${homeButton} ${secondaryButton} </div> `;
+            
+            contentDiv.innerHTML = `${html}${buttonsHtml}`;
             contentDiv.style.display = "block";
             
             showPage('blog', null, true); // ページセクションを表示するが、履歴は操作しない
@@ -136,7 +152,6 @@ function showArticleDetail(slug, title, fromPopState = false) {
             if (pageTitle) pageTitle.textContent = title;
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
-            // ★★★ History API: 履歴を追加/置換 ★★★
             if (!fromPopState) {
                 const state = { page: 'blog', slug: slug, title: title };
                 const url = `#blog/${slug}`;
@@ -149,9 +164,7 @@ function showArticleDetail(slug, title, fromPopState = false) {
     }).finally(() => {
         isShowingArticleDetail = false;
     });
-}
-
-function showBlogList() {
+}function showBlogList() {
     isShowingArticleDetail = false;
     const listContainer = document.getElementById('blog-list-container');
     const paginationContainer = document.getElementById('pagination');
