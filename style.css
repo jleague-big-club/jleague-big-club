@@ -1000,3 +1000,23 @@ body {
   transform: scale(1.15);  /* 少し拡大する */
   text-decoration: none;   /* 下線を表示しない */
 }
+/* style.css の末尾などに追加 */
+
+/* トップページのコンテンツコンテナの最低限の高さを確保 */
+#big5-cards {
+  /* スマホでは縦積みなので高めに、PCでは2行なのでこのくらい */
+  min-height: 250px; 
+}
+
+#club-categories {
+  min-height: 600px; /* テーブルが表示されるエリアの最低限の高さ */
+}
+
+/* その他の動的コンテンツエリアにも設定 */
+.metrics-chart-wrap {
+  min-height: 520px;
+}
+
+#jleague-history {
+  min-height: 800px;
+}
