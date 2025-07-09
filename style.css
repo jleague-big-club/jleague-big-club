@@ -975,6 +975,28 @@ body {
     font-size: 1em;
     cursor: pointer;
 }
-/* ▲▲▲ 追加ここまで ▲▲▲ */
+/* === フッターのSNSアイコン用のスタイル === */
 
-/* --- END OF FILE style.css --- */
+/* フッターリンクのコンテナをFlexboxに設定し、要素を垂直方向に中央揃え */
+.footer-links {
+  align-items: center; 
+}
+
+/* SNSリンクのアイコンスタイル */
+.footer-social-link {
+  display: inline-flex; /* アイコンを中央に配置するため */
+  color: #aabbcc;       /* アイコンの基本色 */
+  transition: color 0.2s, transform 0.2s; /* ホバーアニメーション */
+}
+
+.footer-social-link svg {
+  width: 22px;  /* アイコンのサイズ */
+  height: 22px;
+}
+
+/* ホバー時のスタイル */
+.footer-social-link:hover {
+  color: #fff;              /* アイコンの色を白に */
+  transform: scale(1.15);  /* 少し拡大する */
+  text-decoration: none;   /* 下線を表示しない */
+}
