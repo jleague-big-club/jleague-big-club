@@ -182,6 +182,14 @@ body {
     .blog-card-content { padding: 12px; }
     .blog-card-title { font-weight: bold; margin-bottom: 5px; color: #333; font-size: 1.05em; }
     .blog-card-date { color: #888; font-size: 0.9em; }
+#blog-content img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 25px auto;
+        border-radius: 10px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    }
     .position-btn-row { display: flex; flex-wrap: wrap; gap: 3px 7px; justify-content: center; margin-bottom: 14px; }
     #player-choice-list { width: auto !important; min-width: 0 !important; max-width: 100% !important; display: flex; justify-content: center; }
     .player-choice-row { width: auto !important; }

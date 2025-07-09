@@ -388,21 +388,93 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    window.generateImage = function(elementId) {
+    window.generateImage = async function(elementId) {
         const target = document.getElementById(elementId);
+        if (!target) {
+            messageArea.textContent = '対象要素が見つかりません。';
+            setTimeout(() => { messageArea.textContent = ''; }, 3000);
+            return;
+        }
         messageArea.textContent = '画像生成中...';
-        html2canvas(target, { backgroundColor: '#1c2128', scale: 2, useCORS: true })
-            .then(canvas => {
-                canvas.toBlob(blob => {
-                    if (navigator.clipboard?.write) {
-                        navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
-                            .then(() => messageArea.textContent = 'コピーしました！')
-                            .catch(() => messageArea.textContent = 'コピーに失敗しました。');
-                    } else messageArea.textContent = 'お使いのブラウザはコピー機能に非対応です。';
-                });
-            })
-            .catch(() => messageArea.textContent = '画像生成に失敗しました。')
-            .finally(() => setTimeout(() => { messageArea.textContent = ''; }, 3000));
+
+        // --- Store original state ---
+        const originalInlineStyles = new Map();
+        const elementsToStyle = [target, ...target.querySelectorAll('*')];
+        elementsToStyle.forEach(el => {
+            originalInlineStyles.set(el, el.style.cssText);
+        });
+
+        let chartInstance = null;
+        let originalChartOptions = null;
+        const canvasEl = target.querySelector('canvas');
+        if (canvasEl) {
+            chartInstance = Chart.getChart(canvasEl);
+            if (chartInstance) {
+                originalChartOptions = JSON.parse(JSON.stringify(chartInstance.options));
+            }
+        }
+
+        try {
+            // --- Apply light mode for capture ---
+            target.style.backgroundColor = '#ffffff';
+            target.style.color = '#000000';
+
+            const allTextElements = target.querySelectorAll('.capture-title, #chart-title-display, .legend-item, .player-label, .club-name, .record-info, .rank, .prob, td, th, label, .sim-score-box p, .sim-score-box h3, .card-header');
+            allTextElements.forEach(el => {
+                el.style.color = 'black';
+            });
+            target.querySelectorAll('.capture-footer, .best11-logo, .update-date-note').forEach(el => {
+                el.style.color = '#555555';
+            });
+            target.querySelectorAll('.player-label.unselected').forEach(el => {
+                el.style.color = '#777777';
+            });
+
+            if (chartInstance) {
+                const newOptions = chartInstance.options;
+                if (newOptions.plugins.datalabels) {
+                    newOptions.plugins.datalabels.color = '#000000';
+                }
+                if (newOptions.scales) {
+                    if (newOptions.scales.y) newOptions.scales.y.ticks.color = '#000000';
+                    if (newOptions.scales.x) newOptions.scales.x.ticks.color = '#555555';
+                }
+                chartInstance.update('none');
+            }
+
+            await new Promise(resolve => setTimeout(resolve, 50));
+
+            // --- Capture ---
+            const canvas = await html2canvas(target, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+            canvas.toBlob(blob => {
+                if (navigator.clipboard?.write) {
+                    navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
+                        .then(() => messageArea.textContent = 'コピーしました！')
+                        .catch(err => {
+                            console.error('Copy failed:', err);
+                            messageArea.textContent = 'コピーに失敗しました。';
+                        });
+                } else {
+                    messageArea.textContent = 'お使いのブラウザはコピー機能に非対応です。';
+                }
+            });
+
+        } catch (err) {
+            console.error("Image generation failed:", err);
+            messageArea.textContent = '画像生成に失敗しました。';
+        } finally {
+            // --- Restore original state ---
+            originalInlineStyles.forEach((style, el) => {
+                el.style.cssText = style;
+            });
+
+            if (chartInstance && originalChartOptions) {
+                chartInstance.options = originalChartOptions;
+                chartInstance.update('none');
+            }
+            
+            setTimeout(() => { messageArea.textContent = ''; }, 3000);
+        }
     }
     
     // === 実行 ===
