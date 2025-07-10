@@ -68,4 +68,4 @@ Jリーグの中でも比較的新しいこのクラブは、巨大資本の投�
 ***
 
 あなたの推しクラブがビッグクラブになるには、何が足りない？<br>
-<a href="javascript:void(0)" onclick="showPage('simulation', document.getElementById('nav-simulation-btn'));" style="font-weight:bold; color:#299ad3;">→ビッグクラブシミュレーターを使ってクラブのもしもを見てみよう！</a>
+<a href="#simulation" onclick="event.preventDefault(); showPage('simulation', document.getElementById('nav-simulation-btn'));" style="font-weight:bold; color:#299ad3;">→ビッグクラブシミュレーターを使ってクラブのもしもを見てみよう！</a>

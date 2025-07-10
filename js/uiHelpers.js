@@ -1,4 +1,4 @@
-// js/uiHelpers.js
+// js/uiHelpers.js (最終修正版)
 
 let bannerAutoPlayInterval;
 
@@ -10,37 +10,53 @@ export function toHalfWidth(str) {
 }
 
 export function updateNavActiveState(id, btn) {
-    document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
+    // 最初にすべてのactiveクラスを削除
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
 
     let targetBtn = btn;
     if (!targetBtn) {
+        // ボタンが指定されていない場合、ページIDから対応するリンクを探す
         const pageToBtnMap = {
-            'top': '#nav-analysis-btn',
-            'metrics': 'button[onclick*="showPage(\'metrics\'"]',
-            'attendance': 'button[onclick*="showPage(\'attendance\'"]',
-            'history': 'button[onclick*="showPage(\'history\'"]',
-            'introduce': 'button[onclick*="showPage(\'introduce\'"]',
-            'rankings': '#nav-rankings-btn',
-            'prediction': 'button[onclick*="showPage(\'prediction\'"]',
-            'simulation': '#nav-simulation-btn',
-            'best11': 'button[onclick*="showPage(\'best11\'"]',
-            'europe': '#nav-europe-btn',
-            'europe-top20': 'button[onclick*="showPage(\'europe-top20\'"]',
-            'blog': 'button[onclick*="showPage(\'blog\'"]',
+            'top': 'a[href="#top"]',
+            'metrics': 'a[href="#metrics"]',
+            'attendance': 'a[href="#attendance"]',
+            'history': 'a[href="#history"]',
+            'introduce': 'a[href="#introduce"]',
+            'rankings': 'a[href="#rankings"]',
+            'prediction': 'a[href="#prediction"]',
+            'simulation': 'a[href="#simulation"]',
+            'best11': 'a[href="#best11"]',
+            'europe': 'a[href="#europe"]',
+            'europe-top20': 'a[href="#europe-top20"]',
+            'blog': '.nav-links > a[href="#blog"]',
         };
+        // マップに存在するIDのみ処理
         if (pageToBtnMap[id]) {
+            // 複数の候補がある場合も考慮し、最初に見つかったものを対象とする
             targetBtn = document.querySelector(pageToBtnMap[id]);
         }
     }
 
+    // targetBtnが見つかった場合のみ処理を実行
     if (targetBtn) {
         targetBtn.classList.add('active');
         const parentDropdown = targetBtn.closest('.nav-dropdown');
         if (parentDropdown) {
-            parentDropdown.querySelector('button').classList.add('active');
+            // 親のドロップダウンのトリガーとなるリンクにもactiveクラスを付ける
+            const parentTrigger = parentDropdown.querySelector('a');
+            if (parentTrigger) {
+                parentTrigger.classList.add('active');
+            }
+        }
+    } else if (id === 'top') {
+        // トップページの場合はJリーグ分析をアクティブにする
+        const analysisBtn = document.getElementById('nav-analysis-btn');
+        if (analysisBtn) {
+            analysisBtn.classList.add('active');
         }
     }
 }
+
 
 export function stopBannerAutoPlay() {
     clearInterval(bannerAutoPlayInterval);
@@ -341,5 +357,4 @@ function toggleSubMenu(btn, event) {
     parentDropdown.classList.toggle('menu-open');
 }
 
-// === グローバルスコープでアクセス可能にする関数 ===
 window.toggleSubMenu = toggleSubMenu;

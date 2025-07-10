@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Jリーグビッグクラブ分析</title>
+<meta name="description" content="Jリーグの「ビッグクラブ」をデータで徹底分析！独自のビッグクラブ指数で、浦和レッズや鹿島アントラーズからあなたの推しクラブまで、そのポテンシャルを可視化します。観客数や売上高、順位データも満載。">
 <link rel="icon" href="/img/favicon.ico" sizes="any">
   
 <!-- Google tag (gtag.js) -->
@@ -29,7 +30,7 @@
 </button>
 
 <header id="mobile-header">
-<a href="javascript:void(0)" onclick="showPage('top', null);" class="home-icon-link">
+<a href="#top" onclick="event.preventDefault(); showPage('top', null);" class="home-icon-link">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
     <circle cx="12" cy="12" r="10"></circle>
     <path d="M12 2a10 10 0 0 0-3.54 19.53m7.08-19.53A10 10 0 0 1 15.54 21.53M2 12h20M12 2v20"></path>
@@ -38,47 +39,46 @@
     </a>
 </header>
 <nav>
-<a href="javascript:void(0)" onclick="showPage('top', document.querySelector('nav button'));" class="home-icon-link">
+<a href="#top" onclick="event.preventDefault(); showPage('top', document.querySelector('nav button'));" class="home-icon-link">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 0-3.54 19.53m7.08-19.53A10 10 0 0 1 15.54 21.53M2 12h20M12 2v20"></path></svg>
     <span>Big Club Japan</span>    </a>
     <div id="nav-links" class="nav-links">
-      <span class="nav-dropdown">
-        <button onclick="toggleSubMenu(this, event)" id="nav-analysis-btn" class="active">Jリーグ分析</button>
-        <div class="nav-dropdown-content">
-          <button onclick="event.stopPropagation(); showPage('top', document.getElementById('nav-analysis-btn'));">ビッグクラブ指数</button>
-          <button onclick="event.stopPropagation(); showPage('metrics', this);">クラブ指標</button>
-          <button onclick="event.stopPropagation(); showPage('attendance', this);">平均観客数</button>
-          <button onclick="event.stopPropagation(); showPage('history', this);">過去10年順位</button>
-          <button onclick="event.stopPropagation(); showPage('introduce', this);">各クラブ紹介</button>
-        </div>
-      </span>
-      <span class="nav-dropdown">
-        <button onclick="toggleSubMenu(this, event)" id="nav-rankings-btn">Jリーグ順位表</button>
-        <div class="nav-dropdown-content">
-          <button onclick="event.stopPropagation(); showPage('rankings', this);">順位表</button>
-          <button onclick="event.stopPropagation(); showPage('prediction', this);">シーズン予測</button>
-        </div>
-      </span>
-      
-      <span class="nav-dropdown">
-        <button onclick="toggleSubMenu(this, event)" id="nav-simulation-btn">シミュレーション</button>
-        <div class="nav-dropdown-content">
-            <button onclick="event.stopPropagation(); showPage('simulation', document.getElementById('nav-simulation-btn'));">ビッグクラブシミュレーター</button>
-            <button onclick="event.stopPropagation(); showPage('best11', this);">ベスト11メーカー</button>
-        </div>
-      </span>
-      
-      <span class="nav-dropdown">
-        <button onclick="toggleSubMenu(this, event)" id="nav-europe-btn">5大リーグ</button>
-        <div class="nav-dropdown-content">
-            <button onclick="event.stopPropagation(); showPage('europe', document.getElementById('nav-europe-btn'));">5大リーグ日本人選手</button>
-            <button onclick="event.stopPropagation(); showPage('europe-top20', this);">売上高TOP20</button>
-        </div>
-      </span>
-      
-      <button onclick="showPage('blog', this)">記事</button>
-
+  <span class="nav-dropdown">
+    <a href="#top" onmouseover="preloadModule('top')" onclick="event.preventDefault(); toggleSubMenu(this, event);" id="nav-analysis-btn" class="active">Jリーグ分析</a>
+    <div class="nav-dropdown-content">
+      <a href="#top" onmouseover="preloadModule('top')" onclick="event.preventDefault(); event.stopPropagation(); showPage('top', document.getElementById('nav-analysis-btn'));">ビッグクラブ指数</a>
+      <a href="#metrics" onmouseover="preloadModule('metrics')" onclick="event.preventDefault(); event.stopPropagation(); showPage('metrics', this);">クラブ指標</a>
+      <a href="#attendance" onmouseover="preloadModule('attendance')" onclick="event.preventDefault(); event.stopPropagation(); showPage('attendance', this);">平均観客数</a>
+      <a href="#history" onmouseover="preloadModule('history')" onclick="event.preventDefault(); event.stopPropagation(); showPage('history', this);">過去10年順位</a>
+      <a href="#introduce" onmouseover="preloadModule('introduce')" onclick="event.preventDefault(); event.stopPropagation(); showPage('introduce', this);">各クラブ紹介</a>
     </div>
+  </span>
+  <span class="nav-dropdown">
+    <a href="#rankings" onmouseover="preloadModule('rankings')" onclick="event.preventDefault(); toggleSubMenu(this, event);" id="nav-rankings-btn">Jリーグ順位表</a>
+    <div class="nav-dropdown-content">
+      <a href="#rankings" onmouseover="preloadModule('rankings')" onclick="event.preventDefault(); event.stopPropagation(); showPage('rankings', this);">順位表</a>
+      <a href="#prediction" onmouseover="preloadModule('prediction')" onclick="event.preventDefault(); event.stopPropagation(); showPage('prediction', this);">シーズン予測</a>
+    </div>
+  </span>
+  
+  <span class="nav-dropdown">
+    <a href="#simulation" onmouseover="preloadModule('simulation')" onclick="event.preventDefault(); toggleSubMenu(this, event);" id="nav-simulation-btn">シミュレーション</a>
+    <div class="nav-dropdown-content">
+        <a href="#simulation" onmouseover="preloadModule('simulation')" onclick="event.preventDefault(); event.stopPropagation(); showPage('simulation', document.getElementById('nav-simulation-btn'));">ビッグクラブシミュレーター</a>
+        <a href="#best11" onmouseover="preloadModule('best11')" onclick="event.preventDefault(); event.stopPropagation(); showPage('best11', this);">ベスト11メーカー</a>
+    </div>
+  </span>
+  
+  <span class="nav-dropdown">
+    <a href="#europe" onmouseover="preloadModule('europe')" onclick="event.preventDefault(); toggleSubMenu(this, event);" id="nav-europe-btn">5大リーグ</a>
+    <div class="nav-dropdown-content">
+        <a href="#europe" onmouseover="preloadModule('europe')" onclick="event.preventDefault(); event.stopPropagation(); showPage('europe', document.getElementById('nav-europe-btn'));">5大リーグ日本人選手</a>
+        <a href="#europe-top20" onmouseover="preloadModule('europe-top20')" onclick="event.preventDefault(); event.stopPropagation(); showPage('europe-top20', this);">売上高TOP20</a>
+    </div>
+  </span>
+  
+  <a href="#blog" onmouseover="preloadModule('blog')" onclick="event.preventDefault(); showPage('blog', this);">記事</a>
+</div>
 </nav>
 <div id="menu-overlay" class="menu-overlay"></div>
 <main>
@@ -87,7 +87,7 @@
   <div class="carousel-track">
   <!-- 1番目のバナー：ビッグクラブの解説記事 -->
   <div class="carousel-item">
-    <a href="javascript:void(0)" onclick="showArticleDetail('bigclub-challenge', 'データで見るJリーグ・ビッグクラブの夜明け')">
+   <a href="#blog/bigclub-challenge" onclick="event.preventDefault(); showArticleDetail('bigclub-challenge', 'データで見るJリーグ・ビッグクラブの夜明け')">
        <img src="/img/banner1.webp" alt="ビッグクラブの挑戦"
        width="380" height="100" fetchpriority="high" decoding="async" loading="eager">
       <div class="banner-text">
@@ -97,7 +97,7 @@
   </div>
   <!-- 2番目のバナー：シーズン予測ページの紹介 -->
   <div class="carousel-item">
-    <a href="javascript:void(0)" onclick="showArticleDetail('prediction-intro', 'シーズン予測であなたの推しクラブの未来を見よう！')">
+   <a href="#blog/prediction-intro" onclick="event.preventDefault(); showArticleDetail('prediction-intro', 'シーズン予測であなたの推しクラブの未来を見よう！')">
       <img src="/img/banner2.webp" alt="シーズン予測ページ紹介"
 width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
       <div class="banner-text">
@@ -107,7 +107,7 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
   </div>
   <!-- 3番目のバナー：ベスト11メーカー -->
   <div class="carousel-item">
-    <a href="javascript:void(0)" onclick="showArticleDetail('best11-intro', '君だけの最強イレブンを作ろう！')">
+   <a href="#blog/best11-intro" onclick="event.preventDefault(); showArticleDetail('best11-intro', '君だけの最強イレブンを作ろう！')">
        <img src="/img/banner3.webp" alt="ベスト11メーカー"
 width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
       <div class="banner-text">
@@ -117,7 +117,7 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
   </div>
   <!-- 4番目のバナー：ビッグクラブシミュレーター -->
   <div class="carousel-item">
-    <a href="javascript:void(0)" onclick="showArticleDetail('simulation-intro', 'もしも…を試せるビッグクラブシミュレーター')">
+  <a href="#blog/simulation-intro" onclick="event.preventDefault(); showArticleDetail('simulation-intro', 'もしも…を試せるビッグクラブシミュレーター')">
       <img src="/img/banner4.webp" alt="ビッグクラブシミュレーター"
  width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
       <div class="banner-text">
@@ -127,7 +127,7 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
   </div>
   <!-- 5番目のバナー：観客動員ランキング -->
   <div class="carousel-item">
-    <a href="javascript:void(0)" onclick="showArticleDetail('attendance-intro', 'Jリーグで最も熱いスタジアムはどこ！？')">
+   <a href="#blog/attendance-intro" onclick="event.preventDefault(); showArticleDetail('attendance-intro', 'Jリーグで最も熱いスタジアムはどこ！？')">
       <img src="/img/banner5.webp" alt="平均観客数"
 width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
       <div class="banner-text">
@@ -137,7 +137,7 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
   </div>
   <!-- 6番目のバナー：5大リーグ日本人選手 -->
   <div class="carousel-item">
-    <a href="javascript:void(0)" onclick="showArticleDetail('europe-intro', '世界で戦うサムライたちをチェック！')">
+   <a href="#blog/europe-intro" onclick="event.preventDefault(); showArticleDetail('europe-intro', '世界で戦うサムライたちをチェック！')">
       <img src="/img/banner6.webp" alt="欧州の日本人選手"
 width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
       <div class="banner-text">
@@ -252,11 +252,10 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
                 残留以上の順位で終わる回数が多いチームです。</li>
         </ul>
  <div style="text-align: center; margin-top: 25px; padding-top: 15px; border-top: 1px solid #4a5a7f;">
-        <a href="javascript:void(0)" 
-           onclick="document.getElementById('prediction-help-pop').style.display='none'; showArticleDetail('prediction-logic-explainer', 'なぜ順位と予測が違う？ シミュレーションの裏側を解説');"
-           style="color: #ffd700; text-decoration: underline; font-weight: bold; font-size: 1.05em;">
-            さらに詳しく (なぜ順位と予測が違う？)
-        </a>
+        <a href="#blog/prediction-logic-explainer"
+   onclick="event.preventDefault(); document.getElementById('prediction-help-pop').style.display='none'; showArticleDetail('prediction-logic-explainer', 'なぜ順位と予測が違う？ シミュレーションの裏側を解説');">
+    さらに詳しく (なぜ順位と予測が違う？)
+</a>
     </div>
     </div>
   
@@ -417,7 +416,7 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
 <footer class="site-footer">
   <div class="footer-container">
     <div class="footer-logo">
-      <a href="javascript:void(0)" onclick="showPage('top', document.querySelector('nav button'));">
+      <a href="#top" onclick="event.preventDefault(); showPage('top', document.querySelector('nav a'));">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <circle cx="12" cy="12" r="10"></circle>
     <path d="M12 2a10 10 0 0 0-3.54 19.53m7.08-19.53A10 10 0 0 1 15.54 21.53M2 12h20M12 2v20"></path>
@@ -426,8 +425,8 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
       </a>
     </div>
     <div class="footer-links">
-      <a href="javascript:void(0)" onclick="showPage('top', document.querySelector('nav button'));">ホーム</a>
-      <a href="javascript:void(0)" onclick="showPage('blog', document.querySelector('nav button:last-child'));">記事一覧</a>
+  <a href="#top" onclick="event.preventDefault(); showPage('top', document.querySelector('nav a'));">ホーム</a>
+  <a href="#blog" onclick="event.preventDefault(); showPage('blog', document.querySelector('#nav-links > a:last-of-type'));">記事一覧</a>
       <a href="legal/contact.html" target="_blank" rel="noopener noreferrer">お問い合わせ</a>
       <a href="legal/privacy-policy.html" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a>
       
