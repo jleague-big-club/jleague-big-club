@@ -24,6 +24,8 @@ export function hideArticleDetail() {
     _isShowingArticleDetail = false;
 }
 
+// js/pages/blog.js
+
 export async function showArticleDetail(slug, title, fromPopState = false) {
     _isShowingArticleDetail = true;
     const listContainer = document.getElementById('blog-list-container');
@@ -39,6 +41,34 @@ export async function showArticleDetail(slug, title, fromPopState = false) {
 
     try {
         await loadScript(MARKED_JS_URL);
+
+        // --- ここからが追加/修正箇所 ---
+
+        // 1. 新しいRendererオブジェクトを作成
+        const renderer = new marked.Renderer();
+        const originalImageRenderer = renderer.image.bind(renderer);
+
+        // 2. 画像(image)のレンダリングルールを上書き
+        renderer.image = (href, title, text) => {
+            // 内部リンク（自分のサイトの画像）の場合のみ遅延読み込みを適用
+            if (href && !href.startsWith('http')) {
+                return `
+                    <img src="${href}" 
+                         alt="${text}" 
+                         ${title ? `title="${title}"` : ''} 
+                         loading="lazy" 
+                         decoding="async">
+                `;
+            }
+            // 外部リンク画像の場合は、元のmarkedの動作に任せる
+            return originalImageRenderer(href, title, text);
+        };
+
+        // 3. markedにカスタムRendererを設定
+        marked.use({ renderer });
+        
+        // --- ここまでが追加/修正箇所 ---
+
 
         const res = await fetch(`/posts/${slug}.md`);
         if (!res.ok) throw new Error(`Markdownファイルが見つかりません: ${slug}.md`);
@@ -88,8 +118,7 @@ export async function showArticleDetail(slug, title, fromPopState = false) {
         if (contentDiv) contentDiv.innerHTML = `<p style="color: red;">記事の読み込みに失敗しました。</p>`;
         _isShowingArticleDetail = false;
     }
-}
-window.showArticleDetail = showArticleDetail;
+}window.showArticleDetail = showArticleDetail;
 
 function renderPagination() {
     getBlogPosts().then(blogPosts => {
