@@ -24,6 +24,8 @@ export function hideArticleDetail() {
     _isShowingArticleDetail = false;
 }
 
+// js/pages/blog.js
+
 export async function showArticleDetail(slug, title, fromPopState = false) {
     _isShowingArticleDetail = true;
     const listContainer = document.getElementById('blog-list-container');
@@ -39,45 +41,38 @@ export async function showArticleDetail(slug, title, fromPopState = false) {
 
     try {
         await loadScript(MARKED_JS_URL);
-
-        // markedのカスタマイズは行わない
-
+        
+        const renderer = new marked.Renderer();
+        const originalImageRenderer = renderer.image.bind(renderer);
+        renderer.image = (href, title, text) => {
+            if (typeof href === 'string' && !href.startsWith('http')) {
+                return `<img src="${href}" alt="${text}" ${title ? `title="${title}"` : ''} loading="lazy" decoding="async">`;
+            }
+            return originalImageRenderer(href, title, text);
+        };
+        marked.use({ renderer });
+        
         const res = await fetch(`/posts/${slug}.md`);
         if (!res.ok) throw new Error(`Markdownファイルが見つかりません: ${slug}.md`);
         const md = await res.text();
-
         const bodyContent = md.replace(/^---[\s\S]*?---/, '').trim();
-        // シンプルにHTMLへ変換
         const html = marked.parse(bodyContent);
 
         if (contentDiv) {
-            
-            // --- ここからが新しいアプローチ ---
-            
-            // 1. まずHTMLを一時的なコンテナに入れる
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = html;
-
-            // 2. コンテナ内の全てのimgタグを取得
             const images = tempDiv.querySelectorAll('img');
-
-            // 3. 各imgタグに属性を追加する
             images.forEach(img => {
-                // 外部リンク画像は除外
                 if (img.src && !img.src.startsWith('http')) {
                     img.setAttribute('loading', 'lazy');
                     img.setAttribute('decoding', 'async');
                 }
             });
-            
-            // 4. 属性が追加されたHTMLを最終的なコンテンツとして使う
             const optimizedHtml = tempDiv.innerHTML;
-
-            // --- ここまでが新しいアプローチ ---
             
-            const homeButton = `<a href="#top" onclick="event.preventDefault(); window.showPage('top', null);" style="color:#aaa; font-weight:bold; text-decoration:none; border:1px solid #aaa; padding: 8px 20px; border-radius:8px; transition: all 0.2s;"> « ホームに戻る </a>`;
+            // --- ▼▼▼ ここからボタン生成ロジックの修正 ▼▼▼ ---
 
-            let secondaryButton;
+            let homeButton, secondaryButton;
             const introMapping = {
                 'prediction-intro': { page: 'prediction', name: 'シーズン予測' },
                 'best11-intro': { page: 'best11', name: 'ベスト11メーカー' },
@@ -87,16 +82,26 @@ export async function showArticleDetail(slug, title, fromPopState = false) {
                 'bigclub-challenge': { page: 'top', name: 'ビッグクラブ指数' }
             };
 
-            if (introMapping[slug]) {
+            // 特定の記事(prediction-logic-explainer)の場合の分岐
+            if (slug === 'prediction-logic-explainer') {
+                homeButton = `<a href="#prediction" onclick="event.preventDefault(); window.showPage('prediction', null);" style="color:#aaa; font-weight:bold; text-decoration:none; border:1px solid #aaa; padding: 8px 20px; border-radius:8px; transition: all 0.2s;"> « シーズン予測に戻る </a>`;
+                secondaryButton = `<a href="#blog" onclick="event.preventDefault(); window.showPage('blog', null);" style="color:#299ad3; font-weight:bold; text-decoration:none; border:1px solid #299ad3; padding: 8px 20px; border-radius:8px; transition: all 0.2s;"> 記事一覧へ » </a>`;
+            } else if (introMapping[slug]) {
+                // 紹介記事の場合
                 const { page, name } = introMapping[slug];
-                secondaryButton = `<a href="#${page}" onclick="event.preventDefault(); window.showPage('${page}', null);" style="color:#299ad3; font-weight:bold; text-decoration:none; border:1px solid #299ad3; padding: 8px 20px; border-radius:8px; transition: all 0.2s;"> ${name}に戻る » </a>`;
+                homeButton = `<a href="#top" onclick="event.preventDefault(); window.showPage('top', null);" style="color:#aaa; font-weight:bold; text-decoration:none; border:1px solid #aaa; padding: 8px 20px; border-radius:8px; transition: all 0.2s;"> « ホームに戻る </a>`;
+                secondaryButton = `<a href="#${page}" onclick="event.preventDefault(); window.showPage('${page}', null);" style="color:#299ad3; font-weight:bold; text-decoration:none; border:1px solid #299ad3; padding: 8px 20px; border-radius:8px; transition: all 0.2s;"> ${name}へ » </a>`;
             } else {
+                // その他の通常記事の場合
+                homeButton = `<a href="#top" onclick="event.preventDefault(); window.showPage('top', null);" style="color:#aaa; font-weight:bold; text-decoration:none; border:1px solid #aaa; padding: 8px 20px; border-radius:8px; transition: all 0.2s;"> « ホームに戻る </a>`;
                 secondaryButton = `<a href="#blog" onclick="event.preventDefault(); window.showPage('blog', null);" style="color:#299ad3; font-weight:bold; text-decoration:none; border:1px solid #299ad3; padding: 8px 20px; border-radius:8px; transition: all 0.2s;"> 記事一覧に戻る » </a>`;
             }
 
             const buttonsHtml = ` <div style="text-align:center; margin-top:3em; display:flex; justify-content:center; gap:20px;"> ${homeButton} ${secondaryButton} </div> `;
+            
+            // --- ▲▲▲ ボタン生成ロジックの修正はここまで ▲▲▲ ---
 
-            contentDiv.innerHTML = `${optimizedHtml}${buttonsHtml}`; // ★ 使う変数を `html` から `optimizedHtml` に変更
+            contentDiv.innerHTML = `${optimizedHtml}${buttonsHtml}`;
             contentDiv.style.display = "block";
             
             window.showPage('blog', null, true); 
@@ -115,8 +120,7 @@ export async function showArticleDetail(slug, title, fromPopState = false) {
         if (contentDiv) contentDiv.innerHTML = `<p style="color: red;">記事の読み込みに失敗しました。</p>`;
         _isShowingArticleDetail = false;
     }
-}
-window.showArticleDetail = showArticleDetail;
+}window.showArticleDetail = showArticleDetail;
 
 function renderPagination() {
     getBlogPosts().then(blogPosts => {

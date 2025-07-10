@@ -66,6 +66,15 @@ async function showPage(id, btn, fromPopState = false) {
             const url = `#${id}`;
             history.pushState(state, '', url);
         }
+if (typeof gtag === 'function') {
+            const GA_TRACKING_ID = 'G-RZ7LMDQ2KM'; // あなたのトラッキングID
+            const pagePath = location.pathname + location.hash;
+            
+            gtag('config', GA_TRACKING_ID, {
+                'page_path': pagePath,
+                'page_title': document.title // 必要に応じて動的に変更も可能
+            });
+        }
 
         // === モジュールの動的読み込みと初期化 ===
         if (pageModules[id]) {
