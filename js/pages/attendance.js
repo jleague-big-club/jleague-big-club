@@ -1,7 +1,11 @@
+// js/pages/attendance.js
+
 import { getAttendanceData } from '../dataManager.js';
 import { clubAbbreviations } from '../config.js';
+import { loadScript } from '../uiHelpers.js';
 
 let attendanceChart = null;
+const CHART_JS_URL = 'https://cdn.jsdelivr.net/npm/chart.js';
 
 function renderAttendanceTable(dataToRender) {
     document.getElementById('attendance-chart-wrap').style.display = 'none';
@@ -49,13 +53,16 @@ function renderAttendanceTable(dataToRender) {
     });
 }
 
-function renderAttendanceChart(clubName) {
+async function renderAttendanceChart(clubName) {
     document.getElementById('attendance-output-container').style.display = 'none';
     const chartWrap = document.getElementById('attendance-chart-wrap');
     const canvas = document.getElementById('attendanceChart');
     chartWrap.style.display = 'block';
 
-    getAttendanceData().then(attendanceData => {
+    try {
+        await loadScript(CHART_JS_URL);
+
+        const attendanceData = await getAttendanceData();
         const clubHistory = attendanceData.filter(d => d.クラブ === clubName).sort((a, b) => a.年 - b.年);
         const labels = clubHistory.map(d => d.年);
         const colorMap = { 'J1': '#e94444', 'J2': '#29b6e6', 'J3': '#6cbf6b', 'JFL': '#f2a136', 'default': '#aaaaaa' };
@@ -98,7 +105,7 @@ function renderAttendanceChart(clubName) {
                 }
             }
         });
-
+        
         const footerContainer = document.getElementById('attendance-chart-footer');
         footerContainer.innerHTML = '';
         const bottomFlexContainer = document.createElement('div');
@@ -123,7 +130,11 @@ function renderAttendanceChart(clubName) {
         bottomFlexContainer.appendChild(customLegend);
         bottomFlexContainer.appendChild(backBtn);
         footerContainer.appendChild(bottomFlexContainer);
-    });
+
+    } catch (error) {
+        console.error('Chart.jsの読み込みまたはグラフの描画に失敗しました', error);
+        chartWrap.innerHTML = '<p style="color: red; text-align: center;">グラフの表示に失敗しました。時間をおいて再度お試しください。</p>';
+    }
 }
 window.renderAttendanceChart = renderAttendanceChart;
 

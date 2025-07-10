@@ -1,8 +1,12 @@
+// js/pages/blog.js
+
 import { getBlogPosts } from '../dataManager.js';
+import { loadScript } from '../uiHelpers.js';
 
 const articlesPerPage = 18;
 let currentPage = 1;
 let _isShowingArticleDetail = false;
+const MARKED_JS_URL = 'https://cdn.jsdelivr.net/npm/marked/marked.min.js';
 
 export function isShowingArticleDetail() {
     return _isShowingArticleDetail;
@@ -28,8 +32,14 @@ export async function showArticleDetail(slug, title, fromPopState = false) {
 
     if (listContainer) listContainer.style.display = 'none';
     if (paginationContainer) paginationContainer.style.display = 'none';
+    if(contentDiv) {
+        contentDiv.innerHTML = '<p>記事を読み込んでいます...</p>';
+        contentDiv.style.display = 'block';
+    }
 
     try {
+        await loadScript(MARKED_JS_URL);
+
         const res = await fetch(`/posts/${slug}.md`);
         if (!res.ok) throw new Error(`Markdownファイルが見つかりません: ${slug}.md`);
         const md = await res.text();
@@ -62,7 +72,6 @@ export async function showArticleDetail(slug, title, fromPopState = false) {
             contentDiv.innerHTML = `${html}${buttonsHtml}`;
             contentDiv.style.display = "block";
             
-            // This will be handled by the main showPage function now
             window.showPage('blog', null, true); 
             const pageTitle = document.querySelector('#page-title-blog h1');
             if (pageTitle) pageTitle.textContent = title;
@@ -76,12 +85,11 @@ export async function showArticleDetail(slug, title, fromPopState = false) {
         }
     } catch (err) {
         console.error("記事詳細の読み込みエラー:", err);
-        if (contentDiv) contentDiv.innerHTML = `記事の読み込みに失敗しました。`;
+        if (contentDiv) contentDiv.innerHTML = `<p style="color: red;">記事の読み込みに失敗しました。</p>`;
         _isShowingArticleDetail = false;
     }
 }
 window.showArticleDetail = showArticleDetail;
-
 
 function renderPagination() {
     getBlogPosts().then(blogPosts => {
@@ -150,15 +158,13 @@ export function showBlogList() {
 
 let blogInitialized = false;
 export function initializeBlog() {
-    if (blogInitialized) return;
+    if (blogInitialized) return Promise.resolve();
     return getBlogPosts().then(() => {
         blogInitialized = true;
     });
 }
 
 export default function initBlogPage() {
-    // This function is called when the blog page is shown.
-    // The logic to show either the list or detail is handled in main.js
     if (!isShowingArticleDetail()) {
         showBlogList();
     }

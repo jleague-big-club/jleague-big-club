@@ -1,3 +1,5 @@
+// js/uiHelpers.js
+
 let bannerAutoPlayInterval;
 
 export function toHalfWidth(str) {
@@ -315,4 +317,26 @@ function setupFooterButtonObserver() {
         { root: null, rootMargin: '0px', threshold: 0 }
     );
     observer.observe(footer);
+}
+
+/**
+ * スクリプトを動的に読み込み、Promiseを返すヘルパー関数。
+ * すでに読み込み済みの場合は何もしない。
+ * @param {string} src スクリプトのURL
+ * @returns {Promise<void>}
+ */
+export function loadScript(src) {
+    return new Promise((resolve, reject) => {
+        // すでにDOMに存在するかチェック
+        if (document.querySelector(`script[src="${src}"]`)) {
+            resolve();
+            return;
+        }
+        const script = document.createElement('script');
+        script.src = src;
+        script.async = true;
+        script.onload = () => resolve();
+        script.onerror = () => reject(new Error(`Script load error for ${src}`));
+        document.head.appendChild(script);
+    });
 }

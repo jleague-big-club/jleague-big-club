@@ -1,10 +1,14 @@
+// js/pages/best11.js
+
 import { getPlayerData } from '../dataManager.js';
 import { majorLeagues } from '../config.js';
+import { loadScript } from '../uiHelpers.js';
 
 let best11Formation = "343";
 let best11Selected = {};
 let best11Filter = { type: 'all', value: null };
 let nowSelectedPosKey = null;
+const HTML2CANVAS_URL = 'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
 
 const best11Positions = {
     "343": [{ key: "GK", label: "GK" }, { key: "CB1", label: "CB" }, { key: "CB2", label: "CB" }, { key: "CB3", label: "CB" }, { key: "MF1", label: "CMF" }, { key: "MF2", label: "CMF" }, { key: "MF3", label: "LMF" }, { key: "MF4", label: "RMF" }, { key: "MF5", label: "LWG" }, { key: "FW", label: "CF" }, { key: "MF6", label: "RWG" }],
@@ -52,7 +56,6 @@ window.setBest11Filter = (type, value, element) => {
         best11Filter = { type: 'all', value: null };
     }
     
-    // Update club select options
     const clubSelect = document.getElementById('club-filter-select');
     const playerData = getPlayerData();
     const originalOptions = [...new Map(playerData.map(p => [p['所属クラブ'], p['リーグ']])).entries()].filter(([club]) => club).sort();
@@ -124,7 +127,6 @@ function selectPosition(posKey, btn) {
     let players = sourceData.filter(p => {
         const playerPos = (p['ポジション'] || "").toUpperCase();
         if (playerPos === searchKey) return true;
-        // 柔軟なポジション検索
         if (searchKey === 'CB' && playerPos === 'DF') return true;
         if ((searchKey === 'MF' || searchKey === 'LMF' || searchKey === 'RMF' || searchKey === 'CMF' || searchKey === 'DMF') && playerPos === 'MF') return true;
         if ((searchKey === 'FW' || searchKey === 'LWG' || searchKey === 'RWG' || searchKey === 'CF') && playerPos === 'FW') return true;
@@ -245,13 +247,11 @@ function setFormation(form, btn) {
     document.querySelectorAll('.formation-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     
-    // Reset selections and filters
     best11Selected = {};
     best11Filter = { type: 'all', value: null };
     
-    initBest11Page(); // Re-initialize the page with the new formation
+    initBest11Page(); 
 
-    // Reset filter UI
     document.querySelectorAll('#best11-filters .filter-btn').forEach(b => b.classList.remove('active'));
     document.querySelector('#best11-filters .filter-btn').classList.add('active');
     const clubSelect = document.getElementById('club-filter-select');
@@ -273,50 +273,63 @@ function setupBest11EventListeners() {
 
     const copyBtn = document.getElementById("copy-best11-img-btn");
     if(copyBtn && !copyBtn.dataset.initialized) {
-        copyBtn.onclick = function() {
-            const postBtn = document.getElementById('post-to-x-btn');
-            const captureElem = document.getElementById('best11-capture-area');
-            const buttonsContainer = document.getElementById('capture-buttons');
-            const msgSpan = document.getElementById('copy-best11-img-msg');
-            
-            const selectedLabel = captureElem.querySelector('.best11-player-label.selected');
-            if (selectedLabel) selectedLabel.classList.remove('selected');
-            
+        copyBtn.onclick = async function () {
             this.disabled = true;
-            postBtn.disabled = true;
-            buttonsContainer.style.visibility = 'hidden';
-            msgSpan.textContent = '';
-            
-            html2canvas(captureElem, { backgroundColor: null, scale: 2, useCORS: true }).then(canvas => {
-                if (selectedLabel) selectedLabel.classList.add('selected');
+            const postBtn = document.getElementById('post-to-x-btn');
+            if (postBtn) postBtn.disabled = true;
 
-                canvas.toBlob(blob => {
-                    if (!blob) {
-                        msgSpan.textContent = 'エラー: 画像データの生成に失敗しました';
-                        return;
-                    }
-                    if (navigator.clipboard && navigator.clipboard.write) {
-                        navigator.clipboard.write([new ClipboardItem({ "image/png": blob })])
-                            .then(() => {
-                                msgSpan.textContent = 'コピーしました！';
-                                setTimeout(() => msgSpan.textContent = '', 3000);
-                            })
-                            .catch(err => {
-                                console.warn("クリップボードへのコピーに失敗しました:", err);
-                                downloadImage(canvas, "best11.png", msgSpan);
-                            });
-                    } else {
-                        downloadImage(canvas, "best11.png", msgSpan);
-                    }
-                }, 'image/png');
-            }).catch(err => {
-                console.error("画像キャプチャ中にエラー:", err);
-                msgSpan.textContent = 'エラー: 画像のキャプチャに失敗しました';
-            }).finally(() => {
+            const msgSpan = document.getElementById('copy-best11-img-msg');
+            if (msgSpan) msgSpan.textContent = '画像生成準備中...';
+
+            try {
+                await loadScript(HTML2CANVAS_URL);
+
+                const captureElem = document.getElementById('best11-capture-area');
+                const buttonsContainer = document.getElementById('capture-buttons');
+                const selectedLabel = captureElem.querySelector('.best11-player-label.selected');
+                
+                if (selectedLabel) selectedLabel.classList.remove('selected');
+                if (buttonsContainer) buttonsContainer.style.visibility = 'hidden';
+                if (msgSpan) msgSpan.textContent = '';
+                
+                html2canvas(captureElem, { backgroundColor: null, scale: 2, useCORS: true }).then(canvas => {
+                    if (selectedLabel) selectedLabel.classList.add('selected');
+
+                    canvas.toBlob(blob => {
+                        if (!blob) {
+                            if (msgSpan) msgSpan.textContent = 'エラー: 画像データの生成に失敗しました';
+                            return;
+                        }
+                        if (navigator.clipboard && navigator.clipboard.write) {
+                            navigator.clipboard.write([new ClipboardItem({ "image/png": blob })])
+                                .then(() => {
+                                    if (msgSpan) {
+                                        msgSpan.textContent = 'コピーしました！';
+                                        setTimeout(() => msgSpan.textContent = '', 3000);
+                                    }
+                                })
+                                .catch(err => {
+                                    console.warn("クリップボードへのコピーに失敗しました:", err);
+                                    downloadImage(canvas, "best11.png", msgSpan);
+                                });
+                        } else {
+                            downloadImage(canvas, "best11.png", msgSpan);
+                        }
+                    }, 'image/png');
+                }).catch(err => {
+                    console.error("画像キャプチャ中にエラー:", err);
+                    if (msgSpan) msgSpan.textContent = 'エラー: 画像のキャプチャに失敗しました';
+                }).finally(() => {
+                    if (buttonsContainer) buttonsContainer.style.visibility = 'visible';
+                });
+
+            } catch (error) {
+                console.error('html2canvasの読み込みに失敗しました', error);
+                if (msgSpan) msgSpan.textContent = 'エラー: 画像生成機能の準備に失敗';
+            } finally {
                 this.disabled = false;
-                postBtn.disabled = false;
-                buttonsContainer.style.visibility = 'visible';
-            });
+                if (postBtn) postBtn.disabled = false;
+            }
         };
         copyBtn.dataset.initialized = 'true';
     }
@@ -329,11 +342,13 @@ function setupBest11EventListeners() {
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-            msgSpan.textContent = 'ダウンロードしました！';
-            setTimeout(() => msgSpan.textContent = '', 5000);
+            if (msgSpan) {
+              msgSpan.textContent = 'ダウンロードしました！';
+              setTimeout(() => msgSpan.textContent = '', 5000);
+            }
         } catch (e) {
             console.error("画像のダウンロードに失敗しました:", e);
-            msgSpan.textContent = 'エラー: 画像のダウンロードに失敗しました';
+            if(msgSpan) msgSpan.textContent = 'エラー: 画像のダウンロードに失敗しました';
         }
     }
 }
@@ -346,7 +361,6 @@ export default function initBest11Page() {
     renderCourtPlayers();
     setupBest11EventListeners();
     
-    // Ensure copy button text is correct on load
     const copyButton = document.getElementById('copy-best11-img-btn');
     if (copyButton) {
         if (window.innerWidth <= 768) {

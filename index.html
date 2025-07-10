@@ -15,11 +15,6 @@
 
   gtag('config', 'G-RZ7LMDQ2KM');
 </script>
-
-  <!-- 外部ライブラリの読み込み（defer属性で遅延読み込み） -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
   
   <!-- ★★★ ここでCSSファイルを読み込む ★★★ -->
   <link rel="stylesheet" href="style.min.css">
@@ -93,8 +88,8 @@
   <!-- 1番目のバナー：ビッグクラブの解説記事 -->
   <div class="carousel-item">
     <a href="javascript:void(0)" onclick="showArticleDetail('bigclub-challenge', 'データで見るJリーグ・ビッグクラブの夜明け')">
-      <img src="/img/banner1.webp" alt="ビッグクラブの挑戦"
- width="380" height="100" fetchpriority="high" decoding="async">
+       <img src="/img/banner1.webp" alt="ビッグクラブの挑戦"
+       width="380" height="100" fetchpriority="high" decoding="async" loading="eager">
       <div class="banner-text">
         データで見るJリーグ・ビッグクラブの夜明け
       </div>
@@ -104,7 +99,7 @@
   <div class="carousel-item">
     <a href="javascript:void(0)" onclick="showArticleDetail('prediction-intro', 'シーズン予測であなたの推しクラブの未来を見よう！')">
       <img src="/img/banner2.webp" alt="シーズン予測ページ紹介"
- width="380" height="100" fetchpriority="high" decoding="async">
+width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
       <div class="banner-text">
         シーズン予測で推しクラブの未来を見よう！
       </div>
@@ -114,7 +109,7 @@
   <div class="carousel-item">
     <a href="javascript:void(0)" onclick="showArticleDetail('best11-intro', '君だけの最強イレブンを作ろう！')">
        <img src="/img/banner3.webp" alt="ベスト11メーカー"
- width="380" height="100" fetchpriority="high" decoding="async">
+width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
       <div class="banner-text">
         君だけの最強イレブンを作ろう！
       </div>
@@ -124,7 +119,7 @@
   <div class="carousel-item">
     <a href="javascript:void(0)" onclick="showArticleDetail('simulation-intro', 'もしも…を試せるビッグクラブシミュレーター')">
       <img src="/img/banner4.webp" alt="ビッグクラブシミュレーター"
- width="380" height="100" fetchpriority="high" decoding="async">
+ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
       <div class="banner-text">
         ビッグクラブシミュレーターを使ってみよう！
       </div>
@@ -134,7 +129,7 @@
   <div class="carousel-item">
     <a href="javascript:void(0)" onclick="showArticleDetail('attendance-intro', 'Jリーグで最も熱いスタジアムはどこ！？')">
       <img src="/img/banner5.webp" alt="平均観客数"
- width="380" height="100" fetchpriority="high" decoding="async">
+width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
       <div class="banner-text">
         Jリーグで最も熱いスタジアムはどこだ？
       </div>
@@ -144,7 +139,7 @@
   <div class="carousel-item">
     <a href="javascript:void(0)" onclick="showArticleDetail('europe-intro', '世界で戦うサムライたちをチェック！')">
       <img src="/img/banner6.webp" alt="欧州の日本人選手"
- width="380" height="100" fetchpriority="high" decoding="async">
+width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
       <div class="banner-text">
         世界で戦うサムライたちをチェック
       </div>
