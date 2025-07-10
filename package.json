@@ -1,0 +1,28 @@
+{
+  "name": "jleague-big-club",
+  "version": "1.0.0",
+  "description": "\"# jleague-big-club\"",
+  "main": "admin.js",
+"scripts": {
+  "test": "echo \"Error: no test specified\" && exit 1",
+  "img-to-webp": "imagemin img/**/*.{jpg,png,jpeg} --out-dir=img --plugin=webp",
+  "posts-to-webp": "imagemin posts/img/**/*.{jpg,png,jpeg} --out-dir=posts/img --plugin=webp",
+  "to-webp": "npm run img-to-webp && npm run posts-to-webp"
+},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jleague-big-club/jleague-big-club.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jleague-big-club/jleague-big-club/issues"
+  },
+  "homepage": "https://github.com/jleague-big-club/jleague-big-club#readme",
+  "devDependencies": {
+    "imagemin": "^9.0.1",
+    "imagemin-cli": "^8.0.0",
+    "imagemin-webp": "^8.0.0"
+  }
+}
