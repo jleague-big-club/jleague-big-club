@@ -127,8 +127,8 @@ function renderArticleList(page) {
         currentPosts.forEach(post => {
             const card = document.createElement('div');
             card.className = 'blog-card';
-            card.innerHTML = `
-                <img src="/${post.thumbnail}" alt="${post.title}">
+             card.innerHTML = `
+                <img src="/${post.thumbnail}" alt="${post.title}" loading="lazy" decoding="async" width="300" height="160">
                 <div class="blog-card-content">
                     <div class="blog-card-title">${post.title}</div>
                     <div class="blog-card-date">${post.date}</div>
