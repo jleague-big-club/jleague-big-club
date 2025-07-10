@@ -1,4 +1,6 @@
-// === modules/history.js (確定版) ===
+import { getClubData } from '../dataManager.js';
+import { toHalfWidth } from '../uiHelpers.js';
+import { clubAbbreviations } from '../config.js';
 
 function renderHistory(clubs) {
     const historyDiv = document.getElementById("jleague-history");
@@ -12,13 +14,21 @@ function renderHistory(clubs) {
         th.textContent = h;
         hisHeader.appendChild(th);
     });
+
     const hisTbody = hisTable.createTBody();
     const isMobile = window.innerWidth <= 768;
+
     clubs.forEach(club => {
         const tr = hisTbody.insertRow();
         let clubDisplayName = club.name;
-        if (isMobile && window.clubAbbreviations[club.name]) {
-            clubDisplayName = window.clubAbbreviations[club.name];
+        if (isMobile) {
+            const normalizedClubName = toHalfWidth(club.name);
+            for (const key in clubAbbreviations) {
+                if (toHalfWidth(key) === normalizedClubName) {
+                    clubDisplayName = clubAbbreviations[key];
+                    break;
+                }
+            }
         }
         [clubDisplayName, club.l, club.m, club.o].forEach(val => {
             const td = document.createElement("td");
@@ -29,9 +39,10 @@ function renderHistory(clubs) {
     historyDiv.appendChild(hisTable);
 }
 
-// ★★★ この initialize 関数が重要 ★★★
-export function initialize() {
-    if (window.clubData && window.clubData.length > 0) {
-        renderHistory(window.clubData);
+
+export default function initHistoryPage() {
+    const clubData = getClubData();
+    if (clubData.length > 0) {
+        renderHistory(clubData);
     }
 }
