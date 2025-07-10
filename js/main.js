@@ -1,5 +1,7 @@
+// js/main.js
+
 import { setupEventListeners, handleInitialURL, updateNavActiveState, stopBannerAutoPlay, setupCarousel } from './uiHelpers.js';
-import { loadInitialData, getClubData } from './dataManager.js';
+import { loadInitialData } from './dataManager.js';
 import { initializeBlog } from './pages/blog.js';
 
 // 各ページに対応するモジュールをマッピング
@@ -20,6 +22,13 @@ const pageModules = {
 
 // 読み込み済みのモジュールをキャッシュ
 const loadedModules = {};
+
+// モジュールをプリロードする関数
+function preloadModule(pageId) {
+    if (pageModules[pageId] && !loadedModules[pageId]) {
+        import(pageModules[pageId]);
+    }
+}
 
 // === ページ表示ロジック ===
 async function showPage(id, btn, fromPopState = false) {
@@ -82,7 +91,6 @@ async function showPage(id, btn, fromPopState = false) {
              }
         }
 
-
     } finally {
         const navLinks = document.getElementById('nav-links');
         if (navLinks && navLinks.classList.contains('open')) {
@@ -107,5 +115,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 });
 
-// グローバルスコープでshowPageをアクセス可能にする
+// === グローバルスコープでアクセス可能にする関数群 ===
 window.showPage = showPage;
+window.preloadModule = preloadModule;

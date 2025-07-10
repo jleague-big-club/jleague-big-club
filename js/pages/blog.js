@@ -24,8 +24,6 @@ export function hideArticleDetail() {
     _isShowingArticleDetail = false;
 }
 
-// js/pages/blog.js
-
 export async function showArticleDetail(slug, title, fromPopState = false) {
     _isShowingArticleDetail = true;
     const listContainer = document.getElementById('blog-list-container');
@@ -42,42 +40,41 @@ export async function showArticleDetail(slug, title, fromPopState = false) {
     try {
         await loadScript(MARKED_JS_URL);
 
-        // --- ここからが追加/修正箇所 ---
-
-        // 1. 新しいRendererオブジェクトを作成
-        const renderer = new marked.Renderer();
-        const originalImageRenderer = renderer.image.bind(renderer);
-
-        // 2. 画像(image)のレンダリングルールを上書き
-        renderer.image = (href, title, text) => {
-            // 内部リンク（自分のサイトの画像）の場合のみ遅延読み込みを適用
-            if (href && !href.startsWith('http')) {
-                return `
-                    <img src="${href}" 
-                         alt="${text}" 
-                         ${title ? `title="${title}"` : ''} 
-                         loading="lazy" 
-                         decoding="async">
-                `;
-            }
-            // 外部リンク画像の場合は、元のmarkedの動作に任せる
-            return originalImageRenderer(href, title, text);
-        };
-
-        // 3. markedにカスタムRendererを設定
-        marked.use({ renderer });
-        
-        // --- ここまでが追加/修正箇所 ---
-
+        // markedのカスタマイズは行わない
 
         const res = await fetch(`/posts/${slug}.md`);
         if (!res.ok) throw new Error(`Markdownファイルが見つかりません: ${slug}.md`);
         const md = await res.text();
 
         const bodyContent = md.replace(/^---[\s\S]*?---/, '').trim();
+        // シンプルにHTMLへ変換
         const html = marked.parse(bodyContent);
 
         if (contentDiv) {
+            
+            // --- ここからが新しいアプローチ ---
+            
+            // 1. まずHTMLを一時的なコンテナに入れる
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = html;
+
+            // 2. コンテナ内の全てのimgタグを取得
+            const images = tempDiv.querySelectorAll('img');
+
+            // 3. 各imgタグに属性を追加する
+            images.forEach(img => {
+                // 外部リンク画像は除外
+                if (img.src && !img.src.startsWith('http')) {
+                    img.setAttribute('loading', 'lazy');
+                    img.setAttribute('decoding', 'async');
+                }
+            });
+            
+            // 4. 属性が追加されたHTMLを最終的なコンテンツとして使う
+            const optimizedHtml = tempDiv.innerHTML;
+
+            // --- ここまでが新しいアプローチ ---
+            
             const homeButton = `<a href="#top" onclick="event.preventDefault(); window.showPage('top', null);" style="color:#aaa; font-weight:bold; text-decoration:none; border:1px solid #aaa; padding: 8px 20px; border-radius:8px; transition: all 0.2s;"> « ホームに戻る </a>`;
 
             let secondaryButton;
@@ -99,7 +96,7 @@ export async function showArticleDetail(slug, title, fromPopState = false) {
 
             const buttonsHtml = ` <div style="text-align:center; margin-top:3em; display:flex; justify-content:center; gap:20px;"> ${homeButton} ${secondaryButton} </div> `;
 
-            contentDiv.innerHTML = `${html}${buttonsHtml}`;
+            contentDiv.innerHTML = `${optimizedHtml}${buttonsHtml}`; // ★ 使う変数を `html` から `optimizedHtml` に変更
             contentDiv.style.display = "block";
             
             window.showPage('blog', null, true); 
@@ -118,7 +115,8 @@ export async function showArticleDetail(slug, title, fromPopState = false) {
         if (contentDiv) contentDiv.innerHTML = `<p style="color: red;">記事の読み込みに失敗しました。</p>`;
         _isShowingArticleDetail = false;
     }
-}window.showArticleDetail = showArticleDetail;
+}
+window.showArticleDetail = showArticleDetail;
 
 function renderPagination() {
     getBlogPosts().then(blogPosts => {

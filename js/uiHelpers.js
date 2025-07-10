@@ -53,7 +53,7 @@ export function startBannerAutoPlay(interval, nextFunc) {
 }
 
 export function setupCarousel(carouselId, interval) {
-    if (bannerAutoPlayInterval) return; // すでにセットアップ済みの場合は何もしない
+    if (bannerAutoPlayInterval) return;
     let carousel = document.getElementById(carouselId);
     if (!carousel) return;
 
@@ -164,8 +164,7 @@ export function setupEventListeners(showPage) {
         hamburgerBtn.addEventListener('click', toggleMenu);
         menuOverlay.addEventListener('click', toggleMenu);
     }
-    
-    // ポップアップの表示/非表示ロジック
+
     const scoreBtn = document.getElementById("score-method-btn");
     const scorePop = document.getElementById("score-method-pop");
     const detailLink = document.getElementById("score-detail-link");
@@ -224,10 +223,8 @@ export function setupEventListeners(showPage) {
         }
     }
     
-    // フッターボタンの表示制御
     setupFooterButtonObserver();
     
-    // ウィンドウリサイズ時の処理
     window.addEventListener('resize', () => {
         const best11CopyBtn = document.getElementById('copy-best11-img-btn');
         if (best11CopyBtn) {
@@ -239,12 +236,10 @@ export function setupEventListeners(showPage) {
         }
     });
     
-    // popstateイベント（ブラウザの戻る/進む）
     window.addEventListener('popstate', (event) => {
         if (event.state) {
             const { page, slug, title } = event.state;
             if (page === 'blog' && slug) {
-                // blog.js内の関数を呼び出す
                 import('./pages/blog.js').then(module => {
                     module.showArticleDetail(slug, title, true);
                 });
@@ -319,15 +314,8 @@ function setupFooterButtonObserver() {
     observer.observe(footer);
 }
 
-/**
- * スクリプトを動的に読み込み、Promiseを返すヘルパー関数。
- * すでに読み込み済みの場合は何もしない。
- * @param {string} src スクリプトのURL
- * @returns {Promise<void>}
- */
 export function loadScript(src) {
     return new Promise((resolve, reject) => {
-        // すでにDOMに存在するかチェック
         if (document.querySelector(`script[src="${src}"]`)) {
             resolve();
             return;
@@ -340,3 +328,18 @@ export function loadScript(src) {
         document.head.appendChild(script);
     });
 }
+
+function toggleSubMenu(btn, event) {
+    event.preventDefault();
+    event.stopPropagation();
+    const parentDropdown = btn.parentElement;
+    document.querySelectorAll('.nav-links .nav-dropdown.menu-open').forEach(openMenu => {
+        if (openMenu !== parentDropdown) {
+            openMenu.classList.remove('menu-open');
+        }
+    });
+    parentDropdown.classList.toggle('menu-open');
+}
+
+// === グローバルスコープでアクセス可能にする関数 ===
+window.toggleSubMenu = toggleSubMenu;
