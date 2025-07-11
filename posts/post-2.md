@@ -6,7 +6,9 @@
 
 本稿では、リーグの大多数を占める「中堅クラブ」と「ローカルクラブ」に焦点を当てる。両者の間には、どのような差が存在するのだろうか。
 
-![ビッグクラブスコアTOP60](posts/img/bigclubtop60.webp)
+<div class="chart-container">
+  <img src="posts/img/bigclubtop60.webp" alt="ビッグクラブスコアTOP60" loading="lazy" decoding="async">
+</div>
 
 ***
 

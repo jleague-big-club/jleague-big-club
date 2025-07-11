@@ -72,7 +72,7 @@ if (typeof gtag === 'function') {
             
             gtag('config', GA_TRACKING_ID, {
                 'page_path': pagePath,
-                'page_title': document.title // 必要に応じて動的に変更も可能
+                'page_title': document.title
             });
         }
 
@@ -90,12 +90,14 @@ if (typeof gtag === 'function') {
         // ブログページの特殊処理
         if (id === 'blog') {
             const blogModule = loadedModules['blog'];
-            if(blogModule && !blogModule.isShowingArticleDetail()){
+            if (blogModule) {
+                 // isShowingArticleDetailのチェックを外し、常に一覧表示処理を試みる
+                 // 内部で詳細表示中かどうかの判定はshowBlogListに任せる
                 blogModule.showBlogList();
             }
         } else {
              const blogModule = loadedModules['blog'];
-             if(blogModule) {
+             if(blogModule && blogModule.isShowingArticleDetail()) {
                  blogModule.hideArticleDetail();
              }
         }
@@ -114,9 +116,9 @@ if (typeof gtag === 'function') {
 document.addEventListener("DOMContentLoaded", async () => {
     try {
         await loadInitialData();
-        await initializeBlog(); // ブログ記事リストは最初に読み込んでおく
+        await initializeBlog(); 
         
-        setupEventListeners(showPage); // イベントリスナーにshowPage関数を渡す
+        setupEventListeners(showPage);
         handleInitialURL(showPage);
     } catch (err) {
         console.error("サイトの初期化に失敗しました:", err);
@@ -124,6 +126,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 });
 
+
 // === グローバルスコープでアクセス可能にする関数群 ===
 window.showPage = showPage;
 window.preloadModule = preloadModule;
+
+// blog.jsからshowArticleDetailをインポートしてグローバルに公開
+import { showArticleDetail } from './pages/blog.js';
+window.showArticleDetail = showArticleDetail;

@@ -1,3 +1,5 @@
+// js/pages/rankings.js
+
 import { getRankingData } from '../dataManager.js';
 import { toHalfWidth } from '../uiHelpers.js';
 import { clubAbbreviations } from '../config.js';
@@ -17,27 +19,30 @@ function showRankingTable(league) {
             return;
         }
 
-        const isMobile = window.innerWidth <= 768;
         let dateHtml = '';
         if (updated) {
             const updatedDate = new Date(updated);
             const formattedDate = updatedDate.toLocaleString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+            // スタイルをCSSに移譲し、クラス名を付与する
             dateHtml = `<p class="update-date-note">更新日時: ${formattedDate}</p>`;
         }
 
         const headers = Object.keys(data[0]);
-        const displayHeaders = isMobile ? headers.filter(h => h !== '勝点') : headers;
 
-        let tableHTML = `<table><thead><tr>`;
-        displayHeaders.forEach(h => {
+        // tableHTMLの開始部分に横スクロール用のラッパーdivを追加
+        let tableHTML = `<div class="table-scroll-wrapper"><table><thead><tr>`;
+
+        headers.forEach(h => {
             tableHTML += `<th>${h}</th>`;
         });
         tableHTML += `</tr></thead><tbody>`;
 
         data.forEach(row => {
             tableHTML += `<tr>`;
-            displayHeaders.forEach(h => {
+            headers.forEach(h => {
                 let cellValue = row[h] || '';
+                // スマホ表示のときだけチーム名を短縮する
+                const isMobile = window.innerWidth <= 768;
                 if (h === 'チーム名' && isMobile) {
                     const normalizedTeamName = toHalfWidth(cellValue);
                     let abbreviatedName = cellValue;
@@ -53,7 +58,8 @@ function showRankingTable(league) {
             });
             tableHTML += `</tr>`;
         });
-        tableHTML += `</tbody></table>`;
+        // tableHTMLの終了部分にラッパーdivの閉じタグを追加
+        tableHTML += `</tbody></table></div>`;
         container.innerHTML = dateHtml + tableHTML;
     });
 }

@@ -2,7 +2,9 @@
 
 この記事では、各クラブの記録更新の背景にある要因を分析し、Jリーグ全体のポジティブな潮流を考察する。
 
-![13クラブの平均観客数と過去最高記録の比較](posts/img/attendancerecord2025.webp)
+<div class="chart-container">
+  <img src="posts/img/attendancerecord2025.webp" alt="13クラブの平均観客数と過去最高記録の比較" loading="lazy" decoding="async">
+</div>
 
 ***
 

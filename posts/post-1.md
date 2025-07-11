@@ -12,7 +12,9 @@
 
 ## ビッグクラブ候補群と目される9クラブ
 
-<img src="posts/img/bigclubtop20.webp" alt="ビッグクラブスコアTOP20" loading="lazy" decoding="async" style="display: block; margin: 25px auto; max-width: 100%; border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,0.15);">
+<div class="chart-container">
+  <img src="posts/img/bigclubtop20.webp" alt="ビッグクラブスコアTOP20" loading="lazy" decoding="async">
+</div>
 
 上記のスコアは、本稿で用いる独自の指標「ビッグクラブスコア」である。これは、以下の4つの指標を基に算出した。全ての数値が高いほど、スコアも高くなる設計となっている。
 
@@ -40,7 +42,9 @@
 ![ビッグクラブスコアTOP10](posts/img/kashima2025.webp)
 
 ### 浦和・鹿島を追う第2集団：ポテンシャルを秘めた7クラブ
-![鹿島アントラーズの平均観客数推移](posts/img/bigclubtop10.webp)
+<div class="chart-container">
+  <img src="posts/img/bigclubtop10.webp" alt="ビッグクラブスコアTOP10" loading="lazy" decoding="async">
+</div>
 スコア3位から9位のクラブ群は、4指標のいずれも国内トップクラスであり、巨大都市圏に本拠地を構えるという共通点を持つ。ビッグクラブへと飛躍するポテンシャルを十分に兼ね備えたクラブ群だ。
 
 中でも特筆すべきは**川崎フロンターレ**である。過去10年のJ1平均順位3.3位はリーグ1位であり、2024-25シーズンのACLEでは強豪を次々と破り準優勝を果たすなど、その実力はアジアでも屈指のレベルにある。このACLE準優勝による賞金や、近年活発な選手移籍による多額の移籍金収入により、次期決算での営業収益は100億円の大台を突破する可能性が高いと見られている。さらに、現在のホームスタジアムのサッカー専用化と大幅な客席増設計画も進行しており、7クラブの中では最もビッグクラブに近い存在と言えるだろう。

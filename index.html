@@ -96,7 +96,7 @@
   <div class="carousel-track">
   <!-- 1番目のバナー：ビッグクラブの解説記事 -->
   <div class="carousel-item">
-   <a href="#blog/bigclub-challenge" onclick="event.preventDefault(); showArticleDetail('bigclub-challenge', 'データで見るJリーグ・ビッグクラブの夜明け')">
+   <a href="#blog/bigclub-challenge">
        <img src="/img/banner1.webp" alt="ビッグクラブの挑戦"
        width="380" height="100" fetchpriority="high" decoding="async" loading="eager">
       <div class="banner-text">
@@ -106,7 +106,7 @@
   </div>
   <!-- 2番目のバナー：シーズン予測ページの紹介 -->
   <div class="carousel-item">
-   <a href="#blog/prediction-intro" onclick="event.preventDefault(); showArticleDetail('prediction-intro', 'シーズン予測であなたの推しクラブの未来を見よう！')">
+   <a href="#blog/prediction-intro">
       <img src="/img/banner2.webp" alt="シーズン予測ページ紹介"
 width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
       <div class="banner-text">
@@ -116,7 +116,7 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
   </div>
   <!-- 3番目のバナー：ベスト11メーカー -->
   <div class="carousel-item">
-   <a href="#blog/best11-intro" onclick="event.preventDefault(); showArticleDetail('best11-intro', '君だけの最強イレブンを作ろう！')">
+   <a href="#blog/best11-intro">
        <img src="/img/banner3.webp" alt="ベスト11メーカー"
 width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
       <div class="banner-text">
@@ -126,7 +126,7 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
   </div>
   <!-- 4番目のバナー：ビッグクラブシミュレーター -->
   <div class="carousel-item">
-  <a href="#blog/simulation-intro" onclick="event.preventDefault(); showArticleDetail('simulation-intro', 'もしも…を試せるビッグクラブシミュレーター')">
+  <a href="#blog/simulation-intro">
       <img src="/img/banner4.webp" alt="ビッグクラブシミュレーター"
  width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
       <div class="banner-text">
@@ -136,7 +136,7 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
   </div>
   <!-- 5番目のバナー：観客動員ランキング -->
   <div class="carousel-item">
-   <a href="#blog/attendance-intro" onclick="event.preventDefault(); showArticleDetail('attendance-intro', 'Jリーグで最も熱いスタジアムはどこ！？')">
+   <a href="#blog/attendance-intro">
       <img src="/img/banner5.webp" alt="平均観客数"
 width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
       <div class="banner-text">
@@ -146,7 +146,7 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
   </div>
   <!-- 6番目のバナー：5大リーグ日本人選手 -->
   <div class="carousel-item">
-   <a href="#blog/europe-intro" onclick="event.preventDefault(); showArticleDetail('europe-intro', '世界で戦うサムライたちをチェック！')">
+   <a href="#blog/europe-intro">
       <img src="/img/banner6.webp" alt="欧州の日本人選手"
 width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
       <div class="banner-text">
@@ -159,8 +159,7 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
   <button class="carousel-btn prev" id="carousel-prev-btn">❮</button>
   <button class="carousel-btn next" id="carousel-next-btn">❯</button>
 
-</div>
-<div id="page-title-top" class="page-title-row" style="display:flex;">
+</div><div id="page-title-top" class="page-title-row" style="display:flex;">
     <h1>
       Jリーグ ビッグクラブ指数
       <span class="score-calc-btn" tabindex="0">ビッグクラブ指数とは
@@ -269,10 +268,12 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
                 残留以上の順位で終わる回数が多いチームです。</li>
         </ul>
  <div style="text-align: center; margin-top: 25px; padding-top: 15px; border-top: 1px solid #4a5a7f;">
+        <!-- ▼▼▼【ここから修正】onclick属性をシンプルにします ▼▼▼ -->
         <a href="#blog/prediction-logic-explainer"
-   onclick="event.preventDefault(); document.getElementById('prediction-help-pop').style.display='none'; showArticleDetail('prediction-logic-explainer', 'なぜ順位と予測が違う？ シミュレーションの裏側を解説');">
+   onclick="document.getElementById('prediction-help-pop').style.display='none';">
     さらに詳しく (なぜ順位と予測が違う？)
 </a>
+        <!-- ▲▲▲【ここまで修正】▲▲▲ -->
     </div>
     </div>
   

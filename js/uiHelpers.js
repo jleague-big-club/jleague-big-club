@@ -1,4 +1,4 @@
-// js/uiHelpers.js (最終修正版)
+// js/uiHelpers.js
 
 let bannerAutoPlayInterval;
 
@@ -10,49 +10,39 @@ export function toHalfWidth(str) {
 }
 
 export function updateNavActiveState(id, btn) {
-    // 最初にすべてのactiveクラスを削除
-    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    document.querySelectorAll('.nav-links a, .nav-links button').forEach(el => el.classList.remove('active'));
 
-    let targetBtn = btn;
-    if (!targetBtn) {
-        // ボタンが指定されていない場合、ページIDから対応するリンクを探す
-        const pageToBtnMap = {
-            'top': 'a[href="#top"]',
+    let targetEl;
+    if (btn) {
+        targetEl = btn;
+    } else {
+        const pageToSelectorMap = {
+            'top': '#nav-analysis-btn',
             'metrics': 'a[href="#metrics"]',
             'attendance': 'a[href="#attendance"]',
             'history': 'a[href="#history"]',
             'introduce': 'a[href="#introduce"]',
-            'rankings': 'a[href="#rankings"]',
+            'rankings': '#nav-rankings-btn',
             'prediction': 'a[href="#prediction"]',
-            'simulation': 'a[href="#simulation"]',
+            'simulation': '#nav-simulation-btn',
             'best11': 'a[href="#best11"]',
-            'europe': 'a[href="#europe"]',
+            'europe': '#nav-europe-btn',
             'europe-top20': 'a[href="#europe-top20"]',
-            'blog': '.nav-links > a[href="#blog"]',
+            'blog': 'a[href="#blog"]',
         };
-        // マップに存在するIDのみ処理
-        if (pageToBtnMap[id]) {
-            // 複数の候補がある場合も考慮し、最初に見つかったものを対象とする
-            targetBtn = document.querySelector(pageToBtnMap[id]);
+        // blog/slug のような形式にも対応
+        const baseId = id.split('/')[0];
+        if (pageToSelectorMap[baseId]) {
+            targetEl = document.querySelector(pageToSelectorMap[baseId]);
         }
     }
 
-    // targetBtnが見つかった場合のみ処理を実行
-    if (targetBtn) {
-        targetBtn.classList.add('active');
-        const parentDropdown = targetBtn.closest('.nav-dropdown');
+    if (targetEl) {
+        targetEl.classList.add('active');
+        const parentDropdown = targetEl.closest('.nav-dropdown');
         if (parentDropdown) {
-            // 親のドロップダウンのトリガーとなるリンクにもactiveクラスを付ける
             const parentTrigger = parentDropdown.querySelector('a');
-            if (parentTrigger) {
-                parentTrigger.classList.add('active');
-            }
-        }
-    } else if (id === 'top') {
-        // トップページの場合はJリーグ分析をアクティブにする
-        const analysisBtn = document.getElementById('nav-analysis-btn');
-        if (analysisBtn) {
-            analysisBtn.classList.add('active');
+            if(parentTrigger) parentTrigger.classList.add('active');
         }
     }
 }
@@ -143,6 +133,21 @@ export function setupCarousel(carouselId, interval) {
         }
         setTimeout(() => { isAnimating = false; }, cooldownTime);
     }
+    
+    // カルーセル内のすべてのリンクに対して、クリックイベントを強制的に再設定する
+    const links = track.querySelectorAll('a');
+    links.forEach(link => {
+        link.removeAttribute('onclick'); // 既存のonclick属性を削除
+        
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const href = this.getAttribute('href');
+            if (href) {
+                window.location.hash = href;
+            }
+        }, true); // イベントを先にキャッチする
+    });
 
     nextBtn.addEventListener('click', () => {
         stopBannerAutoPlay();
@@ -181,6 +186,27 @@ export function setupEventListeners(showPage) {
         menuOverlay.addEventListener('click', toggleMenu);
     }
 
+    // ナビゲーションリンクのクリックイベントを一元管理
+    document.querySelectorAll('#nav-links a, #mobile-header a').forEach(link => {
+        // toggleSubMenuを呼び出すリンクは除外
+        if (!link.hasAttribute('onmouseover') && link.getAttribute('onclick') !== "event.preventDefault(); toggleSubMenu(this, event);") {
+            link.addEventListener('click', (event) => {
+                event.preventDefault();
+                const href = link.getAttribute('href');
+                if(href) {
+                    window.location.hash = href;
+                }
+
+                // スマホメニューが開いていれば閉じる
+                if (navLinks && navLinks.classList.contains('open')) {
+                    navLinks.classList.remove('open');
+                    menuOverlay.classList.remove('open');
+                }
+            });
+        }
+    });
+
+
     const scoreBtn = document.getElementById("score-method-btn");
     const scorePop = document.getElementById("score-method-pop");
     const detailLink = document.getElementById("score-detail-link");
@@ -206,13 +232,13 @@ export function setupEventListeners(showPage) {
         if (board && board.style.display === "block" && !board.contains(e.target) && !e.target.matches("td[onclick^='showClubStatus']")) {
             board.style.display = "none";
         }
-        if (scorePop && scorePop.classList.contains('popup-visible') && !scorePop.contains(e.target)) {
+        if (scorePop && scorePop.classList.contains('popup-visible') && !scorePop.contains(e.target) && !scoreBtn.contains(e.target)) {
             scorePop.classList.remove('popup-visible');
         }
         if (detailPop && detailPop.classList.contains('popup-visible') && !detailPop.contains(e.target) && !detailLink.contains(e.target)) {
             detailPop.classList.remove('popup-visible');
         }
-         const helpPop = document.getElementById('prediction-help-pop');
+        const helpPop = document.getElementById('prediction-help-pop');
         const helpBtn = document.getElementById('prediction-help-btn');
         if (helpPop && helpPop.style.display === 'block' && (!helpBtn || !helpBtn.contains(e.target)) && !helpPop.contains(e.target)) {
             helpPop.style.display = 'none';
@@ -251,54 +277,40 @@ export function setupEventListeners(showPage) {
             }
         }
     });
-    
-    window.addEventListener('popstate', (event) => {
-        if (event.state) {
-            const { page, slug, title } = event.state;
-            if (page === 'blog' && slug) {
-                import('./pages/blog.js').then(module => {
-                    module.showArticleDetail(slug, title, true);
-                });
-            } else {
-                showPage(page, null, true);
-            }
-        } else {
-            showPage('top', null, true);
-        }
-    });
 }
 
 
+// ▼▼▼【ここから修正】▼▼▼
 export function handleInitialURL(showPage) {
-    const hash = location.hash.substring(1);
-    if (hash) {
-        if (hash.startsWith('blog/')) {
-            const slug = hash.replace('blog/', '');
+    const hash = location.hash;
+
+    if (hash.startsWith('#blog/')) {
+        const slug = hash.substring('#blog/'.length);
+        
+        // 1. 先に 'blog' ページを表示状態にする
+        showPage('blog', null, true);
+
+        // 2. slugに基づいて記事詳細の表示を試みる
+        //    setTimeoutを使い、showPageの描画処理と競合しないようにする
+        setTimeout(() => {
             import('./dataManager.js').then(dataManager => {
                 dataManager.getBlogPosts().then(posts => {
                     const post = posts.find(p => p.slug === slug);
-                    if (post) {
-                        import('./pages/blog.js').then(blogModule => {
-                            blogModule.showArticleDetail(post.slug, post.title);
-                        });
-                    } else {
-                        showPage('top');
-                    }
+                    // index.jsonに記事があればそのタイトルを、なければslugから仮のタイトルを生成
+                    const title = post ? post.title : slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    
+                    // 履歴を重複させないため fromPopState=true を渡す
+                    window.showArticleDetail(slug, title, true);
                 });
             });
-        } else {
-            const element = document.getElementById(hash);
-            if (element && element.classList.contains('page-section')) {
-                showPage(hash);
-            } else {
-                showPage('top');
-            }
-        }
+        }, 0);
+
     } else {
-        showPage('top');
-        history.replaceState({ page: 'top' }, '', '#top');
+        const pageId = hash.substring(1) || 'top';
+        showPage(pageId, null, true);
     }
 }
+// ▲▲▲【ここまで修正】▲▲▲
 
 function setupFooterButtonObserver() {
     const scoreBtn = document.getElementById('score-method-btn');
@@ -333,8 +345,10 @@ function setupFooterButtonObserver() {
 export function loadScript(src) {
     return new Promise((resolve, reject) => {
         if (document.querySelector(`script[src="${src}"]`)) {
-            resolve();
-            return;
+            if (window[src.split('/').pop().split('.')[0]]) { // e.g. window['marked']
+                resolve();
+                return;
+            }
         }
         const script = document.createElement('script');
         script.src = src;
@@ -358,3 +372,7 @@ function toggleSubMenu(btn, event) {
 }
 
 window.toggleSubMenu = toggleSubMenu;
+
+window.addEventListener('hashchange', () => {
+    handleInitialURL(window.showPage);
+});
