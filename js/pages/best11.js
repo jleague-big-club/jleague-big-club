@@ -301,7 +301,7 @@ function setupBest11EventListeners() {
                             return;
                         }
                         if (navigator.clipboard && navigator.clipboard.write) {
-                            navigator.clipboard.write([new ClipboardItem({ "image/png": blob })])
+                            navigator.clipboard.write([new ClipboardItem({ "image/webp": blob })])
                                 .then(() => {
                                     if (msgSpan) {
                                         msgSpan.textContent = 'コピーしました！';
@@ -310,12 +310,12 @@ function setupBest11EventListeners() {
                                 })
                                 .catch(err => {
                                     console.warn("クリップボードへのコピーに失敗しました:", err);
-                                    downloadImage(canvas, "best11.png", msgSpan);
+                                    downloadImage(canvas, "best11.webp", msgSpan);
                                 });
                         } else {
-                            downloadImage(canvas, "best11.png", msgSpan);
+                            downloadImage(canvas, "best11.webp", msgSpan);
                         }
-                    }, 'image/png');
+                    }, 'image/webp');
                 }).catch(err => {
                     console.error("画像キャプチャ中にエラー:", err);
                     if (msgSpan) msgSpan.textContent = 'エラー: 画像のキャプチャに失敗しました';
@@ -337,7 +337,7 @@ function setupBest11EventListeners() {
     function downloadImage(canvas, filename, msgSpan) {
         try {
             const a = document.createElement('a');
-            a.href = canvas.toDataURL('image/png');
+            a.href = canvas.toDataURL('image/webp');
             a.download = filename;
             document.body.appendChild(a);
             a.click();

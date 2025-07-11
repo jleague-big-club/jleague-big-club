@@ -90,7 +90,7 @@ function renderEuropePlayerList(leagueName) {
                     <p><strong>ポジション:</strong> <span>${p['ポジション']}</span></p>
                 </div>
                 <div class="player-image">
-                    <img src="img/player.png" alt="選手アイコン">
+                    <img src="img/player.webp" alt="選手アイコン">
                 </div>
             </div>`;
         });
