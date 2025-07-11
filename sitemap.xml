@@ -1,34 +1,120 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     
-    <!-- トップページ -->
+    <!-- トップページ (ビッグクラブ指数) -->
     <url>
         <loc>https://bigclub-japan.com/</loc>
-        <lastmod>2024-07-11</lastmod> <!-- 実際の最終更新日に修正 -->
+        <lastmod>2024-07-12</lastmod> <!-- サイト全体の最終更新日 -->
+        <changefreq>weekly</changefreq>
         <priority>1.0</priority>
     </url>
+    
+    <!-- 各機能ページ -->
+    <url>
+        <loc>https://bigclub-japan.com/#metrics</loc>
+        <lastmod>2024-07-12</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://bigclub-japan.com/#history</loc>
+        <lastmod>2024-07-12</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://bigclub-japan.com/#rankings</loc>
+        <lastmod>2024-07-12</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>https://bigclub-japan.com/#prediction</loc>
+        <lastmod>2024-07-12</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>https://bigclub-japan.com/#simulation</loc>
+        <lastmod>2024-07-12</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://bigclub-japan.com/#best11</loc>
+        <lastmod>2024-07-12</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://bigclub-japan.com/#europe</loc>
+        <lastmod>2024-07-12</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://bigclub-japan.com/#attendance</loc>
+        <lastmod>2024-07-12</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+    </url>
 
-    <!-- 法務関連ページ -->
+    <!-- ブログ一覧ページ -->
+    <url>
+        <loc>https://bigclub-japan.com/#blog</loc>
+        <lastmod>2024-07-12</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- ブログ記事ページ -->
+    <url>
+        <loc>https://bigclub-japan.com/#blog/post-1</loc> <!-- 実際のslugに合わせる -->
+        <lastmod>2024-07-11</lastmod> <!-- 記事の公開日 -->
+        <changefreq>yearly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://bigclub-japan.com/#blog/post-2</loc> <!-- 実際のslugに合わせる -->
+        <lastmod>2024-07-11</lastmod> <!-- 記事の公開日 -->
+        <changefreq>yearly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://bigclub-japan.com/#blog/post-3</loc> <!-- 実際のslugに合わせる -->
+        <lastmod>2024-07-11</lastmod> <!-- 記事の公開日 -->
+        <changefreq>yearly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <!-- 紹介記事ページ（ブログ記事と同様に） -->
+    <url>
+        <loc>https://bigclub-japan.com/#blog/bigclub-challenge</loc>
+        <lastmod>2024-07-09</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.6</priority>
+    </url>
+     <url>
+        <loc>https://bigclub-japan.com/#blog/prediction-intro</loc>
+        <lastmod>2024-07-09</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <!-- 他の紹介記事も同様に追加 -->
+
+
+    <!-- 法務関連ページ（これらは物理ファイルなので、このままでOK） -->
     <url>
         <loc>https://bigclub-japan.com/legal/contact.html</loc>
-        <lastmod>2024-07-10</lastmod> <!-- 実際の最終更新日に修正 -->
-        <priority>0.5</priority>
+        <lastmod>2024-07-10</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.3</priority>
     </url>
     <url>
         <loc>https://bigclub-japan.com/legal/privacy-policy.html</loc>
-        <lastmod>2024-07-10</lastmod> <!-- 実際の最終更新日に修正 -->
-        <priority>0.5</priority>
+        <lastmod>2024-07-10</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.3</priority>
     </url>
 
-    <!-- 
-      ブログ記事のページ
-      もし個別のHTMLページとしてアクセスできるなら、以下のように追加します。
-    -->
-    <url>
-        <loc>https://bigclub-japan.com/posts/bigclub-challenge.html</loc>
-        <lastmod>2024-07-09</lastmod> <!-- 記事の実際の更新日 -->
-        <priority>0.8</priority>
-    </url>
-    <!-- 他のブログ記事も同様に追加 -->
-    
 </urlset>
