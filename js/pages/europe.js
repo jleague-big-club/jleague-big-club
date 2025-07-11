@@ -65,14 +65,13 @@ function renderEuropePlayerList(leagueName) {
     const leagueSelector = document.getElementById('europe-league-selector');
     const playerList = document.getElementById('europe-player-list');
     
-    // データ内でのリーグ名と表示名のマッピング
-    const leagueDataNameMap = {
-        "ラ・リーガ": "ラリーガ",
-        "リーグ・アン": "リーグアン"
-    };
-    const leagueDataName = leagueDataNameMap[leagueName] || leagueName;
+    // ▼▼▼【ここから修正】▼▼▼
+    // リーグ名を変換する処理を削除し、引数で受け取ったleagueNameを直接使うように変更します。
+    // const leagueDataNameMap = { ... };
+    // const leagueDataName = leagueDataNameMap[leagueName] || leagueName;
     
-    const playersInLeague = playerData.filter(p => p['リーグ'] === leagueDataName).sort((a, b) => (parseInt(a['年齢']) || 99) - (parseInt(b['年齢']) || 99));
+    const playersInLeague = playerData.filter(p => p['リーグ'] === leagueName).sort((a, b) => (parseInt(a['年齢']) || 99) - (parseInt(b['年齢']) || 99));
+    // ▲▲▲【ここまで修正】▲▲▲
 
     let listHTML = `<button class="rank-tab-btn" style="width:100%; margin: 6px 0 20px 0; padding: 10px; background: #6c757d;" onclick="initEuropeMobilePage()">‹ リーグ選択に戻る</button>`;
     listHTML += `<h3 class="page-subtitle">${leagueName} の日本人選手</h3>`;
