@@ -96,6 +96,12 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('prediction-league-tabs')?.addEventListener('click', (e) => {
             if (e.target.tagName === 'BUTTON') renderPredictionCards(e.target.dataset.league);
         });
+        document.getElementById('prediction-cards-container')?.addEventListener('click', (e) => {
+            const button = e.target.closest('.copy-btn[data-capture-id]');
+            if (button) {
+                generateImage(button.dataset.captureId);
+            }
+        });
         
         document.getElementById('sim-club-select')?.addEventListener('change', (e) => {
             const club = clubData.find(c => c.name === e.target.value);
@@ -276,7 +282,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div class="card-body"><table class="prediction-table"><tbody>${sorted.map((t, i) => `
                         <tr><td class="rank">${i+1}</td><td>${t.name}</td><td class="prob">${(t[cat.key]*100).toFixed(1)}%</td></tr>`).join('')}</tbody></table></div>
                 </div>
-                <div class="actions" style="margin-top: -5px;"><button class="copy-btn" onclick="generateImage('pred-card-${catKey}')">コピー</button></div>
+                <div class="actions" style="margin-top: -5px;"><button class="copy-btn" data-capture-id="pred-card-${catKey}">コピー</button></div>
             </div>`;
         }).join('');
     }
@@ -388,7 +394,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    window.generateImage = async function(elementId) {
+    async function generateImage(elementId) {
         const target = document.getElementById(elementId);
         if (!target) {
             messageArea.textContent = '対象要素が見つかりません。';
@@ -397,67 +403,32 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         messageArea.textContent = '画像生成中...';
 
-        // --- Store original state ---
+        // 元のインラインスタイルを保持するロジックは、万が一他の処理でスタイルが変更された場合に備えて残しておく
         const originalInlineStyles = new Map();
         const elementsToStyle = [target, ...target.querySelectorAll('*')];
         elementsToStyle.forEach(el => {
             originalInlineStyles.set(el, el.style.cssText);
         });
 
-        let chartInstance = null;
-        let originalChartOptions = null;
-        const canvasEl = target.querySelector('canvas');
-        if (canvasEl) {
-            chartInstance = Chart.getChart(canvasEl);
-            if (chartInstance) {
-                originalChartOptions = JSON.parse(JSON.stringify(chartInstance.options));
-            }
-        }
-
         try {
-            // --- Apply light mode for capture ---
-            target.style.backgroundColor = '#ffffff';
-            target.style.color = '#000000';
-
-            const allTextElements = target.querySelectorAll('.capture-title, #chart-title-display, .legend-item, .player-label, .club-name, .record-info, .rank, .prob, td, th, label, .sim-score-box p, .sim-score-box h3, .card-header');
-            allTextElements.forEach(el => {
-                el.style.color = 'black';
-            });
-            target.querySelectorAll('.capture-footer, .best11-logo, .update-date-note').forEach(el => {
-                el.style.color = '#555555';
-            });
-            target.querySelectorAll('.player-label.unselected').forEach(el => {
-                el.style.color = '#777777';
-            });
-
-            if (chartInstance) {
-                const newOptions = chartInstance.options;
-                if (newOptions.plugins.datalabels) {
-                    newOptions.plugins.datalabels.color = '#000000';
-                }
-                if (newOptions.scales) {
-                    if (newOptions.scales.y) newOptions.scales.y.ticks.color = '#000000';
-                    if (newOptions.scales.x) newOptions.scales.x.ticks.color = '#555555';
-                }
-                chartInstance.update('none');
-            }
-
+            // ライトモードへの変換処理は行わない
+            
+            // レンダリングのための短い待機
             await new Promise(resolve => setTimeout(resolve, 50));
 
             // --- Capture ---
-            const canvas = await html2canvas(target, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-            canvas.toBlob(blob => {
-                if (navigator.clipboard?.write) {
-                    navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
-                        .then(() => messageArea.textContent = 'コピーしました！')
-                        .catch(err => {
-                            console.error('Copy failed:', err);
-                            messageArea.textContent = 'コピーに失敗しました。';
-                        });
-                } else {
-                    messageArea.textContent = 'お使いのブラウザはコピー機能に非対応です。';
-                }
+            // html2canvasのbackgroundColorをnullに設定し、要素自身の背景色を使用
+            const canvas = await html2canvas(target, { scale: 2, useCORS: true, backgroundColor: null });
+            const blob = await new Promise((resolve, reject) => {
+                canvas.toBlob(b => b ? resolve(b) : reject(new Error("画像Blobの生成に失敗しました。")));
             });
+
+            if (navigator.clipboard?.write) {
+                await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+                messageArea.textContent = 'コピーしました！';
+            } else {
+                messageArea.textContent = 'お使いのブラウザはコピー機能に非対応です。';
+            }
 
         } catch (err) {
             console.error("Image generation failed:", err);
@@ -467,11 +438,6 @@ document.addEventListener("DOMContentLoaded", () => {
             originalInlineStyles.forEach((style, el) => {
                 el.style.cssText = style;
             });
-
-            if (chartInstance && originalChartOptions) {
-                chartInstance.options = originalChartOptions;
-                chartInstance.update('none');
-            }
             
             setTimeout(() => { messageArea.textContent = ''; }, 3000);
         }
