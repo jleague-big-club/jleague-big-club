@@ -17,23 +17,28 @@ export function hideArticleDetail() {
     const listContainer = document.getElementById('blog-list-container');
     const paginationContainer = document.getElementById('pagination');
     
+    // ランキング用のコンテナも考慮に入れる
+    const layoutContainer = document.querySelector('.blog-layout-container');
+
     if (contentDiv) contentDiv.style.display = 'none';
     if (listContainer) listContainer.style.display = 'flex';
     if (paginationContainer) paginationContainer.style.display = 'block';
-    
+    if (layoutContainer) layoutContainer.style.display = 'block'; // 一覧表示を再表示
+
     _isShowingArticleDetail = false;
 }
 
-// js/pages/blog.js
-
 export async function showArticleDetail(slug, title, fromPopState = false) {
     _isShowingArticleDetail = true;
+    const contentDiv = document.getElementById('blog-content');
     const listContainer = document.getElementById('blog-list-container');
     const paginationContainer = document.getElementById('pagination');
-    const contentDiv = document.getElementById('blog-content');
+    const layoutContainer = document.querySelector('.blog-layout-container');
 
     if (listContainer) listContainer.style.display = 'none';
     if (paginationContainer) paginationContainer.style.display = 'none';
+    if (layoutContainer) layoutContainer.style.display = 'none'; // 一覧表示全体を隠す
+
     if(contentDiv) {
         contentDiv.innerHTML = '<p>記事を読み込んでいます...</p>';
         contentDiv.style.display = 'block';
@@ -42,16 +47,6 @@ export async function showArticleDetail(slug, title, fromPopState = false) {
     try {
         await loadScript(MARKED_JS_URL);
         
-        const renderer = new marked.Renderer();
-        const originalImageRenderer = renderer.image.bind(renderer);
-        renderer.image = (href, title, text) => {
-            if (typeof href === 'string' && !href.startsWith('http')) {
-                return `<img src="${href}" alt="${text}" ${title ? `title="${title}"` : ''} loading="lazy" decoding="async">`;
-            }
-            return originalImageRenderer(href, title, text);
-        };
-        marked.use({ renderer });
-        
         const res = await fetch(`/posts/${slug}.md`);
         if (!res.ok) throw new Error(`Markdownファイルが見つかりません: ${slug}.md`);
         const md = await res.text();
@@ -59,19 +54,6 @@ export async function showArticleDetail(slug, title, fromPopState = false) {
         const html = marked.parse(bodyContent);
 
         if (contentDiv) {
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = html;
-            const images = tempDiv.querySelectorAll('img');
-            images.forEach(img => {
-                if (img.src && !img.src.startsWith('http')) {
-                    img.setAttribute('loading', 'lazy');
-                    img.setAttribute('decoding', 'async');
-                }
-            });
-            const optimizedHtml = tempDiv.innerHTML;
-            
-            // --- ▼▼▼ ここからボタン生成ロジックの修正 ▼▼▼ ---
-
             let homeButton, secondaryButton;
             const introMapping = {
                 'prediction-intro': { page: 'prediction', name: 'シーズン予測' },
@@ -82,27 +64,21 @@ export async function showArticleDetail(slug, title, fromPopState = false) {
                 'bigclub-challenge': { page: 'top', name: 'ビッグクラブ指数' }
             };
 
-            // 特定の記事(prediction-logic-explainer)の場合の分岐
             if (slug === 'prediction-logic-explainer') {
                 homeButton = `<a href="#prediction" onclick="event.preventDefault(); window.showPage('prediction', null);" style="color:#aaa; font-weight:bold; text-decoration:none; border:1px solid #aaa; padding: 8px 20px; border-radius:8px; transition: all 0.2s;"> « シーズン予測に戻る </a>`;
                 secondaryButton = `<a href="#blog" onclick="event.preventDefault(); window.showPage('blog', null);" style="color:#299ad3; font-weight:bold; text-decoration:none; border:1px solid #299ad3; padding: 8px 20px; border-radius:8px; transition: all 0.2s;"> 記事一覧へ » </a>`;
             } else if (introMapping[slug]) {
-                // 紹介記事の場合
                 const { page, name } = introMapping[slug];
                 homeButton = `<a href="#top" onclick="event.preventDefault(); window.showPage('top', null);" style="color:#aaa; font-weight:bold; text-decoration:none; border:1px solid #aaa; padding: 8px 20px; border-radius:8px; transition: all 0.2s;"> « ホームに戻る </a>`;
                 secondaryButton = `<a href="#${page}" onclick="event.preventDefault(); window.showPage('${page}', null);" style="color:#299ad3; font-weight:bold; text-decoration:none; border:1px solid #299ad3; padding: 8px 20px; border-radius:8px; transition: all 0.2s;"> ${name}へ » </a>`;
             } else {
-                // その他の通常記事の場合
                 homeButton = `<a href="#top" onclick="event.preventDefault(); window.showPage('top', null);" style="color:#aaa; font-weight:bold; text-decoration:none; border:1px solid #aaa; padding: 8px 20px; border-radius:8px; transition: all 0.2s;"> « ホームに戻る </a>`;
                 secondaryButton = `<a href="#blog" onclick="event.preventDefault(); window.showPage('blog', null);" style="color:#299ad3; font-weight:bold; text-decoration:none; border:1px solid #299ad3; padding: 8px 20px; border-radius:8px; transition: all 0.2s;"> 記事一覧に戻る » </a>`;
             }
 
             const buttonsHtml = ` <div style="text-align:center; margin-top:3em; display:flex; justify-content:center; gap:20px;"> ${homeButton} ${secondaryButton} </div> `;
             
-            // --- ▲▲▲ ボタン生成ロジックの修正はここまで ▲▲▲ ---
-
-            contentDiv.innerHTML = `${optimizedHtml}${buttonsHtml}`;
-            contentDiv.style.display = "block";
+            contentDiv.innerHTML = `${html}${buttonsHtml}`;
             
             window.showPage('blog', null, true); 
             const pageTitle = document.querySelector('#page-title-blog h1');
@@ -120,7 +96,8 @@ export async function showArticleDetail(slug, title, fromPopState = false) {
         if (contentDiv) contentDiv.innerHTML = `<p style="color: red;">記事の読み込みに失敗しました。</p>`;
         _isShowingArticleDetail = false;
     }
-}window.showArticleDetail = showArticleDetail;
+}
+window.showArticleDetail = showArticleDetail;
 
 function renderPagination() {
     getBlogPosts().then(blogPosts => {
@@ -129,7 +106,6 @@ function renderPagination() {
         paginationContainer.innerHTML = "";
         const totalPages = Math.ceil(blogPosts.length / articlesPerPage);
         if (totalPages <= 1) return;
-
         for (let i = 1; i <= totalPages; i++) {
             const btn = document.createElement('button');
             btn.textContent = i;
@@ -147,10 +123,8 @@ function renderArticleList(page) {
     currentPage = page;
     getBlogPosts().then(blogPosts => {
         const listContainer = document.getElementById('blog-list-container');
-        const paginationContainer = document.getElementById('pagination');
-
-        if (listContainer) listContainer.innerHTML = "";
-        if (paginationContainer) paginationContainer.style.display = 'block';
+        if (!listContainer) return;
+        listContainer.innerHTML = "";
 
         const start = (page - 1) * articlesPerPage;
         const currentPosts = blogPosts.slice(start, start + articlesPerPage);
@@ -166,7 +140,7 @@ function renderArticleList(page) {
                 </div>
             `;
             card.onclick = () => showArticleDetail(post.slug, post.title);
-            if (listContainer) listContainer.appendChild(card);
+            listContainer.appendChild(card);
         });
         renderPagination();
     });
@@ -174,15 +148,13 @@ function renderArticleList(page) {
 
 export function showBlogList() {
     _isShowingArticleDetail = false;
-    const listContainer = document.getElementById('blog-list-container');
-    const paginationContainer = document.getElementById('pagination');
     const contentDiv = document.getElementById('blog-content');
+    const listView = document.getElementById('blog-list-view'); // 修正：blog-layout-containerではなく、一覧全体のコンテナを対象に
     const pageTitle = document.querySelector('#page-title-blog h1');
 
     if (pageTitle) pageTitle.textContent = '記事・ブログ';
-    if (listContainer) listContainer.style.display = 'flex';
-    if (paginationContainer) paginationContainer.style.display = 'block';
     if (contentDiv) contentDiv.style.display = 'none';
+    if (listView) listView.style.display = 'block';
     
     renderArticleList(currentPage);
 }

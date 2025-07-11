@@ -23,7 +23,7 @@
 </head>
 <body>
 <!-- ▼▼▼ ここから元の<body>の中身を全て貼り付けます ▼▼▼ -->
-<button id="hamburger-btn" class="hamburger-btn">
+<button id="hamburger-btn" class="hamburger-btn" aria-label="メニューを開く">
     <span></span>
     <span></span>
     <span></span>
@@ -181,13 +181,21 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
   <div id="page-title-best11" class="page-title-row" style="display:none;"><h1>ベスト11を作る</h1></div>
   <div id="page-title-blog" class="page-title-row" style="display:none;"><h1>記事・ブログ</h1></div>
   
-  <div id="top" class="page-section visible">
-    <div class="big5-container" id="big5-cards"></div>
-    <div class="club-table-container">
-      <h2 style="text-align:center; margin-bottom:8px; color:#baf7fa; font-size:1.25rem;">6位以下クラブ</h2>
-      <div id="club-categories"></div>
-    </div>
+  <!-- index.html -->
+<div id="top" class="page-section visible">
+  <!-- ▼▼▼ この行を追加 ▼▼▼ -->
+  <h2 style="position: absolute; left: -9999px;">ビッグクラブトップ5</h2>
+  
+  <div class="big5-container" id="big5-cards"></div>
+  
+  <!-- ▼▼▼ この行を追加 ▼▼▼ -->
+  <h2 style="text-align:center; margin-bottom:8px; color:#baf7fa; font-size:1.25rem;">6位以下クラブ</h2>
+  
+  <div class="club-table-container">
+    <!-- 元々あったh2は削除、または内容を調整 -->
+    <div id="club-categories"></div>
   </div>
+</div>
   <div id="metrics" class="page-section">
     <span class="table-note">※並びはビッグクラブスコア順<br>※柏・湘南の売上は2023年</span>
 <div class="metric-select-row" style="text-align: center; margin-bottom: 20px;">
@@ -275,12 +283,12 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
       <h2 style="text-align:center;"></h2>
       <div id="europe-flex-row" style="display:flex; flex-direction:row; gap:36px; align-items:flex-start; justify-content:flex-start;">
         <div id="map-container" style="position:relative; width:430px; height:410px; flex-shrink:0;">
-          <img src="/img/europe.png" alt="ヨーロッパ地図" width="430" height="410" style="border-radius:13px; display:block;">
-          <button class="country-btn" data-country="イングランド" style="position:absolute; left:30px; top:200px; width:60px; height:70px;"></button>
-          <button class="country-btn" data-country="スペイン"   style="position:absolute; left:10px; top:335px; width:70px; height:60px;"></button>
-          <button class="country-btn" data-country="フランス"   style="position:absolute; left:70px; top:280px; width:65px; height:60px;"></button>
-          <button class="country-btn" data-country="イタリア"   style="position:absolute; left:160px; top:320px; width:50px; height:80px;"></button>
-          <button class="country-btn" data-country="ドイツ"     style="position:absolute; left:130px; top:240px; width:60px; height:60px;"></button>
+          <img src="/img/europe.webp" alt="ヨーロッパ地図" width="1110" height="1280" style="border-radius:13px; display:block;">
+          <button class="country-btn" data-country="イングランド" style="position:absolute; left:38px; top:270px; width:55px; height:60px;"></button>
+          <button class="country-btn" data-country="スペイン"   style="position:absolute; left:30px; top:415px; width:55px; height:60px;"></button>
+          <button class="country-btn" data-country="フランス"   style="position:absolute; left:70px; top:350px; width:65px; height:60px;"></button>
+          <button class="country-btn" data-country="イタリア"   style="position:absolute; left:160px; top:380px; width:50px; height:75px;"></button>
+          <button class="country-btn" data-country="ドイツ"     style="position:absolute; left:130px; top:290px; width:60px; height:60px;"></button>
         </div>
         <div id="player-table-wrap" style="min-width:280px; max-width:1000px; width:100%; padding-top:9px;"></div>
       </div>

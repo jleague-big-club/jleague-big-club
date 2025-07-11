@@ -12,7 +12,7 @@
 
 ## ビッグクラブ候補群と目される9クラブ
 
-![ビッグクラブスコアTOP20](posts/img/bigclubtop20.webp)
+<img src="posts/img/bigclubtop20.webp" alt="ビッグクラブスコアTOP20" loading="lazy" decoding="async" style="display: block; margin: 25px auto; max-width: 100%; border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,0.15);">
 
 上記のスコアは、本稿で用いる独自の指標「ビッグクラブスコア」である。これは、以下の4つの指標を基に算出した。全ての数値が高いほど、スコアも高くなる設計となっている。
 
