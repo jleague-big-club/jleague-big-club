@@ -35,6 +35,24 @@ async function showPage(id, btn, fromPopState = false) {
     try {
         window.scrollTo(0, 0);
 
+        const pageTitles = {
+            'top': 'Jリーグ ビッグクラブ指数',
+            'metrics': 'クラブ指標 - Jリーグビッグクラブ分析',
+            'history': 'Jリーグ過去データ - Jリーグビッグクラブ分析',
+            'introduce': '各クラブ紹介 - Jリーグビッグクラブ分析',
+            'rankings': 'Jリーグ 順位表 - Jリーグビッグクラブ分析',
+            'prediction': 'Jリーグ シーズン予測 - Jリーグビッグクラブ分析',
+            'attendance': 'Jリーグ 平均観客数 - Jリーグビッグクラブ分析',
+            'blog': '記事・ブログ - Jリーグビッグクラブ分析',
+            'europe': '5大リーグ日本人選手 - Jリーグビッグクラブ分析',
+            'europe-top20': '欧州クラブ売上高TOP20 - Jリーグビッグクラブ分析',
+            'best11': 'ベスト11メーカー - Jリーグビッグクラブ分析',
+            'simulation': 'ビッグクラブシミュレーター - Jリーグビッグクラブ分析'
+        };
+        // 対応するタイトルがあれば文書のタイトルを更新
+        const baseId = id.split('/')[0];
+        document.title = pageTitles[baseId] || 'Jリーグビッグクラブ分析';
+
         // UIの更新
         document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('visible'));
         const targetPage = document.getElementById(id);
