@@ -1,428 +1,428 @@
 {
   "J1": {
     "柏": {
-      "champion": 1.0,
-      "acl": 1.0,
+      "champion": 0.4224,
+      "acl": 0.7467,
       "promotion": 0.0,
       "relegation": 0.0,
       "safe": 1.0
     },
     "神戸": {
-      "champion": 0.0,
-      "acl": 1.0,
+      "champion": 0.085,
+      "acl": 0.3271,
       "promotion": 0.0,
       "relegation": 0.0,
       "safe": 1.0
     },
     "京都": {
-      "champion": 0.0,
-      "acl": 0.5051,
+      "champion": 0.0606,
+      "acl": 0.2764,
       "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "relegation": 0.0002,
+      "safe": 0.9998
     },
     "鹿島": {
-      "champion": 0.0,
-      "acl": 0.4949,
+      "champion": 0.1649,
+      "acl": 0.4822,
       "promotion": 0.0,
       "relegation": 0.0,
       "safe": 1.0
     },
     "広島": {
-      "champion": 0.0,
-      "acl": 0.0,
+      "champion": 0.0795,
+      "acl": 0.3012,
       "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "relegation": 0.0002,
+      "safe": 0.9998
     },
     "川崎F": {
-      "champion": 0.0,
-      "acl": 0.0,
+      "champion": 0.0415,
+      "acl": 0.1944,
       "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "relegation": 0.0003,
+      "safe": 0.9997
     },
     "町田": {
-      "champion": 0.0,
-      "acl": 0.0,
+      "champion": 0.0526,
+      "acl": 0.2317,
       "promotion": 0.0,
       "relegation": 0.0,
       "safe": 1.0
     },
     "浦和": {
-      "champion": 0.0,
-      "acl": 0.0,
+      "champion": 0.0751,
+      "acl": 0.2813,
       "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "relegation": 0.0003,
+      "safe": 0.9997
     },
     "C大阪": {
-      "champion": 0.0,
-      "acl": 0.0,
+      "champion": 0.0031,
+      "acl": 0.0293,
       "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "relegation": 0.016,
+      "safe": 0.984
     },
     "G大阪": {
-      "champion": 0.0,
-      "acl": 0.0,
+      "champion": 0.0131,
+      "acl": 0.0826,
       "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "relegation": 0.0048,
+      "safe": 0.9952
     },
     "岡山": {
-      "champion": 0.0,
-      "acl": 0.0,
+      "champion": 0.0003,
+      "acl": 0.0039,
       "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "relegation": 0.0771,
+      "safe": 0.9229
     },
     "福岡": {
-      "champion": 0.0,
-      "acl": 0.0,
+      "champion": 0.0002,
+      "acl": 0.0046,
       "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "relegation": 0.1114,
+      "safe": 0.8886
     },
     "名古屋": {
-      "champion": 0.0,
-      "acl": 0.0,
+      "champion": 0.0006,
+      "acl": 0.0081,
       "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "relegation": 0.0605,
+      "safe": 0.9395
     },
     "東京V": {
       "champion": 0.0,
-      "acl": 0.0,
+      "acl": 0.0014,
       "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "relegation": 0.2352,
+      "safe": 0.7648
     },
     "清水": {
-      "champion": 0.0,
-      "acl": 0.0,
+      "champion": 0.0006,
+      "acl": 0.0191,
       "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "relegation": 0.0294,
+      "safe": 0.9706
     },
     "FC東京": {
-      "champion": 0.0,
-      "acl": 0.0,
+      "champion": 0.0002,
+      "acl": 0.0027,
       "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "relegation": 0.1248,
+      "safe": 0.8752
     },
     "湘南": {
-      "champion": 0.0,
-      "acl": 0.0,
+      "champion": 0.0003,
+      "acl": 0.0073,
       "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "relegation": 0.0713,
+      "safe": 0.9287
     },
     "横浜FC": {
       "champion": 0.0,
       "acl": 0.0,
       "promotion": 0.0,
-      "relegation": 1.0,
-      "safe": 0.0
+      "relegation": 0.8165,
+      "safe": 0.1835
     },
     "新潟": {
       "champion": 0.0,
       "acl": 0.0,
       "promotion": 0.0,
-      "relegation": 1.0,
-      "safe": 0.0
+      "relegation": 0.7979,
+      "safe": 0.2021
     },
     "横浜FM": {
       "champion": 0.0,
       "acl": 0.0,
       "promotion": 0.0,
-      "relegation": 1.0,
-      "safe": 0.0
+      "relegation": 0.6541,
+      "safe": 0.3459
     }
   },
   "J2": {
-    "水戸ホーリーホック水戸ホーリーホック": {
+    "水戸": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 1.0,
+      "promotion": 0.4715,
       "relegation": 0.0,
       "safe": 1.0
     },
-    "ジェフユナイテッド千葉ジェフユナイテッド千葉": {
+    "千葉": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 0.4914,
+      "promotion": 0.3317,
       "relegation": 0.0,
       "safe": 1.0
     },
-    "ベガルタ仙台ベガルタ仙台": {
+    "仙台": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 0.5086,
+      "promotion": 0.174,
       "relegation": 0.0,
       "safe": 1.0
     },
-    "サガン鳥栖サガン鳥栖": {
+    "鳥栖": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 0.0,
+      "promotion": 0.273,
       "relegation": 0.0,
       "safe": 1.0
     },
-    "ＲＢ大宮アルディージャＲＢ大宮アルディージャ": {
+    "大宮": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 0.0,
+      "promotion": 0.4161,
       "relegation": 0.0,
       "safe": 1.0
     },
-    "徳島ヴォルティス徳島ヴォルティス": {
+    "徳島": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "promotion": 0.079,
+      "relegation": 0.0002,
+      "safe": 0.9998
     },
-    "ジュビロ磐田ジュビロ磐田": {
+    "磐田": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "promotion": 0.1379,
+      "relegation": 0.0002,
+      "safe": 0.9998
     },
-    "Ｖ・ファーレン長崎Ｖ・ファーレン長崎": {
+    "長崎": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "promotion": 0.0756,
+      "relegation": 0.0002,
+      "safe": 0.9998
     },
-    "ヴァンフォーレ甲府ヴァンフォーレ甲府": {
+    "甲府": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "promotion": 0.0208,
+      "relegation": 0.0045,
+      "safe": 0.9955
     },
-    "ＦＣ今治ＦＣ今治": {
+    "今治": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "promotion": 0.0061,
+      "relegation": 0.021,
+      "safe": 0.979
     },
-    "北海道コンサドーレ札幌北海道コンサドーレ札幌": {
+    "札幌": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "promotion": 0.0088,
+      "relegation": 0.0121,
+      "safe": 0.9879
     },
-    "大分トリニータ大分トリニータ": {
+    "大分": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "promotion": 0.0036,
+      "relegation": 0.0345,
+      "safe": 0.9655
     },
-    "藤枝ＭＹＦＣ藤枝ＭＹＦＣ": {
+    "藤枝": {
       "champion": 0.0,
       "acl": 0.0,
       "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "relegation": 0.347,
+      "safe": 0.653
     },
-    "いわきＦＣいわきＦＣ": {
+    "いわき": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "promotion": 0.0019,
+      "relegation": 0.0356,
+      "safe": 0.9644
     },
-    "ブラウブリッツ秋田ブラウブリッツ秋田": {
+    "秋田": {
       "champion": 0.0,
       "acl": 0.0,
       "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "relegation": 0.4512,
+      "safe": 0.5488
     },
-    "モンテディオ山形モンテディオ山形": {
+    "山形": {
       "champion": 0.0,
       "acl": 0.0,
       "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "relegation": 0.2036,
+      "safe": 0.7964
     },
-    "カターレ富山カターレ富山": {
+    "富山": {
       "champion": 0.0,
       "acl": 0.0,
       "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "relegation": 0.35,
+      "safe": 0.65
     },
-    "ロアッソ熊本ロアッソ熊本": {
+    "熊本": {
       "champion": 0.0,
       "acl": 0.0,
       "promotion": 0.0,
-      "relegation": 1.0,
-      "safe": 0.0
+      "relegation": 0.4062,
+      "safe": 0.5938
     },
-    "レノファ山口ＦＣレノファ山口ＦＣ": {
+    "山口": {
       "champion": 0.0,
       "acl": 0.0,
       "promotion": 0.0,
-      "relegation": 1.0,
-      "safe": 0.0
+      "relegation": 0.4909,
+      "safe": 0.5091
     },
-    "愛媛ＦＣ愛媛ＦＣ": {
+    "愛媛": {
       "champion": 0.0,
       "acl": 0.0,
       "promotion": 0.0,
-      "relegation": 1.0,
-      "safe": 0.0
+      "relegation": 0.6428,
+      "safe": 0.3572
     }
   },
   "J3": {
-    "栃木シティ栃木シティ": {
+    "栃木C": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 1.0,
+      "promotion": 0.8677,
       "relegation": 0.0,
       "safe": 1.0
     },
-    "ＦＣ大阪ＦＣ大阪": {
+    "FC大阪": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 1.0,
+      "promotion": 0.2795,
       "relegation": 0.0,
       "safe": 1.0
     },
-    "ヴァンラーレ八戸ヴァンラーレ八戸": {
+    "八戸": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 0.0,
+      "promotion": 0.292,
       "relegation": 0.0,
       "safe": 1.0
     },
-    "テゲバジャーロ宮崎テゲバジャーロ宮崎": {
+    "宮崎": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "promotion": 0.2821,
+      "relegation": 0.0001,
+      "safe": 0.9999
     },
-    "鹿児島ユナイテッドＦＣ鹿児島ユナイテッドＦＣ": {
+    "鹿児島": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "promotion": 0.0889,
+      "relegation": 0.0024,
+      "safe": 0.9976
     },
-    "奈良クラブ奈良クラブ": {
+    "奈良": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "promotion": 0.0473,
+      "relegation": 0.0046,
+      "safe": 0.9954
     },
-    "ギラヴァンツ北九州ギラヴァンツ北九州": {
+    "北九州": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "promotion": 0.0072,
+      "relegation": 0.0466,
+      "safe": 0.9534
     },
-    "松本山雅ＦＣ松本山雅ＦＣ": {
+    "松本": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "promotion": 0.0297,
+      "relegation": 0.0114,
+      "safe": 0.9886
     },
-    "ツエーゲン金沢ツエーゲン金沢": {
+    "金沢": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "promotion": 0.0683,
+      "relegation": 0.0036,
+      "safe": 0.9964
     },
-    "福島ユナイテッドＦＣ福島ユナイテッドＦＣ": {
+    "福島": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "promotion": 0.0035,
+      "relegation": 0.0947,
+      "safe": 0.9053
     },
-    "ガイナーレ鳥取ガイナーレ鳥取": {
+    "鳥取": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "promotion": 0.0052,
+      "relegation": 0.057,
+      "safe": 0.943
     },
-    "高知ユナイテッドＳＣ高知ユナイテッドＳＣ": {
+    "高知": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "promotion": 0.0098,
+      "relegation": 0.037,
+      "safe": 0.963
     },
-    "ザスパ群馬ザスパ群馬": {
+    "群馬": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "promotion": 0.0044,
+      "relegation": 0.0664,
+      "safe": 0.9336
     },
-    "栃木ＳＣ栃木ＳＣ": {
+    "栃木": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "promotion": 0.0101,
+      "relegation": 0.0341,
+      "safe": 0.9659
     },
-    "ＦＣ琉球ＦＣ琉球": {
+    "琉球": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "promotion": 0.0001,
+      "relegation": 0.3761,
+      "safe": 0.6239
     },
-    "ＳＣ相模原ＳＣ相模原": {
+    "相模原": {
       "champion": 0.0,
       "acl": 0.0,
       "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "relegation": 0.2679,
+      "safe": 0.7321
     },
-    "ＡＣ長野パルセイロＡＣ長野パルセイロ": {
+    "長野": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "promotion": 0.0037,
+      "relegation": 0.0459,
+      "safe": 0.9541
     },
-    "カマタマーレ讃岐カマタマーレ讃岐": {
+    "讃岐": {
       "champion": 0.0,
       "acl": 0.0,
       "promotion": 0.0,
-      "relegation": 0.0,
-      "safe": 1.0
+      "relegation": 0.4495,
+      "safe": 0.5505
     },
-    "アスルクラロ沼津アスルクラロ沼津": {
+    "沼津": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 0.0,
-      "relegation": 1.0,
-      "safe": 0.0
+      "promotion": 0.0004,
+      "relegation": 0.2063,
+      "safe": 0.7937
     },
-    "ＦＣ岐阜ＦＣ岐阜": {
+    "岐阜": {
       "champion": 0.0,
       "acl": 0.0,
-      "promotion": 0.0,
-      "relegation": 1.0,
-      "safe": 0.0
+      "promotion": 0.0001,
+      "relegation": 0.2964,
+      "safe": 0.7036
     }
   }
 }
