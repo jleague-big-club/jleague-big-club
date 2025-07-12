@@ -1,0 +1,11 @@
+# 1. 変更したすべてのファイルをステージング
+git add .
+
+# 2. ステージングしたファイルをコミット（変更履歴として記録）
+git commit -m "ここにコミットメッセージを書く（例: 新機能を追加）"
+
+# 3. リモートリポジトリ（origin）のmainブランチにプッシュ
+git push origin main
+
+
+python -m http.server 8000
