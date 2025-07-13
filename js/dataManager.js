@@ -101,10 +101,11 @@ export async function getAttendanceData() {
 
 export async function getRankingData() {
     if (Object.keys(rankingData).length > 0) return rankingData;
-    const [j1Csv, j2Csv, j3Csv, datesJson] = await Promise.all([
+    const [j1Csv, j2Csv, j3Csv, jflCsv, datesJson] = await Promise.all([
         fetchData("data/j1rank.csv"),
         fetchData("data/j2rank.csv"),
         fetchData("data/j3rank.csv"),
+        fetchData("data/jflrank.csv"),
         fetchData("data/update_dates.json")
     ]);
     const parse = (csv) => {
@@ -123,6 +124,7 @@ export async function getRankingData() {
     rankingData['J1'] = { data: parse(j1Csv), updated: datesJson['j1rank.csv'] };
     rankingData['J2'] = { data: parse(j2Csv), updated: datesJson['j2rank.csv'] };
     rankingData['J3'] = { data: parse(j3Csv), updated: datesJson['j3rank.csv'] };
+    rankingData['JFL'] = { data: parse(jflCsv), updated: datesJson['jflrank.csv'] };
     return rankingData;
 }
 
