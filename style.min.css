@@ -69,3 +69,17 @@ body{background:linear-gradient(135deg,#232947,#24304e);color:#f0f0f0;font-famil
 
   /* (省略) ... */
 }
+/* スマホ表示時のランキングボタンの重なりを修正 */
+@media (max-width: 768px) {
+  #rank-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 5px; /* 縦方向8px、横方向5pxの隙間を設定 */
+  }
+
+  /* 元々ボタンに設定されていた左右の余白をリセットして、gapで管理する */
+  #rank-buttons .rank-tab-btn {
+    margin: 0;
+  }
+}
