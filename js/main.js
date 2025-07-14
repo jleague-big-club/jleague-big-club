@@ -87,14 +87,13 @@ async function showPage(id, btn, fromPopState = false) {
             history.pushState(state, '', url);
         }
 if (typeof gtag === 'function') {
-            const GA_TRACKING_ID = 'G-RZ7LMDQ2KM'; // あなたのトラッキングID
-            const pagePath = location.pathname + location.hash;
-            
-            gtag('config', GA_TRACKING_ID, {
-                'page_path': pagePath,
-                'page_title': document.title
-            });
-        }
+    // SPAのページ遷移を計測するための正しい方法
+    gtag('event', 'page_view', {
+        page_location: location.href,
+        page_path: location.pathname + location.hash,
+        page_title: document.title
+    });
+}
 
         // === モジュールの動的読み込みと初期化 ===
         if (pageModules[id]) {
