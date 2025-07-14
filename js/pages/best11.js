@@ -22,14 +22,22 @@ const best11PosCoords = {
 
 // --- Event Handling and Utility Functions ---
 
-function downloadImage(canvas, filename, msgSpan) {
+/**
+ * Blobオブジェクトから画像をダウンロードする
+ * @param {Blob} blob - ダウンロードする画像のBlobオブジェクト
+ * @param {string} filename - 保存ファイル名
+ * @param {HTMLElement} msgSpan - メッセージを表示するspan要素
+ */
+function downloadBlob(blob, filename, msgSpan) {
     try {
+        const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
-        a.href = canvas.toDataURL('image/png');
+        a.href = url;
         a.download = filename;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
+        URL.revokeObjectURL(url); // メモリリークを避ける
         if (msgSpan) {
             msgSpan.textContent = 'ダウンロードしました！';
             setTimeout(() => msgSpan.textContent = '', 5000);
@@ -38,6 +46,24 @@ function downloadImage(canvas, filename, msgSpan) {
         console.error("画像のダウンロードに失敗しました:", e);
         if(msgSpan) msgSpan.textContent = 'エラー: 画像のダウンロードに失敗しました';
     }
+}
+
+/**
+ * canvas.toBlobをPromise化するヘルパー関数
+ * @param {HTMLCanvasElement} canvas - 変換元のcanvas要素
+ * @param {string} [type='image/png'] - 画像のMIMEタイプ
+ * @returns {Promise<Blob>} Blobオブジェクトを解決するPromise
+ */
+function toBlobPromise(canvas, type = 'image/png') {
+    return new Promise((resolve, reject) => {
+        canvas.toBlob((blob) => {
+            if (blob) {
+                resolve(blob);
+            } else {
+                reject(new Error('Canvas to Blob conversion failed'));
+            }
+        }, type);
+    });
 }
 
 async function handleBest11ImageCapture(copyBtn) {
@@ -62,40 +88,36 @@ async function handleBest11ImageCapture(copyBtn) {
         if (buttonsContainer) buttonsContainer.style.visibility = 'hidden';
         if (msgSpan) msgSpan.textContent = '';
         
-        const canvas = await html2canvas(captureElem, { backgroundColor: null, scale: 2, useCORS: true });
+        // メモリ使用量を抑えるため scale を 1.5 に変更
+        const canvas = await html2canvas(captureElem, { backgroundColor: null, scale: 1.5, useCORS: true });
         
         if (selectedLabel) selectedLabel.classList.add('selected');
+
+        const blob = await toBlobPromise(canvas);
 
         const isMobile = window.innerWidth <= 768;
 
         if (isMobile) {
-            downloadImage(canvas, "best11.png", msgSpan);
+            downloadBlob(blob, "best11.png", msgSpan);
         } else {
-            canvas.toBlob(blob => {
-                if (!blob) {
-                    if (msgSpan) msgSpan.textContent = 'エラー: 画像データの生成に失敗しました';
-                    return;
+            if (navigator.clipboard && navigator.clipboard.write) {
+                try {
+                    await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+                    if (msgSpan) {
+                        msgSpan.textContent = 'コピーしました！';
+                        setTimeout(() => msgSpan.textContent = '', 3000);
+                    }
+                } catch (err) {
+                    console.warn("クリップボードへのコピーに失敗しました:", err);
+                    downloadBlob(blob, "best11.png", msgSpan);
                 }
-                if (navigator.clipboard && navigator.clipboard.write) {
-                    navigator.clipboard.write([new ClipboardItem({ "image/png": blob })])
-                        .then(() => {
-                            if (msgSpan) {
-                                msgSpan.textContent = 'コピーしました！';
-                                setTimeout(() => msgSpan.textContent = '', 3000);
-                            }
-                        })
-                        .catch(err => {
-                            console.warn("クリップボードへのコピーに失敗しました:", err);
-                            downloadImage(canvas, "best11.png", msgSpan);
-                        });
-                } else {
-                    downloadImage(canvas, "best11.png", msgSpan);
-                }
-            }, 'image/png');
+            } else {
+                downloadBlob(blob, "best11.png", msgSpan);
+            }
         }
     } catch (error) {
         console.error('画像生成または保存中にエラー:', error);
-        if (msgSpan) msgSpan.textContent = 'エラーが発生しました';
+        if (msgSpan) msgSpan.textContent = `エラーが発生しました: ${error.message}`;
     } finally {
         if (buttonsContainer) buttonsContainer.style.visibility = 'visible';
         copyBtn.disabled = false;
