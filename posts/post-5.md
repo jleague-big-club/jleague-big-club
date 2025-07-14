@@ -68,3 +68,17 @@
 
 </div>
 
+
+
+<hr>
+
+
+
+<div class="article-link-button-container">
+
+&nbsp; <p style="text-align: center; margin-bottom: 1em;"><strong>【あわせて読みたい】</strong><br>J1リーグの予測についてはnoteで公開しています。</p>
+
+&nbsp; <a href="https://note.com/jleague\_bigclub/n/nc5bf4685cc69?sub\_rt=share\_pw" target="\_blank" rel="noopener noreferrer" class="article-link-button secondary">J1版の解説記事をnoteで読む</a>
+
+</div>
+

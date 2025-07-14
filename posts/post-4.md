@@ -48,3 +48,10 @@
 <div class="article-link-button-container">
   <a href="#prediction" class="article-link-button">シーズン予測の全データを見る</a>
 </div>
+
+<hr>
+
+<div class="article-link-button-container">
+  <p style="text-align: center; margin-bottom: 1em;"><strong>【あわせて読みたい】</strong><br>J1リーグの予測についてはnoteで公開しています。</p>
+  <a href="https://note.com/jleague_bigclub/n/nc5bf4685cc69?sub_rt=share_pw" target="_blank" rel="noopener noreferrer" class="article-link-button secondary">J1版の解説記事をnoteで読む</a>
+</div>
