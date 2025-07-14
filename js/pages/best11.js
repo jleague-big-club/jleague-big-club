@@ -295,27 +295,35 @@ function setupBest11EventListeners() {
                 html2canvas(captureElem, { backgroundColor: null, scale: 2, useCORS: true }).then(canvas => {
                     if (selectedLabel) selectedLabel.classList.add('selected');
 
-                    canvas.toBlob(blob => {
-                        if (!blob) {
-                            if (msgSpan) msgSpan.textContent = 'エラー: 画像データの生成に失敗しました';
-                            return;
-                        }
-                        if (navigator.clipboard && navigator.clipboard.write) {
-                            navigator.clipboard.write([new ClipboardItem({ "image/webp": blob })])
-                                .then(() => {
-                                    if (msgSpan) {
-                                        msgSpan.textContent = 'コピーしました！';
-                                        setTimeout(() => msgSpan.textContent = '', 3000);
-                                    }
-                                })
-                                .catch(err => {
-                                    console.warn("クリップボードへのコピーに失敗しました:", err);
-                                    downloadImage(canvas, "best11.webp", msgSpan);
-                                });
-                        } else {
-                            downloadImage(canvas, "best11.webp", msgSpan);
-                        }
-                    }, 'image/webp');
+                    const isMobile = window.innerWidth <= 768;
+
+                    if (isMobile) {
+                        // スマホの場合はダウンロード
+                        downloadImage(canvas, "best11.png", msgSpan);
+                    } else {
+                        // PCの場合はクリップボードへコピー（失敗時はダウンロードにフォールバック）
+                        canvas.toBlob(blob => {
+                            if (!blob) {
+                                if (msgSpan) msgSpan.textContent = 'エラー: 画像データの生成に失敗しました';
+                                return;
+                            }
+                            if (navigator.clipboard && navigator.clipboard.write) {
+                                navigator.clipboard.write([new ClipboardItem({ "image/png": blob })])
+                                    .then(() => {
+                                        if (msgSpan) {
+                                            msgSpan.textContent = 'コピーしました！';
+                                            setTimeout(() => msgSpan.textContent = '', 3000);
+                                        }
+                                    })
+                                    .catch(err => {
+                                        console.warn("クリップボードへのコピーに失敗しました:", err);
+                                        downloadImage(canvas, "best11.png", msgSpan);
+                                    });
+                            } else {
+                                downloadImage(canvas, "best11.png", msgSpan);
+                            }
+                        }, 'image/png');
+                    }
                 }).catch(err => {
                     console.error("画像キャプチャ中にエラー:", err);
                     if (msgSpan) msgSpan.textContent = 'エラー: 画像のキャプチャに失敗しました';
@@ -337,7 +345,9 @@ function setupBest11EventListeners() {
     function downloadImage(canvas, filename, msgSpan) {
         try {
             const a = document.createElement('a');
-            a.href = canvas.toDataURL('image/webp');
+            // ファイル拡張子に基づいてMIMEタイプを決定
+            const mimeType = filename.endsWith('.png') ? 'image/png' : 'image/webp';
+            a.href = canvas.toDataURL(mimeType);
             a.download = filename;
             document.body.appendChild(a);
             a.click();
