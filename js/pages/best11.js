@@ -19,6 +19,100 @@ const best11PosCoords = {
     "433": { GK: { top: 290, left: 140 }, CB1: { top: 200, left: 38 }, CB2: { top: 235, left: 100 }, CB3: { top: 235, left: 190 }, CB4: { top: 200, left: 240 }, MF1: { top: 155, left: 140 }, MF2: { top: 130, left: 55 }, MF3: { top: 130, left: 225 }, MF4: { top: 70, left: 70 }, FW: { top: 25, left: 140 }, MF5: { top: 70, left: 210 } }
 };
 
+
+// --- Event Handling and Utility Functions ---
+
+function downloadImage(canvas, filename, msgSpan) {
+    try {
+        const a = document.createElement('a');
+        a.href = canvas.toDataURL('image/png');
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        if (msgSpan) {
+            msgSpan.textContent = 'ダウンロードしました！';
+            setTimeout(() => msgSpan.textContent = '', 5000);
+        }
+    } catch (e) {
+        console.error("画像のダウンロードに失敗しました:", e);
+        if(msgSpan) msgSpan.textContent = 'エラー: 画像のダウンロードに失敗しました';
+    }
+}
+
+async function handleBest11ImageCapture(copyBtn) {
+    if (!copyBtn) return;
+    
+    copyBtn.disabled = true;
+    const postBtn = document.getElementById('post-to-x-btn');
+    if (postBtn) postBtn.disabled = true;
+
+    const msgSpan = document.getElementById('copy-best11-img-msg');
+    const buttonsContainer = document.getElementById('capture-buttons');
+
+    if (msgSpan) msgSpan.textContent = '画像生成準備中...';
+
+    try {
+        await loadScript(HTML2CANVAS_URL);
+
+        const captureElem = document.getElementById('best11-capture-area');
+        const selectedLabel = captureElem.querySelector('.best11-player-label.selected');
+        
+        if (selectedLabel) selectedLabel.classList.remove('selected');
+        if (buttonsContainer) buttonsContainer.style.visibility = 'hidden';
+        if (msgSpan) msgSpan.textContent = '';
+        
+        const canvas = await html2canvas(captureElem, { backgroundColor: null, scale: 2, useCORS: true });
+        
+        if (selectedLabel) selectedLabel.classList.add('selected');
+
+        const isMobile = window.innerWidth <= 768;
+
+        if (isMobile) {
+            downloadImage(canvas, "best11.png", msgSpan);
+        } else {
+            canvas.toBlob(blob => {
+                if (!blob) {
+                    if (msgSpan) msgSpan.textContent = 'エラー: 画像データの生成に失敗しました';
+                    return;
+                }
+                if (navigator.clipboard && navigator.clipboard.write) {
+                    navigator.clipboard.write([new ClipboardItem({ "image/png": blob })])
+                        .then(() => {
+                            if (msgSpan) {
+                                msgSpan.textContent = 'コピーしました！';
+                                setTimeout(() => msgSpan.textContent = '', 3000);
+                            }
+                        })
+                        .catch(err => {
+                            console.warn("クリップボードへのコピーに失敗しました:", err);
+                            downloadImage(canvas, "best11.png", msgSpan);
+                        });
+                } else {
+                    downloadImage(canvas, "best11.png", msgSpan);
+                }
+            }, 'image/png');
+        }
+    } catch (error) {
+        console.error('画像生成または保存中にエラー:', error);
+        if (msgSpan) msgSpan.textContent = 'エラーが発生しました';
+    } finally {
+        if (buttonsContainer) buttonsContainer.style.visibility = 'visible';
+        copyBtn.disabled = false;
+        if (postBtn) postBtn.disabled = false;
+    }
+}
+
+function handlePostToX() {
+    const text = "私のベストイレブンはこちら！\n#あなたのベストイレブン";
+    const url = "https://jleague-big-club.com";
+    const tweetUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+    window.open(tweetUrl, '_blank');
+}
+
+
+// --- UI Rendering Functions ---
+
 function renderBest11Filters() {
     const playerData = getPlayerData();
     const filtersDiv = document.getElementById('best11-filters');
@@ -44,6 +138,74 @@ function renderBest11Filters() {
 
     filtersDiv.innerHTML = html;
 }
+
+function renderPositionTabs() {
+    const posBtnContainer = document.getElementById("position-btn-container");
+    if (!posBtnContainer) return;
+
+    const positions = best11Positions[best11Formation];
+    let html = '';
+    positions.forEach((pos, i) => {
+        html += `<button class="position-btn${i === 0 ? ' active' : ''}" data-pos="${pos.key}" onclick="selectPosition('${pos.key}', this)">${pos.label}</button>`;
+    });
+    posBtnContainer.innerHTML = html;
+    setTimeout(() => selectPosition(positions[0].key, posBtnContainer.querySelector('.position-btn')), 10);
+}
+
+function renderBest11Table() {
+    const tableDiv = document.getElementById("best11-table");
+    const positions = best11Positions[best11Formation];
+    const playerData = getPlayerData();
+
+    const posOrder = [...positions].sort((a, b) =>
+        (a.key.startsWith('FW') ? -1 : 1) - (b.key.startsWith('FW') ? -1 : 1) ||
+        (b.key.startsWith('MF') ? 1 : -1) - (a.key.startsWith('MF') ? 1 : -1) ||
+        (b.key.startsWith('CB') ? 1 : -1) - (a.key.startsWith('CB') ? 1 : -1) ||
+        (a.key === 'GK' ? 1 : -1)
+    );
+
+    let html = '<table><thead><tr><th>ポジション</th><th>選手</th><th>クラブ</th><th>リーグ</th></tr></thead><tbody>';
+    posOrder.forEach(pos => {
+        let name = best11Selected[pos.key] || '';
+        let club = '', league = '';
+        if (name) {
+            const player = playerData.find(p => p['選手名'] === name);
+            if (player) {
+                club = player['所属クラブ'] || '';
+                league = player['リーグ'] || '';
+            }
+        }
+        html += `<tr><td style="font-weight:bold;">${pos.label}</td><td${name ? '' : ' class="unselected"'}>${name || '未選択'}</td><td>${club || '-'}</td><td>${league || '-'}</td></tr>`;
+    });
+    html += "</tbody></table>";
+    tableDiv.innerHTML = html;
+}
+
+function renderCourtPlayers() {
+    const area = document.getElementById('court-area');
+    if (!area) return;
+    area.innerHTML = '';
+    
+    best11Positions[best11Formation].forEach(pos => {
+        const c = best11PosCoords[best11Formation][pos.key];
+        if (!c) return;
+
+        const label = document.createElement('div');
+        label.className = 'best11-player-label' + (best11Selected[pos.key] ? '' : ' unselected') + (pos.key === nowSelectedPosKey ? ' selected' : '');
+        label.style.top = `${c.top}px`;
+        label.style.left = `${c.left}px`;
+
+        let name = best11Selected[pos.key] ? best11Selected[pos.key] : pos.label;
+        let fontSize = name.length >= 7 ? '0.80em' : (name.length >= 6 ? '0.89em' : '1em');
+        label.innerHTML = `<span style="font-size:${fontSize};">${name}</span>`;
+        label.onclick = () => selectPosition(pos.key, document.querySelector(`.position-btn[data-pos="${pos.key}"]`));
+        label.style.cursor = "pointer";
+        area.appendChild(label);
+    });
+}
+
+// --- Core Logic Functions ---
+
 window.setBest11Filter = (type, value, element) => {
     best11Filter = { type, value };
     document.querySelectorAll('#best11-filters .filter-btn').forEach(btn => btn.classList.remove('active'));
@@ -62,9 +224,9 @@ window.setBest11Filter = (type, value, element) => {
     
     let clubsToShow;
     if (best11Filter.type === 'league') {
-        clubsToShow = originalOptions.filter(([club, league]) => league === best11Filter.value);
+        clubsToShow = originalOptions.filter(([, league]) => league === best11Filter.value);
     } else if (best11Filter.type === '5-da-league') {
-        clubsToShow = originalOptions.filter(([club, league]) => majorLeagues.includes(league));
+        clubsToShow = originalOptions.filter(([, league]) => majorLeagues.includes(league));
     } else {
         clubsToShow = originalOptions;
     }
@@ -85,20 +247,7 @@ window.setBest11Filter = (type, value, element) => {
     }
 };
 
-function renderPositionTabs() {
-    const posBtnContainer = document.getElementById("position-btn-container");
-    if (!posBtnContainer) return;
-
-    const positions = best11Positions[best11Formation];
-    let html = '';
-    positions.forEach((pos, i) => {
-        html += `<button class="position-btn${i === 0 ? ' active' : ''}" data-pos="${pos.key}" onclick="selectPosition('${pos.key}', this)">${pos.label}</button>`;
-    });
-    posBtnContainer.innerHTML = html;
-    setTimeout(() => selectPosition(positions[0].key, posBtnContainer.querySelector('.position-btn')), 10);
-}
-
-function selectPosition(posKey, btn) {
+window.selectPosition = (posKey, btn) => {
     nowSelectedPosKey = posKey;
     document.querySelectorAll('#position-tabs .position-btn').forEach(b => b.classList.remove('active'));
     if (btn) btn.classList.add('active');
@@ -168,68 +317,15 @@ function selectPosition(posKey, btn) {
         });
 
         document.addEventListener('click', (e) => {
-            if (container.classList.contains('open') && !container.contains(e.target)) {
+            if (container && container.classList.contains('open') && !container.contains(e.target)) {
                 container.classList.remove('open');
             }
         });
     }
     renderCourtPlayers();
-}
-window.selectPosition = selectPosition;
+};
 
-function renderBest11Table() {
-    const tableDiv = document.getElementById("best11-table");
-    const positions = best11Positions[best11Formation];
-    const playerData = getPlayerData();
-
-    const posOrder = [...positions].sort((a, b) =>
-        (a.key.startsWith('FW') ? -1 : 1) - (b.key.startsWith('FW') ? -1 : 1) ||
-        (b.key.startsWith('MF') ? 1 : -1) - (a.key.startsWith('MF') ? 1 : -1) ||
-        (b.key.startsWith('CB') ? 1 : -1) - (a.key.startsWith('CB') ? 1 : -1) ||
-        (a.key === 'GK' ? 1 : -1)
-    );
-
-    let html = '<table><thead><tr><th>ポジション</th><th>選手</th><th>クラブ</th><th>リーグ</th></tr></thead><tbody>';
-    posOrder.forEach(pos => {
-        let name = best11Selected[pos.key] || '';
-        let club = '', league = '';
-        if (name) {
-            const player = playerData.find(p => p['選手名'] === name);
-            if (player) {
-                club = player['所属クラブ'] || '';
-                league = player['リーグ'] || '';
-            }
-        }
-        html += `<tr><td style="font-weight:bold;">${pos.label}</td><td${name ? '' : ' class="unselected"'}>${name || '未選択'}</td><td>${club || '-'}</td><td>${league || '-'}</td></tr>`;
-    });
-    html += "</tbody></table>";
-    tableDiv.innerHTML = html;
-}
-
-function renderCourtPlayers() {
-    const area = document.getElementById('court-area');
-    if (!area) return;
-    area.innerHTML = '';
-    
-    best11Positions[best11Formation].forEach(pos => {
-        const c = best11PosCoords[best11Formation][pos.key];
-        if (!c) return;
-
-        const label = document.createElement('div');
-        label.className = 'best11-player-label' + (best11Selected[pos.key] ? '' : ' unselected') + (pos.key === nowSelectedPosKey ? ' selected' : '');
-        label.style.top = `${c.top}px`;
-        label.style.left = `${c.left}px`;
-
-        let name = best11Selected[pos.key] ? best11Selected[pos.key] : pos.label;
-        let fontSize = name.length >= 7 ? '0.80em' : (name.length >= 6 ? '0.89em' : '1em');
-        label.innerHTML = `<span style="font-size:${fontSize};">${name}</span>`;
-        label.onclick = () => selectPosition(pos.key, document.querySelector(`.position-btn[data-pos="${pos.key}"]`));
-        label.style.cursor = "pointer";
-        area.appendChild(label);
-    });
-}
-
-function choosePlayer(posKey, name) {
+window.choosePlayer = (posKey, name) => {
     if (name) {
         best11Selected[posKey] = name;
     } else {
@@ -237,11 +333,9 @@ function choosePlayer(posKey, name) {
     }
     renderBest11Table();
     renderCourtPlayers();
-}
-window.choosePlayer = choosePlayer;
+};
 
-
-function setFormation(form, btn) {
+window.setFormation = (form, btn) => {
     best11Formation = form;
     document.getElementById("formation-title").textContent = "フォーメーション：" + btn.textContent;
     document.querySelectorAll('.formation-btn').forEach(b => b.classList.remove('active'));
@@ -256,117 +350,38 @@ function setFormation(form, btn) {
     document.querySelector('#best11-filters .filter-btn').classList.add('active');
     const clubSelect = document.getElementById('club-filter-select');
     if (clubSelect) clubSelect.value = 'all';
-}
-window.setFormation = setFormation;
+};
+
+
+// --- Initialization ---
 
 function setupBest11EventListeners() {
-    const postBtn = document.getElementById("post-to-x-btn");
-    if (postBtn) {
-        postBtn.onclick = function() {
-            const text = "私のベストイレブンはこちら！\n#あなたのベストイレブン";
-            const url = "https://jleague-big-club.com";
-            const tweetUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
-            window.open(tweetUrl, '_blank');
-        };
-    }
+    const captureButtonsContainer = document.getElementById('capture-buttons');
+    if (!captureButtonsContainer) return;
 
-    const copyBtn = document.getElementById("copy-best11-img-btn");
-    if(copyBtn) {
-        copyBtn.onclick = async function () {
-            this.disabled = true;
-            const postBtn = document.getElementById('post-to-x-btn');
-            if (postBtn) postBtn.disabled = true;
+    // To prevent multiple listeners, we replace the element with its clone, which removes all old listeners
+    const newContainer = captureButtonsContainer.cloneNode(true);
+    captureButtonsContainer.parentNode.replaceChild(newContainer, captureButtonsContainer);
 
-            const msgSpan = document.getElementById('copy-best11-img-msg');
-            if (msgSpan) msgSpan.textContent = '画像生成準備中...';
+    newContainer.addEventListener('click', async (event) => {
+        const target = event.target;
+        
+        const copyBtn = target.closest('#copy-best11-img-btn');
+        const postBtn = target.closest('#post-to-x-btn');
 
-            try {
-                await loadScript(HTML2CANVAS_URL);
-
-                const captureElem = document.getElementById('best11-capture-area');
-                const buttonsContainer = document.getElementById('capture-buttons');
-                const selectedLabel = captureElem.querySelector('.best11-player-label.selected');
-                
-                if (selectedLabel) selectedLabel.classList.remove('selected');
-                if (buttonsContainer) buttonsContainer.style.visibility = 'hidden';
-                if (msgSpan) msgSpan.textContent = '';
-                
-                html2canvas(captureElem, { backgroundColor: null, scale: 2, useCORS: true }).then(canvas => {
-                    if (selectedLabel) selectedLabel.classList.add('selected');
-
-                    const isMobile = window.innerWidth <= 768;
-
-                    if (isMobile) {
-                        // スマホの場合はダウンロード
-                        downloadImage(canvas, "best11.png", msgSpan);
-                    } else {
-                        // PCの場合はクリップボードへコピー（失敗時はダウンロードにフォールバック）
-                        canvas.toBlob(blob => {
-                            if (!blob) {
-                                if (msgSpan) msgSpan.textContent = 'エラー: 画像データの生成に失敗しました';
-                                return;
-                            }
-                            if (navigator.clipboard && navigator.clipboard.write) {
-                                navigator.clipboard.write([new ClipboardItem({ "image/png": blob })])
-                                    .then(() => {
-                                        if (msgSpan) {
-                                            msgSpan.textContent = 'コピーしました！';
-                                            setTimeout(() => msgSpan.textContent = '', 3000);
-                                        }
-                                    })
-                                    .catch(err => {
-                                        console.warn("クリップボードへのコピーに失敗しました:", err);
-                                        downloadImage(canvas, "best11.png", msgSpan);
-                                    });
-                            } else {
-                                downloadImage(canvas, "best11.png", msgSpan);
-                            }
-                        }, 'image/png');
-                    }
-                }).catch(err => {
-                    console.error("画像キャプチャ中にエラー:", err);
-                    if (msgSpan) msgSpan.textContent = 'エラー: 画像のキャプチャに失敗しました';
-                }).finally(() => {
-                    if (buttonsContainer) buttonsContainer.style.visibility = 'visible';
-                });
-
-            } catch (error) {
-                console.error('html2canvasの読み込みに失敗しました', error);
-                if (msgSpan) msgSpan.textContent = 'エラー: 画像生成機能の準備に失敗';
-            } finally {
-                this.disabled = false;
-                if (postBtn) postBtn.disabled = false;
-            }
-        };
-    }
-
-    function downloadImage(canvas, filename, msgSpan) {
-        try {
-            const a = document.createElement('a');
-            const mimeType = filename.endsWith('.png') ? 'image/png' : 'image/webp';
-            a.href = canvas.toDataURL(mimeType);
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            if (msgSpan) {
-              msgSpan.textContent = 'ダウンロードしました！';
-              setTimeout(() => msgSpan.textContent = '', 5000);
-            }
-        } catch (e) {
-            console.error("画像のダウンロードに失敗しました:", e);
-            if(msgSpan) msgSpan.textContent = 'エラー: 画像のダウンロードに失敗しました';
+        if (copyBtn) {
+            await handleBest11ImageCapture(copyBtn);
+        } else if (postBtn) {
+            handlePostToX();
         }
-    }
+    });
 }
-
 
 export default function initBest11Page() {
     renderBest11Filters();
     renderPositionTabs();
     renderBest11Table();
     renderCourtPlayers();
-    setupBest11EventListeners();
     
     const copyButton = document.getElementById('copy-best11-img-btn');
     if (copyButton) {
@@ -376,4 +391,6 @@ export default function initBest11Page() {
             copyButton.innerHTML = '画像をコピー';
         }
     }
+
+    setupBest11EventListeners();
 }
