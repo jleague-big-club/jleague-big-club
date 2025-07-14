@@ -4,7 +4,7 @@ body{background:linear-gradient(135deg,#232947,#24304e);color:#f0f0f0;font-famil
 .nav-dropdown-content a{background:none;border:none;border-radius:8px;box-shadow:none;box-sizing:border-box;color:#f0f0f0;cursor:pointer;display:block;font-size:1rem;font-weight:700;margin:0;padding:11px 15px;text-align:left;text-decoration:none;transition:background .14s,color .12s;width:100%}
 .nav-dropdown-content a:focus,.nav-dropdown-content a:hover{background:#2a4b76;color:#fff}
 @media (max-width:768px){body{font-size:15px;padding-bottom:0}main{padding:0 4vw 80px}.page-title-row h1{align-items:center;flex-direction:column-reverse;font-size:1.6rem;gap:12px;text-align:center}table{font-size:13px}#mobile-header{align-items:center;background-color:#25304a;display:flex;height:55px;justify-content:center;position:sticky;top:0;width:100%;z-index:1001}#mobile-header .home-icon-link{font-size:1rem;gap:8px;padding:4px 12px;position:static;transform:none}#mobile-header .home-icon-link svg{height:20px;width:20px}nav{background-color:transparent;height:0;padding:0;position:static}nav .home-icon-link{display:none}.hamburger-btn{background:transparent;border:none;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;height:40px;justify-content:space-around;left:10px;padding:8px;position:fixed;top:8px;width:40px;z-index:11001}.hamburger-btn span{background:#fff;border-radius:10px;height:.2rem;width:100%}.nav-links{align-items:stretch;backdrop-filter:blur(5px);background:#232947e8;box-sizing:border-box;flex-direction:column;gap:0;height:100vh;justify-content:flex-start;left:0;max-width:250px;padding-left:10px;padding-right:10px;padding-top:80px;position:fixed;top:0;transform:translateX(-100%);transition:transform .3s ease-in-out;width:70%;z-index:11000}.nav-links.open{transform:translateX(0)}.nav-links .nav-dropdown>button,.nav-links button{box-sizing:border-box;font-size:1.1rem;margin-bottom:0;width:100%}.nav-links>.nav-dropdown,.nav-links>button{margin-bottom:18px;width:100%}.nav-dropdown-content{background:none;border:none;box-shadow:none;box-sizing:border-box;display:none;margin-top:15px;padding-left:20px;position:static;width:100%}.nav-dropdown:focus-within .nav-dropdown-content,.nav-dropdown:hover .nav-dropdown-content{display:none}.nav-dropdown.menu-open .nav-dropdown-content{display:block}.menu-overlay{background-color:rgba(0,0,0,.6);cursor:pointer;display:none;height:100%;left:0;position:fixed;top:0;width:100%;z-index:10999}.menu-overlay.open{display:block}.carousel-container{background-color:transparent;border:none;border-radius:0;margin:0 auto 25px;padding:0}.carousel-item{min-width:100%;padding:0 5px}.carousel-item img{max-height:200px}.banner-text{font-size:1.05em;padding:15px 12px 10px}.carousel-btn{height:38px;width:38px}.carousel-btn.prev{left:15px}.carousel-btn.next{right:15px}.big5-row{flex-direction:column;gap:12px;width:100%}.club-card{margin:0 auto;width:90%}#best11-capture-core{align-items:center;flex-direction:column;gap:20px;width:100%}#best11-capture-core>div:first-child{max-width:100%;min-width:0;order:-1;transform:scale(.95);transform-origin:top center}#best11-table,#table-footer{display:none!important}#table-footer{color:#bbb;display:block!important;font-size:1.2rem;margin-top:0;text-align:center}#best11-capture-area{box-sizing:border-box;min-width:0;padding-left:5px;padding-right:5px;width:100%}#best11-capture-area>div:first-child{font-size:1.6rem!important}.blog-card{margin:0 auto;width:90%} .metrics-chart-wrap{box-sizing:border-box;max-width:100%;padding:12px 5px}
-  #attendance-chart-wrap{min-height:auto} canvas{height:210px!important}#player-table-wrap td:nth-child(2),#player-table-wrap th:nth-child(2){display:none}#score-detail-pop.popup-visible,#score-method-pop.popup-visible{bottom:77px;bottom:auto;left:50%;max-height:85vh;max-width:88vw;overflow-y:auto;right:auto;top:50%;transform:translate(-50%,-50%);width:88vw}#club-status-board{box-sizing:border-box;font-size:1rem!important;width:95vw!important}#attendance-output-container th,#ranking-table-container th{font-size:.75rem;line-height:1.2;padding:7px 4px}#attendance-output-container td:nth-child(7),#attendance-output-container th:nth-child(7){display:none}#club-status-board .club-status-grid{display:grid;font-size:.9rem;gap:12px 15px;grid-template-columns:1fr 1fr;margin-top:15px}#club-status-board .status-item{background:rgba(0,0,0,.2);border-radius:6px;padding:8px 10px}#club-status-board .status-label{color:#abc;display:block;font-size:.8rem;margin-bottom:3px}#club-status-board .status-value{color:#fff;font-size:1.05rem;font-weight:700}#club-status-board .status-value.score{color:gold;font-size:1.15rem}#jleague-history th{font-size:.75rem;line-height:1.2;padding:7px 4px}#europe-mobile-view{display:none}.player-card-mobile{align-items:center;background-color:#344062;border:1px solid #4a5d8a;border-radius:10px;display:flex;gap:15px;margin-bottom:15px;padding:12px}.player-card-mobile .player-info{flex-grow:1}.player-card-mobile .player-info h3{color:#a2d2ff;font-size:1.15em;margin:0 0 8px}.player-card-mobile .player-info p{color:#eaf7fc;display:flex;font-size:.9em;margin:3px 0}.player-card-mobile .player-info p strong{color:#9cb3d8;display:inline-block;min-width:80px}.player-card-mobile .player-image{flex-shrink:0;height:60px;width:60px}.player-card-mobile .player-image img{background-color:#4a5d8a;border-radius:50%;height:100%;object-fit:cover;width:100%}.page-subtitle{color:#baf7fa;font-size:1.25rem;margin:10px 0 20px;text-align:center}#europe-top20 td,#europe-top20 th{font-size:.57rem;padding:8px 4px;white-space:normal}#europe-pc-view{display:none!important}#europe-mobile-view{display:block!important}
+  #attendance-chart-wrap{min-height:auto} #player-table-wrap td:nth-child(2),#player-table-wrap th:nth-child(2){display:none}#score-detail-pop.popup-visible,#score-method-pop.popup-visible{bottom:77px;bottom:auto;left:50%;max-height:85vh;max-width:88vw;overflow-y:auto;right:auto;top:50%;transform:translate(-50%,-50%);width:88vw}#club-status-board{box-sizing:border-box;font-size:1rem!important;width:95vw!important}#attendance-output-container th,#ranking-table-container th{font-size:.75rem;line-height:1.2;padding:7px 4px}#attendance-output-container td:nth-child(7),#attendance-output-container th:nth-child(7){display:none}#club-status-board .club-status-grid{display:grid;font-size:.9rem;gap:12px 15px;grid-template-columns:1fr 1fr;margin-top:15px}#club-status-board .status-item{background:rgba(0,0,0,.2);border-radius:6px;padding:8px 10px}#club-status-board .status-label{color:#abc;display:block;font-size:.8rem;margin-bottom:3px}#club-status-board .status-value{color:#fff;font-size:1.05rem;font-weight:700}#club-status-board .status-value.score{color:gold;font-size:1.15rem}#jleague-history th{font-size:.75rem;line-height:1.2;padding:7px 4px}#europe-mobile-view{display:none}.player-card-mobile{align-items:center;background-color:#344062;border:1px solid #4a5d8a;border-radius:10px;display:flex;gap:15px;margin-bottom:15px;padding:12px}.player-card-mobile .player-info{flex-grow:1}.player-card-mobile .player-info h3{color:#a2d2ff;font-size:1.15em;margin:0 0 8px}.player-card-mobile .player-info p{color:#eaf7fc;display:flex;font-size:.9em;margin:3px 0}.player-card-mobile .player-info p strong{color:#9cb3d8;display:inline-block;min-width:80px}.player-card-mobile .player-image{flex-shrink:0;height:60px;width:60px}.player-card-mobile .player-image img{background-color:#4a5d8a;border-radius:50%;height:100%;object-fit:cover;width:100%}.page-subtitle{color:#baf7fa;font-size:1.25rem;margin:10px 0 20px;text-align:center}#europe-top20 td,#europe-top20 th{font-size:.57rem;padding:8px 4px;white-space:normal}#europe-pc-view{display:none!important}#europe-mobile-view{display:block!important}
   .nav-links>a, .nav-dropdown>a {
     box-sizing: border-box;
     font-size: 1.1rem;
@@ -82,4 +82,133 @@ body{background:linear-gradient(135deg,#232947,#24304e);color:#f0f0f0;font-famil
   #rank-buttons .rank-tab-btn {
     margin: 0;
   }
+}
+/* === Bar Chart Race Styles (for bigclub-japan.com) === */
+.bcr-page-container {
+    max-width: 720px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 15px;
+    background-color: #293352;
+    border-radius: 12px;
+    color: #f0f0f0;
+    text-align: center;
+    box-sizing: border-box; /* ← この行を追加 */
+}
+.bcr-page-container h2 {
+    color: #baf7fa;
+    font-size: 1.7em;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+.bcr-league-selector {
+    margin-bottom: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+}
+.bcr-league-btn, .bcr-info-btn {
+    padding: 6px 14px;
+    border: 2px solid #4a5a7f;
+    background-color: transparent;
+    color: #abc;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+.bcr-league-btn:hover, .bcr-info-btn:hover { background-color: #4a5a7f; color: white; }
+.bcr-league-btn.active { background: linear-gradient(90deg, #27aee7 60%, #aaf7fd); color: #143060; border-color: #27aee7; }
+.bcr-info-btn { background-color: #553c7b; border-color: #6a4c9a; color: #f0f0f0; }
+.bcr-info-btn:hover { background-color: #6a4c9a; }
+.bcr-description {
+    color: #abc;
+    line-height: 1.5;
+    margin-bottom: 15px;
+    font-size: 0.85em;
+}
+.bcr-chart-wrapper {
+    position: relative;
+    width: 100%;
+}
+.bcr-controls-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+.bcr-control-btn {
+    background: linear-gradient(90deg, #27aee7 60%, #aaf7fd);
+    border: none;
+    border-radius: 8px;
+    color: #143060;
+    font-weight: bold;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.bcr-control-btn:hover { transform: scale(1.05); }
+.bcr-section-display {
+    font-size: 1em;
+    font-weight: bold;
+    color: #baf7fa;
+    min-width: 65px;
+    text-align: center;
+}
+.bcr-slider { -webkit-appearance: none; width: 50%; height: 10px; background: #4a5a7f; outline: none; border-radius: 5px; opacity: 0.7; transition: opacity .2s; }
+.bcr-slider:hover { opacity: 1; }
+.bcr-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; background: #299ad3; cursor: pointer; border-radius: 50%; }
+.bcr-slider::-moz-range-thumb { width: 20px; height: 20px; background: #299ad3; cursor: pointer; border-radius: 50%; }
+.bcr-modal { display: none; position: fixed; z-index: 10003; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); animation: bcr-fadeIn 0.3s; }
+.bcr-modal-content { background-color: #293352; margin: 15% auto; padding: 25px; border: 1px solid #888; border-radius: 12px; width: 80%; max-width: 500px; text-align: left; position: relative; }
+.bcr-close-btn { color: #aaa; position: absolute; top: 10px; right: 20px; font-size: 28px; font-weight: bold; }
+.bcr-close-btn:hover, .bcr-close-btn:focus { color: white; text-decoration: none; cursor: pointer; }
+.bcr-modal-content h3 { color: #baf7fa; margin-top: 0; }
+.bcr-modal-content p { color: #abc; line-height: 1.8; }
+@keyframes bcr-fadeIn { from {opacity: 0} to {opacity: 1} }
+/* === バーチャートレースの表示修正 === */
+
+/* 1. ラベルが見切れないように、グラフのコンテナに左パディングを追加 */
+.bcr-chart-wrapper {
+    box-sizing: border-box;
+    padding-left: 100px;
+}
+
+/* 2. グラフの背景を透明にして、ページの背景に馴染ませる */
+#bcr-chart {
+    background: transparent;
+}
+
+/* 3. グラフの描画エリア左下に表示する「節」のスタイル */
+#bcr-race-section-display {
+    position: absolute;
+    bottom: 50px;
+    
+    /* ▼▼▼ ここから変更 ▼▼▼ */
+    /* 中央揃えをやめて、左からの位置を直接指定します */
+    left: 550px; 
+    /* 中央揃えに使っていたtransformは不要なのでリセットします */
+    transform: none; 
+    /* ▲▲▲ ここまで変更 ▲▲▲ */
+
+    font-size: 3.2rem;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.06);
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* スマホ表示の調整 */
+@media (max-width: 768px) {
+    .bcr-chart-wrapper {
+        padding-left: 0px;
+    }
+    #bcr-race-section-display {
+        font-size: 2.0rem;
+        bottom: 30px;
+        /* ▼▼▼ スマホでも左からの位置を指定 ▼▼▼ */
+        left: 270px;
+    }
 }

@@ -18,6 +18,7 @@ const pageModules = {
     'europe-top20': './pages/europe-top20.js',
     'best11': './pages/best11.js',
     'simulation': './pages/simulation.js',
+    'barchartrace': './pages/barchartrace.js' // ← ここに barchartrace を追加
 };
 
 // 読み込み済みのモジュールをキャッシュ
@@ -47,7 +48,8 @@ async function showPage(id, btn, fromPopState = false) {
             'europe': '5大リーグ日本人選手 - Jリーグビッグクラブ分析',
             'europe-top20': '欧州クラブ売上高TOP20 - Jリーグビッグクラブ分析',
             'best11': 'ベスト11メーカー - Jリーグビッグクラブ分析',
-            'simulation': 'ビッグクラブシミュレーター - Jリーグビッグクラブ分析'
+            'simulation': 'ビッグクラブシミュレーター - Jリーグビッグクラブ分析',
+            'barchartrace': 'Jリーグ バーチャートレース - Jリーグビッグクラブ分析' // ← バーチャートレース用のタイトルを追加
         };
         // 対応するタイトルがあれば文書のタイトルを更新
         const baseId = id.split('/')[0];
@@ -99,9 +101,10 @@ if (typeof gtag === 'function') {
             if (!loadedModules[id]) {
                 const module = await import(pageModules[id]);
                 loadedModules[id] = module;
-            }
-            if (loadedModules[id] && typeof loadedModules[id].default === 'function') {
-                await loadedModules[id].default();
+                // 初回読み込み時にデフォルトエクスポートされた関数を実行
+                if (module.default && typeof module.default === 'function') {
+                    await module.default();
+                }
             }
         }
         
@@ -109,8 +112,6 @@ if (typeof gtag === 'function') {
         if (id === 'blog') {
             const blogModule = loadedModules['blog'];
             if (blogModule) {
-                 // isShowingArticleDetailのチェックを外し、常に一覧表示処理を試みる
-                 // 内部で詳細表示中かどうかの判定はshowBlogListに任せる
                 blogModule.showBlogList();
             }
         } else {

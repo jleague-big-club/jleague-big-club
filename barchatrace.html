@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jリーグ 2025 バーチャートレース</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <style>
+        /* === スタイル全体をコンパクトに調整 === */
+        body { background-color: #1a2035; font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 10px; box-sizing: border-box; }
+        .page-container {
+            max-width: 720px; /* 横幅を詰める */
+            width: 100%;
+            margin: 0;
+            padding: 15px; /* 内側の余白を詰める */
+            background-color: #293352;
+            border-radius: 12px;
+            color: #f0f0f0;
+            text-align: center;
+        }
+        .page-container h1 {
+            color: #baf7fa;
+            font-size: 1.7em; /* フォントサイズを調整 */
+            margin-top: 0;
+            margin-bottom: 15px; /* 下の余白を詰める */
+        }
+        .league-selector {
+            margin-bottom: 15px; /* 下の余白を詰める */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px; /* ボタン間の隙間を詰める */
+        }
+        .league-btn, .info-btn { /* ボタンのスタイルを共通化 */
+            padding: 6px 14px; /* ボタンのサイズを小さく */
+            border: 2px solid #4a5a7f;
+            background-color: transparent;
+            color: #abc;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .league-btn:hover, .info-btn:hover { background-color: #4a5a7f; color: white; }
+        .league-btn.active { background: linear-gradient(90deg, #27aee7 60%, #aaf7fd); color: #143060; border-color: #27aee7; }
+        .info-btn { background-color: #553c7b; border-color: #6a4c9a; color: #f0f0f0; }
+        .info-btn:hover { background-color: #6a4c9a; }
+
+        .description {
+            color: #abc;
+            line-height: 1.5;
+            margin-bottom: 15px; /* 下の余白を詰める */
+            font-size: 0.85em; /* フォントサイズを調整 */
+        }
+        .chart-wrapper {
+            position: relative;
+            height: 600px; /* チャートの高さを詰める */
+            width: 100%;
+        }
+        .controls-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px; /* 要素間の隙間を詰める */
+            margin-top: 10px; /* 上の余白を詰める */
+        }
+        .control-btn {
+            background: linear-gradient(90deg, #27aee7 60%, #aaf7fd);
+            border: none;
+            border-radius: 8px;
+            color: #143060;
+            font-weight: bold;
+            padding: 6px 14px; /* ボタンサイズを小さく */
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .control-btn:hover { transform: scale(1.05); }
+        .section-display {
+            font-size: 1em; /* フォントサイズを調整 */
+            font-weight: bold;
+            color: #baf7fa;
+            min-width: 65px; /* 最小幅を調整 */
+            text-align: center;
+        }
+        .slider { -webkit-appearance: none; width: 50%; height: 10px; background: #4a5a7f; outline: none; border-radius: 5px; opacity: 0.7; transition: opacity .2s; }
+        .slider:hover { opacity: 1; }
+        .slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; background: #299ad3; cursor: pointer; border-radius: 50%; }
+        .slider::-moz-range-thumb { width: 20px; height: 20px; background: #299ad3; cursor: pointer; border-radius: 50%; }
+        
+        .modal { display: none; position: fixed; z-index: 10; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); animation: fadeIn 0.3s; }
+        .modal-content { background-color: #293352; margin: 15% auto; padding: 25px; border: 1px solid #888; border-radius: 12px; width: 80%; max-width: 500px; text-align: left; position: relative; }
+        .close-btn { color: #aaa; position: absolute; top: 10px; right: 20px; font-size: 28px; font-weight: bold; }
+        .close-btn:hover, .close-btn:focus { color: white; text-decoration: none; cursor: pointer; }
+        .modal-content h3 { color: #baf7fa; margin-top: 0; }
+        .modal-content p { color: #abc; line-height: 1.8; }
+        @keyframes fadeIn { from {opacity: 0} to {opacity: 1} }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <h1>J1 2025 バーチャートレース</h1>
+        
+        <div class="league-selector">
+            <button class="league-btn active" data-league="J1">J1</button>
+            <button class="league-btn" data-league="J2">J2</button>
+            <button class="league-btn" data-league="J3">J3</button>
+            <button id="bcr-help-btn" class="info-btn">なぜ+2？</button>
+        </div>
+
+        <p class="description">
+            リーグを選択し、再生ボタンを押すと順位変動アニメーションが始まります。<br>
+            スライダーで好きな節を確認することもできます。
+        </p>
+        <div class="chart-wrapper">
+            <canvas id="bcr-chart"></canvas>
+        </div>
+        <div class="controls-wrapper">
+            <button id="bcr-play-pause-btn" class="control-btn">再生</button>
+            <button id="bcr-reset-btn" class="control-btn">リセット</button>
+            <span id="bcr-current-section" class="section-display">第1節</span>
+            <input type="range" id="bcr-slider" min="1" max="38" value="1" class="slider">
+             <span id="bcr-total-section" class="section-display">/</span>
+        </div>
+    </div>
+
+    <div id="bcr-help-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">×</span>
+            <h3>なぜ勝ち点が一度に「+2」など変動することがあるの？</h3>
+            <p>
+                通常、1チームは1節につき1試合しか行わないため、勝ち点の変動は「+3, +1, +0」のいずれかです。<br><br>
+                しかし、ACLの日程や天候による延期などの理由で、<strong>1つの節の集計期間内に、あるチームが2試合以上を戦う</strong>ことがあります。<br><br>
+                例えば、あるチームが1週間に2試合を戦い、両方とも引き分けた場合、そのチームの勝ち点は一度に「+2」されます。このアニメーションは、そのような実際の試合日程を正確に反映しています。
+            </p>
+        </div>
+    </div>
+
+    <script type="module" src="js/pages/barchartrace.js"></script>
+</body>
+</html>

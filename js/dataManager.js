@@ -6,6 +6,7 @@ let rankingData = {};
 let predictionProbabilities = {};
 let europeTopClubs = [];
 let updateDates = {};
+let scheduleData = '';
 
 const dataCache = {};
 
@@ -137,6 +138,13 @@ export async function getPredictionData() {
     predictionProbabilities = preds;
     updateDates = dates;
     return { predictionProbabilities, updateDates };
+}
+
+export async function getScheduleData() {
+    if (scheduleData) return scheduleData;
+    const csvText = await fetchData("data/schedule.csv");
+    scheduleData = csvText;
+    return scheduleData;
 }
 
 export async function getEuropeTopClubsData() {

@@ -66,6 +66,7 @@
     <a href="#rankings" onmouseover="preloadModule('rankings')" onclick="event.preventDefault(); toggleSubMenu(this, event);" id="nav-rankings-btn">Jリーグ順位表</a>
     <div class="nav-dropdown-content">
       <a href="#rankings" onmouseover="preloadModule('rankings')" onclick="event.preventDefault(); event.stopPropagation(); showPage('rankings', this);">順位表</a>
+   <a href="#barchartrace" onmouseover="preloadModule('barchartrace')" onclick="event.preventDefault(); event.stopPropagation(); showPage('barchartrace', this);">バーチャートレース</a>
       <a href="#prediction" onmouseover="preloadModule('prediction')" onclick="event.preventDefault(); event.stopPropagation(); showPage('prediction', this);">シーズン予測</a>
     </div>
   </span>
@@ -204,6 +205,45 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
     <div id="club-categories"></div>
   </div>
 </div>
+<div id="barchartrace" class="page-section">
+      <div id="page-title-barchartrace" class="page-title-row" style="display:none;">
+          <h1>Jリーグ 2025 バーチャートレース</h1>
+      </div>
+      <div class="bcr-page-container">
+        <div class="bcr-league-selector">
+          <button class="bcr-league-btn active" data-league="J1">J1</button>
+          <button class="bcr-league-btn" data-league="J2">J2</button>
+          <button class="bcr-league-btn" data-league="J3">J3</button>
+          <button id="bcr-help-btn" class="bcr-info-btn">なぜ+2？</button>
+        </div>
+        <p class="bcr-description">
+          リーグを選択し、再生ボタンを押すと順位変動アニメーションが始まります。<br>
+          スライダーで好きな節を確認することもできます。
+        </p>
+        <div class="bcr-chart-wrapper">
+          <canvas id="bcr-chart"></canvas>
+<span id="bcr-race-section-display"></span>
+        </div>
+        <div class="bcr-controls-wrapper">
+          <button id="bcr-play-pause-btn" class="bcr-control-btn">再生</button>
+          <button id="bcr-reset-btn" class="bcr-control-btn">リセット</button>
+          <span id="bcr-current-section" class="bcr-section-display">第1節</span>
+          <input type="range" id="bcr-slider" min="1" max="38" value="1" class="bcr-slider">
+          <span id="bcr-total-section" class="bcr-section-display">/</span>
+        </div>
+      </div>
+      <div id="bcr-help-modal" class="bcr-modal">
+        <div class="bcr-modal-content">
+          <span class="bcr-close-btn">×</span>
+          <h3>なぜ勝ち点が一度に「+2」など変動することがあるの？</h3>
+          <p>
+            通常、1チームは1節につき1試合しか行わないため、勝ち点の変動は「+3, +1, +0」のいずれかです。<br><br>
+            しかし、ACLの日程や天候による延期などの理由で、<strong>1つの節の集計期間内に、あるチームが2試合以上を戦う</strong>ことがあります。<br><br>
+            例えば、あるチームが1週間に2試合を戦い、両方とも引き分けた場合、そのチームの勝ち点は一度に「+2」されます。このアニメーションは、そのような実際の試合日程を正確に反映しています。
+          </p>
+        </div>
+      </div>
+    </div>
   <div id="metrics" class="page-section">
     <span class="table-note">※並びはビッグクラブスコア順<br>※柏・湘南の売上は2023年</span>
 <div class="metric-select-row" style="text-align: center; margin-bottom: 20px;">
@@ -501,7 +541,8 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
     <span style="color: #18a; font-size: 0.98em;">※ 今後も最新データや意見をもとにアップデート予定です。</span>
   </div>
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 <script type="module" src="js/main.js"></script>
 
 </body>
