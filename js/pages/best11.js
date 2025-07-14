@@ -261,18 +261,17 @@ window.setFormation = setFormation;
 
 function setupBest11EventListeners() {
     const postBtn = document.getElementById("post-to-x-btn");
-    if (postBtn && !postBtn.dataset.initialized) {
+    if (postBtn) {
         postBtn.onclick = function() {
             const text = "私のベストイレブンはこちら！\n#あなたのベストイレブン";
             const url = "https://jleague-big-club.com";
             const tweetUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
             window.open(tweetUrl, '_blank');
         };
-        postBtn.dataset.initialized = 'true';
     }
 
     const copyBtn = document.getElementById("copy-best11-img-btn");
-    if(copyBtn && !copyBtn.dataset.initialized) {
+    if(copyBtn) {
         copyBtn.onclick = async function () {
             this.disabled = true;
             const postBtn = document.getElementById('post-to-x-btn');
@@ -339,13 +338,11 @@ function setupBest11EventListeners() {
                 if (postBtn) postBtn.disabled = false;
             }
         };
-        copyBtn.dataset.initialized = 'true';
     }
 
     function downloadImage(canvas, filename, msgSpan) {
         try {
             const a = document.createElement('a');
-            // ファイル拡張子に基づいてMIMEタイプを決定
             const mimeType = filename.endsWith('.png') ? 'image/png' : 'image/webp';
             a.href = canvas.toDataURL(mimeType);
             a.download = filename;
