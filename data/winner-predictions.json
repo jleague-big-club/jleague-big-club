@@ -1,0 +1,183 @@
+{
+  "version": "ver.1",
+  "J1": [
+    {
+      "kickoff": "7/19 (土) 19:00",
+      "home": "湘南ベルマーレ",
+      "away": "セレッソ大阪",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-0",
+          "odds": "8.3倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-1",
+          "odds": "9.0倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-2",
+          "odds": "27.5倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "7/19 (土) 19:00",
+      "home": "ＦＣ東京",
+      "away": "浦和レッズ",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-0",
+          "odds": "8.3倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-1",
+          "odds": "8.9倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "1-2",
+          "odds": "22.4倍",
+          "class": "longshot"
+        }
+      ]
+    }
+  ],
+  "J2": [],
+  "J3": [
+    {
+      "kickoff": "7/19 (土) 19:00",
+      "home": "栃木シティ",
+      "away": "ザスパ群馬",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-0",
+          "odds": "8.0倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "2-0",
+          "odds": "9.2倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "1-2",
+          "odds": "22.2倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "7/19 (土) 19:00",
+      "home": "AC長野パルセイロ",
+      "away": "松本山雅FC",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-1",
+          "odds": "8.1倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-0",
+          "odds": "8.4倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "3-1",
+          "odds": "20.3倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "7/19 (土) 19:00",
+      "home": "カマタマーレ讃岐",
+      "away": "高知ユナイテッドＳＣ",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-0",
+          "odds": "7.7倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "2-0",
+          "odds": "8.8倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "1-2",
+          "odds": "21.0倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "7/19 (土) 19:00",
+      "home": "ガイナーレ鳥取",
+      "away": "アスルクラロ沼津",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-0",
+          "odds": "8.0倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "2-0",
+          "odds": "8.9倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "1-2",
+          "odds": "20.8倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "7/19 (土) 19:00",
+      "home": "ツエーゲン金沢",
+      "away": "ヴァンラーレ八戸",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-0",
+          "odds": "7.8倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "2-0",
+          "odds": "8.4倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "1-2",
+          "odds": "20.3倍",
+          "class": "longshot"
+        }
+      ]
+    }
+  ]
+}

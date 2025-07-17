@@ -66,8 +66,18 @@
     <a href="#rankings" onmouseover="preloadModule('rankings')" onclick="event.preventDefault(); toggleSubMenu(this, event);" id="nav-rankings-btn">Jリーグ順位表</a>
     <div class="nav-dropdown-content">
       <a href="#rankings" onmouseover="preloadModule('rankings')" onclick="event.preventDefault(); event.stopPropagation(); showPage('rankings', this);">順位表</a>
-   <a href="#barchartrace" onmouseover="preloadModule('barchartrace')" onclick="event.preventDefault(); event.stopPropagation(); showPage('barchartrace', this);">バーチャートレース</a>
-      <a href="#prediction" onmouseover="preloadModule('prediction')" onclick="event.preventDefault(); event.stopPropagation(); showPage('prediction', this);">シーズン予測</a>
+      <a href="#barchartrace" onmouseover="preloadModule('barchartrace')" onclick="event.preventDefault(); event.stopPropagation(); showPage('barchartrace', this);">バーチャートレース</a>
+      <!-- シーズン予測は「予想」カテゴリに移動 -->
+    </div>
+  </span>
+
+  <!-- 新しい「予想」カテゴリを追加 -->
+  <span class="nav-dropdown">
+    <a href="#winner" onmouseover="preloadModule('winner')" onclick="event.preventDefault(); toggleSubMenu(this, event);" id="nav-prediction-btn">予想</a>
+    <div class="nav-dropdown-content">
+ <a href="#prediction" onmouseover="preloadModule('prediction')" onclick="event.preventDefault(); event.stopPropagation(); showPage('prediction', this);">シーズン予測</a>
+        <a href="#winner" onmouseover="preloadModule('winner')" onclick="event.preventDefault(); event.stopPropagation(); showPage('winner', this);">WINNER予測</a>
+       
     </div>
   </span>
   
@@ -189,6 +199,7 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
   <div id="europe-top20" class="page-section"></div>
   <div id="page-title-best11" class="page-title-row" style="display:none;"><h1>ベスト11を作る</h1></div>
   <div id="page-title-blog" class="page-title-row" style="display:none;"><h1>記事・ブログ</h1></div>
+<div id="page-title-winner" class="page-title-row" style="display:none;"><h1>Jリーグ WINNER予測</h1></div>
   
   <!-- index.html -->
 <div id="top" class="page-section visible">
@@ -319,6 +330,12 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
     </div>
   
   </div>
+  
+  <!-- ★★★ ここにWINNERページ用の箱を追加しました ★★★ -->
+  <div id="winner" class="page-section"></div>
+
+ <div id="winner-results" class="page-section"></div>
+  
   <div id="introduce" class="page-section">
     <div id="club-status-board" style="display:none;"></div>
     <div id="club-league-tabs" style="text-align:center; margin-bottom:20px;">

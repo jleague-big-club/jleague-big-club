@@ -2,122 +2,118 @@
 
 import { setupEventListeners, handleInitialURL, updateNavActiveState, stopBannerAutoPlay, setupCarousel } from './uiHelpers.js';
 import { loadInitialData } from './dataManager.js';
-import { initializeBlog } from './pages/blog.js';
+import { initializeBlog, showBlogList, showArticleDetail, hideArticleDetail, isShowingArticleDetail, getBlogPosts } from './pages/blog.js';
 
-// 各ページに対応するモジュールをマッピング
 const pageModules = {
-    'top': './pages/top.js',
-    'metrics': './pages/metrics.js',
-    'history': './pages/history.js',
-    'introduce': './pages/introduce.js',
-    'rankings': './pages/rankings.js',
-    'prediction': './pages/prediction.js',
-    'attendance': './pages/attendance.js',
-    'blog': './pages/blog.js',
-    'europe': './pages/europe.js',
-    'europe-top20': './pages/europe-top20.js',
-    'best11': './pages/best11.js',
-    'simulation': './pages/simulation.js',
-    'barchartrace': './pages/barchartrace.js' // ← ここに barchartrace を追加
+    'top': './pages/top.js', 'metrics': './pages/metrics.js', 'history': './pages/history.js', 'introduce': './pages/introduce.js',
+    'rankings': './pages/rankings.js', 'prediction': './pages/prediction.js', 'attendance': './pages/attendance.js',
+    'blog': './pages/blog.js', 'europe': './pages/europe.js', 'europe-top20': './pages/europe-top20.js', 'best11': './pages/best11.js',
+    'simulation': './pages/simulation.js', 'barchartrace': './pages/barchartrace.js', 'winner': './pages/winner.js'
 };
 
-// 読み込み済みのモジュールをキャッシュ
 const loadedModules = {};
 
-// モジュールをプリロードする関数
 function preloadModule(pageId) {
-    if (pageModules[pageId] && !loadedModules[pageId]) {
-        import(pageModules[pageId]);
+    const baseId = pageId.split('/')[0];
+    if (pageModules[baseId] && !loadedModules[baseId]) {
+        import(pageModules[baseId]);
     }
 }
 
-// === ページ表示ロジック ===
 async function showPage(id, btn, fromPopState = false) {
     try {
         window.scrollTo(0, 0);
 
-        const pageTitles = {
-            'top': 'Jリーグ ビッグクラブ指数',
-            'metrics': 'クラブ指標 - Jリーグビッグクラブ分析',
-            'history': 'Jリーグ過去データ - Jリーグビッグクラブ分析',
-            'introduce': '各クラブ紹介 - Jリーグビッグクラブ分析',
-            'rankings': 'Jリーグ 順位表 - Jリーグビッグクラブ分析',
-            'prediction': 'Jリーグ シーズン予測 - Jリーグビッグクラブ分析',
-            'attendance': 'Jリーグ 平均観客数 - Jリーグビッグクラブ分析',
-            'blog': '記事・ブログ - Jリーグビッグクラブ分析',
-            'europe': '5大リーグ日本人選手 - Jリーグビッグクラブ分析',
-            'europe-top20': '欧州クラブ売上高TOP20 - Jリーグビッグクラブ分析',
-            'best11': 'ベスト11メーカー - Jリーグビッグクラブ分析',
-            'simulation': 'ビッグクラブシミュレーター - Jリーグビッグクラブ分析',
-            'barchartrace': 'Jリーグ バーチャートレース - Jリーグビッグクラブ分析' // ← バーチャートレース用のタイトルを追加
-        };
-        // 対応するタイトルがあれば文書のタイトルを更新
         const baseId = id.split('/')[0];
-        document.title = pageTitles[baseId] || 'Jリーグビッグクラブ分析';
+        const pageTitles = {
+            'top': 'Jリーグ ビッグクラブ指数', 'metrics': 'クラブ指標', 'history': 'Jリーグ過去データ',
+            'introduce': '各クラブ紹介', 'rankings': 'Jリーグ 順位表', 'prediction': 'Jリーグ シーズン予測',
+            'attendance': 'Jリーグ 平均観客数', 'blog': '記事・ブログ', 'europe': '5大リーグ日本人選手',
+            'europe-top20': '欧州クラブ売上高TOP20', 'best11': 'ベスト11メーカー', 'simulation': 'ビッグクラブシミュレーター',
+            'barchartrace': 'Jリーグ バーチャートレース', 'winner': 'Jリーグ WINNER予測'
+        };
+        // ★★★【修正】結果ページ用のタイトルを追加
+        if (id === 'winner/results') {
+            document.title = 'WINNER予測 結果検証 - Jリーグビッグクラブ分析';
+        } else {
+            document.title = pageTitles[baseId] ? `${pageTitles[baseId]} - Jリーグビッグクラブ分析` : 'Jリーグビッグクラブ分析';
+        }
 
-        // UIの更新
         document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('visible'));
-        const targetPage = document.getElementById(id);
+        // ★★★【修正】#winner/results の場合は winner-results を表示
+        const targetPageId = id === 'winner/results' ? 'winner-results' : baseId;
+        const targetPage = document.getElementById(targetPageId);
         if (targetPage) targetPage.classList.add('visible');
 
         document.querySelectorAll('.page-title-row').forEach(row => row.style.display = 'none');
-        let titleId = (id === 'europe-top20') ? 'europe-top20' : id;
-        const pageTitleDiv = document.getElementById('page-title-' + titleId);
-        if (pageTitleDiv) pageTitleDiv.style.display = 'flex';
+        // ★★★【修正】結果ページ用のタイトル表示
+        let titleId = id === 'winner/results' ? 'winner-results' : (id === 'europe-top20' ? 'europe-top20' : baseId);
+        if (id === 'winner/results') {
+             // 結果ページ専用のタイトルdivを動的に作るか、HTMLに用意する
+             let titleDiv = document.getElementById('page-title-winner-results');
+             if (!titleDiv) {
+                 titleDiv = document.createElement('div');
+                 titleDiv.id = 'page-title-winner-results';
+                 titleDiv.className = 'page-title-row';
+                 titleDiv.innerHTML = '<h1>WINNER予測 結果検証</h1>';
+                 document.querySelector('main').prepend(titleDiv);
+             }
+             titleDiv.style.display = 'flex';
+        } else {
+            const pageTitleDiv = document.getElementById('page-title-' + titleId);
+            if (pageTitleDiv) pageTitleDiv.style.display = 'flex';
+        }
+
 
         updateNavActiveState(id, btn);
 
         const scoreBtn = document.getElementById('score-method-btn');
         const banner = document.querySelector('.carousel-container');
-
-        if (id === 'top') {
+        if (baseId === 'top') {
             if (scoreBtn) scoreBtn.style.display = 'block';
             if (banner) banner.style.display = 'block';
-            setupCarousel('banner-carousel', 4000);
+            if(!fromPopState) setupCarousel('banner-carousel', 4000);
         } else {
             if (scoreBtn) scoreBtn.style.display = 'none';
             if (banner) banner.style.display = 'none';
             stopBannerAutoPlay();
         }
 
-        // 履歴の更新
         if (!fromPopState) {
-            const state = { page: id };
-            const url = `#${id}`;
-            history.pushState(state, '', url);
+            history.pushState({ page: id }, '', `#${id}`);
         }
-if (typeof gtag === 'function') {
-    // SPAのページ遷移を計測するための正しい方法
-    gtag('event', 'page_view', {
-        page_location: location.href,
-        page_path: location.pathname + location.hash,
-        page_title: document.title
-    });
-}
 
-        // === モジュールの動的読み込みと初期化 ===
-        if (pageModules[id]) {
-            if (!loadedModules[id]) {
-                const module = await import(pageModules[id]);
-                loadedModules[id] = module;
-                // 初回読み込み時にデフォルトエクスポートされた関数を実行
-                if (module.default && typeof module.default === 'function') {
-                    await module.default();
-                }
-            }
+        const moduleId = baseId;
+        if (pageModules[moduleId] && !loadedModules[moduleId]) {
+            const module = await import(pageModules[moduleId]);
+            loadedModules[moduleId] = module;
         }
-        
-        // ブログページの特殊処理
-        if (id === 'blog') {
-            const blogModule = loadedModules['blog'];
-            if (blogModule) {
-                blogModule.showBlogList();
+
+        // ★★★【ここから大幅に簡略化】★★★
+        if (moduleId === 'winner' && loadedModules.winner) {
+            if (id === 'winner/results') {
+                await loadedModules.winner.showPredictionResults();
+            } else {
+                await loadedModules.winner.initializeWinnerPage(document.getElementById('winner'));
+            }
+        } else if (moduleId === 'blog' && loadedModules.blog) {
+             if (id.startsWith('blog/')) {
+                const slug = id.substring(5);
+                const allPosts = await getBlogPosts();
+                const postData = allPosts.find(p => p.slug === slug);
+                await showArticleDetail(slug, postData?.title, fromPopState);
+            } else {
+                showBlogList();
             }
         } else {
-             const blogModule = loadedModules['blog'];
-             if(blogModule && blogModule.isShowingArticleDetail()) {
-                 blogModule.hideArticleDetail();
-             }
+            // 他のページに移動したら、ブログ詳細を隠す
+            if (loadedModules.blog && isShowingArticleDetail()) {
+                hideArticleDetail();
+            }
+            // 他のページの初期化処理があればここに書く
+            if (loadedModules[moduleId]?.default) {
+                 await loadedModules[moduleId].default(document.getElementById(moduleId));
+            }
         }
 
     } finally {
@@ -130,12 +126,10 @@ if (typeof gtag === 'function') {
     }
 }
 
-// === 初期化 ===
 document.addEventListener("DOMContentLoaded", async () => {
     try {
         await loadInitialData();
         await initializeBlog(); 
-        
         setupEventListeners(showPage);
         handleInitialURL(showPage);
     } catch (err) {
@@ -144,11 +138,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 });
 
-
-// === グローバルスコープでアクセス可能にする関数群 ===
 window.showPage = showPage;
 window.preloadModule = preloadModule;
-
-// blog.jsからshowArticleDetailをインポートしてグローバルに公開
-import { showArticleDetail } from './pages/blog.js';
 window.showArticleDetail = showArticleDetail;

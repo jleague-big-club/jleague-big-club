@@ -1,0 +1,46 @@
+{
+  "picks": [
+    {
+      "id": "pick_20250810",
+      "date": "2025-08-10",
+      "title": "8/10 J1第24節 2試合で夢の万馬券狙い！",
+      "investment": 500,
+      "selections": [
+        {
+          "match": "川崎F vs 神戸",
+          "pick": "3-2",
+          "odds": 25.0
+        },
+        {
+          "match": "浦和 vs 横浜FM",
+          "pick": "1-1",
+          "odds": 5.5
+        }
+      ],
+      "status": "結果待ち", // "結果待ち", "的中", "はずれ"
+      "payout": 0,
+      "comment": "川崎の打ち合いに期待！浦和と横浜FMは手堅くドローを抑えます。これが当たれば最高！"
+    },
+    {
+      "id": "pick_20250803",
+      "date": "2025-08-03",
+      "title": "堅実派！清水の勝利でコツコツ稼ぐ",
+      "investment": 1000,
+      "selections": [
+        {
+          "match": "清水 vs 甲府",
+          "pick": "2-0",
+          "odds": 8.0
+        }
+      ],
+      "status": "はずれ",
+      "payout": 0,
+      "comment": "まさかのスコアレスドロー...。清水の決定力不足が響きました。次回こそは！"
+    }
+  ],
+  "summary": {
+    "total_investment": 1500,
+    "total_payout": 0,
+    "recovery_rate": "0%"
+  }
+}
