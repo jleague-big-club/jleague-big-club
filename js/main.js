@@ -20,7 +20,6 @@ const pageModules = {
     'simulation': './pages/simulation.js',
     'barchartrace': './pages/barchartrace.js',
     'winner': './pages/winner.js',
-    // ★★★【ここに追加】★★★
     'elo-ratings': './pages/elo-ratings.js'
 };
 
@@ -35,6 +34,28 @@ function preloadModule(pageId) {
     }
 }
 
+// === OGP情報を更新するヘルパー関数 ===
+const updateOgp = (title, description, image, url) => {
+    document.title = `${title} | Big Club Japan`;
+
+    const metaTags = {
+        'og:title': title,
+        'og:description': description,
+        'og:image': image,
+        'og:url': url,
+        'twitter:card': 'summary_large_image',
+        // 他のTwitterカードタグも必要に応じて更新
+    };
+
+    for (const property in metaTags) {
+        let element = document.querySelector(`meta[property="${property}"], meta[name="${property}"]`);
+        if (element) {
+            element.setAttribute('content', metaTags[property]);
+        }
+    }
+};
+
+
 // === ページ表示ロジック ===
 async function showPage(id, btn, fromPopState = false) {
     try {
@@ -42,39 +63,46 @@ async function showPage(id, btn, fromPopState = false) {
 
         const baseId = id.split('/')[0];
         const pageTitles = {
-            'top': 'Jリーグ ビッグクラブ指数',
-            'metrics': 'クラブ指標',
-            'history': 'Jリーグ過去データ',
-            'introduce': '各クラブ紹介',
-            'rankings': 'Jリーグ 順位表',
-            'prediction': 'Jリーグ シーズン予測',
-            'attendance': 'Jリーグ 平均観客数',
-            'blog': '記事・ブログ',
-            'europe': '5大リーグ日本人選手',
-            'europe-top20': '欧州クラブ売上高TOP20',
-            'best11': 'ベスト11メーカー',
-            'simulation': 'ビッグクラブシミュレーター',
-            'barchartrace': 'Jリーグ バーチャートレース',
-            'winner': 'Jリーグ WINNER予測',
-            // ★★★【ここに追加】★★★
-            'elo-ratings': 'Jリーグ Eloレーティング'
+            'top': 'Jリーグ ビッグクラブ指数', 'metrics': 'クラブ指標', 'history': 'Jリーグ過去データ',
+            'introduce': '各クラブ紹介', 'rankings': 'Jリーグ 順位表', 'prediction': 'Jリーグ シーズン予測',
+            'attendance': 'Jリーグ 平均観客数', 'blog': '記事・ブログ', 'europe': '5大リーグ日本人選手',
+            'europe-top20': '欧州クラブ売上高TOP20', 'best11': 'ベスト11メーカー', 'simulation': 'ビッグクラブシミュレーター',
+            'barchartrace': 'Jリーグ バーチャートレース', 'winner': 'Jリーグ WINNER予測', 'elo-ratings': 'Jリーグ Eloレーティング'
         };
 
-        if (id === 'winner/results') {
-            document.title = 'WINNER予測 結果検証 - Jリーグビッグクラブ分析';
-        } else {
-            document.title = pageTitles[baseId] ? `${pageTitles[baseId]} - Jリーグビッグクラブ分析` : 'Jリーグビッグクラブ分析';
-        }
+        // --- OGPとページタイトルの動的更新 ---
+        const siteUrl = 'https://bigclub-japan.com/';
+        const defaultDescription = 'Jリーグの「ビッグクラブ」をデータで徹底分析！独自のビッグクラブ指数で、そのポテンシャルを可視化します。';
+        const defaultImage = `${siteUrl}img/ogp_image.webp`;
 
+        if (id.startsWith('blog/')) {
+            const slug = id.substring(5);
+            try {
+                const allPosts = await getBlogPosts();
+                const post = allPosts.find(p => p.slug === slug);
+                if (post) {
+                    const postDescription = `データ分析サイト「Big Club Japan」の記事：${post.title}`;
+                    const postImage = `${siteUrl}${post.thumbnail.startsWith('/') ? post.thumbnail.substring(1) : post.thumbnail}`;
+                    updateOgp(post.title, postDescription, postImage, `${siteUrl}#${id}`);
+                } else {
+                     updateOgp('記事が見つかりません', defaultDescription, defaultImage, `${siteUrl}#${id}`);
+                }
+            } catch (e) {
+                updateOgp('記事・ブログ', defaultDescription, defaultImage, `${siteUrl}#blog`);
+            }
+        } else if (pageTitles[baseId]) {
+            updateOgp(pageTitles[baseId], defaultDescription, defaultImage, `${siteUrl}#${id}`);
+        } else {
+            updateOgp('Jリーグビッグクラブ分析', defaultDescription, defaultImage, siteUrl);
+        }
+        
+        // --- UIの更新 ---
         document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('visible'));
         const targetPageId = id === 'winner/results' ? 'winner-results' : (id.startsWith('blog/') ? 'blog' : baseId);
         const targetPage = document.getElementById(targetPageId);
-        if (targetPage) {
-            targetPage.classList.add('visible');
-        }
+        if (targetPage) targetPage.classList.add('visible');
 
         document.querySelectorAll('.page-title-row').forEach(row => row.style.display = 'none');
-        // ★★★【ここを修正】★★★
         let titleId;
         if (id === 'winner/results') {
             let titleDiv = document.getElementById('page-title-winner-results');
@@ -109,9 +137,6 @@ async function showPage(id, btn, fromPopState = false) {
         if (!fromPopState) {
             history.pushState({ page: id }, '', `#${id}`);
         }
-        if (typeof gtag === 'function') {
-            gtag('event', 'page_view', { page_location: location.href, page_path: location.pathname + location.hash, page_title: document.title });
-        }
 
         const moduleId = baseId;
         if (pageModules[moduleId] && !loadedModules[moduleId]) {
@@ -119,7 +144,7 @@ async function showPage(id, btn, fromPopState = false) {
             loadedModules[moduleId] = module;
         }
 
-        // ページごとの処理を振り分け
+        // --- ページごとの処理 ---
         if (moduleId === 'winner' && loadedModules.winner) {
             if (id === 'winner/results') {
                 await loadedModules.winner.showPredictionResults();
@@ -129,18 +154,15 @@ async function showPage(id, btn, fromPopState = false) {
         } else if (moduleId === 'blog' && loadedModules.blog) {
              if (id.startsWith('blog/')) {
                 const slug = id.substring(5);
-                const allPosts = await getBlogPosts();
-                const postData = allPosts.find(p => p.slug === slug);
-                await showArticleDetail(slug, postData?.title, fromPopState);
+                // タイトルはOGP更新時に取得済みなので、ここでは渡さない
+                await showArticleDetail(slug, null, fromPopState);
             } else {
                 showBlogList();
             }
         } else {
-            // 他のページに移動したら、ブログ詳細を隠す
             if (loadedModules.blog && isShowingArticleDetail()) {
                 hideArticleDetail();
             }
-            // 各ページのデフォルト初期化関数を実行
             if (loadedModules[moduleId]?.default) {
                  await loadedModules[moduleId].default(document.getElementById(moduleId));
             }
