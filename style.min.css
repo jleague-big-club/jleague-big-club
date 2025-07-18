@@ -810,3 +810,42 @@ transition: background-color 0.2s;
     font-weight: 700;
     color: #ffd700;
 }
+/* --- style.min.css に追記 --- */
+
+/* ======================================================= */
+/* === ページネーションボタンのスタイル === */
+/* ======================================================= */
+
+#pagination {
+    text-align: center;
+    margin-top: 40px; /* 上の要素との余白 */
+    margin-bottom: 20px; /* 下の要素との余白 */
+}
+
+.pagination-btn {
+    display: inline-block;
+    min-width: 40px; /* ボタンの最小幅 */
+    padding: 10px 15px;
+    margin: 0 5px; /* ボタン間の余白 */
+    font-size: 1.1em;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(90deg, #44567c, #354a6b);
+    border: 1.5px solid #5a75a7;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all .2s;
+}
+
+.pagination-btn:hover {
+    background: linear-gradient(90deg, #516894, #455f8a);
+    transform: translateY(-2px);
+}
+
+.pagination-btn.active {
+    background: linear-gradient(90deg, #27aee7 60%, #aaf7fd);
+    border-color: #299ad3;
+    color: #143060;
+    cursor: default;
+    transform: none;
+}

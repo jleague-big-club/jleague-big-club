@@ -3,7 +3,7 @@
 import { getBlogPosts } from '../dataManager.js';
 import { loadScript } from '../uiHelpers.js';
 
-const articlesPerPage = 18;
+const articlesPerPage = 9;
 let currentPage = 1;
 let _isShowingArticleDetail = false;
 const MARKED_JS_URL = 'https://cdn.jsdelivr.net/npm/marked/marked.min.js';
