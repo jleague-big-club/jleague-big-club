@@ -2,17 +2,32 @@
 
 import { setupEventListeners, handleInitialURL, updateNavActiveState, stopBannerAutoPlay, setupCarousel } from './uiHelpers.js';
 import { loadInitialData } from './dataManager.js';
-import { initializeBlog, showBlogList, showArticleDetail, hideArticleDetail, isShowingArticleDetail, getBlogPosts } from './pages/blog.js';
+import { initializeBlog, showBlogList, showArticleDetail, hideArticleDetail, isShowingArticleDetail, getBlogPosts, showPredictionResults } from './pages/blog.js';
 
+// 各ページに対応するモジュールをマッピング
 const pageModules = {
-    'top': './pages/top.js', 'metrics': './pages/metrics.js', 'history': './pages/history.js', 'introduce': './pages/introduce.js',
-    'rankings': './pages/rankings.js', 'prediction': './pages/prediction.js', 'attendance': './pages/attendance.js',
-    'blog': './pages/blog.js', 'europe': './pages/europe.js', 'europe-top20': './pages/europe-top20.js', 'best11': './pages/best11.js',
-    'simulation': './pages/simulation.js', 'barchartrace': './pages/barchartrace.js', 'winner': './pages/winner.js'
+    'top': './pages/top.js',
+    'metrics': './pages/metrics.js',
+    'history': './pages/history.js',
+    'introduce': './pages/introduce.js',
+    'rankings': './pages/rankings.js',
+    'prediction': './pages/prediction.js',
+    'attendance': './pages/attendance.js',
+    'blog': './pages/blog.js',
+    'europe': './pages/europe.js',
+    'europe-top20': './pages/europe-top20.js',
+    'best11': './pages/best11.js',
+    'simulation': './pages/simulation.js',
+    'barchartrace': './pages/barchartrace.js',
+    'winner': './pages/winner.js',
+    // ★★★【ここに追加】★★★
+    'elo-ratings': './pages/elo-ratings.js'
 };
 
+// 読み込み済みのモジュールをキャッシュ
 const loadedModules = {};
 
+// モジュールをプリロードする関数
 function preloadModule(pageId) {
     const baseId = pageId.split('/')[0];
     if (pageModules[baseId] && !loadedModules[baseId]) {
@@ -20,19 +35,31 @@ function preloadModule(pageId) {
     }
 }
 
+// === ページ表示ロジック ===
 async function showPage(id, btn, fromPopState = false) {
     try {
         window.scrollTo(0, 0);
 
         const baseId = id.split('/')[0];
         const pageTitles = {
-            'top': 'Jリーグ ビッグクラブ指数', 'metrics': 'クラブ指標', 'history': 'Jリーグ過去データ',
-            'introduce': '各クラブ紹介', 'rankings': 'Jリーグ 順位表', 'prediction': 'Jリーグ シーズン予測',
-            'attendance': 'Jリーグ 平均観客数', 'blog': '記事・ブログ', 'europe': '5大リーグ日本人選手',
-            'europe-top20': '欧州クラブ売上高TOP20', 'best11': 'ベスト11メーカー', 'simulation': 'ビッグクラブシミュレーター',
-            'barchartrace': 'Jリーグ バーチャートレース', 'winner': 'Jリーグ WINNER予測'
+            'top': 'Jリーグ ビッグクラブ指数',
+            'metrics': 'クラブ指標',
+            'history': 'Jリーグ過去データ',
+            'introduce': '各クラブ紹介',
+            'rankings': 'Jリーグ 順位表',
+            'prediction': 'Jリーグ シーズン予測',
+            'attendance': 'Jリーグ 平均観客数',
+            'blog': '記事・ブログ',
+            'europe': '5大リーグ日本人選手',
+            'europe-top20': '欧州クラブ売上高TOP20',
+            'best11': 'ベスト11メーカー',
+            'simulation': 'ビッグクラブシミュレーター',
+            'barchartrace': 'Jリーグ バーチャートレース',
+            'winner': 'Jリーグ WINNER予測',
+            // ★★★【ここに追加】★★★
+            'elo-ratings': 'Jリーグ Eloレーティング'
         };
-        // ★★★【修正】結果ページ用のタイトルを追加
+
         if (id === 'winner/results') {
             document.title = 'WINNER予測 結果検証 - Jリーグビッグクラブ分析';
         } else {
@@ -40,30 +67,30 @@ async function showPage(id, btn, fromPopState = false) {
         }
 
         document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('visible'));
-        // ★★★【修正】#winner/results の場合は winner-results を表示
-        const targetPageId = id === 'winner/results' ? 'winner-results' : baseId;
+        const targetPageId = id === 'winner/results' ? 'winner-results' : (id.startsWith('blog/') ? 'blog' : baseId);
         const targetPage = document.getElementById(targetPageId);
-        if (targetPage) targetPage.classList.add('visible');
+        if (targetPage) {
+            targetPage.classList.add('visible');
+        }
 
         document.querySelectorAll('.page-title-row').forEach(row => row.style.display = 'none');
-        // ★★★【修正】結果ページ用のタイトル表示
-        let titleId = id === 'winner/results' ? 'winner-results' : (id === 'europe-top20' ? 'europe-top20' : baseId);
+        // ★★★【ここを修正】★★★
+        let titleId;
         if (id === 'winner/results') {
-             // 結果ページ専用のタイトルdivを動的に作るか、HTMLに用意する
-             let titleDiv = document.getElementById('page-title-winner-results');
-             if (!titleDiv) {
-                 titleDiv = document.createElement('div');
-                 titleDiv.id = 'page-title-winner-results';
-                 titleDiv.className = 'page-title-row';
-                 titleDiv.innerHTML = '<h1>WINNER予測 結果検証</h1>';
-                 document.querySelector('main').prepend(titleDiv);
-             }
-             titleDiv.style.display = 'flex';
+            let titleDiv = document.getElementById('page-title-winner-results');
+            if (!titleDiv) {
+                titleDiv = document.createElement('div');
+                titleDiv.id = 'page-title-winner-results';
+                titleDiv.className = 'page-title-row';
+                titleDiv.innerHTML = '<h1>WINNER予測 結果検証</h1>';
+                document.querySelector('main').prepend(titleDiv);
+            }
+            titleDiv.style.display = 'flex';
         } else {
+            titleId = ['europe-top20', 'winner', 'elo-ratings'].includes(baseId) ? baseId : id.split('/')[0];
             const pageTitleDiv = document.getElementById('page-title-' + titleId);
             if (pageTitleDiv) pageTitleDiv.style.display = 'flex';
         }
-
 
         updateNavActiveState(id, btn);
 
@@ -72,7 +99,7 @@ async function showPage(id, btn, fromPopState = false) {
         if (baseId === 'top') {
             if (scoreBtn) scoreBtn.style.display = 'block';
             if (banner) banner.style.display = 'block';
-            if(!fromPopState) setupCarousel('banner-carousel', 4000);
+            if (!fromPopState) setupCarousel('banner-carousel', 4000);
         } else {
             if (scoreBtn) scoreBtn.style.display = 'none';
             if (banner) banner.style.display = 'none';
@@ -82,6 +109,9 @@ async function showPage(id, btn, fromPopState = false) {
         if (!fromPopState) {
             history.pushState({ page: id }, '', `#${id}`);
         }
+        if (typeof gtag === 'function') {
+            gtag('event', 'page_view', { page_location: location.href, page_path: location.pathname + location.hash, page_title: document.title });
+        }
 
         const moduleId = baseId;
         if (pageModules[moduleId] && !loadedModules[moduleId]) {
@@ -89,7 +119,7 @@ async function showPage(id, btn, fromPopState = false) {
             loadedModules[moduleId] = module;
         }
 
-        // ★★★【ここから大幅に簡略化】★★★
+        // ページごとの処理を振り分け
         if (moduleId === 'winner' && loadedModules.winner) {
             if (id === 'winner/results') {
                 await loadedModules.winner.showPredictionResults();
@@ -110,7 +140,7 @@ async function showPage(id, btn, fromPopState = false) {
             if (loadedModules.blog && isShowingArticleDetail()) {
                 hideArticleDetail();
             }
-            // 他のページの初期化処理があればここに書く
+            // 各ページのデフォルト初期化関数を実行
             if (loadedModules[moduleId]?.default) {
                  await loadedModules[moduleId].default(document.getElementById(moduleId));
             }
@@ -126,6 +156,7 @@ async function showPage(id, btn, fromPopState = false) {
     }
 }
 
+// === 初期化 ===
 document.addEventListener("DOMContentLoaded", async () => {
     try {
         await loadInitialData();
@@ -138,6 +169,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 });
 
+// === グローバルスコープでアクセス可能にする関数群 ===
 window.showPage = showPage;
 window.preloadModule = preloadModule;
 window.showArticleDetail = showArticleDetail;

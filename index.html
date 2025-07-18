@@ -56,6 +56,7 @@
     <a href="#top" onmouseover="preloadModule('top')" onclick="event.preventDefault(); toggleSubMenu(this, event);" id="nav-analysis-btn" class="active">Jリーグ分析</a>
     <div class="nav-dropdown-content">
       <a href="#top" onmouseover="preloadModule('top')" onclick="event.preventDefault(); event.stopPropagation(); showPage('top', document.getElementById('nav-analysis-btn'));">ビッグクラブ指数</a>
+<a href="#elo-ratings" onmouseover="preloadModule('elo-ratings')" onclick="event.preventDefault(); event.stopPropagation(); showPage('elo-ratings', this);">Eloレーティング</a>
       <a href="#metrics" onmouseover="preloadModule('metrics')" onclick="event.preventDefault(); event.stopPropagation(); showPage('metrics', this);">クラブ指標</a>
       <a href="#attendance" onmouseover="preloadModule('attendance')" onclick="event.preventDefault(); event.stopPropagation(); showPage('attendance', this);">平均観客数</a>
       <a href="#history" onmouseover="preloadModule('history')" onclick="event.preventDefault(); event.stopPropagation(); showPage('history', this);">過去10年順位</a>
@@ -200,6 +201,7 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
   <div id="page-title-best11" class="page-title-row" style="display:none;"><h1>ベスト11を作る</h1></div>
   <div id="page-title-blog" class="page-title-row" style="display:none;"><h1>記事・ブログ</h1></div>
 <div id="page-title-winner" class="page-title-row" style="display:none;"><h1>Jリーグ WINNER予測</h1></div>
+<div id="page-title-elo-ratings" class="page-title-row" style="display:none;"><h1>Jリーグ Eloレーティング</h1></div>
   
   <!-- index.html -->
 <div id="top" class="page-section visible">
@@ -335,6 +337,8 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
   <div id="winner" class="page-section"></div>
 
  <div id="winner-results" class="page-section"></div>
+
+<div id="elo-ratings" class="page-section"></div>
   
   <div id="introduce" class="page-section">
     <div id="club-status-board" style="display:none;"></div>

@@ -697,3 +697,116 @@ transition: background-color 0.2s;
   font-size: 0.8em;
   opacity: 0.7;
 }
+/* --- style.min.css に追記 --- */
+
+/* 記事内のリンクボタン用のスタイル */
+.article-link-button-container {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.article-link-button {
+    display: inline-block;
+    padding: 12px 28px;
+    background: linear-gradient(90deg, #27aee7 60%, #aaf7fd);
+    color: #143060;
+    font-size: 1.1em;
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 25px;
+    border: 2px solid #299ad3;
+    box-shadow: 0 2px 8px rgba(42, 184, 242, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.article-link-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(42, 184, 242, 0.4);
+    color: #143060; /* ホバー時も文字色を維持 */
+}
+
+/* ２つ目のボタン用のスタイル（noteへのリンクなど） */
+.article-link-button.secondary {
+    background: transparent;
+    border: 2px solid #6c757d;
+    color: #6c757d;
+    box-shadow: none;
+}
+
+.article-link-button.secondary:hover {
+    background-color: rgba(108, 117, 125, 0.1);
+    color: #333;
+    box-shadow: none;
+}
+/* --- style.min.css に追記 --- */
+
+/* ======================================================= */
+/* === Eloレーティングページ専用のスタイル === */
+/* ======================================================= */
+
+.elo-header {
+    text-align: center;
+    margin-bottom: 30px;
+    background-color: rgba(0,0,0,0.15);
+    padding: 20px;
+    border-radius: 12px;
+}
+.elo-header p {
+    margin: 0 0 15px 0;
+    line-height: 1.8;
+    color: #abc;
+}
+.elo-header .article-link-button.small {
+    font-size: 0.9em;
+    padding: 8px 20px;
+}
+
+.elo-tables-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.rating-table-container h2 {
+    text-align: center;
+    color: #baf7fa;
+    margin-bottom: 15px;
+}
+
+.rating-table-container table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: #293352;
+    border-radius: 12px;
+    overflow: hidden; /* 角丸を適用するため */
+}
+
+.rating-table-container th,
+.rating-table-container td {
+    padding: 12px 10px;
+    text-align: center;
+    border-bottom: 1px solid #3a486b;
+}
+
+.rating-table-container th {
+    background: linear-gradient(90deg, #27aee7 65%, #b0e7fa);
+    color: #fff;
+    font-size: 1.05em;
+}
+
+.rating-table-container tr:last-child td {
+    border-bottom: none;
+}
+.rating-table-container tr:hover {
+    background-color: rgba(42, 184, 242, 0.1);
+}
+
+.rating-table-container .team-name-cell {
+    text-align: left;
+    font-weight: 600;
+}
+.rating-table-container .rating-cell {
+    font-weight: 700;
+    color: #ffd700;
+}

@@ -1,32 +1,62 @@
 [
   {
     "title": "Jリーグからビッグクラブは誕生するのか？データで見る「ビッグクラブ」に最も近いクラブ",
-    "slug": "post-1",
-    "thumbnail": "posts/img/thumbnail.png",
+    "slug": "bigclub-theory-1",
+    "thumbnail": "posts/img/bigclub.webp",
     "date": "2025-07-07"
   },
   {
     "title": "中堅とローカルの境界線はどこか？飛躍が期待される「ローカルクラブ」を分析",
-    "slug": "post-2",
-    "thumbnail": "posts/img/thumbnail2.png",
+    "slug": "bigclub-theory-2",
+    "thumbnail": "posts/img/localclub.webp",
     "date": "2025-07-08"
   },
   {
     "title": "2025年7月時点で平均観客数が過去最高を記録した13クラブ",
-    "slug": "post-3",
-    "thumbnail": "posts/img/thumbnail3.png",
+    "slug": "attendance-record-2025",
+    "thumbnail": "posts/img/attendancerecord2025.webp",
     "date": "2025-07-09"
   },
   {
-    "title": "魔境J2を勝ち抜くのはどこだ？ AIが導き出す2025年J1昇格レースの全貌",
-    "slug": "post-4",
-    "thumbnail": "posts/img/thumbnail3.png",
+    "title": "魔境J2を勝ち抜くのはどこだ？ AIが導き出す2025年J2昇格レースの全貌",
+    "slug": "j2-prediction-explainer",
+    "thumbnail": "posts/img/j2latest.webp",
     "date": "2025-07-14"
   },
   {
     "title": "天国と地獄。AIが読み解く2025年J3リーグ、昇格と降格の境界線",
-    "slug": "post-5",
-    "thumbnail": "posts/img/thumbnail3.png",
+    "slug": "j3-prediction-explainer",
+    "thumbnail": "posts/img/j3latest.webp",
     "date": "2025-07-14"
+  },
+  {
+    "title": "AIスコア予測でWINNERが変わる！「本命」「対抗」「大穴」の根拠、全解説",
+    "slug": "winner-explainer",
+    "thumbnail": "posts/img/winner.webp",
+    "date": "2025-07-18"
+  },
+  {
+    "title": "強さの物差し「Eloレーティング」とは？ AI予測の心臓部を徹底解説",
+    "slug": "elo-rating-explainer",
+    "thumbnail": "posts/img/rating_graph_sample.webp",
+    "date": "2025-07-18"
+  },
+  {
+    "title": "もしも、あなたのクラブが…？ビッグクラブシミュレーターで未来を覗こう！",
+    "slug": "simulation-explainer",
+    "thumbnail": "posts/img/simulator_main.webp",
+    "date": "2025-07-16"
+  },
+  {
+    "title": "ホームアドバンテージは本当か？データが暴くJリーグ『最もタフなアウェイの地』",
+    "slug": "home-advantage-analysis",
+    "thumbnail": "posts/img/stadium_atmosphere.webp",
+    "date": "2025-07-15"
+  },
+  {
+    "title": "『魔境』はどこだ？データが暴く、Jリーグで最もカオスなリーグ【混戦度ランキング】",
+    "slug": "league-chaos-ranking",
+    "thumbnail": "posts/img/j_makyo.webp",
+    "date": "2025-07-18"
   }
 ]
