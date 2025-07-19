@@ -849,3 +849,11 @@ transition: background-color 0.2s;
     cursor: default;
     transform: none;
 }
+
+.elo-header .update-date-note {
+    font-size: 0.9em;
+    color: #9cb3d8;
+    margin-top: 15px; /* 上の文章との間にスペースを追加 */
+    margin-bottom: 15px;
+    text-align: right; /* 右寄せにする */
+}
