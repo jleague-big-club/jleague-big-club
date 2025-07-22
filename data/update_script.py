@@ -23,6 +23,7 @@ TARGET_FILES = [
     "j1rank.csv",
     "j2rank.csv",
     "j3rank.csv",
+    "jflrank.csv",
     "attendancefigure.csv",
     "prediction_probabilities.json"
 ]
