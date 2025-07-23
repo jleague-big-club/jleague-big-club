@@ -98,7 +98,7 @@
     <a href="#europe" onmouseover="preloadModule('europe')" onclick="event.preventDefault(); toggleSubMenu(this, event);" id="nav-europe-btn">5大リーグ</a>
     <div class="nav-dropdown-content">
         <a href="#europe" onmouseover="preloadModule('europe')" onclick="event.preventDefault(); event.stopPropagation(); showPage('europe', document.getElementById('nav-europe-btn'));">5大リーグ日本人選手</a>
-        <a href="#europe-top20" onmouseover="preloadModule('europe-top20')" onclick="event.preventDefault(); event.stopPropagation(); showPage('europe-top20', this);">売上高TOP20</a>
+        <!-- ▼▼▼ 修正点1: 「売上高TOP20」のナビゲーション項目を削除しました ▼▼▼ -->
     </div>
   </span>
   
@@ -200,13 +200,14 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
   <div id="page-title-prediction" class="page-title-row" style="display:none;"><h1>Jリーグ 2025シーズン予測</h1></div>
   <div id="page-title-introduce" class="page-title-row" style="display:none;"><h1>各クラブ紹介</h1></div>
   <div id="page-title-europe" class="page-title-row" style="display:none;"><h1>25-26シーズン 5大リーグ日本人選手</h1></div>
-    <div id="page-title-europe-top20" class="page-title-row" style="display:none;"><h1>欧州クラブ 推定売上高TOP20（24-25シーズン）</h1></div>
-  <div id="europe-top20" class="page-section"></div>
+  <!-- ▼▼▼ 修正点2: 「売上高TOP20」のページタイトルを削除しました ▼▼▼ -->
   <div id="page-title-best11" class="page-title-row" style="display:none;"><h1>ベスト11を作る</h1></div>
   <div id="page-title-blog" class="page-title-row" style="display:none;"><h1>記事・ブログ</h1></div>
 <div id="page-title-winner" class="page-title-row" style="display:none;"><h1>Jリーグ WINNER予測</h1></div>
 <div id="page-title-elo-ratings" class="page-title-row" style="display:none;"><h1>Jリーグ Eloレーティング</h1></div>
   
+  <!-- ▼▼▼ 修正点3: 「売上高TOP20」のコンテンツ表示用divを削除しました ▼▼▼ -->
+
   <!-- index.html -->
 <div id="top" class="page-section visible">
   <!-- ▼▼▼ この行を追加 ▼▼▼ -->
