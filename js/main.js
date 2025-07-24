@@ -15,6 +15,7 @@ const pageModules = {
     'attendance': './pages/attendance.js',
     'blog': './pages/blog.js',
     'europe': './pages/europe.js',
+    'europe-rankings': './pages/europe-rankings.js',
     'europe-top20': './pages/europe-top20.js',
     'best11': './pages/best11.js',
     'simulation': './pages/simulation.js',
@@ -65,7 +66,7 @@ async function showPage(id, btn, fromPopState = false) {
         const pageTitles = {
             'top': 'Jリーグ ビッグクラブ指数', 'metrics': 'クラブ指標', 'history': 'Jリーグ過去データ',
             'introduce': '各クラブ紹介', 'rankings': 'Jリーグ 順位表', 'prediction': 'Jリーグ シーズン予測',
-            'attendance': 'Jリーグ 平均観客数', 'blog': '記事・ブログ', 'europe': '5大リーグ日本人選手',
+            'attendance': 'Jリーグ 平均観客数', 'blog': '記事・ブログ', 'europe': '5大リーグ日本人選手', 'europe-rankings': '5大リーグ 順位表',
             'europe-top20': '欧州クラブ売上高TOP20', 'best11': 'ベスト11メーカー', 'simulation': 'ビッグクラブシミュレーター',
             'barchartrace': 'Jリーグ バーチャートレース', 'winner': 'Jリーグ WINNER予測', 'elo-ratings': 'Jリーグ Eloレーティング'
         };
@@ -115,7 +116,7 @@ async function showPage(id, btn, fromPopState = false) {
             }
             titleDiv.style.display = 'flex';
         } else {
-            titleId = ['europe-top20', 'winner', 'elo-ratings'].includes(baseId) ? baseId : id.split('/')[0];
+            titleId = ['europe-top20', 'winner', 'elo-ratings', 'europe-rankings'].includes(baseId) ? baseId : id.split('/')[0];
             const pageTitleDiv = document.getElementById('page-title-' + titleId);
             if (pageTitleDiv) pageTitleDiv.style.display = 'flex';
         }

@@ -5,6 +5,7 @@ let attendanceData = [];
 let rankingData = {};
 let predictionProbabilities = {};
 let europeTopClubs = [];
+let europeRankingData = null; 
 let updateDates = {};
 let scheduleData = '';
 
@@ -171,4 +172,62 @@ export async function getEuropeTopClubsData() {
     };
     europeTopClubs = lines.slice(1).map(line => parseCsvLine(line));
     return europeTopClubs;
+}
+export async function getEuropeRankingData() {
+    if (europeRankingData) return europeRankingData;
+
+    try {
+        const csvText = await fetchData("data/5league-rankings.csv");
+        // ヘッダー行は使わず、データ行から処理を開始
+        const lines = csvText.trim().split("\n").slice(1); 
+
+        // CSVの列に対応する正しいヘッダーをここで定義
+        const headers = ['年', 'リーグ', '順位', 'クラブ名', '試合数', '勝', '分', '敗', '得点', '失点', '得失点差', '勝点'];
+        
+        let currentLeague = '';
+        let currentYear = '';
+
+        const data = lines
+            .map(line => {
+                const values = line.split(",");
+                const obj = {};
+                // 上で定義したヘッダーを使ってオブジェクトを生成
+                headers.forEach((h, i) => obj[h] = values[i] ? values[i].trim() : '');
+
+                // 空欄の年とリーグ情報を前の行から引き継ぐ
+                if (obj['年'] && obj['年'].trim() !== '') {
+                    currentYear = obj['年'];
+                } else {
+                    obj['年'] = currentYear;
+                }
+                if (obj['リーグ'] && obj['リーグ'].trim() !== '') {
+                    currentLeague = obj['リーグ'];
+                } else {
+                    obj['リーグ'] = currentLeague;
+                }
+                
+                return obj;
+            })
+            // クラブ名がない区切り行などを除外
+            .filter(row => row && row['クラブ名'] && row['クラブ名'].trim() !== '');
+
+        // リーグごとにデータをグループ化
+        const groupedData = data.reduce((acc, row) => {
+            const league = row['リーグ'];
+            if (league) {
+                if (!acc[league]) {
+                    acc[league] = [];
+                }
+                acc[league].push(row);
+            }
+            return acc;
+        }, {});
+        
+        europeRankingData = groupedData;
+        return europeRankingData;
+
+    } catch (error) {
+        console.error("5大リーグ順位表データの読み込みに失敗しました:", error);
+        return null;
+    }
 }

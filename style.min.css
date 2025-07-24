@@ -857,3 +857,86 @@ transition: background-color 0.2s;
     margin-bottom: 15px;
     text-align: right; /* 右寄せにする */
 }
+/* リーグ選択ボタンのコンテナ（以前の `category-selector` を流用） */
+#europe-rankings .category-selector {
+    display: flex;
+    justify-content: center;
+    gap: 0; /* ボタン間の隙間をなくす */
+    margin-bottom: 20px; /* テーブルとの間に20pxの余白を追加 */
+}
+
+/* リーグ選択ボタンのスタイル（画像のデザインに合わせる） */
+#europe-rankings .category-btn {
+    padding: 10px 20px;
+    border: 1px solid #666; /* 境界線の色 */
+    background-color: #f0f0f0; /* 通常時の背景色 */
+    color: #333; /* 通常時の文字色 */
+    border-radius: 0; /* 角丸をなくす */
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0; /* 隣接するボタンとのマージンをなくす */
+}
+
+/* 隣接するボタンの境界線が重ならないように調整 */
+#europe-rankings .category-btn:not(:last-child) {
+    border-right: none;
+}
+
+/* 最初のボタンの左側の角を丸める */
+#europe-rankings .category-btn:first-child {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+
+/* 最後のボタンの右側の角を丸める */
+#europe-rankings .category-btn:last-child {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+/* アクティブなボタンのスタイル */
+#europe-rankings .category-btn.active,
+#europe-rankings .category-btn:hover {
+    background-color: #d0d0d0; /* ホバー・アクティブ時の背景色 */
+    color: #000;
+}
+
+/* 順位表テーブルのコンテナ */
+#europe-rankings-table-container {
+    /* 横スクロール対応のラッパーはJS側で生成される `rankings-table-wrapper` に任せる */
+}
+
+/* スマホ表示時の調整 */
+@media (max-width: 768px) {
+    #europe-rankings .category-selector {
+        flex-wrap: wrap; /* スマホではボタンを折り返す */
+        gap: 5px; /* 折り返した際のボタン間の隙間 */
+        margin-bottom: 15px;
+    }
+
+    /* スマホでは角丸をリセットし、個別のボタンとして表示 */
+    #europe-rankings .category-btn,
+    #europe-rankings .category-btn:first-child,
+    #europe-rankings .category-btn:last-child {
+        border-radius: 6px;
+        border-right: 1px solid #666;
+    }
+
+    /* ▼▼▼【ここから追加】▼▼▼ */
+    /* 5大リーグ順位表：スマホ表示で「勝・分・敗」の列を非表示 */
+    #europe-rankings .mobile-hidden-col {
+        display: none;
+    }
+    #europe-rankings .rankings-table th {
+        font-size: 0.8rem; /* フォントサイズ (お好みで調整してください) */
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+}
+/* === 5大リーグ順位表ページ === */
+#europe-rankings {
+    max-width: 900px;
+    margin: 0 auto;
+}
