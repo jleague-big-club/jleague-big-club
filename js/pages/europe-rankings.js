@@ -15,7 +15,34 @@ function renderRankingTable(leagueName) {
 
     const data = europeRankingsData[leagueName];
     
-    // スマホで非表示にする列に className を追加
+    let topRowHtml = '<div class="rank-info-row">';
+    let legendHtml = '<div class="rank-legend">';
+
+    switch (leagueName) {
+        case "プレミアリーグ":
+        case "ラ・リーガ":
+        case "セリエA":
+            legendHtml += '<div class="legend-item"><span class="legend-color-box legend-ucl"></span>UCL</div>';
+            legendHtml += '<div class="legend-item"><span class="legend-color-box legend-uel"></span>UEL</div>';
+            legendHtml += '<div class="legend-item"><span class="legend-color-box legend-relegation-main"></span>自動降格</div>';
+            break;
+        case "ブンデスリーガ": // ★ ブンデスリーガの凡例を分離
+            legendHtml += '<div class="legend-item"><span class="legend-color-box legend-ucl"></span>UCL</div>';
+            legendHtml += '<div class="legend-item"><span class="legend-color-box legend-uel"></span>UEL</div>';
+            legendHtml += '<div class="legend-item"><span class="legend-color-box legend-relegation-playoff"></span>入替戦</div>';
+            legendHtml += '<div class="legend-item"><span class="legend-color-box legend-relegation-main"></span>自動降格</div>';
+            break;
+        case "リーグ・アン":
+             legendHtml += '<div class="legend-item"><span class="legend-color-box legend-ucl"></span>UCL</div>';
+             legendHtml += '<div class="legend-item"><span class="legend-color-box legend-ucl-qualify"></span>UCL予選</div>';
+             legendHtml += '<div class="legend-item"><span class="legend-color-box legend-uel"></span>UEL</div>';
+             legendHtml += '<div class="legend-item"><span class="legend-color-box legend-relegation-playoff"></span>入替戦</div>';
+             legendHtml += '<div class="legend-item"><span class="legend-color-box legend-relegation-main"></span>自動降格</div>';
+            break;
+    }
+    legendHtml += '</div>';
+    topRowHtml += legendHtml + '</div>';
+
     const displayHeaders = [
         { key: '順位', label: '順位' },
         { key: 'クラブ名', label: 'チーム名' },
@@ -29,10 +56,8 @@ function renderRankingTable(leagueName) {
         { key: '得失点差', label: '得失点差' }
     ];
     
-    // 順位でデータをソート
     const sortedData = [...data].sort((a, b) => parseInt(a['順位']) - parseInt(b['順位']));
 
-    // Jリーグ順位表と同じクラス名を使ってスタイルを適用
     const tableHTML = `
         <div class="rankings-table-wrapper">
             <table class="rankings-table">
@@ -42,35 +67,55 @@ function renderRankingTable(leagueName) {
                     </tr>
                 </thead>
                 <tbody>
-                    ${sortedData.map(row => `
-                        <tr>
+                    ${sortedData.map(row => {
+                        const rank = parseInt(row['順位'], 10);
+                        let rowClass = '';
+                        switch (leagueName) {
+                            case "プレミアリーグ":
+                            case "ラ・リーガ":
+                            case "セリエA":
+                                if (rank <= 4) rowClass = 'rank-ucl';
+                                else if (rank === 5) rowClass = 'rank-uel';
+                                else if (rank >= 18) rowClass = 'rank-relegation-main';
+                                break;
+                            case "ブンデスリーガ": // ★ ブンデスリーガの判定を分離
+                                if (rank <= 4) rowClass = 'rank-ucl';
+                                else if (rank === 5) rowClass = 'rank-uel';
+                                else if (rank === 16) rowClass = 'rank-relegation-playoff'; // 16位は入れ替え戦
+                                else if (rank >= 17) rowClass = 'rank-relegation-main'; // 17, 18位が自動降格
+                                break;
+                            case "リーグ・アン":
+                                if (rank <= 3) rowClass = 'rank-ucl';
+                                else if (rank === 4) rowClass = 'rank-ucl-qualify';
+                                else if (rank === 5) rowClass = 'rank-uel';
+                                else if (rank === 16) rowClass = 'rank-relegation-playoff';
+                                else if (rank >= 17) rowClass = 'rank-relegation-main';
+                                break;
+                        }
+
+                        return `
+                        <tr class="${rowClass}">
                             ${displayHeaders.map(header => {
                                 const value = row[header.key] !== undefined ? row[header.key] : '';
                                 const tdClasses = [];
-                                if (header.className) {
-                                    tdClasses.push(header.className);
-                                }
-                                // チーム名のセルは左寄せにする
-                                if (header.key === 'クラブ名') {
-                                    tdClasses.push('team-name-cell');
-                                }
+                                if (header.className) tdClasses.push(header.className);
+                                if (header.key === 'クラブ名') tdClasses.push('team-name-cell');
                                 return `<td class="${tdClasses.join(' ')}">${value}</td>`;
                             }).join('')}
                         </tr>
-                    `).join('')}
+                    `}).join('')}
                 </tbody>
             </table>
         </div>
     `;
 
-    container.innerHTML = tableHTML;
+    container.innerHTML = topRowHtml + tableHTML;
 }
 
 // ページ初期化関数
 export default async function initEuropeRankingsPage(container) {
     if (!container) return;
 
-    // データの読み込み
     if (!europeRankingsData) {
         try {
             europeRankingsData = await getEuropeRankingData();
@@ -82,10 +127,8 @@ export default async function initEuropeRankingsPage(container) {
     }
 
     if (!container.dataset.initialized) {
-        // Jリーグページ風のボタンセレクターに変更
         const leagueButtons = leagueOrder
             .map((league, index) => {
-                // ボタンの表示名を短く調整
                 const buttonLabel = league.replace('プレミアリーグ', 'プレミア').replace('ラ・リーガ', 'ラリーガ').replace('リーグ・アン', 'リーグアン');
                 return `<button data-league="${league}" class="category-btn ${index === 0 ? 'active' : ''}">${buttonLabel}</button>`;
             })
@@ -110,7 +153,6 @@ export default async function initEuropeRankingsPage(container) {
         container.dataset.initialized = 'true';
     }
 
-    // 初期表示
     const initialLeague = container.querySelector('.category-btn.active')?.dataset.league || leagueOrder[0];
     renderRankingTable(initialLeague);
 }
