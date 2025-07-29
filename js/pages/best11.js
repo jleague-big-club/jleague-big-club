@@ -40,17 +40,22 @@ function downloadImage(canvas, filename, msgSpan) {
     }
 }
 
+// js/pages/best11.js
+
+// ... (他の関数はそのまま) ...
+
 async function handleBest11ImageCapture(copyBtn) {
     if (!copyBtn) return;
-    
-    copyBtn.disabled = true;
-    const postBtn = document.getElementById('post-to-x-btn');
-    if (postBtn) postBtn.disabled = true;
 
+    const postBtn = document.getElementById('post-to-x-btn');
     const msgSpan = document.getElementById('copy-best11-img-msg');
     const buttonsContainer = document.getElementById('capture-buttons');
+    const originalBtnContent = copyBtn.innerHTML;
 
-    if (msgSpan) msgSpan.textContent = '画像生成準備中...';
+    // ボタンを無効化し、処理中であることを示す
+    copyBtn.disabled = true;
+    copyBtn.innerHTML = '<span>生成中...</span>';
+    if (postBtn) postBtn.disabled = true;
 
     try {
         await loadScript(HTML2CANVAS_URL);
@@ -58,50 +63,58 @@ async function handleBest11ImageCapture(copyBtn) {
         const captureElem = document.getElementById('best11-capture-area');
         const selectedLabel = captureElem.querySelector('.best11-player-label.selected');
         
+        // キャプチャの準備
         if (selectedLabel) selectedLabel.classList.remove('selected');
         if (buttonsContainer) buttonsContainer.style.visibility = 'hidden';
         if (msgSpan) msgSpan.textContent = '';
         
+        // 少し待機時間を設けて、DOMの更新が確実に行われるようにする
+        await new Promise(resolve => setTimeout(resolve, 50));
+
         const canvas = await html2canvas(captureElem, { backgroundColor: null, scale: 2, useCORS: true });
         
+        // キャプチャ後にUIを元に戻す
         if (selectedLabel) selectedLabel.classList.add('selected');
-
+        
         const isMobile = window.innerWidth <= 768;
 
         if (isMobile) {
             downloadImage(canvas, "best11.png", msgSpan);
         } else {
+            // PCの場合はクリップボードへのコピーを試みる
             canvas.toBlob(blob => {
                 if (!blob) {
                     if (msgSpan) msgSpan.textContent = 'エラー: 画像データの生成に失敗しました';
                     return;
                 }
-                if (navigator.clipboard && navigator.clipboard.write) {
-                    navigator.clipboard.write([new ClipboardItem({ "image/png": blob })])
-                        .then(() => {
-                            if (msgSpan) {
-                                msgSpan.textContent = 'コピーしました！';
-                                setTimeout(() => msgSpan.textContent = '', 3000);
-                            }
-                        })
-                        .catch(err => {
-                            console.warn("クリップボードへのコピーに失敗しました:", err);
-                            downloadImage(canvas, "best11.png", msgSpan);
-                        });
-                } else {
-                    downloadImage(canvas, "best11.png", msgSpan);
-                }
+                navigator.clipboard.write([new ClipboardItem({ "image/png": blob })])
+                    .then(() => {
+                        if (msgSpan) {
+                            msgSpan.textContent = 'コピーしました！';
+                            setTimeout(() => msgSpan.textContent = '', 3000);
+                        }
+                    })
+                    .catch(err => {
+                        console.warn("クリップボードへのコピーに失敗したため、ダウンロードに切り替えます:", err);
+                        downloadImage(canvas, "best11.png", msgSpan);
+                    });
             }, 'image/png');
         }
     } catch (error) {
         console.error('画像生成または保存中にエラー:', error);
         if (msgSpan) msgSpan.textContent = 'エラーが発生しました';
     } finally {
+        // ★★★【ここが重要】★★★
+        // 処理が成功しても失敗しても、必ずボタンの状態を元に戻す
         if (buttonsContainer) buttonsContainer.style.visibility = 'visible';
         copyBtn.disabled = false;
+        copyBtn.innerHTML = originalBtnContent; // 元のボタンの内容に戻す
         if (postBtn) postBtn.disabled = false;
     }
 }
+
+
+// ... (以降の関数はそのまま) ...
 
 function handlePostToX() {
     const text = "私のベストイレブンはこちら！\n#あなたのベストイレブン";

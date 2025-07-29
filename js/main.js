@@ -63,16 +63,39 @@ async function showPage(id, btn, fromPopState = false) {
 
         const baseId = id.split('/')[0];
         const pageTitles = {
-            'top': 'Jリーグ ビッグクラブ指数', 'metrics': 'クラブ指標', 'history': 'Jリーグ過去データ',
-            'introduce': '各クラブ紹介', 'rankings': 'Jリーグ 順位表', 'prediction': 'Jリーグ シーズン予測',
-            'attendance': 'Jリーグ 平均観客数', 'blog': '記事・ブログ', 'europe': '5大リーグ日本人選手', 'europe-rankings': '5大リーグ 順位表',
-            'europe-top20': '欧州クラブ売上高TOP20', 'best11': 'ベスト11メーカー', 'simulation': 'ビッグクラブシミュレーター',
-            'barchartrace': 'Jリーグ バーチャートレース', 'winner': 'Jリーグ WINNER予測', 'elo-ratings': 'Jリーグ Eloレーティング'
-        };
+        'top': 'Jリーグ ビッグクラブ指数ランキング | Big Club Japan',
+        'metrics': '【2024年】Jリーグ クラブ別 売上高・観客動員数ランキング | Big Club Japan',
+        'history': 'Jリーグ 過去10年のJ1平均順位データ | Big Club Japan',
+        'introduce': 'Jリーグ全クラブ紹介 データ分析 | Big Club Japan',
+        'rankings': '【最新】J1・J2・J3・JFL 順位表 | Big Club Japan',
+        'prediction': '【AI予測】Jリーグ 2024シーズン順位予測 | Big Club Japan',
+        'attendance': 'Jリーグ年度別 平均観客数データ推移 | Big Club Japan',
+        'blog': '記事・コラム | Big Club Japan',
+        'europe': '【24-25】5大リーグ所属の日本人選手一覧 | Big Club Japan',
+        'europe-rankings': '【最新】欧州5大リーグ 順位表 | Big Club Japan',
+        'europe-top20': '欧州サッカークラブ 売上高ランキングTOP20 | Big Club Japan',
+        'best11': 'Jリーグ ベストイレブンメーカー | Big Club Japan',
+        'simulation': 'ビッグクラブ シミュレーター | Big Club Japan',
+        'barchartrace': '【動画】Jリーグ順位変動 バーチャートレース | Big Club Japan',
+        'winner': '【AI予測】Jリーグ WINNER予測 (toto) | Big Club Japan',
+        'elo-ratings': 'Jリーグ Eloレーティング 最新版 | Big Club Japan'
+    };
 
         const siteUrl = 'https://bigclub-japan.com/';
         const defaultDescription = 'Jリーグの「ビッグクラブ」をデータで徹底分析！独自のビッグクラブ指数で、そのポテンシャルを可視化します。';
         const defaultImage = `${siteUrl}img/ogp_image.webp`;
+
+       const pageDescriptions = {
+            'top': '独自のビッグクラブ指数でJリーグ全クラブをランキング。浦和レッズ、鹿島アントラーズなど、あなたの応援するクラブの真の実力をデータで分析します。',
+            'metrics': 'Jリーグクラブの最新の売上高、平均観客動員数、タイトル数をランキング形式で比較。クラブの経営規模や人気が一目でわかります。',
+            'history': '過去10年間のJ1平均順位と在籍年数をデータ化。鹿島や川崎Fなど、安定して強さを誇るクラブはどこか？',
+            'introduce': 'J1からJFLまで、Jリーグ全クラブの基本データと紹介文を掲載。レーダーチャートで各クラブの特徴を可視化します。',
+            'rankings': 'J1, J2, J3, JFLの最新順位表を掲載。昇格・降格圏内のチームをリアルタイムでチェック。',
+            'prediction': '独自のAIがJリーグの2024シーズン最終順位をシミュレーション。優勝確率や降格確率を毎節更新します。',
+            'attendance': 'Jリーグの年度別・クラブ別の平均観客数データをグラフで比較。スタジアムの熱気をデータで振り返ります。',
+            'winner': 'AIがサッカーくじWINNERの試合結果を予測。データに基づいた本命・対抗・大穴予想で、あなたのtotoライフをサポート。',
+            'elo-ratings': '最新の試合結果を反映したJリーグクラブの強さの指標「Eloレーティング」を公開。今の本当の力関係がわかります。'
+        };
 
         if (id.startsWith('blog/')) {
             const slug = id.substring(5);
