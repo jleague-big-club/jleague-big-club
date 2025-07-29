@@ -1,3 +1,5 @@
+// js/pages/top.js
+
 import { getClubData } from '../dataManager.js';
 
 function renderBig5(clubs) {
@@ -42,7 +44,7 @@ function renderOthers(clubs) {
     others.forEach((club, idx) => {
         let category, colorClass;
         if (club.sum >= 30) {
-            category = "有望ビッグクラブ"; // 5位まではトップクラブとして別表示のため
+            category = "有望ビッグクラブ";
             colorClass = "top-club";
         } else if (club.sum >= 20) {
             category = "潜在的ビッグクラブ";
@@ -66,9 +68,12 @@ function renderOthers(clubs) {
 }
 
 export default function initTopPage() {
-    const clubData = getClubData();
-    if (clubData.length > 0) {
-        renderBig5(clubData);
-        renderOthers(clubData);
+    const allClubData = getClubData();
+    if (allClubData.length > 0) {
+        // ★★★【ここから修正】JFLを除外する ★★★
+        const jLeagueClubs = allClubData.filter(club => club.p !== 'JFL');
+        renderBig5(jLeagueClubs);
+        renderOthers(jLeagueClubs);
+        // ★★★【ここまで修正】★★★
     }
 }

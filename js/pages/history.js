@@ -1,3 +1,5 @@
+// js/pages/history.js
+
 import { getClubData } from '../dataManager.js';
 import { toHalfWidth } from '../uiHelpers.js';
 import { clubAbbreviations } from '../config.js';
@@ -9,7 +11,7 @@ function renderHistory(clubs) {
     const hisTable = document.createElement("table");
     const hisThead = hisTable.createTHead();
     const hisHeader = hisThead.insertRow();
-    ["クラブ名", "J1過去10年在籍年数", "J1過去10年平均順位", "J1過去10年在籍スコア"].forEach(h => {
+    ["クラブ", "J1過去10年在籍年数", "J1過去10年平均順位", "スコア"].forEach(h => {
         const th = document.createElement("th");
         th.textContent = h;
         hisHeader.appendChild(th);
@@ -39,10 +41,12 @@ function renderHistory(clubs) {
     historyDiv.appendChild(hisTable);
 }
 
-
 export default function initHistoryPage() {
-    const clubData = getClubData();
-    if (clubData.length > 0) {
-        renderHistory(clubData);
+    const allClubData = getClubData();
+    if (allClubData.length > 0) {
+        // ★★★【ここから修正】JFLを除外する ★★★
+        const jLeagueClubs = allClubData.filter(club => club.p !== 'JFL');
+        renderHistory(jLeagueClubs);
+        // ★★★【ここまで修正】★★★
     }
 }

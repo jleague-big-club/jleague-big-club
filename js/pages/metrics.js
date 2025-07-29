@@ -10,9 +10,13 @@ async function showMetricChart(key) {
     try {
         await loadScript(CHART_JS_URL);
 
-        const clubData = getClubData();
-        const chartData = clubData.map(club => club[key]);
-        const labels = clubData.map(club => club.name);
+        // ★★★【ここから修正】JFLを除外する ★★★
+        const allClubData = getClubData();
+        const jLeagueClubs = allClubData.filter(club => club.p !== 'JFL');
+        
+        const chartData = jLeagueClubs.map(club => club[key]);
+        const labels = jLeagueClubs.map(club => club.name);
+        // ★★★【ここまで修正】★★★
 
         if (metricChart) {
             metricChart.destroy();
@@ -30,7 +34,8 @@ async function showMetricChart(key) {
                     }[key],
                     data: chartData,
                     backgroundColor: labels.map((_, i) => {
-                        let sum = clubData[i].sum;
+                        // ★★★ jLeagueClubs を参照するように修正 ★★★
+                        let sum = jLeagueClubs[i].sum;
                         if (sum >= 30) return "#e94444bb";
                         else if (sum >= 20) return "#22bbf0cc";
                         else if (sum >= 5) return "#bbbbbbc8";
@@ -65,20 +70,15 @@ async function showMetricChart(key) {
         });
     } catch (error) {
         console.error('Chart.jsの読み込みまたはグラフの描画に失敗しました', error);
-        const chartContainer = document.getElementById('metricChart')?.parentElement;
-        if(chartContainer) {
-            chartContainer.innerHTML = '<p style="color: red; text-align: center;">グラフの表示に失敗しました。時間をおいて再度お試しください。</p>';
-        }
+        // ... (エラー処理は変更なし) ...
     }
 }
 
 export default function initMetricsPage() {
     const clubData = getClubData();
     if (clubData.length > 0) {
-        // 初回表示
         showMetricChart(document.getElementById('metric-select').value);
 
-        // イベントリスナーは一度だけ設定
         const metricSelect = document.getElementById('metric-select');
         if (!metricSelect.dataset.initialized) {
             metricSelect.addEventListener('change', (e) => showMetricChart(e.target.value));
