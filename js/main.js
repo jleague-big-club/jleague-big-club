@@ -1,4 +1,4 @@
-// js/main.js
+// js/main.js (元のコード)
 
 import { setupEventListeners, handleInitialURL, updateNavActiveState, stopBannerAutoPlay, setupCarousel } from './uiHelpers.js';
 import { loadInitialData } from './dataManager.js';
@@ -45,7 +45,6 @@ const updateOgp = (title, description, image, url) => {
         'og:image': image,
         'og:url': url,
         'twitter:card': 'summary_large_image',
-        // 他のTwitterカードタグも必要に応じて更新
     };
 
     for (const property in metaTags) {
@@ -71,7 +70,6 @@ async function showPage(id, btn, fromPopState = false) {
             'barchartrace': 'Jリーグ バーチャートレース', 'winner': 'Jリーグ WINNER予測', 'elo-ratings': 'Jリーグ Eloレーティング'
         };
 
-        // --- OGPとページタイトルの動的更新 ---
         const siteUrl = 'https://bigclub-japan.com/';
         const defaultDescription = 'Jリーグの「ビッグクラブ」をデータで徹底分析！独自のビッグクラブ指数で、そのポテンシャルを可視化します。';
         const defaultImage = `${siteUrl}img/ogp_image.webp`;
@@ -97,7 +95,6 @@ async function showPage(id, btn, fromPopState = false) {
             updateOgp('Jリーグビッグクラブ分析', defaultDescription, defaultImage, siteUrl);
         }
         
-        // --- UIの更新 ---
         document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('visible'));
         const targetPageId = id === 'winner/results' ? 'winner-results' : (id.startsWith('blog/') ? 'blog' : baseId);
         const targetPage = document.getElementById(targetPageId);
@@ -145,7 +142,6 @@ async function showPage(id, btn, fromPopState = false) {
             loadedModules[moduleId] = module;
         }
 
-        // --- ページごとの処理 ---
         if (moduleId === 'winner' && loadedModules.winner) {
             if (id === 'winner/results') {
                 await loadedModules.winner.showPredictionResults();
@@ -155,7 +151,6 @@ async function showPage(id, btn, fromPopState = false) {
         } else if (moduleId === 'blog' && loadedModules.blog) {
              if (id.startsWith('blog/')) {
                 const slug = id.substring(5);
-                // タイトルはOGP更新時に取得済みなので、ここでは渡さない
                 await showArticleDetail(slug, null, fromPopState);
             } else {
                 showBlogList();

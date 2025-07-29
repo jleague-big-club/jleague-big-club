@@ -1,3 +1,5 @@
+// js/dataManager.js
+
 let clubData = [];
 let playerData = [];
 let blogPosts = [];
@@ -8,6 +10,7 @@ let europeTopClubs = [];
 let europeRankingData = null; 
 let updateDates = {};
 let scheduleData = '';
+let introductionsData = null;
 
 const dataCache = {};
 
@@ -26,8 +29,8 @@ async function fetchData(url) {
 
 export async function loadInitialData() {
     const [clubCsv, playerCsv] = await Promise.all([
-        fetchData("data/data.csv"),
-        fetchData("data/playerdata.csv"),
+        fetchData("/data/data.csv"),
+        fetchData("/data/playerdata.csv"),
     ]);
 
     // Parse Club Data
@@ -44,8 +47,15 @@ export async function loadInitialData() {
         obj.sum = parseFloat(obj["総合的ビッグクラブスコア"]) || 0;
         obj.l = obj["過去10年J1在籍年数"] || '0';
         obj.m = obj["J1在籍10年平均順位"] || 'N/A';
-        obj.o = obj["J1在籍10年平均順位スコア"] || 'N/A';
+        obj.o = obj["J1在籍10年平均順位スコア"] || '0';
         obj.p = obj["所属リーグ"] || 'N/A';
+        obj.color = obj["チームカラー"] || '#4a5a7f';
+        obj.revenueScore = parseFloat(obj["売上スコア"]) || 0;
+        obj.audienceScore = parseFloat(obj["観客スコア"]) || 0;
+        obj.titleScore = parseFloat(obj["タイトルスコア"]) || 0;
+        obj.rankScore = parseFloat(obj["平均順位スコア"]) || 0;
+        obj.lat = parseFloat(obj["緯度"]) || 0;
+        obj.lon = parseFloat(obj["経度"]) || 0;
         return obj;
     });
     clubData.sort((a, b) => b.sum - a.sum);
@@ -59,6 +69,12 @@ export async function loadInitialData() {
         headers.forEach((h, i) => obj[h] = vals[i] ? vals[i].trim() : '');
         return obj;
     });
+}
+
+export async function getIntroductionsData() {
+    if (introductionsData) return introductionsData;
+    introductionsData = await fetchData("/data/introductions.json");
+    return introductionsData;
 }
 
 export const getClubData = () => clubData;
@@ -77,8 +93,8 @@ export async function getBlogPosts() {
 export async function getAttendanceData() {
     if (attendanceData.length > 0) return attendanceData;
     const [csvText, datesJson] = await Promise.all([
-        fetchData("data/attendancefigure.csv"),
-        fetchData("data/update_dates.json")
+        fetchData("/data/attendancefigure.csv"),
+        fetchData("/data/update_dates.json")
     ]);
     let lines = csvText.trim().split("\n");
     let headers = lines[0].split(",").map(h => h.trim());
@@ -104,11 +120,11 @@ export async function getAttendanceData() {
 export async function getRankingData() {
     if (Object.keys(rankingData).length > 0) return rankingData;
     const [j1Csv, j2Csv, j3Csv, jflCsv, datesJson] = await Promise.all([
-        fetchData("data/j1rank.csv"),
-        fetchData("data/j2rank.csv"),
-        fetchData("data/j3rank.csv"),
-        fetchData("data/jflrank.csv"),
-        fetchData("data/update_dates.json")
+        fetchData("/data/j1rank.csv"),
+        fetchData("/data/j2rank.csv"),
+        fetchData("/data/j3rank.csv"),
+        fetchData("/data/jflrank.csv"),
+        fetchData("/data/update_dates.json")
     ]);
     const parse = (csv) => {
         if (!csv || csv.trim() === '') return [];
@@ -133,8 +149,8 @@ export async function getRankingData() {
 export async function getPredictionData() {
     if (Object.keys(predictionProbabilities).length > 0) return { predictionProbabilities, updateDates };
     const [preds, dates] = await Promise.all([
-        fetchData("data/prediction_probabilities.json"),
-        fetchData("data/update_dates.json")
+        fetchData("/data/prediction_probabilities.json"),
+        fetchData("/data/update_dates.json")
     ]);
     predictionProbabilities = preds;
     updateDates = dates;
@@ -143,14 +159,14 @@ export async function getPredictionData() {
 
 export async function getScheduleData() {
     if (scheduleData) return scheduleData;
-    const csvText = await fetchData("data/schedule.csv");
+    const csvText = await fetchData("/data/schedule.csv");
     scheduleData = csvText;
     return scheduleData;
 }
 
 export async function getEuropeTopClubsData() {
     if (europeTopClubs.length > 0) return europeTopClubs;
-    const csvText = await fetchData("data/europebigclub.csv");
+    const csvText = await fetchData("/data/europebigclub.csv");
     const lines = csvText.trim().split("\n");
     const parseCsvLine = (line) => {
         const result = [];
@@ -177,11 +193,8 @@ export async function getEuropeRankingData() {
     if (europeRankingData) return europeRankingData;
 
     try {
-        const csvText = await fetchData("data/5league-rankings.csv");
-        // ヘッダー行は使わず、データ行から処理を開始
+        const csvText = await fetchData("/data/5league-rankings.csv");
         const lines = csvText.trim().split("\n").slice(1); 
-
-        // CSVの列に対応する正しいヘッダーをここで定義
         const headers = ['年', 'リーグ', '順位', 'クラブ名', '試合数', '勝', '分', '敗', '得点', '失点', '得失点差', '勝点'];
         
         let currentLeague = '';
@@ -191,10 +204,7 @@ export async function getEuropeRankingData() {
             .map(line => {
                 const values = line.split(",");
                 const obj = {};
-                // 上で定義したヘッダーを使ってオブジェクトを生成
                 headers.forEach((h, i) => obj[h] = values[i] ? values[i].trim() : '');
-
-                // 空欄の年とリーグ情報を前の行から引き継ぐ
                 if (obj['年'] && obj['年'].trim() !== '') {
                     currentYear = obj['年'];
                 } else {
@@ -205,13 +215,10 @@ export async function getEuropeRankingData() {
                 } else {
                     obj['リーグ'] = currentLeague;
                 }
-                
                 return obj;
             })
-            // クラブ名がない区切り行などを除外
             .filter(row => row && row['クラブ名'] && row['クラブ名'].trim() !== '');
 
-        // リーグごとにデータをグループ化
         const groupedData = data.reduce((acc, row) => {
             const league = row['リーグ'];
             if (league) {

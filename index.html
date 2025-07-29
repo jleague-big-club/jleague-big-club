@@ -30,12 +30,10 @@
   gtag('config', 'G-RZ7LMDQ2KM');
 </script>
   
-  <!-- ★★★ ここでCSSファイルを読み込む ★★★ -->
   <link rel="stylesheet" href="style.min.css">
 
 </head>
 <body>
-<!-- ▼▼▼ ここから元の<body>の中身を全て貼り付けます ▼▼▼ -->
 <button id="hamburger-btn" class="hamburger-btn" aria-label="メニューを開く">
     <span></span>
     <span></span>
@@ -72,11 +70,9 @@
     <div class="nav-dropdown-content">
       <a href="#rankings" onmouseover="preloadModule('rankings')" onclick="event.preventDefault(); event.stopPropagation(); showPage('rankings', this);">順位表</a>
       <a href="#barchartrace" onmouseover="preloadModule('barchartrace')" onclick="event.preventDefault(); event.stopPropagation(); showPage('barchartrace', this);">バーチャートレース</a>
-      <!-- シーズン予測は「予想」カテゴリに移動 -->
     </div>
   </span>
 
-  <!-- 新しい「予想」カテゴリを追加 -->
   <span class="nav-dropdown">
     <a href="#winner" onmouseover="preloadModule('winner')" onclick="event.preventDefault(); toggleSubMenu(this, event);" id="nav-prediction-btn">Jリーグ予想</a>
     <div class="nav-dropdown-content">
@@ -98,9 +94,7 @@
     <a href="#europe" onmouseover="preloadModule('europe')" onclick="event.preventDefault(); toggleSubMenu(this, event);" id="nav-europe-btn">海外サッカー</a>
     <div class="nav-dropdown-content">
         <a href="#europe" onmouseover="preloadModule('europe')" onclick="event.preventDefault(); event.stopPropagation(); showPage('europe', document.getElementById('nav-europe-btn'));">5大リーグ日本人選手</a>
-        <!-- ▼▼▼ ここから追加 ▼▼▼ -->
         <a href="#europe-rankings" onmouseover="preloadModule('europe-rankings')" onclick="event.preventDefault(); event.stopPropagation(); showPage('europe-rankings', this);">5大リーグ順位表</a>
-        <!-- ▲▲▲ ここまで追加 ▲▲▲ -->
     </div>
   </span>
   
@@ -112,7 +106,6 @@
 
 <div class="carousel-container" id="banner-carousel">
   <div class="carousel-track">
-  <!-- 1番目のバナー：ビッグクラブの解説記事 -->
   <div class="carousel-item">
    <a href="#blog/bigclub-challenge">
        <img src="/img/banner1.webp" alt="ビッグクラブの挑戦"
@@ -122,7 +115,6 @@
       </div>
     </a>
   </div>
-  <!-- 2番目のバナー：シーズン予測ページの紹介 -->
   <div class="carousel-item">
    <a href="#blog/prediction-intro">
       <img src="/img/banner2.webp" alt="シーズン予測ページ紹介"
@@ -132,7 +124,6 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
       </div>
     </a>
   </div>
-  <!-- 3番目のバナー：ベスト11メーカー -->
   <div class="carousel-item">
    <a href="#blog/best11-intro">
        <img src="/img/banner3.webp" alt="ベスト11メーカー"
@@ -142,7 +133,6 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
       </div>
     </a>
   </div>
-  <!-- 4番目のバナー：ビッグクラブシミュレーター -->
   <div class="carousel-item">
   <a href="#blog/simulation-intro">
       <img src="/img/banner4.webp" alt="ビッグクラブシミュレーター"
@@ -152,7 +142,6 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
       </div>
     </a>
   </div>
-  <!-- 5番目のバナー：観客動員ランキング -->
   <div class="carousel-item">
    <a href="#blog/attendance-intro">
       <img src="/img/banner5.webp" alt="平均観客数"
@@ -162,7 +151,6 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
       </div>
     </a>
   </div>
-  <!-- 6番目のバナー：5大リーグ日本人選手 -->
   <div class="carousel-item">
    <a href="#blog/europe-intro">
       <img src="/img/banner6.webp" alt="欧州の日本人選手"
@@ -206,22 +194,16 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
   <div id="page-title-blog" class="page-title-row" style="display:none;"><h1>記事・ブログ</h1></div>
 <div id="page-title-winner" class="page-title-row" style="display:none;"><h1>Jリーグ WINNER予測</h1></div>
 <div id="page-title-elo-ratings" class="page-title-row" style="display:none;"><h1>Jリーグ Eloレーティング</h1></div>
-  <!-- ▼▼▼ ここから追加 ▼▼▼ -->
   <div id="page-title-europe-rankings" class="page-title-row" style="display:none;"><h1>5大リーグ 順位表 25-26シーズン</h1></div>
-  <!-- ▲▲▲ ここまで追加 ▲▲▲ -->
 
-  <!-- index.html -->
 <div id="top" class="page-section visible">
-  <!-- ▼▼▼ この行を追加 ▼▼▼ -->
   <h2 style="position: absolute; left: -9999px;">ビッグクラブトップ5</h2>
   
   <div class="big5-container" id="big5-cards"></div>
   
-  <!-- ▼▼▼ この行を追加 ▼▼▼ -->
   <h2 style="text-align:center; margin-bottom:8px; color:#baf7fa; font-size:1.25rem;">6位以下クラブ</h2>
   
   <div class="club-table-container">
-    <!-- 元々あったh2は削除、または内容を調整 -->
     <div id="club-categories"></div>
   </div>
 </div>
@@ -298,7 +280,6 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
     </div>
     <div id="prediction-container">
     </div>
-    <!-- ▼▼▼【ここから追加】予測説明ポップアップ ▼▼▼ -->
     <div id="prediction-help-pop">
         <button class="close-btn" onclick="document.getElementById('prediction-help-pop').style.display='none';">閉じる</button>
         <h3>シーズン予測の見方</h3>
@@ -329,18 +310,15 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
                 残留以上の順位で終わる回数が多いチームです。</li>
         </ul>
  <div style="text-align: center; margin-top: 25px; padding-top: 15px; border-top: 1px solid #4a5a7f;">
-        <!-- ▼▼▼【ここから修正】onclick属性をシンプルにします ▼▼▼ -->
         <a href="#blog/prediction-logic-explainer"
    onclick="document.getElementById('prediction-help-pop').style.display='none';">
     さらに詳しく (なぜ順位と予測が違う？)
 </a>
-        <!-- ▲▲▲【ここまで修正】▲▲▲ -->
     </div>
     </div>
   
   </div>
   
-  <!-- ★★★ ここにWINNERページ用の箱を追加しました ★★★ -->
   <div id="winner" class="page-section"></div>
 
  <div id="winner-results" class="page-section"></div>
@@ -348,15 +326,9 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
 <div id="elo-ratings" class="page-section"></div>
   
   <div id="introduce" class="page-section">
-    <div id="club-status-board" style="display:none;"></div>
-    <div id="club-league-tabs" style="text-align:center; margin-bottom:20px;">
-      <button class="league-tab-btn active" data-league="J1">J1</button>
-      <button class="league-tab-btn" data-league="J2">J2</button>
-      <button class="league-tab-btn" data-league="J3">J3</button>
-      <button class="league-tab-btn" data-league="JFL">JFL</button>
-    </div>
-    <div id="club-league-table"></div>
+    <!-- introduce.js がこの中にコンテンツを生成します -->
   </div>
+
   <div id="europe" class="page-section" style="display:none;">
     <div id="europe-pc-view">
       <h2 style="text-align:center;"></h2>
@@ -378,9 +350,7 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
         <div id="europe-player-list" style="padding: 10px 5px;"></div>
     </div>
 </div>
-  <!-- ▼▼▼ ここから追加 ▼▼▼ -->
   <div id="europe-rankings" class="page-section"></div>
-  <!-- ▲▲▲ ここまで追加 ▲▲▲ -->
   <div id="best11" class="page-section" style="display:none;">
     <div id="best11-capture-area">
       <div style="font-size:2.1em; font-weight:bold; color:#fff; margin-bottom:8px;">#あなたのベストイレブン</div>
@@ -520,13 +490,11 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
       <a href="legal/contact.html" target="_blank" rel="noopener noreferrer">お問い合わせ</a>
       <a href="legal/privacy-policy.html" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a>
       
-      <!-- ▼▼▼ ここから追加 ▼▼▼ -->
       <a href="https://x.com/BigClub_Japan" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="Xのプロフィールページ">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
           <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.6.75ZM11.49 13.5l-1.45-2.086L3.33 2.75h2.1l4.485 6.06L14.24 13.5h-2.75Z"/>
         </svg>
       </a>
-      <!-- ▲▲▲ ここまで追加 ▲▲▲ -->
     </div>
     <div class="footer-copyright">
       © 2025 Big Club Japan. All Rights Reserved.
@@ -561,7 +529,7 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
     <b>なぜこの比率（重み）なのか？</b><br>
     <ul style="margin-top: 8px;">
       <li>売上高や観客動員は“人気”や“影響力”の指標、タイトルや順位は“実績”や“強さ”の指標です。</li>
-      <li>クラブの総合力・“ビッグクラブらしさ”が最も反映されるよう、<b>売上/順位=30%ずつ、タイトル=25%、観客動員=15%</b>の比率で調整しています。※観客動員は無料観客も含むので比重は低く設定</li>
+      <li>クラブの総合力・“ビッグクラブらしさ”が最も反映されるよう、<b>売上/順位=30%ずつ、タイトル=25%、観客動員=15%</b>の比重で調整しています。※観客動員は無料観客も含むので比重は低く設定</li>
     </ul>
     <b>【例】浦和レッズのスコア</b><br>
     <ul style="margin-top: 8px;">
