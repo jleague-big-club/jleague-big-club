@@ -2,7 +2,7 @@
 
 import { setupEventListeners, handleInitialURL, updateNavActiveState, stopBannerAutoPlay, setupCarousel } from './uiHelpers.js';
 import { loadInitialData } from './dataManager.js';
-import { initializeBlog, showBlogList, showArticleDetail, hideArticleDetail, isShowingArticleDetail, getBlogPosts, showPredictionResults } from './pages/blog.js';
+import { initializeBlog, showBlogList, showArticleDetail as originalShowArticleDetail, hideArticleDetail, isShowingArticleDetail, getBlogPosts, showPredictionResults } from './pages/blog.js';
 
 // 各ページに対応するモジュールをマッピング
 const pageModules = {
@@ -54,6 +54,60 @@ const updateOgp = (title, description, image, url) => {
         }
     }
 };
+
+// ▼▼▼【ここから修正】▼▼▼
+// 記事ページに広告を挿入する showArticleDetail 関数をここで定義
+async function showArticleDetail(slug, title, fromPopState = false) {
+    // 元の関数を呼び出して記事を表示
+    await originalShowArticleDetail(slug, title, fromPopState);
+
+    const blogContent = document.getElementById('blog-content');
+    if (!blogContent || blogContent.style.display === 'none') return;
+
+    // 既存の広告を削除して重複を防ぐ
+    blogContent.querySelectorAll('.ad-in-article').forEach(ad => ad.remove());
+
+    // 広告ユニットのHTMLを作成する関数
+    const createAdUnit = (slotId) => {
+        const adWrapper = document.createElement('div');
+        adWrapper.className = 'ad-in-article';
+        adWrapper.style.margin = '30px auto';
+        adWrapper.style.textAlign = 'center';
+
+        const ins = document.createElement('ins');
+        ins.className = 'adsbygoogle';
+        ins.style.display = 'block';
+        ins.setAttribute('data-ad-client', 'ca-pub-1470345215148439');
+        ins.setAttribute('data-ad-slot', slotId); // ★個別のスロットID
+        ins.setAttribute('data-ad-format', 'auto');
+        ins.setAttribute('data-full-width-responsive', 'true');
+        
+        adWrapper.appendChild(ins);
+        
+        // AdSenseスクリプトを実行
+        try {
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+        } catch (e) {
+            console.error('AdSense error:', e);
+        }
+        return adWrapper;
+    };
+
+    // 1. 記事冒頭に広告を挿入 (H2タグの直前)
+    const firstH2 = blogContent.querySelector('h2');
+    if (firstH2) {
+        // ここでは記事内広告用のスロットIDを使います。AdSenseで別途作成してください。
+        const adUnitTop = createAdUnit('8733170368'); 
+        firstH2.parentNode.insertBefore(adUnitTop, firstH2);
+    }
+    
+    // 2. 記事末尾に広告を挿入 (最後の要素の前)
+    if (blogContent.children.length > 5) { // ある程度記事が長い場合のみ
+        const adUnitBottom = createAdUnit('9802709455'); // 別のスロットIDを推奨
+        blogContent.appendChild(adUnitBottom);
+    }
+}
+// ▲▲▲【ここまで修正】▲▲▲
 
 
 // === ページ表示ロジック ===
@@ -143,15 +197,18 @@ async function showPage(id, btn, fromPopState = false) {
 
         updateNavActiveState(id, btn);
 
+        const adContainer = document.getElementById('ad-top-banner');
         const scoreBtn = document.getElementById('score-method-btn');
         const banner = document.querySelector('.carousel-container');
         if (baseId === 'top') {
             if (scoreBtn) scoreBtn.style.display = 'block';
             if (banner) banner.style.display = 'block';
+            if (adContainer) adContainer.style.display = 'block';
             if (!fromPopState) setupCarousel('banner-carousel', 4000);
         } else {
             if (scoreBtn) scoreBtn.style.display = 'none';
             if (banner) banner.style.display = 'none';
+            if (adContainer) adContainer.style.display = 'none';
             stopBannerAutoPlay();
         }
 
