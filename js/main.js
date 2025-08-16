@@ -1,4 +1,4 @@
-// js/main.js (元のコード)
+// js/main.js (修正済み)
 
 import { setupEventListeners, handleInitialURL, updateNavActiveState, stopBannerAutoPlay, setupCarousel } from './uiHelpers.js';
 import { loadInitialData } from './dataManager.js';
@@ -55,7 +55,7 @@ const updateOgp = (title, description, image, url) => {
     }
 };
 
-// ▼▼▼【ここから修正】▼▼▼
+
 // 記事ページに広告を挿入する showArticleDetail 関数をここで定義
 async function showArticleDetail(slug, title, fromPopState = false) {
     // 元の関数を呼び出して記事を表示
@@ -107,7 +107,6 @@ async function showArticleDetail(slug, title, fromPopState = false) {
         blogContent.appendChild(adUnitBottom);
     }
 }
-// ▲▲▲【ここまで修正】▲▲▲
 
 
 // === ページ表示ロジック ===
@@ -117,22 +116,22 @@ async function showPage(id, btn, fromPopState = false) {
 
         const baseId = id.split('/')[0];
         const pageTitles = {
-        'top': 'Jリーグ ビッグクラブ指数ランキング | Big Club Japan',
-        'metrics': '【2024年】Jリーグ クラブ別 売上高・観客動員数ランキング | Big Club Japan',
-        'history': 'Jリーグ 過去10年のJ1平均順位データ | Big Club Japan',
-        'introduce': 'Jリーグ全クラブ紹介 データ分析 | Big Club Japan',
-        'rankings': '【最新】J1・J2・J3・JFL 順位表 | Big Club Japan',
-        'prediction': '【AI予測】Jリーグ 2024シーズン順位予測 | Big Club Japan',
-        'attendance': 'Jリーグ年度別 平均観客数データ推移 | Big Club Japan',
-        'blog': '記事・コラム | Big Club Japan',
-        'europe': '【24-25】5大リーグ所属の日本人選手一覧 | Big Club Japan',
-        'europe-rankings': '【最新】欧州5大リーグ 順位表 | Big Club Japan',
-        'europe-top20': '欧州サッカークラブ 売上高ランキングTOP20 | Big Club Japan',
-        'best11': 'Jリーグ ベストイレブンメーカー | Big Club Japan',
-        'simulation': 'ビッグクラブ シミュレーター | Big Club Japan',
-        'barchartrace': '【動画】Jリーグ順位変動 バーチャートレース | Big Club Japan',
-        'winner': '【AI予測】Jリーグ WINNER予測 (toto) | Big Club Japan',
-        'elo-ratings': 'Jリーグ Eloレーティング 最新版 | Big Club Japan'
+        'top': 'Jリーグ ビッグクラブ指数ランキング', // Note: updateOgpで `| Big Club Japan` が付与されるので重複を削除
+        'metrics': '【2024年】Jリーグ クラブ別 売上高・観客動員数ランキング',
+        'history': 'Jリーグ 過去10年のJ1平均順位データ',
+        'introduce': 'Jリーグ全クラブ紹介 データ分析',
+        'rankings': '【最新】J1・J2・J3・JFL 順位表',
+        'prediction': '【AI予測】Jリーグ 2024シーズン順位予測',
+        'attendance': 'Jリーグ年度別 平均観客数データ推移',
+        'blog': '記事・コラム',
+        'europe': '【24-25】5大リーグ所属の日本人選手一覧',
+        'europe-rankings': '【最新】欧州5大リーグ 順位表',
+        'europe-top20': '欧州サッカークラブ 売上高ランキングTOP20',
+        'best11': 'Jリーグ ベストイレブンメーカー',
+        'simulation': 'ビッグクラブ シミュレーター',
+        'barchartrace': '【動画】Jリーグ順位変動 バーチャートレース',
+        'winner': '【AI予測】Jリーグ WINNER予測 (toto)',
+        'elo-ratings': 'Jリーグ Eloレーティング 最新版'
     };
 
         const siteUrl = 'https://bigclub-japan.com/';
@@ -167,7 +166,9 @@ async function showPage(id, btn, fromPopState = false) {
                 updateOgp('記事・ブログ', defaultDescription, defaultImage, `${siteUrl}#blog`);
             }
         } else if (pageTitles[baseId]) {
-            updateOgp(pageTitles[baseId], defaultDescription, defaultImage, `${siteUrl}#${id}`);
+            // pageDescriptionsに固有の説明があればそれを使用、なければデフォルトを使用
+            const description = pageDescriptions[baseId] || defaultDescription;
+            updateOgp(pageTitles[baseId], description, defaultImage, `${siteUrl}#${id}`);
         } else {
             updateOgp('Jリーグビッグクラブ分析', defaultDescription, defaultImage, siteUrl);
         }
@@ -243,6 +244,18 @@ async function showPage(id, btn, fromPopState = false) {
                  await loadedModules[moduleId].default(document.getElementById(moduleId));
             }
         }
+
+        // ★★★ ここから修正 ★★★
+        // Google Analyticsに手動でpage_viewイベントを送信します。
+        // これにより、ページが切り替わるたびに、正しいタイトルとURLで閲覧情報が記録されます。
+        if (typeof gtag === 'function') {
+            gtag('event', 'page_view', {
+                page_title: document.title, // JavaScriptで更新された後のタイトル
+                page_location: window.location.href, // ハッシュを含む完全なURL
+                page_path: window.location.pathname + window.location.hash // GA4が推奨するパス形式
+            });
+        }
+        // ★★★ ここまで修正 ★★★
 
     } finally {
         const navLinks = document.getElementById('nav-links');
