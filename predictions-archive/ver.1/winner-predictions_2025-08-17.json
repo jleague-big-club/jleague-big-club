@@ -1,0 +1,108 @@
+{
+  "version": "ver.1",
+  "J1": [
+    {
+      "kickoff": "8/17 (日) 19:00",
+      "home": "ファジアーノ岡山",
+      "away": "柏レイソル",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-1",
+          "odds": "7.6倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-0",
+          "odds": "8.6倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-2",
+          "odds": "20.1倍",
+          "class": "longshot"
+        }
+      ]
+    }
+  ],
+  "J2": [
+    {
+      "kickoff": "8/17 (日) 19:00",
+      "home": "ヴァンフォーレ甲府",
+      "away": "大分トリニータ",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "2-0",
+          "odds": "7.9倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-0",
+          "odds": "8.5倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "0-1",
+          "odds": "24.7倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "8/17 (日) 19:00",
+      "home": "サガン鳥栖",
+      "away": "Ｖ・ファーレン長崎",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-0",
+          "odds": "8.0倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "2-0",
+          "odds": "8.4倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "1-2",
+          "odds": "22.8倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "8/17 (日) 19:00",
+      "home": "愛媛ＦＣ",
+      "away": "ＲＢ大宮アルディージャ",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-1",
+          "odds": "7.7倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "0-1",
+          "odds": "9.3倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-2",
+          "odds": "20.3倍",
+          "class": "longshot"
+        }
+      ]
+    }
+  ],
+  "J3": []
+}
