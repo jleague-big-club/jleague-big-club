@@ -9,19 +9,19 @@
         {
           "type": "本命",
           "score": "2-0",
-          "odds": "7.8倍",
+          "odds": "7.6倍",
           "class": "favorite"
         },
         {
           "type": "対抗",
           "score": "1-0",
-          "odds": "8.3倍",
+          "odds": "7.8倍",
           "class": "contender"
         },
         {
           "type": "大穴",
-          "score": "0-1",
-          "odds": "22.3倍",
+          "score": "4-0",
+          "odds": "21.9倍",
           "class": "longshot"
         }
       ]
@@ -34,19 +34,19 @@
         {
           "type": "本命",
           "score": "2-0",
-          "odds": "7.3倍",
+          "odds": "7.4倍",
           "class": "favorite"
         },
         {
           "type": "対抗",
           "score": "3-0",
-          "odds": "7.9倍",
+          "odds": "8.2倍",
           "class": "contender"
         },
         {
           "type": "大穴",
-          "score": "4-1",
-          "odds": "20.7倍",
+          "score": "5-0",
+          "odds": "22.6倍",
           "class": "longshot"
         }
       ]

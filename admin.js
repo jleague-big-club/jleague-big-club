@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     // === グローバル変数 ===
-    let clubData = [], attendanceData = [], predictionData = {}, updateDates = {}, playerData = [];
+    let clubData = [], attendanceData = [], predictionData = {}, updateDates = {}, playerData = [], postTexts = {}; // postTextsを追加
     let attendanceChart = null, customChart = null;
     const leagueColors = { J1: '#e60012', J2: '#00a0e9', J3: '#67b52d', other: '#888' };
 
@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
         graph: document.getElementById('panel-graph-generator'),
         attendance: document.getElementById('panel-attendance'),
         prediction: document.getElementById('panel-prediction'),
+        sns: document.getElementById('panel-sns-post'), // snsパネルを追加
         simulation: document.getElementById('panel-simulation'),
         best11: document.getElementById('panel-best11'),
     };
@@ -30,10 +31,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // === データ読み込み ===
     async function fetchAllData() {
-        const [clubRes, attRes, predRes, datesRes, playerRes] = await Promise.all([
+        // ★★★【修正】latest_post_text.jsonの読み込みを追加 ★★★
+        const [clubRes, attRes, predRes, datesRes, playerRes, postRes] = await Promise.all([
             fetch("data/data.csv").catch(e=>null), fetch("data/attendancefigure.csv").catch(e=>null),
             fetch("data/prediction_probabilities.json").catch(e=>null), fetch("data/update_dates.json").catch(e=>null),
-            fetch("data/playerdata.csv").catch(e=>null),
+            fetch("data/playerdata.csv").catch(e=>null), fetch("data/latest_post_text.json").catch(e=>null),
         ]);
         if (clubRes) {
             const text = await clubRes.text(); let lines = text.trim().split("\n"); let headers = lines[0].split(",").map(h => h.trim());
@@ -58,6 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         if (predRes) predictionData = await predRes.json();
         if (datesRes) updateDates = await datesRes.json();
+        if (postRes) postTexts = await postRes.json(); // ★★★【修正】postTextsに格納 ★★★
     }
     
     // === パネル切り替え ===
@@ -67,6 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if(panelId === 'panel-graph-generator') updateChart();
         if(panelId === 'panel-attendance') handleAttendanceViewChange();
         if(panelId === 'panel-prediction') renderPredictionCards('J1');
+        if(panelId === 'panel-sns-post') renderSnsPostPanel('J1'); // ★★★【修正】SNSパネルの初期表示
         if(panelId === 'panel-simulation') runSimulation();
         if(panelId === 'panel-best11') renderBest11Selectors();
     }
@@ -76,6 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
         panels.graph.innerHTML = getGraphGeneratorHTML();
         panels.attendance.innerHTML = getAttendanceAnalysisHTML();
         panels.prediction.innerHTML = getPredictionHTML();
+        panels.sns.innerHTML = getSnsPostHTML(); // ★★★【修正】SNSパネルのHTMLを生成
         panels.simulation.innerHTML = getSimulationHTML();
         panels.best11.innerHTML = getBest11HTML();
     }
@@ -98,9 +103,19 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         document.getElementById('prediction-cards-container')?.addEventListener('click', (e) => {
             const button = e.target.closest('.copy-btn[data-capture-id]');
-            if (button) {
-                generateImage(button.dataset.captureId);
-            }
+            if (button) generateImage(button.dataset.captureId);
+        });
+
+        // ★★★【修正】SNSパネル用のイベントリスナーを追加 ★★★
+        document.getElementById('sns-post-tabs')?.addEventListener('click', (e) => {
+            if(e.target.tagName === 'BUTTON') renderSnsPostPanel(e.target.dataset.league);
+        });
+        document.getElementById('sns-copy-button')?.addEventListener('click', () => {
+            const textarea = document.getElementById('sns-post-textarea');
+            textarea.select();
+            navigator.clipboard.writeText(textarea.value);
+            messageArea.textContent = 'コピーしました！';
+            setTimeout(() => { messageArea.textContent = ''; }, 2000);
         });
         
         document.getElementById('sim-club-select')?.addEventListener('change', (e) => {
@@ -125,9 +140,11 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('copy-best11-btn')?.addEventListener('click', () => generateImage('best11-capture-core'));
     }
     
-    // === 機能別ロジックとHTMLテンプレート ===
+    // === 機能別ロジックとHTMLテンプレート (既存の関数は省略) ===
     
-    // --- 1. グラフ生成 ---
+    // (getGraphGeneratorHTML, updateChart, getAttendanceAnalysisHTML, ... , runSimulation, getBest11HTML, ... は変更なし)
+    
+    // --- (省略された既存の関数群) ---
     function getGraphGeneratorHTML() {
         const clubCheckboxes = clubData.sort((a,b) => a.name.localeCompare(b.name, 'ja')).map(c => `<div class="checkbox-item"><input type="checkbox" id="graph-cb-${c.name}" value="${c.name}" data-league="${c.league}" checked><label for="graph-cb-${c.name}">${c.name}</label></div>`).join('');
         return `
@@ -178,7 +195,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // --- 2. 観客数分析 ---
     function getAttendanceAnalysisHTML() {
         const clubOptions = clubData.sort((a,b)=>a.name.localeCompare(b.name,'ja')).map(c => `<option value="${c.name}">${c.name}</option>`).join('');
         return `
@@ -239,7 +255,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
     
-    // --- 3. 予測 ---
     function getPredictionHTML() {
         const updated = updateDates['prediction_probabilities.json'] ? new Date(updateDates['prediction_probabilities.json']).toLocaleString('ja-JP') : 'N/A';
         return `
@@ -287,7 +302,37 @@ document.addEventListener("DOMContentLoaded", () => {
         }).join('');
     }
 
-    // --- 4. シミュレーター ---
+    // ★★★【新規】SNS投稿案パネルのHTMLとロジック ★★★
+    function getSnsPostHTML() {
+        return `
+            <div class="controls">
+                <h2>AI生成 SNS投稿案</h2>
+                <div id="sns-post-tabs" class="sns-post-controls">
+                    <button class="filter-btn active" data-league="J1">J1</button>
+                    <button class="filter-btn" data-league="J2">J2</button>
+                    <button class="filter-btn" data-league="J3">J3</button>
+                </div>
+                <textarea id="sns-post-textarea" placeholder="ここに投稿文が表示されます..."></textarea>
+                <button id="sns-copy-button" class="sns-copy-button">クリップボードにコピー</button>
+            </div>`;
+    }
+    // ★★★【修正】この関数を丸ごと置き換えてください ★★★
+    function renderSnsPostPanel(league) {
+        // タブのアクティブ状態を切り替え
+        document.querySelectorAll('#sns-post-tabs button').forEach(b => b.classList.remove('active'));
+        document.querySelector(`#sns-post-tabs button[data-league="${league}"]`).classList.add('active');
+        
+        const textarea = document.getElementById('sns-post-textarea');
+        if (textarea) {
+            // テキストエリアに内容をセット
+            textarea.value = postTexts[league] || `AIによる${league}の投稿文はありませんでした。`;
+            
+            // ★★★【最終手段】JavaScriptで直接高さを強制設定 ★★★
+            textarea.style.height = '200px';
+            textarea.style.width = '300px';
+        }
+    }
+    
     function getSimulationHTML() {
         const clubOptions = clubData.sort((a,b)=>a.name.localeCompare(b.name,'ja')).map(c => `<option value="${c.name}">${c.name}</option>`).join('');
         return `
@@ -317,6 +362,7 @@ document.addEventListener("DOMContentLoaded", () => {
         
         const calcScore = (r, a, rank, t) => (r/200*100*0.3) + (a/45000*100*0.15) + (t/98*100*0.25) + ((21-rank)*0.3);
         const currentScore = club.sum; const newScore = calcScore(revenue, audience, avgRank, titles);
+        const getCategoryInfo = score => { if (score > 60) return { text: "ビッグクラブ", color: "var(--yellow-color)" }; if(score > 40) return { text: "強豪クラブ", color: "var(--accent-color)"}; return { text: "その他", color: "var(--subtext-color)"}};
         const currentCategory = getCategoryInfo(currentScore); const newCategory = getCategoryInfo(newScore);
 
         resultArea.innerHTML = `
@@ -330,7 +376,6 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>`;
     }
 
-    // --- 5. ベスト11 ---
     function getBest11HTML() {
         const clubOptions = [...new Set(playerData.map(p=>p.club))].sort().map(c=>`<option value="${c}">${c}</option>`).join('');
         return `
@@ -379,7 +424,6 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('court-players').innerHTML = html;
     }
 
-    // --- ユーティリティ ---
     function setupFilterButtonListeners(containerId, checkboxContainerId) {
         document.getElementById(containerId)?.addEventListener('click', (e) => {
             if (e.target.tagName !== 'BUTTON') return;
@@ -402,8 +446,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
         messageArea.textContent = '画像生成中...';
-
-        // 元のインラインスタイルを保持するロジックは、万が一他の処理でスタイルが変更された場合に備えて残しておく
         const originalInlineStyles = new Map();
         const elementsToStyle = [target, ...target.querySelectorAll('*')];
         elementsToStyle.forEach(el => {
@@ -411,13 +453,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         try {
-            // ライトモードへの変換処理は行わない
-            
-            // レンダリングのための短い待機
             await new Promise(resolve => setTimeout(resolve, 50));
-
-            // --- Capture ---
-            // html2canvasのbackgroundColorをnullに設定し、要素自身の背景色を使用
             const canvas = await html2canvas(target, { scale: 2, useCORS: true, backgroundColor: null });
             const blob = await new Promise((resolve, reject) => {
                 canvas.toBlob(b => b ? resolve(b) : reject(new Error("画像Blobの生成に失敗しました。")));
@@ -429,16 +465,13 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 messageArea.textContent = 'お使いのブラウザはコピー機能に非対応です。';
             }
-
         } catch (err) {
             console.error("Image generation failed:", err);
             messageArea.textContent = '画像生成に失敗しました。';
         } finally {
-            // --- Restore original state ---
             originalInlineStyles.forEach((style, el) => {
                 el.style.cssText = style;
             });
-            
             setTimeout(() => { messageArea.textContent = ''; }, 3000);
         }
     }
