@@ -219,10 +219,23 @@ async function showPage(id, btn, fromPopState = false, initialOptions = {}) {
             if (baseId === 'find-my-club') {
                 zundamonGuide.style.display = 'flex';
             } else {
+                // 「推しクラブ診断」ページ以外の時の処理
                 zundamonGuide.style.display = 'none';
                 if (typeof window.stopCurrentAudio === 'function') {
                     window.stopCurrentAudio();
                 }
+
+                // ▼▼▼【ここから追加】▼▼▼
+                // 質問ボックスと結果ボックスも非表示にする
+                const findMyClubQuestions = document.getElementById('find-my-club-questions');
+                if (findMyClubQuestions) {
+                    findMyClubQuestions.style.display = 'none';
+                }
+                const findMyClubResult = document.getElementById('find-my-club-result');
+                if (findMyClubResult) {
+                    findMyClubResult.style.display = 'none';
+                }
+                // ▲▲▲【ここまで追加】▲▲▲
             }
         }
 

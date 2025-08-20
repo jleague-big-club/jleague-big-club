@@ -1328,16 +1328,13 @@ transition: background-color 0.2s;
 }
 
 /* === 推しクラブ診断ページ専用スタイル (最終修正版) === */
-#find-my-club {
+#find-my-club.page-section.visible {
     max-width: 700px;
-    margin: 20px auto;
+    margin: 20px auto 0;
     text-align: center;
-    /* ▼▼▼【ここから追加】▼▼▼ */
     display: flex;
     flex-direction: column;
-    /* justify-content: center; */ /* ← この行をコメントアウトまたは削除 */
-    min-height: 75vh;        /* コンテナの高さを確保 */
-    /* ▲▲▲【ここまで追加】▲▲▲ */
+    min-height: 75vh;
 }
 
 .diagnosis-question-box {
