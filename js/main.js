@@ -1,7 +1,7 @@
-// js/main.js (修正済み)
+// js/main.js
 
-import { setupEventListeners, handleInitialURL, updateNavActiveState, stopBannerAutoPlay, setupCarousel } from './uiHelpers.js';
-import { loadInitialData } from './dataManager.js';
+import { setupEventListeners, updateNavActiveState, stopBannerAutoPlay, setupCarousel } from './uiHelpers.js';
+import { loadInitialData, getClubData } from './dataManager.js';
 import { initializeBlog, showBlogList, showArticleDetail as originalShowArticleDetail, hideArticleDetail, isShowingArticleDetail, getBlogPosts, showPredictionResults } from './pages/blog.js';
 
 // 各ページに対応するモジュールをマッピング
@@ -21,7 +21,8 @@ const pageModules = {
     'simulation': './pages/simulation.js',
     'barchartrace': './pages/barchartrace.js',
     'winner': './pages/winner.js',
-    'elo-ratings': './pages/elo-ratings.js'
+    'elo-ratings': './pages/elo-ratings.js',
+    'find-my-club': './pages/findMyClub.js'
 };
 
 // 読み込み済みのモジュールをキャッシュ
@@ -78,13 +79,12 @@ async function showArticleDetail(slug, title, fromPopState = false) {
         ins.className = 'adsbygoogle';
         ins.style.display = 'block';
         ins.setAttribute('data-ad-client', 'ca-pub-1470345215148439');
-        ins.setAttribute('data-ad-slot', slotId); // ★個別のスロットID
+        ins.setAttribute('data-ad-slot', slotId);
         ins.setAttribute('data-ad-format', 'auto');
         ins.setAttribute('data-full-width-responsive', 'true');
         
         adWrapper.appendChild(ins);
         
-        // AdSenseスクリプトを実行
         try {
             (window.adsbygoogle = window.adsbygoogle || []).push({});
         } catch (e) {
@@ -93,46 +93,63 @@ async function showArticleDetail(slug, title, fromPopState = false) {
         return adWrapper;
     };
 
-    // 1. 記事冒頭に広告を挿入 (H2タグの直前)
     const firstH2 = blogContent.querySelector('h2');
     if (firstH2) {
-        // ここでは記事内広告用のスロットIDを使います。AdSenseで別途作成してください。
         const adUnitTop = createAdUnit('8733170368'); 
         firstH2.parentNode.insertBefore(adUnitTop, firstH2);
     }
     
-    // 2. 記事末尾に広告を挿入 (最後の要素の前)
-    if (blogContent.children.length > 5) { // ある程度記事が長い場合のみ
-        const adUnitBottom = createAdUnit('9802709455'); // 別のスロットIDを推奨
+    if (blogContent.children.length > 5) {
+        const adUnitBottom = createAdUnit('9802709455');
         blogContent.appendChild(adUnitBottom);
     }
 }
 
 
 // === ページ表示ロジック ===
-async function showPage(id, btn, fromPopState = false) {
+async function showPage(id, btn, fromPopState = false, initialOptions = {}) {
     try {
         window.scrollTo(0, 0);
 
-        const baseId = id.split('/')[0];
+        // 汎用的な #/introduce URLを、デフォルトクラブID付きのURLにリダイレクトする
+        if (id === 'introduce') {
+            const allClubData = getClubData();
+            const defaultClub = allClubData.length > 0 ? allClubData.find(c => c.p === 'J1') || allClubData[0] : null;
+            if (defaultClub && defaultClub.teamId) {
+                const newId = `introduce/${defaultClub.teamId}`;
+                history.replaceState({ page: newId }, '', `#/${newId}`);
+                return showPage(newId, btn, true, initialOptions);
+            }
+        }
+
+        let baseId = id.split('/')[0];
+        let options = { ...initialOptions };
+        if (baseId === 'introduce' && id.includes('/')) {
+            const clubId = id.split('/')[1];
+            if (clubId) {
+                options.detailClubId = clubId;
+            }
+        }
+
         const pageTitles = {
-        'top': 'Jリーグ ビッグクラブ指数ランキング', // Note: updateOgpで `| Big Club Japan` が付与されるので重複を削除
-        'metrics': '【2024年】Jリーグ クラブ別 売上高・観客動員数ランキング',
-        'history': 'Jリーグ 過去10年のJ1平均順位データ',
-        'introduce': 'Jリーグ全クラブ紹介 データ分析',
-        'rankings': '【最新】J1・J2・J3・JFL 順位表',
-        'prediction': '【AI予測】Jリーグ 2024シーズン順位予測',
-        'attendance': 'Jリーグ年度別 平均観客数データ推移',
-        'blog': '記事・コラム',
-        'europe': '【24-25】5大リーグ所属の日本人選手一覧',
-        'europe-rankings': '【最新】欧州5大リーグ 順位表',
-        'europe-top20': '欧州サッカークラブ 売上高ランキングTOP20',
-        'best11': 'Jリーグ ベストイレブンメーカー',
-        'simulation': 'ビッグクラブ シミュレーター',
-        'barchartrace': '【動画】Jリーグ順位変動 バーチャートレース',
-        'winner': '【AI予測】Jリーグ WINNER予測 (toto)',
-        'elo-ratings': 'Jリーグ Eloレーティング 最新版'
-    };
+            'top': 'Jリーグ ビッグクラブ指数ランキング',
+            'metrics': '【2024年】Jリーグ クラブ別 売上高・観客動員数ランキング',
+            'history': 'Jリーグ 過去10年のJ1平均順位データ',
+            'introduce': 'Jリーグ全クラブ紹介 データ分析',
+            'rankings': '【最新】J1・J2・J3・JFL 順位表',
+            'prediction': '【AI予測】Jリーグ 2024シーズン順位予測',
+            'attendance': 'Jリーグ年度別 平均観客数データ推移',
+            'blog': '記事・コラム',
+            'europe': '【25-26】5大リーグ所属の日本人選手一覧',
+            'europe-rankings': '【25-26】欧州5大リーグ 順位表',
+            'europe-top20': '欧州サッカークラブ 売上高ランキングTOP20',
+            'best11': 'Jリーグ ベストイレブンメーカー',
+            'simulation': 'ビッグクラブ シミュレーター',
+            'barchartrace': '【動画】Jリーグ順位変動 バーチャートレース',
+            'winner': '【AI予測】Jリーグ WINNER予測',
+            'elo-ratings': 'Jリーグ Eloレーティング 最新版',
+            'find-my-club': '推しクラブマッチング'
+        };
 
         const siteUrl = 'https://bigclub-japan.com/';
         const defaultDescription = 'Jリーグの「ビッグクラブ」をデータで徹底分析！独自のビッグクラブ指数で、そのポテンシャルを可視化します。';
@@ -144,9 +161,9 @@ async function showPage(id, btn, fromPopState = false) {
             'history': '過去10年間のJ1平均順位と在籍年数をデータ化。鹿島や川崎Fなど、安定して強さを誇るクラブはどこか？',
             'introduce': 'J1からJFLまで、Jリーグ全クラブの基本データと紹介文を掲載。レーダーチャートで各クラブの特徴を可視化します。',
             'rankings': 'J1, J2, J3, JFLの最新順位表を掲載。昇格・降格圏内のチームをリアルタイムでチェック。',
-            'prediction': '独自のAIがJリーグの2024シーズン最終順位をシミュレーション。優勝確率や降格確率を毎節更新します。',
+            'prediction': '独自のAIがJリーグの2025シーズン最終順位をシミュレーション。優勝確率や降格確率を毎節更新します。',
             'attendance': 'Jリーグの年度別・クラブ別の平均観客数データをグラフで比較。スタジアムの熱気をデータで振り返ります。',
-            'winner': 'AIがサッカーくじWINNERの試合結果を予測。データに基づいた本命・対抗・大穴予想で、あなたのtotoライフをサポート。',
+            'winner': 'AIがサッカーくじWINNERの試合結果を予測。データに基づいた本命・対抗・大穴予想で、あなたのWINNERライフをサポート。',
             'elo-ratings': '最新の試合結果を反映したJリーグクラブの強さの指標「Eloレーティング」を公開。今の本当の力関係がわかります。'
         };
 
@@ -158,17 +175,16 @@ async function showPage(id, btn, fromPopState = false) {
                 if (post) {
                     const postDescription = `データ分析サイト「Big Club Japan」の記事：${post.title}`;
                     const postImage = `${siteUrl}${post.thumbnail.startsWith('/') ? post.thumbnail.substring(1) : post.thumbnail}`;
-                    updateOgp(post.title, postDescription, postImage, `${siteUrl}#${id}`);
+                    updateOgp(post.title, postDescription, postImage, `${siteUrl}#/${id}`);
                 } else {
-                     updateOgp('記事が見つかりません', defaultDescription, defaultImage, `${siteUrl}#${id}`);
+                     updateOgp('記事が見つかりません', defaultDescription, defaultImage, `${siteUrl}#/${id}`);
                 }
             } catch (e) {
-                updateOgp('記事・ブログ', defaultDescription, defaultImage, `${siteUrl}#blog`);
+                updateOgp('記事・ブログ', defaultDescription, defaultImage, `${siteUrl}#/blog`);
             }
         } else if (pageTitles[baseId]) {
-            // pageDescriptionsに固有の説明があればそれを使用、なければデフォルトを使用
             const description = pageDescriptions[baseId] || defaultDescription;
-            updateOgp(pageTitles[baseId], description, defaultImage, `${siteUrl}#${id}`);
+            updateOgp(pageTitles[baseId], description, defaultImage, `${siteUrl}#/${id}`);
         } else {
             updateOgp('Jリーグビッグクラブ分析', defaultDescription, defaultImage, siteUrl);
         }
@@ -198,6 +214,18 @@ async function showPage(id, btn, fromPopState = false) {
 
         updateNavActiveState(id, btn);
 
+        const zundamonGuide = document.getElementById('zundamon-guide');
+        if (zundamonGuide) {
+            if (baseId === 'find-my-club') {
+                zundamonGuide.style.display = 'flex';
+            } else {
+                zundamonGuide.style.display = 'none';
+                if (typeof window.stopCurrentAudio === 'function') {
+                    window.stopCurrentAudio();
+                }
+            }
+        }
+
         const adContainer = document.getElementById('ad-top-banner');
         const scoreBtn = document.getElementById('score-method-btn');
         const banner = document.querySelector('.carousel-container');
@@ -214,7 +242,10 @@ async function showPage(id, btn, fromPopState = false) {
         }
 
         if (!fromPopState) {
-            history.pushState({ page: id }, '', `#${id}`);
+            const newHash = id ? `#/${id}` : '#';
+            if(window.location.hash !== newHash) {
+                history.pushState({ page: id }, '', newHash);
+            }
         }
 
         const moduleId = baseId;
@@ -241,21 +272,17 @@ async function showPage(id, btn, fromPopState = false) {
                 hideArticleDetail();
             }
             if (loadedModules[moduleId]?.default) {
-                 await loadedModules[moduleId].default(document.getElementById(moduleId));
+                 await loadedModules[moduleId].default(document.getElementById(moduleId), options);
             }
         }
 
-        // ★★★ ここから修正 ★★★
-        // Google Analyticsに手動でpage_viewイベントを送信します。
-        // これにより、ページが切り替わるたびに、正しいタイトルとURLで閲覧情報が記録されます。
         if (typeof gtag === 'function') {
             gtag('event', 'page_view', {
-                page_title: document.title, // JavaScriptで更新された後のタイトル
-                page_location: window.location.href, // ハッシュを含む完全なURL
-                page_path: window.location.pathname + window.location.hash // GA4が推奨するパス形式
+                page_title: document.title,
+                page_location: window.location.href,
+                page_path: window.location.pathname + window.location.hash
             });
         }
-        // ★★★ ここまで修正 ★★★
 
     } finally {
         const navLinks = document.getElementById('nav-links');
@@ -267,13 +294,22 @@ async function showPage(id, btn, fromPopState = false) {
     }
 }
 
+function handleInitialURL() {
+    let hash = location.hash.substring(1); 
+    if(hash.startsWith('/')) {
+        hash = hash.substring(1);
+    }
+    const pageId = hash || 'top';
+    showPage(pageId, null, true);
+}
+
 // === 初期化 ===
 document.addEventListener("DOMContentLoaded", async () => {
     try {
         await loadInitialData();
         await initializeBlog(); 
         setupEventListeners(showPage);
-        handleInitialURL(showPage);
+        handleInitialURL();
     } catch (err) {
         console.error("サイトの初期化に失敗しました:", err);
         document.body.innerHTML = `<div style="color:red; text-align:center; padding: 20px;">サイトの読み込みに失敗しました。<br>リロードしてみてください。</div>`;
@@ -284,3 +320,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 window.showPage = showPage;
 window.preloadModule = preloadModule;
 window.showArticleDetail = showArticleDetail;
+
+window.addEventListener('hashchange', () => {
+    handleInitialURL();
+});

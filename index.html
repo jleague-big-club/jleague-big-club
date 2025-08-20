@@ -82,13 +82,14 @@
     </div>
   </span>
   
-  <span class="nav-dropdown">
-    <a href="#simulation" onmouseover="preloadModule('simulation')" onclick="event.preventDefault(); toggleSubMenu(this, event);" id="nav-simulation-btn">シミュレーション</a>
-    <div class="nav-dropdown-content">
-        <a href="#simulation" onmouseover="preloadModule('simulation')" onclick="event.preventDefault(); event.stopPropagation(); showPage('simulation', document.getElementById('nav-simulation-btn'));">ビッグクラブシミュレーター</a>
-        <a href="#best11" onmouseover="preloadModule('best11')" onclick="event.preventDefault(); event.stopPropagation(); showPage('best11', this);">ベスト11メーカー</a>
-    </div>
-  </span>
+<span class="nav-dropdown">
+  <a href="#simulation" onmouseover="preloadModule('simulation'); preloadModule('find-my-club');" onclick="event.preventDefault(); toggleSubMenu(this, event);" id="nav-simulation-btn">シミュレーション</a>
+  <div class="nav-dropdown-content">
+      <a href="#simulation" onmouseover="preloadModule('simulation')" onclick="event.preventDefault(); event.stopPropagation(); showPage('simulation', document.getElementById('nav-simulation-btn'));">ビッグクラブシミュレーター</a>
+      <a href="#find-my-club" onmouseover="preloadModule('find-my-club')" onclick="event.preventDefault(); event.stopPropagation(); showPage('find-my-club', this);">推しクラブマッチング</a>
+      <a href="#best11" onmouseover="preloadModule('best11')" onclick="event.preventDefault(); event.stopPropagation(); showPage('best11', this);">ベスト11メーカー</a>
+  </div>
+</span>
   
   <span class="nav-dropdown">
     <a href="#europe" onmouseover="preloadModule('europe')" onclick="event.preventDefault(); toggleSubMenu(this, event);" id="nav-europe-btn">海外サッカー</a>
@@ -121,6 +122,15 @@
 width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
       <div class="banner-text">
         シーズン予測で推しクラブの未来を見よう！
+      </div>
+    </a>
+  </div>
+  <div class="carousel-item">
+   <a href="#blog/find-my-club-intro">
+      <img src="/img/banner7.webp" alt="推しクラブ診断"
+      width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
+      <div class="banner-text">
+        J初心者必見！あなたに合うJクラブを見つけよう
       </div>
     </a>
   </div>
@@ -349,11 +359,23 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
       <div id="europe-flex-row" style="display:flex; flex-direction:row; gap:36px; align-items:flex-start; justify-content:flex-start;">
         <div id="map-container" style="position:relative; width:430px; height:410px; flex-shrink:0;">
           <img src="/img/europe.webp" alt="ヨーロッパ地図" width="1110" height="1280" style="border-radius:13px; display:block;">
-          <button class="country-btn" data-country="イングランド" style="position:absolute; left:38px; top:270px; width:55px; height:60px;"></button>
-          <button class="country-btn" data-country="スペイン"   style="position:absolute; left:30px; top:415px; width:55px; height:60px;"></button>
-          <button class="country-btn" data-country="フランス"   style="position:absolute; left:70px; top:350px; width:65px; height:60px;"></button>
-          <button class="country-btn" data-country="イタリア"   style="position:absolute; left:160px; top:380px; width:50px; height:75px;"></button>
-          <button class="country-btn" data-country="ドイツ"     style="position:absolute; left:130px; top:290px; width:60px; height:60px;"></button>
+          
+          <!-- ★★★【修正】各ボタンに class="country-btn" を追加 ★★★ -->
+          <button class="country-btn" data-league="プレミアリーグ" style="position:absolute; left:38px; top:270px; width:55px; height:60px;"></button>
+          <button class="country-btn" data-league="ラ・リーガ" style="position:absolute; left:30px; top:415px; width:55px; height:60px;"></button>
+          <button class="country-btn" data-league="リーグ・アン" style="position:absolute; left:70px; top:350px; width:65px; height:60px;"></button>
+          <button class="country-btn" data-league="セリエA" style="position:absolute; left:160px; top:380px; width:50px; height:75px;"></button>
+          <button class="country-btn" data-league="ブンデスリーガ" style="position:absolute; left:130px; top:290px; width:60px; height:60px;"></button>
+          
+          <!-- ★★★【追加】リーグ選択ボタンを追加 ★★★ -->
+          <div id="europe-league-buttons" style="position:absolute; top: 10px; left: 10px; display: flex; flex-direction: column; gap: 8px;">
+              <button class="country-btn active" data-league="all">5大リーグ全て</button>
+              <button class="country-btn" data-league="プレミアリーグ">イングランド</button>
+              <button class="country-btn" data-league="ラ・リーガ">スペイン</button>
+              <button class="country-btn" data-league="ブンデスリーガ">ドイツ</button>
+              <button class="country-btn" data-league="セリエA">イタリア</button>
+              <button class="country-btn" data-league="リーグ・アン">フランス</button>
+          </div>
         </div>
         <div id="player-table-wrap" style="min-width:280px; max-width:1000px; width:100%; padding-top:9px;"></div>
       </div>
@@ -486,6 +508,13 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
         </div>
     </div>
 </div>
+<!-- ★★★【このブロックを丸ごとコピーして貼り付け】★★★ -->
+<div id="page-title-find-my-club" class="page-title-row" style="display:none;"><h1>あなたに合うJリーグクラブを見つけよう！</h1></div>
+
+<div id="find-my-club" class="page-section">
+  <div id="find-my-club-questions"></div>
+  <div id="find-my-club-result" style="display: none;"></div>
+</div>
 </main>
 <footer class="site-footer">
   <div class="footer-container">
@@ -512,6 +541,7 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
     </div>
     <div class="footer-copyright">
       © 2025 Big Club Japan. All Rights Reserved.
+      <span style="font-size: 0.85em; color: #89a;">本サイトの一部コンテンツでは、音声読み上げソフト「VOICEVOX:ずんだもん」を使用しています。</span>
     </div>
   </div>
 </footer>

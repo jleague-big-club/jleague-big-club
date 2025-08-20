@@ -56,6 +56,8 @@ export async function loadInitialData() {
         obj.rankScore = parseFloat(obj["平均順位スコア"]) || 0;
         obj.lat = parseFloat(obj["緯度"]) || 0;
         obj.lon = parseFloat(obj["経度"]) || 0;
+        obj.teamId = obj["teamId"] || '';
+        obj['ホームタウン'] = obj["ホームタウン"] || '';
         return obj;
     });
     clubData.sort((a, b) => b.sum - a.sum);

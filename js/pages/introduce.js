@@ -123,6 +123,13 @@ function showClubDetails(clubName) {
         return;
     }
 
+    // URLを更新して状態を永続化
+    const newHash = `#/introduce/${club.teamId}`;
+    if (window.location.hash !== newHash) {
+        // ページ内遷移では履歴スタックを増やさないreplaceStateを使用
+        history.replaceState({ page: `introduce/${club.teamId}` }, '', newHash);
+    }
+
     const introText = introductions[club.name] || 'このクラブの紹介文は準備中です。';
     
     const rankIndex = allClubData.findIndex(c => c.name === club.name);
@@ -181,7 +188,7 @@ function showClubDetails(clubName) {
     updateMapMarker(club);
 }
 
-function renderClubList(league) {
+function renderClubList(league, clubNameToSelect = null) {
     const listContainer = document.getElementById("club-list-view");
     if (!listContainer) return;
 
@@ -201,7 +208,13 @@ function renderClubList(league) {
         item.addEventListener('click', () => showClubDetails(item.textContent));
     });
     
-    showClubDetails(clubsToShow[0].name);
+    const targetClubName = clubNameToSelect && clubsToShow.some(c => c.name === clubNameToSelect)
+        ? clubNameToSelect
+        : clubsToShow[0]?.name;
+
+    if (targetClubName) {
+        showClubDetails(targetClubName);
+    }
 }
 
 // ページが非表示になるときにチャートを破棄するリスナー
@@ -216,7 +229,7 @@ const observer = new MutationObserver(mutations => {
     });
 });
 
-export default async function initIntroducePage(container) {
+export default async function initIntroducePage(container, options = {}) {
     if (!container) return;
 
     allClubData = getClubData(); 
@@ -248,10 +261,23 @@ export default async function initIntroducePage(container) {
             });
         });
         
-        // ページが非表示になったことを検知するオブザーバーを開始
         observer.observe(container, { attributes: true });
     }
     
-    const initialLeague = container.querySelector('#club-league-tabs .league-tab-btn.active')?.dataset.league || 'J1';
-    renderClubList(initialLeague);
+    let initialLeague = 'J1';
+    let initialClubName = null;
+
+    if (options.detailClubId) {
+        const targetClub = allClubData.find(c => c.teamId == options.detailClubId);
+        if (targetClub) {
+            initialLeague = targetClub.p;
+            initialClubName = targetClub.name;
+        }
+    }
+    
+    container.querySelector('#club-league-tabs').querySelectorAll(".league-tab-btn").forEach(b => {
+        b.classList.toggle("active", b.dataset.league === initialLeague);
+    });
+
+    renderClubList(initialLeague, initialClubName);
 }

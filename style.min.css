@@ -1326,3 +1326,222 @@ transition: background-color 0.2s;
     background-color: #fff !important;
     border-radius: 8px;
 }
+
+/* === 推しクラブ診断ページ専用スタイル (最終修正版) === */
+#find-my-club {
+    max-width: 700px;
+    margin: 20px auto;
+    text-align: center;
+    /* ▼▼▼【ここから追加】▼▼▼ */
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */ /* ← この行をコメントアウトまたは削除 */
+    min-height: 75vh;        /* コンテナの高さを確保 */
+    /* ▲▲▲【ここまで追加】▲▲▲ */
+}
+
+.diagnosis-question-box {
+    background-color: #2a3758;
+    border: 1.5px solid #4a5a7f;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+.diagnosis-question-box h2 {
+    color: #baf7fc;
+    font-size: 1.5em;
+    margin-top: 0;
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+.diagnosis-question-box p {
+    color: #abc;
+    line-height: 1.7;
+    margin-bottom: 25px;
+}
+.diagnosis-answers {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.diagnosis-btn {
+    display: block;
+    width: 100%;
+    padding: 15px 20px;
+    font-size: 1.1em;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(90deg, #44567c, #354a6b);
+    border: 1.5px solid #5a75a7;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all .2s;
+    text-align: center;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+.diagnosis-btn:hover {
+    background: linear-gradient(90deg, #516894, #455f8a);
+    transform: translateY(-2px);
+}
+.diagnosis-btn.secondary {
+    background: transparent;
+    border-color: #6c757d;
+    color: #eaf7fc;
+}
+.diagnosis-btn.secondary:hover {
+    background: #6c757d;
+}
+
+#prefecture-select {
+    padding: 15px;
+    font-size: 1.1em;
+    width: 100%;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: 2px solid #5a75a7;
+    background-color: #232947;
+    color: #fff;
+    font-weight: bold;
+}
+
+/* === 結果表示のスタイル調整 === */
+.result-box {
+    animation: fadeIn 0.5s;
+    width: 100%;
+    max-width: 700px;
+    box-sizing: border-box;
+}
+.result-intro-text {
+  font-size: 1.4rem; /* ← フォントサイズを大きく */
+  font-weight: bold;
+  color: #ffffff;
+  margin: 0 0 0.2rem 0; /* ← 下の余白を少し詰める */
+}
+.result-box h1 {
+    font-size: 2.2em;
+    color: gold;
+    margin-top: 0;
+    margin-bottom: 15px;
+    word-break: keep-all;
+    white-space: normal;
+}
+.result-box .result-oneword {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #ffd700;
+    background-color: rgba(255, 215, 0, 0.1);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin: 15px auto;
+    max-width: 90%;
+}
+.result-reason {
+    font-size: 1.1em;
+    line-height: 1.8;
+    margin-bottom: 30px;
+}
+.result-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* === ずんだもんガイド (変更なし) === */
+#zundamon-guide {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    z-index: 1000;
+    transition: transform 0.3s ease-in-out;
+}
+#zundamon-image {
+    width: 100px;
+    height: auto;
+    animation: zundamon-bounce 2s ease-in-out infinite;
+}
+@keyframes zundamon-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+#zundamon-speech-bubble {
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 15px 20px;
+    max-width: 300px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    position: relative;
+    border: 3px solid #a4e268;
+}
+#zundamon-speech-bubble::before {
+    content: '';
+    position: absolute;
+    bottom: 15px;
+    left: -12px;
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 15px solid #a4e268;
+}
+#zundamon-text {
+    margin: 0;
+    color: #333;
+    font-size: 16px;
+    line-height: 1.5;
+    font-weight: bold;
+}
+#zundamon-audio-toggle {
+    background-color: #a4e268;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    /* align-self: flex-start; ← 不要になるので削除 */
+    transition: background-color 0.2s;
+    position: absolute; /* ← 追加 */
+    top: -15px;         /* ← 追加 */
+    right: 0px;        /* ← 追加 */
+}
+#zundamon-audio-toggle:hover {
+    background-color: #8ccf52;
+}
+
+/* === メディアクエリ (スマホ対応) === */
+@media (max-width: 768px) {
+    #zundamon-guide {
+        left: 50%;
+        transform: translateX(-50%);
+        width: 95%;
+        max-width: 400px;
+        box-sizing: border-box;
+        bottom: 10px;
+    }
+    #zundamon-image { width: 80px; }
+    #zundamon-speech-bubble { flex-grow: 1; padding: 10px 15px; }
+    #zundamon-text { font-size: 14px; }
+    #zundamon-audio-toggle { position: absolute; top: -15px; right: 0px; }
+    .result-box h1 { font-size: 1.8em; }
+}
+/* Add this to style.min.css */
+
+.diagnosis-btn.back {
+    background: transparent;
+    border-color: #8899bb;
+    color: #eaf7fc;
+    margin-top: 10px; /* Add some space above the back button */
+}
+
+.diagnosis-btn.back:hover {
+    background: #8899bb;
+    color: #14213d;
+}
