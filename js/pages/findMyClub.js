@@ -14,6 +14,13 @@ let questionContainerListener = null;
 let baseCandidateClubs = []; // 診断のベースとなるクラブリスト
 let answerHistory = [];
 
+const allDiagnosisAudioFiles = [
+    'start_01_greeting.mp3', 'start_02_guide.mp3',
+    'react_01_ok.mp3', 'react_02_hmm.mp3', 'react_03_good.mp3', 'react_04_again_ok.mp3',
+    'local_01_select.mp3', 'local_02_decided.mp3', 'local_03_multi.mp3', 'local_04_notfound.mp3',
+    'result_01_intro.mp3', 'result_02_announce.mp3', 'result_04_next.mp3', 'result_05_retry.mp3'
+];
+
 let audioContextUnlocked = false; // オーディオコンテキストがアンロックされたかどうかのフラグ
 const preloadedAudio = {}; // プリロードしたオーディオをキャッシュするオブジェクト
 
@@ -152,7 +159,7 @@ const questions = [
 async function playSound(audioFiles) {
     if (currentAudio) {
         currentAudio.pause();
-        currentAudio.src = '';
+        currentAudio.currentTime = 0; // 念のため再生位置をリセット
         currentAudio = null;
     }
     if (!isAudioEnabled) return;
@@ -162,27 +169,24 @@ async function playSound(audioFiles) {
         if (!isAudioEnabled) break;
         
         await new Promise(resolve => {
+            // ▼▼▼【ここを修正】▼▼▼
+            // キャッシュから取得。なければ新規作成（フォールバック）
             const audio = preloadedAudio[filename] || new Audio(`/audio/zundamon/${filename}`);
+            // ▲▲▲【ここまで修正】▲▲▲
             currentAudio = audio;
             
             if (audio.ended) {
                 audio.currentTime = 0;
             }
             
-            if (audio.readyState >= 3) {
-                audio.play().catch(e => {
+            // すでに読み込み済みのはずなので、すぐに再生を試みる
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(e => {
                     console.error(`Error playing ${filename}:`, e);
+                    // エラーでも次に進むために resolve() を呼ぶ
                     resolve();
                 });
-            } else {
-                const playHandler = () => {
-                    audio.removeEventListener('canplaythrough', playHandler);
-                    audio.play().catch(e => {
-                        console.error(`Error playing ${filename}:`, e);
-                        resolve();
-                    });
-                };
-                audio.addEventListener('canplaythrough', playHandler);
             }
 
             const endedHandler = () => {
@@ -190,19 +194,12 @@ async function playSound(audioFiles) {
                 resolve();
             };
             audio.addEventListener('ended', endedHandler);
-
-            audio.addEventListener('error', (e) => {
-                console.error(`${filename} の再生に失敗…`, e);
-                resolve();
-            });
         });
         
         currentAudio = null;
-        if (playlist.length > 1) {
-             await new Promise(resolve => setTimeout(resolve, 50));
-        }
     }
 }
+
 function updateZundamonUI(text, imageName = 'normal') { const zt = document.getElementById('zundamon-text'); const zi = document.getElementById('zundamon-image'); if (zt) zt.textContent = text; if (zi) zi.src = `/img/zundamon/${imageName}.webp`; }
 function updateMapMarker(club, markerId) { const marker = document.getElementById(markerId); if (!marker) return; const hasCoords = club.lat && club.lon; const mapContainer = marker.closest('.map-container'); if (!hasCoords) { if (mapContainer) mapContainer.style.display = 'none'; return; } if (mapContainer) mapContainer.style.display = 'block'; const mapBounds = { top: 46.0, bottom: 30.0, left: 128.0, right: 146.0 }; const topPercent = 100 - ((club.lat - mapBounds.bottom) / (mapBounds.top - mapBounds.bottom)) * 100; const leftPercent = ((club.lon - mapBounds.left) / (mapBounds.right - mapBounds.left)) * 100; marker.style.top = `${topPercent}%`; marker.style.left = `${leftPercent}%`; marker.style.backgroundColor = club.color; marker.style.display = 'block'; marker.title = club.name; }
 
@@ -541,6 +538,8 @@ function renderStartScreen() {
 
 export default async function initFindMyClubPage(container) {
     if (!container) return;
+
+    allDiagnosisAudioFiles.forEach(file => preloadAudio(file));
 
     document.querySelectorAll('.page-title-row').forEach(el => el.style.display = 'none');
     const findMyClubTitle = document.getElementById('page-title-find-my-club');
