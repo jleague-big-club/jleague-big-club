@@ -137,7 +137,7 @@ async function showPage(id, btn, fromPopState = false, initialOptions = {}) {
             'history': 'Jリーグ 過去10年のJ1平均順位データ',
             'introduce': 'Jリーグ全クラブ紹介 データ分析',
             'rankings': '【最新】J1・J2・J3・JFL 順位表',
-            'prediction': '【AI予測】Jリーグ 2024シーズン順位予測',
+            'prediction': '【AI予測】Jリーグ 2025シーズン順位予測',
             'attendance': 'Jリーグ年度別 平均観客数データ推移',
             'blog': '記事・コラム',
             'europe': '【25-26】5大リーグ所属の日本人選手一覧',
