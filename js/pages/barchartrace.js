@@ -255,6 +255,10 @@ async function initialize(league) {
 
 // === このページが呼ばれた時に実行されるメイン関数 ===
 export default function initializePage() {
-    setupControls();
-    initialize('J1');
+    // SPAでのページ遷移時にコンテナの描画が完了するのを待つため、
+    // 処理をほんの少しだけ遅延させて実行する
+    setTimeout(() => {
+        setupControls();
+        initialize('J1');
+    }, 0); // 0ミリ秒の遅延でOK
 }

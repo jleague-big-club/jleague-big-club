@@ -1542,3 +1542,73 @@ transition: background-color 0.2s;
     background: #8899bb;
     color: #14213d;
 }
+
+/* --- サポートボタンのスタイル (修正版) --- */
+.support-widget-wrapper {
+  padding: 20px 15px;
+}
+.support-widget {
+  max-width: 520px;
+  margin: 20px auto;
+  padding: 25px;
+  border: 1.5px solid #4a5a7f;
+  border-radius: 16px;
+  background-color: #2a3758;
+  /* ▼▼▼ ここから変更 ▼▼▼ */
+  display: flex; /* 要素を横並びにする */
+  align-items: center; /* 上下中央揃え */
+  justify-content: center; /* 左右中央揃え */
+  gap: 25px; /* テキストとボタンの間の隙間 */
+  flex-wrap: wrap; /* スマホ表示で折り返すようにする */
+  /* ▲▲▲ ここまで変更 ▲▲▲ */
+}
+
+.support-title {
+  font-size: 1.2rem;
+  color: #eaf7fc;
+  margin: 0; /* 不要なマージンをリセット */
+  font-weight: bold;
+}
+
+/* ▼▼▼ 原因となっていた飾り線のコードは削除しました ▼▼▼ */
+
+.support-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #ffd700;
+  color: #143060;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  flex-shrink: 0; /* ボタンが縮まないようにする */
+}
+
+.support-button:hover {
+  background-color: #ffe033;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+}
+
+.support-button svg {
+  color: #143060;
+}
+
+@media (max-width: 768px) {
+  .support-widget {
+    padding: 20px;
+    gap: 15px; /* スマホでの隙間を調整 */
+  }
+  .support-title {
+    font-size: 1.1rem;
+  }
+  .support-button {
+    font-size: 1rem;
+    padding: 12px 28px;
+  }
+}

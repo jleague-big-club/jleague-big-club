@@ -246,7 +246,7 @@ async function showPage(id, btn, fromPopState = false, initialOptions = {}) {
             if (scoreBtn) scoreBtn.style.display = 'block';
             if (banner) banner.style.display = 'block';
             if (adContainer) adContainer.style.display = 'block';
-            if (!fromPopState) setupCarousel('banner-carousel', 4000);
+            setupCarousel('banner-carousel', 4000);
         } else {
             if (scoreBtn) scoreBtn.style.display = 'none';
             if (banner) banner.style.display = 'none';
