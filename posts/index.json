@@ -1,5 +1,11 @@
 [
   {
+    "title": "はじめに：Big Club Japanへようこそ！",
+    "slug": "about-this-site",
+    "thumbnail": "posts/img/aboutthissite.webp",
+    "date": "2025-07-01"
+  },
+  {
     "title": "Jリーグからビッグクラブは誕生するのか？データで見る「ビッグクラブ」に最も近いクラブ",
     "slug": "bigclub-theory-1",
     "thumbnail": "posts/img/bigclub.webp",
