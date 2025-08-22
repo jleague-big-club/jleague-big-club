@@ -1637,10 +1637,3 @@ transition: background-color 0.2s;
     border: none;
     padding-bottom: 0;
 }
-
-/* (2) テーブル自体の角丸と影、余白をリセットする */
-#ranking-table-container .table-scroll-wrapper table {
-    border-radius: 0;
-    box-shadow: none;
-    margin-bottom: 0;
-}
