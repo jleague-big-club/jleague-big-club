@@ -318,7 +318,6 @@ async function showPage(id, btn, fromPopState = false, initialOptions = {}) {
             document.querySelectorAll('.nav-dropdown.menu-open').forEach(menu => menu.classList.remove('menu-open'));
         }
     }
-window.prerenderReady = true;
 }
 
 function handleInitialURL() {
