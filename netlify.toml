@@ -1,0 +1,14 @@
+# Netlifyのビルド設定
+[build]
+  # 公開するフォルダを指定します (あなたの場合はルートフォルダ)
+  publish = "/"
+
+# リダイレクト設定
+[[redirects]]
+  # プリレンダリングを有効にするためのSPA用リダイレクトルール
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false
+  [redirects.query]
+    _escaped_fragment_ = ":splat"

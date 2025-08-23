@@ -1,5 +1,0 @@
-# Netlify CMS用のルール (既存)
-/admin/*    /admin/index.html   200
-
-# SPAのOGP対応のためのルール (新規追加)
-/_escaped_fragment_/*  https://bigclub-japan.com/:splat  200
