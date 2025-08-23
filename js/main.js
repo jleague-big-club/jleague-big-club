@@ -50,7 +50,7 @@ const updateOgp = (title, description, image, url) => {
         'og:title': title,
         'og:description': description,
         'og:image': image,
-        'og:url': url.replace('/#', '/'),
+        'og:url': url,
         'twitter:card': 'summary_large_image',
         'twitter:title': title, // Twitter用のタイトルも追加
         'twitter:description': description, // Twitter用の説明も追加
@@ -269,8 +269,8 @@ async function showPage(id, btn, fromPopState = false, initialOptions = {}) {
 
         if (!fromPopState) {
             const newHash = id ? `#/${id}` : '#';
-                if (window.location.pathname + window.location.hash !== newPath) {
-        history.pushState({ page: id }, '', newPath);
+            if(window.location.hash !== newHash) {
+                history.pushState({ page: id }, '', newHash);
             }
         }
 
