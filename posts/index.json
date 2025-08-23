@@ -5,6 +5,48 @@
     "thumbnail": "posts/img/aboutthissite.webp",
     "date": "2025-07-01"
   },
+{
+    "title": "データで見るJリーグ・ビッグクラブの夜明け",
+    "slug": "bigclub-challenge",
+    "thumbnail": "posts/img/banner1.webp",
+    "date": "2025-07-02"
+  },
+  {
+    "title": "あなたの推しクラブの未来は？ シーズン予測で徹底分析！",
+    "slug": "prediction-intro",
+    "thumbnail": "posts/img/j2latest.webp",
+    "date": "2025-07-03"
+  },
+  {
+    "title": "もしも…を試せるビッグクラブシミュレーター",
+    "slug": "simulation-intro",
+    "thumbnail": "posts/img/simulator_main.webp",
+    "date": "2025-07-04"
+  },
+  {
+    "title": "Jリーグで最も熱いスタジアムはどこだ？観客動員数ランキング",
+    "slug": "attendance-intro",
+    "thumbnail": "posts/img/attendancerecord2025.webp",
+    "date": "2025-07-05"
+  },
+  {
+    "title": "Jリーグ60クラブから、あなたの「推し」を見つけよう！",
+    "slug": "find-my-club-intro",
+    "thumbnail": "posts/img/banner6.webp",
+    "date": "2025-07-06"
+  },
+  {
+    "title": "君だけの最強イレブンを作ろう！ベスト11メーカー",
+    "slug": "best11-intro",
+    "thumbnail": "posts/img/stadium_atmosphere.webp",
+    "date": "2025-07-06"
+  },
+  {
+    "title": "世界で戦うサムライたちをチェック！5大リーグ日本人選手一覧",
+    "slug": "europe-intro",
+    "thumbnail": "posts/img/rating_graph_sample.webp",
+    "date": "2025-07-06"
+  },
   {
     "title": "Jリーグからビッグクラブは誕生するのか？データで見る「ビッグクラブ」に最も近いクラブ",
     "slug": "bigclub-theory-1",
@@ -76,5 +118,11 @@
     "slug": "machida-analysis",
     "thumbnail": "posts/img/machida_analysis.webp",
     "date": "2025-08-18"
+  },
+  {
+    "title": "観客動員はフランス超え！データが示すJ2リーグの”世界レベル”と、その先に待つ巨大な壁",
+    "slug": "j2-attendance",
+    "thumbnail": "posts/img/j2-attendance-transition.webp",
+    "date": "2025-08-23"
   }
 ]

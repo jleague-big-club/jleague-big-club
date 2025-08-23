@@ -35,6 +35,13 @@
 
     <!-- ★★★ ブログ記事ページ ★★★ -->
     <url><loc>https://bigclub-japan.com/#blog/about-this-site</loc><lastmod>2025-07-01</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
+    <url><loc>https://bigclub-japan.com/#blog/bigclub-challenge</loc><lastmod>2025-07-02</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+    <url><loc>https://bigclub-japan.com/#blog/prediction-intro</loc><lastmod>2025-07-03</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+    <url><loc>https://bigclub-japan.com/#blog/simulation-intro</loc><lastmod>2025-07-04</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+    <url><loc>https://bigclub-japan.com/#blog/attendance-intro</loc><lastmod>2025-07-05</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+    <url><loc>https://bigclub-japan.com/#blog/find-my-club-intro</loc><lastmod>2025-07-06</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+    <url><loc>https://bigclub-japan.com/#blog/best11-intro</loc><lastmod>2025-07-06</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+    <url><loc>https://bigclub-japan.com/#blog/europe-intro</loc><lastmod>2025-07-06</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
     <url><loc>https://bigclub-japan.com/#blog/bigclub-theory-1</loc><lastmod>2025-07-07</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
     <url><loc>https://bigclub-japan.com/#blog/bigclub-theory-2</loc><lastmod>2025-07-08</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
     <url><loc>https://bigclub-japan.com/#blog/attendance-record-2025</loc><lastmod>2025-07-09</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
@@ -46,8 +53,8 @@
     <url><loc>https://bigclub-japan.com/#blog/elo-rating-explainer</loc><lastmod>2025-07-18</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
     <url><loc>https://bigclub-japan.com/#blog/league-chaos-ranking</loc><lastmod>2025-07-18</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
     <url><loc>https://bigclub-japan.com/#blog/china-league-attendance</loc><lastmod>2025-07-22</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
-    <url><loc>https://bigclub-japan.com/#blog/machida-analysis</loc><lastmod>2025-07-22</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
-    <!-- 他のバナーからリンクしている古いslugの紹介記事も、必要であれば新しいslugで追加してください -->
+    <url><loc>https://bigclub-japan.com/#blog/machida-analysis</loc><lastmod>2025-08-18</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
+    <url><loc>https://bigclub-japan.com/#blog/j2-attendance</loc><lastmod>2025-08-23</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
 
     <!-- 法務関連ページ -->
     <url><loc>https://bigclub-japan.com/legal/contact.html</loc><lastmod>2024-07-10</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
