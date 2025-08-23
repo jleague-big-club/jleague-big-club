@@ -36,23 +36,36 @@ function preloadModule(pageId) {
     }
 }
 
-// === OGP情報を更新するヘルパー関数 ===
+// === OGP情報を更新するヘルパー関数 (修正版) ===
 const updateOgp = (title, description, image, url) => {
+    // 1. 通常のタイトルとdescriptionを更新
     document.title = `${title} | Big Club Japan`;
+    let descElement = document.querySelector('meta[name="description"]');
+    if (descElement) {
+        descElement.setAttribute('content', description);
+    }
 
+    // 2. OGPタグとTwitterカードタグを更新
     const metaTags = {
         'og:title': title,
         'og:description': description,
         'og:image': image,
         'og:url': url,
         'twitter:card': 'summary_large_image',
+        'twitter:title': title, // Twitter用のタイトルも追加
+        'twitter:description': description, // Twitter用の説明も追加
+        'twitter:image': image, // Twitter用の画像も追加
     };
 
     for (const property in metaTags) {
         let element = document.querySelector(`meta[property="${property}"], meta[name="${property}"]`);
-        if (element) {
-            element.setAttribute('content', metaTags[property]);
+        // タグが存在しない場合は新規作成する
+        if (!element) {
+            element = document.createElement('meta');
+            element.setAttribute('name', property);
+            document.head.appendChild(element);
         }
+        element.setAttribute('content', metaTags[property]);
     }
 };
 
