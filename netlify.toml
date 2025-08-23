@@ -1,14 +1,19 @@
 # Netlifyのビルド設定
 [build]
-  # 公開するフォルダを指定します (あなたの場合はルートフォルダ)
   publish = "/"
 
 # リダイレクト設定
 [[redirects]]
-  # プリレンダリングを有効にするためのSPA用リダイレクトルール
+  # /blog/slug 形式のURLを index.html に転送し、
+  # SPAルーターが処理できるようにするルール
+  from = "/blog/*"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  # クローラーが /#blog/slug にアクセスした場合のフォールバック
   from = "/*"
   to = "/index.html"
   status = 200
-  force = false
   [redirects.query]
     _escaped_fragment_ = ":splat"
