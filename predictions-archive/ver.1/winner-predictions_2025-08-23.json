@@ -8,20 +8,20 @@
       "predictions": [
         {
           "type": "本命",
-          "score": "2-0",
-          "odds": "7.8倍",
+          "score": "1-0",
+          "odds": "7.9倍",
           "class": "favorite"
         },
         {
           "type": "対抗",
-          "score": "1-0",
-          "odds": "8.3倍",
+          "score": "2-0",
+          "odds": "8.0倍",
           "class": "contender"
         },
         {
           "type": "大穴",
           "score": "4-0",
-          "odds": "22.4倍",
+          "odds": "20.8倍",
           "class": "longshot"
         }
       ]
@@ -30,31 +30,6 @@
       "kickoff": "8/23 (土) 19:00",
       "home": "名古屋グランパス",
       "away": "川崎フロンターレ",
-      "predictions": [
-        {
-          "type": "本命",
-          "score": "1-1",
-          "odds": "8.0倍",
-          "class": "favorite"
-        },
-        {
-          "type": "対抗",
-          "score": "1-0",
-          "odds": "8.7倍",
-          "class": "contender"
-        },
-        {
-          "type": "大穴",
-          "score": "2-2",
-          "odds": "20.5倍",
-          "class": "longshot"
-        }
-      ]
-    },
-    {
-      "kickoff": "8/23 (土) 19:00",
-      "home": "東京ヴェルディ",
-      "away": "サンフレッチェ広島",
       "predictions": [
         {
           "type": "本命",
@@ -71,7 +46,32 @@
         {
           "type": "大穴",
           "score": "2-2",
-          "odds": "20.1倍",
+          "odds": "20.2倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "8/23 (土) 19:00",
+      "home": "東京ヴェルディ",
+      "away": "サンフレッチェ広島",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-1",
+          "odds": "8.3倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-0",
+          "odds": "8.6倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "0-2",
+          "odds": "20.3倍",
           "class": "longshot"
         }
       ]
@@ -84,88 +84,13 @@
         {
           "type": "本命",
           "score": "1-1",
-          "odds": "7.8倍",
-          "class": "favorite"
-        },
-        {
-          "type": "対抗",
-          "score": "0-1",
-          "odds": "8.3倍",
-          "class": "contender"
-        },
-        {
-          "type": "大穴",
-          "score": "1-3",
-          "odds": "20.1倍",
-          "class": "longshot"
-        }
-      ]
-    },
-    {
-      "kickoff": "8/23 (土) 19:00",
-      "home": "ガンバ大阪",
-      "away": "横浜ＦＣ",
-      "predictions": [
-        {
-          "type": "本命",
-          "score": "2-0",
-          "odds": "7.6倍",
-          "class": "favorite"
-        },
-        {
-          "type": "対抗",
-          "score": "1-0",
-          "odds": "8.5倍",
-          "class": "contender"
-        },
-        {
-          "type": "大穴",
-          "score": "0-0",
-          "odds": "22.6倍",
-          "class": "longshot"
-        }
-      ]
-    },
-    {
-      "kickoff": "8/23 (土) 19:00",
-      "home": "ファジアーノ岡山",
-      "away": "湘南ベルマーレ",
-      "predictions": [
-        {
-          "type": "本命",
-          "score": "2-0",
-          "odds": "7.2倍",
-          "class": "favorite"
-        },
-        {
-          "type": "対抗",
-          "score": "3-0",
-          "odds": "7.9倍",
-          "class": "contender"
-        },
-        {
-          "type": "大穴",
-          "score": "4-1",
-          "odds": "21.6倍",
-          "class": "longshot"
-        }
-      ]
-    },
-    {
-      "kickoff": "8/23 (土) 19:00",
-      "home": "セレッソ大阪",
-      "away": "ヴィッセル神戸",
-      "predictions": [
-        {
-          "type": "本命",
-          "score": "1-1",
           "odds": "8.1倍",
           "class": "favorite"
         },
         {
           "type": "対抗",
-          "score": "1-0",
-          "odds": "8.7倍",
+          "score": "0-1",
+          "odds": "8.5倍",
           "class": "contender"
         },
         {
@@ -178,25 +103,100 @@
     },
     {
       "kickoff": "8/23 (土) 19:00",
+      "home": "ガンバ大阪",
+      "away": "横浜ＦＣ",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "2-0",
+          "odds": "7.3倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "3-0",
+          "odds": "8.8倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "4-1",
+          "odds": "23.1倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "8/23 (土) 19:00",
+      "home": "ファジアーノ岡山",
+      "away": "湘南ベルマーレ",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "2-0",
+          "odds": "7.5倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "3-0",
+          "odds": "8.0倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "5-0",
+          "odds": "20.1倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "8/23 (土) 19:00",
+      "home": "セレッソ大阪",
+      "away": "ヴィッセル神戸",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-1",
+          "odds": "7.9倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-0",
+          "odds": "8.9倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-2",
+          "odds": "20.4倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "8/23 (土) 19:00",
       "home": "横浜Ｆ・マリノス",
       "away": "ＦＣ町田ゼルビア",
       "predictions": [
         {
           "type": "本命",
           "score": "1-1",
-          "odds": "7.5倍",
+          "odds": "7.8倍",
           "class": "favorite"
         },
         {
           "type": "対抗",
           "score": "0-1",
-          "odds": "9.1倍",
+          "odds": "9.3倍",
           "class": "contender"
         },
         {
           "type": "大穴",
-          "score": "1-3",
-          "odds": "25.9倍",
+          "score": "2-2",
+          "odds": "20.4倍",
           "class": "longshot"
         }
       ]
@@ -211,19 +211,19 @@
         {
           "type": "本命",
           "score": "2-0",
-          "odds": "7.2倍",
+          "odds": "7.3倍",
           "class": "favorite"
         },
         {
           "type": "対抗",
-          "score": "1-0",
-          "odds": "8.9倍",
+          "score": "3-0",
+          "odds": "8.7倍",
           "class": "contender"
         },
         {
           "type": "大穴",
           "score": "0-0",
-          "odds": "21.9倍",
+          "odds": "21.7倍",
           "class": "longshot"
         }
       ]
@@ -236,19 +236,19 @@
         {
           "type": "本命",
           "score": "1-1",
-          "odds": "8.1倍",
+          "odds": "7.9倍",
           "class": "favorite"
         },
         {
           "type": "対抗",
           "score": "1-0",
-          "odds": "8.6倍",
+          "odds": "8.9倍",
           "class": "contender"
         },
         {
           "type": "大穴",
           "score": "2-2",
-          "odds": "21.6倍",
+          "odds": "21.1倍",
           "class": "longshot"
         }
       ]
@@ -260,20 +260,20 @@
       "predictions": [
         {
           "type": "本命",
-          "score": "2-0",
-          "odds": "8.1倍",
+          "score": "1-0",
+          "odds": "8.0倍",
           "class": "favorite"
         },
         {
           "type": "対抗",
-          "score": "1-0",
-          "odds": "8.3倍",
+          "score": "2-0",
+          "odds": "8.6倍",
           "class": "contender"
         },
         {
           "type": "大穴",
           "score": "1-2",
-          "odds": "23.9倍",
+          "odds": "22.7倍",
           "class": "longshot"
         }
       ]
@@ -286,19 +286,19 @@
         {
           "type": "本命",
           "score": "1-1",
-          "odds": "8.2倍",
+          "odds": "8.4倍",
           "class": "favorite"
         },
         {
           "type": "対抗",
           "score": "1-0",
-          "odds": "8.4倍",
+          "odds": "8.7倍",
           "class": "contender"
         },
         {
           "type": "大穴",
-          "score": "3-1",
-          "odds": "20.1倍",
+          "score": "3-0",
+          "odds": "21.0倍",
           "class": "longshot"
         }
       ]
@@ -311,19 +311,19 @@
         {
           "type": "本命",
           "score": "2-0",
-          "odds": "7.4倍",
+          "odds": "7.5倍",
           "class": "favorite"
         },
         {
           "type": "対抗",
           "score": "3-0",
-          "odds": "8.9倍",
+          "odds": "8.4倍",
           "class": "contender"
         },
         {
           "type": "大穴",
-          "score": "0-0",
-          "odds": "22.3倍",
+          "score": "4-1",
+          "odds": "20.6倍",
           "class": "longshot"
         }
       ]
@@ -336,19 +336,19 @@
         {
           "type": "本命",
           "score": "2-0",
-          "odds": "7.0倍",
+          "odds": "7.3倍",
           "class": "favorite"
         },
         {
           "type": "対抗",
           "score": "3-0",
-          "odds": "8.4倍",
+          "odds": "8.2倍",
           "class": "contender"
         },
         {
           "type": "大穴",
           "score": "4-1",
-          "odds": "22.2倍",
+          "odds": "22.1倍",
           "class": "longshot"
         }
       ]
@@ -361,19 +361,19 @@
         {
           "type": "本命",
           "score": "2-0",
-          "odds": "7.4倍",
+          "odds": "7.8倍",
           "class": "favorite"
         },
         {
           "type": "対抗",
           "score": "3-0",
-          "odds": "8.2倍",
+          "odds": "7.9倍",
           "class": "contender"
         },
         {
           "type": "大穴",
-          "score": "5-0",
-          "odds": "22.9倍",
+          "score": "4-1",
+          "odds": "20.9倍",
           "class": "longshot"
         }
       ]
@@ -386,19 +386,19 @@
         {
           "type": "本命",
           "score": "2-0",
-          "odds": "7.2倍",
+          "odds": "7.4倍",
           "class": "favorite"
         },
         {
           "type": "対抗",
           "score": "3-0",
-          "odds": "7.8倍",
+          "odds": "7.9倍",
           "class": "contender"
         },
         {
           "type": "大穴",
           "score": "5-0",
-          "odds": "20.6倍",
+          "odds": "20.3倍",
           "class": "longshot"
         }
       ]
@@ -413,19 +413,19 @@
         {
           "type": "本命",
           "score": "2-0",
-          "odds": "7.8倍",
+          "odds": "7.7倍",
           "class": "favorite"
         },
         {
           "type": "対抗",
           "score": "1-0",
-          "odds": "8.2倍",
+          "odds": "8.4倍",
           "class": "contender"
         },
         {
           "type": "大穴",
-          "score": "0-1",
-          "odds": "23.3倍",
+          "score": "4-0",
+          "odds": "20.3倍",
           "class": "longshot"
         }
       ]
@@ -438,7 +438,7 @@
         {
           "type": "本命",
           "score": "1-0",
-          "odds": "8.2倍",
+          "odds": "8.3倍",
           "class": "favorite"
         },
         {
@@ -450,7 +450,7 @@
         {
           "type": "大穴",
           "score": "1-2",
-          "odds": "21.2倍",
+          "odds": "21.6倍",
           "class": "longshot"
         }
       ]
@@ -469,13 +469,13 @@
         {
           "type": "対抗",
           "score": "1-0",
-          "odds": "8.1倍",
+          "odds": "7.8倍",
           "class": "contender"
         },
         {
           "type": "大穴",
           "score": "4-0",
-          "odds": "20.4倍",
+          "odds": "21.9倍",
           "class": "longshot"
         }
       ]
@@ -488,19 +488,19 @@
         {
           "type": "本命",
           "score": "2-0",
-          "odds": "7.8倍",
+          "odds": "7.6倍",
           "class": "favorite"
         },
         {
           "type": "対抗",
           "score": "1-0",
-          "odds": "8.5倍",
+          "odds": "8.7倍",
           "class": "contender"
         },
         {
           "type": "大穴",
-          "score": "4-0",
-          "odds": "20.0倍",
+          "score": "0-1",
+          "odds": "25.1倍",
           "class": "longshot"
         }
       ]
@@ -513,19 +513,19 @@
         {
           "type": "本命",
           "score": "2-0",
-          "odds": "7.5倍",
+          "odds": "7.7倍",
           "class": "favorite"
         },
         {
           "type": "対抗",
           "score": "1-0",
-          "odds": "8.5倍",
+          "odds": "8.3倍",
           "class": "contender"
         },
         {
           "type": "大穴",
-          "score": "4-0",
-          "odds": "20.6倍",
+          "score": "0-1",
+          "odds": "25.5倍",
           "class": "longshot"
         }
       ]
@@ -538,7 +538,7 @@
         {
           "type": "本命",
           "score": "2-0",
-          "odds": "7.4倍",
+          "odds": "7.5倍",
           "class": "favorite"
         },
         {
@@ -550,7 +550,7 @@
         {
           "type": "大穴",
           "score": "1-1",
-          "odds": "23.0倍",
+          "odds": "22.8倍",
           "class": "longshot"
         }
       ]
@@ -562,20 +562,20 @@
       "predictions": [
         {
           "type": "本命",
-          "score": "1-1",
-          "odds": "8.5倍",
+          "score": "1-0",
+          "odds": "8.0倍",
           "class": "favorite"
         },
         {
           "type": "対抗",
-          "score": "1-0",
-          "odds": "8.5倍",
+          "score": "1-1",
+          "odds": "8.3倍",
           "class": "contender"
         },
         {
           "type": "大穴",
-          "score": "2-2",
-          "odds": "21.1倍",
+          "score": "3-1",
+          "odds": "20.6倍",
           "class": "longshot"
         }
       ]
@@ -588,19 +588,19 @@
         {
           "type": "本命",
           "score": "1-0",
-          "odds": "7.8倍",
+          "odds": "8.3倍",
           "class": "favorite"
         },
         {
           "type": "対抗",
           "score": "2-0",
-          "odds": "8.9倍",
+          "odds": "8.3倍",
           "class": "contender"
         },
         {
           "type": "大穴",
           "score": "1-2",
-          "odds": "22.3倍",
+          "odds": "23.7倍",
           "class": "longshot"
         }
       ]
