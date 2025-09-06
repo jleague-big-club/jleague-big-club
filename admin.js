@@ -280,7 +280,6 @@ function renderPredictionCards(league) {
     const leagueProbs = predictionData[league];
     if (!leagueProbs) { container.innerHTML = '<p class="placeholder">予測データなし</p>'; return; }
     
-    // ▼▼▼【ここから変更】データ構造の変更に対応 ▼▼▼
     const teams = Object.keys(leagueProbs).map(name => ({ name, ...leagueProbs[name] }));
     const cats = {
         champion: { title: '優勝', key: 'champion', class: 'champion', icon: '🏆' }, 
@@ -301,19 +300,16 @@ function renderPredictionCards(league) {
 
     container.innerHTML = order.map(catKey => {
         const cat = cats[catKey];
-        // ソートキーを t[cat.key] から t[cat.key].prob に変更
         const sorted = teams.sort((a, b) => b[cat.key].prob - a[cat.key].prob).slice(0, 5);
         
         return `<div class="prediction-wrapper">
             <div id="pred-card-${catKey}" class="capture-area prediction-card">
                 <div class="card-header ${cat.class}">${cat.icon} ${cat.title} 確率 Top 5</div>
                 <div class="card-body"><table class="prediction-table"><tbody>${sorted.map((t, i) => {
-                    // 確率と変動情報を取得
                     const probData = t[cat.key];
                     const probability = probData.prob;
                     const change = probData.change;
 
-                    // 変動情報から矢印のHTMLを生成
                     let changeHtml = '';
                     if (change === 'up') {
                         changeHtml = '<span class="change-arrow up">▲</span>';
@@ -326,7 +322,7 @@ function renderPredictionCards(league) {
                     return `
                     <tr>
                         <td class="rank">${i+1}</td>
-                        <td>${t.name}</td>
+                        <td class="club">${t.name}</td>
                         <td class="prob">${changeHtml}${(probability*100).toFixed(1)}%</td>
                     </tr>`;
                 }).join('')}</tbody></table></div>
@@ -334,7 +330,6 @@ function renderPredictionCards(league) {
             <div class="actions" style="margin-top: -5px;"><button class="copy-btn" data-capture-id="pred-card-${catKey}">コピー</button></div>
         </div>`;
     }).join('');
-    // ▲▲▲【ここまで変更】▲▲▲
 }
 
     // ★★★【新規】SNS投稿案パネルのHTMLとロジック ★★★

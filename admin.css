@@ -196,13 +196,36 @@ body {
 .card-header.promotion { color: var(--green-color); }
 .card-header.relegation { color: var(--red-color); }
 .card-header.safe, .card-header.acl { color: var(--accent-color); }
-.card-body { padding: 0; flex-grow: 1; }
-.prediction-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.card-body { padding: 5px 0; flex-grow: 1; }
+.prediction-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* テーブルのレイアウトを固定 */
+}
 .prediction-table tr:hover { background-color: rgba(255,255,255,0.03); }
-.prediction-table td { padding: 8px 5px; border-bottom: 1px solid #21262d; }
+.prediction-table td {
+  padding: 9px 5px;
+  border-bottom: 1px solid #21262d;
+  vertical-align: middle;
+}
 .prediction-table tr:last-child td { border-bottom: none; }
-.prediction-table .rank { width: 30px; font-weight: bold; color: var(--subtext-color); }
-.prediction-table .prob { font-weight: bold; text-align: right; width: 70px; }
+.prediction-table .rank {
+  width: 20%;
+  text-align: center;
+  font-weight: bold;
+  color: var(--subtext-color);
+}
+.prediction-table .club {
+  width: 45%;
+  text-align: left;
+  padding-left: 10px;
+}
+.prediction-table .prob {
+  width: 35%;
+  text-align: right;
+  padding-right: 15px;
+  font-weight: bold;
+}
 .update-date-note { font-size: 0.8em; color: var(--subtext-color); text-align: right; margin-top: -15px; margin-bottom: 15px; }
 
 /* シミュレーター */
