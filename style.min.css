@@ -1637,3 +1637,27 @@ transition: background-color 0.2s;
     border: none;
     padding-bottom: 0;
 }
+/* === シーズン予測 確率変動矢印のスタイル === */
+.prediction-list .probability {
+    display: flex; /* 矢印とテキストを横並びにするため */
+    align-items: center; /* 上下中央揃え */
+    justify-content: flex-end; /* 右寄せ */
+    gap: 4px; /* 矢印とテキストの間の隙間 */
+}
+
+.change-arrow {
+    font-size: 0.8em;
+    font-weight: bold;
+    width: 1em; /* 幅を固定して位置を揃える */
+    text-align: center;
+}
+
+.change-arrow.up {
+    color: #2ecc71; /* publicサイトの昇格ヘッダーの色 */
+}
+.change-arrow.down {
+    color: #e74c3c; /* publicサイトの降格ヘッダーの色 */
+}
+.change-arrow.flat {
+    color: #aab8d8; /* publicサイトの順位テキストの色 */
+}

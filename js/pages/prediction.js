@@ -30,13 +30,15 @@ function renderPrediction(league) {
             })
             .map(({ item }) => item);
         
+        // ▼▼▼【ここから変更】データ構造の変更に合わせてソートキーを修正 ▼▼▼
         const predictions = {
-            champion: stableSort(teamList, (a, b) => b.champion - a.champion).slice(0, 5).filter(t => t.champion > 0),
-            acl: stableSort(teamList, (a, b) => b.acl - a.acl).slice(0, 5).filter(t => t.acl > 0),
-            promotion: stableSort(teamList, (a, b) => b.promotion - a.promotion).slice(0, 5).filter(t => t.promotion > 0),
-            relegation: stableSort(teamList, (a, b) => b.relegation - a.relegation).slice(0, 5).filter(t => t.relegation > 0),
-            full_ranking: stableSort(teamList, (a, b) => b.safe - a.safe).slice(0, 15)
+            champion: stableSort(teamList, (a, b) => b.champion.prob - a.champion.prob).slice(0, 5).filter(t => t.champion.prob > 0),
+            acl: stableSort(teamList, (a, b) => b.acl.prob - a.acl.prob).slice(0, 5).filter(t => t.acl.prob > 0),
+            promotion: stableSort(teamList, (a, b) => b.promotion.prob - a.promotion.prob).slice(0, 5).filter(t => t.promotion.prob > 0),
+            relegation: stableSort(teamList, (a, b) => b.relegation.prob - a.relegation.prob).slice(0, 5).filter(t => t.relegation.prob > 0),
+            full_ranking: stableSort(teamList, (a, b) => b.safe.prob - a.safe.prob).slice(0, 15)
         };
+        // ▲▲▲【ここまで変更】▲▲▲
 
         const categorySettings = {
             champion: { title: '🏆 優勝確率 TOP5', probKey: 'champion', className: 'champion' },
@@ -76,7 +78,20 @@ function renderPrediction(league) {
                 <div class="prediction-card-body">
                     <ul class="prediction-list">
                     ${teams.map((team, index) => {
-                        const probability = team[cat.probKey];
+                        // ▼▼▼【ここから変更】確率と変動情報を取得し、矢印HTMLを生成 ▼▼▼
+                        const probData = team[cat.probKey];
+                        const probability = probData.prob;
+                        const change = probData.change;
+                        
+                        let changeHtml = '';
+                        if (change === 'up') {
+                            changeHtml = '<span class="change-arrow up">▲</span>';
+                        } else if (change === 'down') {
+                            changeHtml = '<span class="change-arrow down">▼</span>';
+                        } else {
+                            changeHtml = '<span class="change-arrow flat">–</span>';
+                        }
+
                         const probText = (probability !== null && typeof probability !== 'undefined') ? `${(probability * 100).toFixed(1)}%` : '';
                         return `
                         <li>
@@ -84,8 +99,9 @@ function renderPrediction(league) {
                                 <span class="rank">${index + 1}位</span>
                                 <span class="team-name">${team.name}</span>
                             </div>
-                            ${probText ? `<span class="probability">${probText}</span>` : ''}
+                            ${probText ? `<span class="probability">${changeHtml}${probText}</span>` : ''}
                         </li>`;
+                        // ▲▲▲【ここまで変更】▲▲▲
                     }).join('')}
                     </ul>
                 </div>

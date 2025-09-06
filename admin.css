@@ -284,3 +284,28 @@ body {
 .sns-copy-button:hover {
   background-color: #2ea043;
 }
+/* admin.css の末尾に以下を追加 */
+
+.prediction-table .prob {
+    display: flex; /* 矢印とテキストを横並びにするため */
+    align-items: center; /* 上下中央揃え */
+    justify-content: flex-end; /* 右寄せ */
+    gap: 4px; /* 矢印とテキストの間の隙間 */
+}
+
+.change-arrow {
+    font-size: 0.8em;
+    font-weight: bold;
+    width: 1em; /* 幅を固定して位置を揃える */
+    text-align: center;
+}
+
+.change-arrow.up {
+    color: var(--green-color);
+}
+.change-arrow.down {
+    color: var(--red-color);
+}
+.change-arrow.flat {
+    color: var(--subtext-color);
+}

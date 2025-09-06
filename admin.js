@@ -270,37 +270,72 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
             <div id="prediction-cards-container" class="analysis-cards"></div>`;
     }
-    function renderPredictionCards(league) {
-        document.querySelectorAll('#prediction-league-tabs button').forEach(b=>b.classList.remove('active'));
-        document.querySelector(`#prediction-league-tabs button[data-league="${league}"]`)?.classList.add('active');
-        const container = document.getElementById('prediction-cards-container');
-        const leagueProbs = predictionData[league];
-        if (!leagueProbs) { container.innerHTML = '<p class="placeholder">予測データなし</p>'; return; }
-        const teams = Object.keys(leagueProbs).map(name => ({ name, ...leagueProbs[name] }));
-        const cats = {
-            champion: { title: '優勝', key: 'champion', class: 'champion', icon: '🏆' }, acl: { title: 'ACL圏内', key: 'acl', class: 'acl', icon: '🌏' },
-            promotion: { title: '昇格', key: 'promotion', class: 'promotion', icon: '⬆️' }, relegation: { title: '降格', key: 'relegation', class: 'relegation', icon: '⬇️' },
-            safe: { title: '残留以上', key: 'safe', class: 'safe', icon: '✅' }
-        };
-        let order;
-        if (league === 'J1') { order = ['champion', 'acl', 'relegation', 'safe'];
-        } else {
-            cats.promotion.title = league === 'J2' ? 'J1昇格' : 'J2昇格'; cats.relegation.title = league === 'J2' ? 'J3降格' : 'JFL降格';
-            order = ['promotion', 'relegation', 'safe'];
-        }
-        container.innerHTML = order.map(catKey => {
-            const cat = cats[catKey];
-            const sorted = teams.sort((a, b) => b[cat.key] - a[cat.key]).slice(0, 5);
-            return `<div class="prediction-wrapper">
-                <div id="pred-card-${catKey}" class="capture-area prediction-card">
-                    <div class="card-header ${cat.class}">${cat.icon} ${cat.title} 確率 Top 5</div>
-                    <div class="card-body"><table class="prediction-table"><tbody>${sorted.map((t, i) => `
-                        <tr><td class="rank">${i+1}</td><td>${t.name}</td><td class="prob">${(t[cat.key]*100).toFixed(1)}%</td></tr>`).join('')}</tbody></table></div>
-                </div>
-                <div class="actions" style="margin-top: -5px;"><button class="copy-btn" data-capture-id="pred-card-${catKey}">コピー</button></div>
-            </div>`;
-        }).join('');
+    // admin.js の中の renderPredictionCards 関数を以下のように修正してください。
+// (他の関数は変更不要です)
+
+function renderPredictionCards(league) {
+    document.querySelectorAll('#prediction-league-tabs button').forEach(b => b.classList.remove('active'));
+    document.querySelector(`#prediction-league-tabs button[data-league="${league}"]`)?.classList.add('active');
+    const container = document.getElementById('prediction-cards-container');
+    const leagueProbs = predictionData[league];
+    if (!leagueProbs) { container.innerHTML = '<p class="placeholder">予測データなし</p>'; return; }
+    
+    // ▼▼▼【ここから変更】データ構造の変更に対応 ▼▼▼
+    const teams = Object.keys(leagueProbs).map(name => ({ name, ...leagueProbs[name] }));
+    const cats = {
+        champion: { title: '優勝', key: 'champion', class: 'champion', icon: '🏆' }, 
+        acl: { title: 'ACL圏内', key: 'acl', class: 'acl', icon: '🌏' },
+        promotion: { title: '昇格', key: 'promotion', class: 'promotion', icon: '⬆️' }, 
+        relegation: { title: '降格', key: 'relegation', class: 'relegation', icon: '⬇️' },
+        safe: { title: '残留以上', key: 'safe', class: 'safe', icon: '✅' }
+    };
+    
+    let order;
+    if (league === 'J1') { 
+        order = ['champion', 'acl', 'relegation', 'safe'];
+    } else {
+        cats.promotion.title = league === 'J2' ? 'J1昇格' : 'J2昇格'; 
+        cats.relegation.title = league === 'J2' ? 'J3降格' : 'JFL降格';
+        order = ['promotion', 'relegation', 'safe'];
     }
+
+    container.innerHTML = order.map(catKey => {
+        const cat = cats[catKey];
+        // ソートキーを t[cat.key] から t[cat.key].prob に変更
+        const sorted = teams.sort((a, b) => b[cat.key].prob - a[cat.key].prob).slice(0, 5);
+        
+        return `<div class="prediction-wrapper">
+            <div id="pred-card-${catKey}" class="capture-area prediction-card">
+                <div class="card-header ${cat.class}">${cat.icon} ${cat.title} 確率 Top 5</div>
+                <div class="card-body"><table class="prediction-table"><tbody>${sorted.map((t, i) => {
+                    // 確率と変動情報を取得
+                    const probData = t[cat.key];
+                    const probability = probData.prob;
+                    const change = probData.change;
+
+                    // 変動情報から矢印のHTMLを生成
+                    let changeHtml = '';
+                    if (change === 'up') {
+                        changeHtml = '<span class="change-arrow up">▲</span>';
+                    } else if (change === 'down') {
+                        changeHtml = '<span class="change-arrow down">▼</span>';
+                    } else {
+                        changeHtml = '<span class="change-arrow flat">–</span>';
+                    }
+
+                    return `
+                    <tr>
+                        <td class="rank">${i+1}</td>
+                        <td>${t.name}</td>
+                        <td class="prob">${changeHtml}${(probability*100).toFixed(1)}%</td>
+                    </tr>`;
+                }).join('')}</tbody></table></div>
+            </div>
+            <div class="actions" style="margin-top: -5px;"><button class="copy-btn" data-capture-id="pred-card-${catKey}">コピー</button></div>
+        </div>`;
+    }).join('');
+    // ▲▲▲【ここまで変更】▲▲▲
+}
 
     // ★★★【新規】SNS投稿案パネルのHTMLとロジック ★★★
     function getSnsPostHTML() {
