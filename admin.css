@@ -196,7 +196,7 @@ body {
 .card-header.promotion { color: var(--green-color); }
 .card-header.relegation { color: var(--red-color); }
 .card-header.safe, .card-header.acl { color: var(--accent-color); }
-.card-body { padding: 15px; flex-grow: 1; }
+.card-body { padding: 0; flex-grow: 1; }
 .prediction-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
 .prediction-table tr:hover { background-color: rgba(255,255,255,0.03); }
 .prediction-table td { padding: 8px 5px; border-bottom: 1px solid #21262d; }
