@@ -2,11 +2,11 @@
   "J1": {
     "京都": {
       "champion": {
-        "prob": 0.2495,
-        "change": "up"
+        "prob": 0.1956,
+        "change": "down"
       },
       "acl": {
-        "prob": 0.6855,
+        "prob": 0.5823,
         "change": "up"
       },
       "promotion": {
@@ -24,11 +24,11 @@
     },
     "柏": {
       "champion": {
-        "prob": 0.1814,
+        "prob": 0.3368,
         "change": "down"
       },
       "acl": {
-        "prob": 0.6327,
+        "prob": 0.7271,
         "change": "down"
       },
       "promotion": {
@@ -46,11 +46,11 @@
     },
     "神戸": {
       "champion": {
-        "prob": 0.1561,
+        "prob": 0.1248,
         "change": "up"
       },
       "acl": {
-        "prob": 0.5351,
+        "prob": 0.4382,
         "change": "up"
       },
       "promotion": {
@@ -68,12 +68,12 @@
     },
     "鹿島": {
       "champion": {
-        "prob": 0.3717,
-        "change": "up"
+        "prob": 0.2093,
+        "change": "down"
       },
       "acl": {
-        "prob": 0.7619,
-        "change": "up"
+        "prob": 0.5966,
+        "change": "down"
       },
       "promotion": {
         "prob": 0.0,
@@ -88,14 +88,14 @@
         "change": "flat"
       }
     },
-    "ＦＣ町田ゼルビア": {
+    "町田": {
       "champion": {
-        "prob": 0.0,
-        "change": "flat"
+        "prob": 0.107,
+        "change": "up"
       },
       "acl": {
-        "prob": 0.0,
-        "change": "flat"
+        "prob": 0.4096,
+        "change": "up"
       },
       "promotion": {
         "prob": 0.0,
@@ -107,16 +107,16 @@
       },
       "safe": {
         "prob": 1.0,
-        "change": "up"
+        "change": "flat"
       }
     },
     "広島": {
       "champion": {
-        "prob": 0.0109,
+        "prob": 0.0153,
         "change": "down"
       },
       "acl": {
-        "prob": 0.1189,
+        "prob": 0.1331,
         "change": "down"
       },
       "promotion": {
@@ -134,11 +134,11 @@
     },
     "浦和": {
       "champion": {
-        "prob": 0.0236,
+        "prob": 0.0096,
         "change": "down"
       },
       "acl": {
-        "prob": 0.1657,
+        "prob": 0.0886,
         "change": "down"
       },
       "promotion": {
@@ -156,12 +156,12 @@
     },
     "川崎F": {
       "champion": {
-        "prob": 0.0037,
+        "prob": 0.0015,
         "change": "down"
       },
       "acl": {
-        "prob": 0.0527,
-        "change": "up"
+        "prob": 0.0219,
+        "change": "down"
       },
       "promotion": {
         "prob": 0.0,
@@ -178,12 +178,12 @@
     },
     "G大阪": {
       "champion": {
-        "prob": 0.003,
-        "change": "up"
+        "prob": 0.0001,
+        "change": "down"
       },
       "acl": {
-        "prob": 0.0456,
-        "change": "up"
+        "prob": 0.0013,
+        "change": "down"
       },
       "promotion": {
         "prob": 0.0,
@@ -200,23 +200,23 @@
     },
     "C大阪": {
       "champion": {
-        "prob": 0.0001,
-        "change": "flat"
+        "prob": 0.0,
+        "change": "down"
       },
       "acl": {
-        "prob": 0.0019,
-        "change": "up"
+        "prob": 0.0004,
+        "change": "down"
       },
       "promotion": {
         "prob": 0.0,
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.0,
+        "prob": 0.0001,
         "change": "down"
       },
       "safe": {
-        "prob": 1.0,
+        "prob": 0.9999,
         "change": "up"
       }
     },
@@ -226,19 +226,19 @@
         "change": "flat"
       },
       "acl": {
-        "prob": 0.0,
-        "change": "down"
+        "prob": 0.0008,
+        "change": "up"
       },
       "promotion": {
         "prob": 0.0,
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.0,
+        "prob": 0.0002,
         "change": "down"
       },
       "safe": {
-        "prob": 1.0,
+        "prob": 0.9998,
         "change": "up"
       }
     },
@@ -256,11 +256,11 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.0001,
+        "prob": 0.0032,
         "change": "down"
       },
       "safe": {
-        "prob": 0.9999,
+        "prob": 0.9968,
         "change": "up"
       }
     },
@@ -270,19 +270,19 @@
         "change": "flat"
       },
       "acl": {
-        "prob": 0.0,
-        "change": "down"
+        "prob": 0.0001,
+        "change": "flat"
       },
       "promotion": {
         "prob": 0.0,
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.0,
+        "prob": 0.0024,
         "change": "down"
       },
       "safe": {
-        "prob": 1.0,
+        "prob": 0.9976,
         "change": "up"
       }
     },
@@ -300,15 +300,15 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.0034,
+        "prob": 0.0571,
         "change": "down"
       },
       "safe": {
-        "prob": 0.9966,
+        "prob": 0.9429,
         "change": "up"
       }
     },
-    "ＦＣ東京": {
+    "FC東京": {
       "champion": {
         "prob": 0.0,
         "change": "flat"
@@ -322,11 +322,11 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.9312,
-        "change": "up"
+        "prob": 0.0323,
+        "change": "down"
       },
       "safe": {
-        "prob": 0.0688,
+        "prob": 0.9677,
         "change": "up"
       }
     },
@@ -344,59 +344,15 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.0167,
+        "prob": 0.068,
         "change": "down"
       },
       "safe": {
-        "prob": 0.9833,
+        "prob": 0.932,
         "change": "up"
       }
     },
-    "横浜Ｆ・マリノス": {
-      "champion": {
-        "prob": 0.0,
-        "change": "flat"
-      },
-      "acl": {
-        "prob": 0.0,
-        "change": "flat"
-      },
-      "promotion": {
-        "prob": 0.0,
-        "change": "flat"
-      },
-      "relegation": {
-        "prob": 0.1206,
-        "change": "up"
-      },
-      "safe": {
-        "prob": 0.8794,
-        "change": "up"
-      }
-    },
-    "湘南": {
-      "champion": {
-        "prob": 0.0,
-        "change": "flat"
-      },
-      "acl": {
-        "prob": 0.0,
-        "change": "flat"
-      },
-      "promotion": {
-        "prob": 0.0,
-        "change": "flat"
-      },
-      "relegation": {
-        "prob": 0.0463,
-        "change": "down"
-      },
-      "safe": {
-        "prob": 0.9537,
-        "change": "up"
-      }
-    },
-    "横浜ＦＣ": {
+    "横浜FM": {
       "champion": {
         "prob": 0.0,
         "change": "flat"
@@ -415,7 +371,51 @@
       },
       "safe": {
         "prob": 0.0,
+        "change": "down"
+      }
+    },
+    "湘南": {
+      "champion": {
+        "prob": 0.0,
         "change": "flat"
+      },
+      "acl": {
+        "prob": 0.0,
+        "change": "flat"
+      },
+      "promotion": {
+        "prob": 0.0,
+        "change": "flat"
+      },
+      "relegation": {
+        "prob": 0.1708,
+        "change": "down"
+      },
+      "safe": {
+        "prob": 0.8292,
+        "change": "up"
+      }
+    },
+    "横浜FC": {
+      "champion": {
+        "prob": 0.0,
+        "change": "flat"
+      },
+      "acl": {
+        "prob": 0.0,
+        "change": "flat"
+      },
+      "promotion": {
+        "prob": 0.0,
+        "change": "flat"
+      },
+      "relegation": {
+        "prob": 0.7603,
+        "change": "down"
+      },
+      "safe": {
+        "prob": 0.2397,
+        "change": "up"
       }
     },
     "新潟": {
@@ -432,11 +432,11 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.8817,
+        "prob": 0.9056,
         "change": "down"
       },
       "safe": {
-        "prob": 0.1183,
+        "prob": 0.0944,
         "change": "up"
       }
     }
@@ -452,8 +452,8 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.6344,
-        "change": "up"
+        "prob": 0.3786,
+        "change": "down"
       },
       "relegation": {
         "prob": 0.0,
@@ -474,7 +474,7 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.6122,
+        "prob": 0.5566,
         "change": "up"
       },
       "relegation": {
@@ -486,7 +486,7 @@
         "change": "flat"
       }
     },
-    "Ｖ・ファーレン長崎": {
+    "長崎": {
       "champion": {
         "prob": 0.0,
         "change": "flat"
@@ -496,8 +496,8 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.0,
-        "change": "flat"
+        "prob": 0.2647,
+        "change": "down"
       },
       "relegation": {
         "prob": 0.0,
@@ -505,7 +505,7 @@
       },
       "safe": {
         "prob": 1.0,
-        "change": "up"
+        "change": "flat"
       }
     },
     "徳島": {
@@ -518,8 +518,8 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.212,
-        "change": "up"
+        "prob": 0.1198,
+        "change": "down"
       },
       "relegation": {
         "prob": 0.0,
@@ -530,7 +530,7 @@
         "change": "flat"
       }
     },
-    "ＲＢ大宮アルディージャ": {
+    "大宮": {
       "champion": {
         "prob": 0.0,
         "change": "flat"
@@ -540,8 +540,8 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.0,
-        "change": "flat"
+        "prob": 0.4445,
+        "change": "up"
       },
       "relegation": {
         "prob": 0.0,
@@ -549,7 +549,7 @@
       },
       "safe": {
         "prob": 1.0,
-        "change": "up"
+        "change": "flat"
       }
     },
     "仙台": {
@@ -562,8 +562,8 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.3732,
-        "change": "up"
+        "prob": 0.0983,
+        "change": "down"
       },
       "relegation": {
         "prob": 0.0,
@@ -584,8 +584,8 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.0076,
-        "change": "down"
+        "prob": 0.0799,
+        "change": "up"
       },
       "relegation": {
         "prob": 0.0,
@@ -596,7 +596,7 @@
         "change": "flat"
       }
     },
-    "ＦＣ今治": {
+    "今治": {
       "champion": {
         "prob": 0.0,
         "change": "flat"
@@ -606,8 +606,8 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.0,
-        "change": "flat"
+        "prob": 0.0176,
+        "change": "up"
       },
       "relegation": {
         "prob": 0.0,
@@ -615,7 +615,7 @@
       },
       "safe": {
         "prob": 1.0,
-        "change": "up"
+        "change": "flat"
       }
     },
     "鳥栖": {
@@ -628,8 +628,8 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.1325,
-        "change": "up"
+        "prob": 0.0327,
+        "change": "down"
       },
       "relegation": {
         "prob": 0.0,
@@ -650,16 +650,16 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.0209,
-        "change": "up"
+        "prob": 0.0036,
+        "change": "down"
       },
       "relegation": {
-        "prob": 0.0,
-        "change": "flat"
+        "prob": 0.0001,
+        "change": "up"
       },
       "safe": {
-        "prob": 1.0,
-        "change": "flat"
+        "prob": 0.9999,
+        "change": "down"
       }
     },
     "甲府": {
@@ -672,19 +672,19 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.0072,
+        "prob": 0.0021,
         "change": "up"
       },
       "relegation": {
-        "prob": 0.0,
+        "prob": 0.0002,
         "change": "down"
       },
       "safe": {
-        "prob": 1.0,
+        "prob": 0.9998,
         "change": "up"
       }
     },
-    "いわきＦＣ": {
+    "いわき": {
       "champion": {
         "prob": 0.0,
         "change": "flat"
@@ -694,16 +694,16 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.0,
-        "change": "flat"
+        "prob": 0.0016,
+        "change": "up"
       },
       "relegation": {
-        "prob": 0.0,
+        "prob": 0.0006,
         "change": "flat"
       },
       "safe": {
-        "prob": 1.0,
-        "change": "up"
+        "prob": 0.9994,
+        "change": "flat"
       }
     },
     "山形": {
@@ -720,15 +720,15 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.0008,
+        "prob": 0.0367,
         "change": "down"
       },
       "safe": {
-        "prob": 0.9992,
+        "prob": 0.9633,
         "change": "up"
       }
     },
-    "藤枝ＭＹＦＣ": {
+    "藤枝": {
       "champion": {
         "prob": 0.0,
         "change": "flat"
@@ -742,12 +742,12 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.3722,
+        "prob": 0.1975,
         "change": "up"
       },
       "safe": {
-        "prob": 0.6278,
-        "change": "up"
+        "prob": 0.8025,
+        "change": "down"
       }
     },
     "秋田": {
@@ -764,12 +764,12 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.0029,
-        "change": "down"
+        "prob": 0.1336,
+        "change": "up"
       },
       "safe": {
-        "prob": 0.9971,
-        "change": "up"
+        "prob": 0.8664,
+        "change": "down"
       }
     },
     "熊本": {
@@ -786,12 +786,12 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.0082,
-        "change": "down"
+        "prob": 0.1323,
+        "change": "up"
       },
       "safe": {
-        "prob": 0.9918,
-        "change": "up"
+        "prob": 0.8677,
+        "change": "down"
       }
     },
     "大分": {
@@ -808,12 +808,12 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.0052,
-        "change": "down"
+        "prob": 0.0737,
+        "change": "up"
       },
       "safe": {
-        "prob": 0.9948,
-        "change": "up"
+        "prob": 0.9263,
+        "change": "down"
       }
     },
     "富山": {
@@ -830,15 +830,15 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.6107,
+        "prob": 0.6897,
         "change": "down"
       },
       "safe": {
-        "prob": 0.3893,
+        "prob": 0.3103,
         "change": "up"
       }
     },
-    "レノファ山口ＦＣ": {
+    "山口": {
       "champion": {
         "prob": 0.0,
         "change": "flat"
@@ -852,15 +852,15 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 1.0,
+        "prob": 0.7808,
         "change": "up"
       },
       "safe": {
-        "prob": 0.0,
-        "change": "flat"
+        "prob": 0.2192,
+        "change": "down"
       }
     },
-    "愛媛ＦＣ": {
+    "愛媛": {
       "champion": {
         "prob": 0.0,
         "change": "flat"
@@ -874,12 +874,12 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 1.0,
+        "prob": 0.9548,
         "change": "up"
       },
       "safe": {
-        "prob": 0.0,
-        "change": "flat"
+        "prob": 0.0452,
+        "change": "down"
       }
     }
   },
@@ -894,7 +894,7 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.9507,
+        "prob": 0.6909,
         "change": "up"
       },
       "relegation": {
@@ -916,7 +916,7 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.885,
+        "prob": 0.7482,
         "change": "up"
       },
       "relegation": {
@@ -928,7 +928,7 @@
         "change": "flat"
       }
     },
-    "鹿児島ユナイテッドＦＣ": {
+    "鹿児島": {
       "champion": {
         "prob": 0.0,
         "change": "flat"
@@ -938,8 +938,8 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.0,
-        "change": "flat"
+        "prob": 0.2657,
+        "change": "down"
       },
       "relegation": {
         "prob": 0.0,
@@ -947,10 +947,10 @@
       },
       "safe": {
         "prob": 1.0,
-        "change": "up"
+        "change": "flat"
       }
     },
-    "ＦＣ大阪": {
+    "FC大阪": {
       "champion": {
         "prob": 0.0,
         "change": "flat"
@@ -960,8 +960,8 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.0,
-        "change": "flat"
+        "prob": 0.0211,
+        "change": "down"
       },
       "relegation": {
         "prob": 0.0,
@@ -969,7 +969,7 @@
       },
       "safe": {
         "prob": 1.0,
-        "change": "up"
+        "change": "flat"
       }
     },
     "奈良": {
@@ -982,7 +982,7 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.04,
+        "prob": 0.0988,
         "change": "down"
       },
       "relegation": {
@@ -1004,7 +1004,7 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.1243,
+        "prob": 0.1599,
         "change": "down"
       },
       "relegation": {
@@ -1016,7 +1016,7 @@
         "change": "flat"
       }
     },
-    "栃木ＳＣ": {
+    "栃木SC": {
       "champion": {
         "prob": 0.0,
         "change": "flat"
@@ -1026,19 +1026,19 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.0,
-        "change": "flat"
+        "prob": 0.0071,
+        "change": "up"
       },
       "relegation": {
-        "prob": 0.0,
-        "change": "flat"
+        "prob": 0.0003,
+        "change": "down"
       },
       "safe": {
-        "prob": 1.0,
+        "prob": 0.9997,
         "change": "up"
       }
     },
-    "ＳＣ相模原": {
+    "相模原": {
       "champion": {
         "prob": 0.0,
         "change": "flat"
@@ -1048,15 +1048,15 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.0,
-        "change": "flat"
+        "prob": 0.0017,
+        "change": "down"
       },
       "relegation": {
-        "prob": 0.0,
-        "change": "flat"
+        "prob": 0.0041,
+        "change": "down"
       },
       "safe": {
-        "prob": 1.0,
+        "prob": 0.9959,
         "change": "up"
       }
     },
@@ -1070,19 +1070,19 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.0,
-        "change": "down"
+        "prob": 0.0058,
+        "change": "up"
       },
       "relegation": {
-        "prob": 0.0,
+        "prob": 0.0007,
         "change": "down"
       },
       "safe": {
-        "prob": 1.0,
+        "prob": 0.9993,
         "change": "up"
       }
     },
-    "福島ユナイテッドＦＣ": {
+    "福島": {
       "champion": {
         "prob": 0.0,
         "change": "flat"
@@ -1092,15 +1092,15 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.0,
-        "change": "flat"
+        "prob": 0.0001,
+        "change": "down"
       },
       "relegation": {
-        "prob": 0.0,
-        "change": "flat"
+        "prob": 0.0104,
+        "change": "down"
       },
       "safe": {
-        "prob": 1.0,
+        "prob": 0.9896,
         "change": "up"
       }
     },
@@ -1114,19 +1114,19 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.0,
+        "prob": 0.0005,
         "change": "down"
       },
       "relegation": {
-        "prob": 0.0,
-        "change": "down"
+        "prob": 0.0087,
+        "change": "up"
       },
       "safe": {
-        "prob": 1.0,
-        "change": "up"
+        "prob": 0.9913,
+        "change": "down"
       }
     },
-    "松本山雅ＦＣ": {
+    "松本": {
       "champion": {
         "prob": 0.0,
         "change": "flat"
@@ -1137,14 +1137,14 @@
       },
       "promotion": {
         "prob": 0.0,
-        "change": "flat"
+        "change": "down"
       },
       "relegation": {
-        "prob": 0.0,
-        "change": "flat"
+        "prob": 0.0065,
+        "change": "down"
       },
       "safe": {
-        "prob": 1.0,
+        "prob": 0.9935,
         "change": "up"
       }
     },
@@ -1158,19 +1158,19 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.0,
+        "prob": 0.0001,
         "change": "down"
       },
       "relegation": {
-        "prob": 0.0,
+        "prob": 0.0257,
         "change": "down"
       },
       "safe": {
-        "prob": 1.0,
+        "prob": 0.9743,
         "change": "up"
       }
     },
-    "ＦＣ琉球": {
+    "琉球": {
       "champion": {
         "prob": 0.0,
         "change": "flat"
@@ -1184,15 +1184,15 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.0,
-        "change": "flat"
+        "prob": 0.1267,
+        "change": "down"
       },
       "safe": {
-        "prob": 1.0,
+        "prob": 0.8733,
         "change": "up"
       }
     },
-    "高知ユナイテッドＳＣ": {
+    "高知": {
       "champion": {
         "prob": 0.0,
         "change": "flat"
@@ -1202,16 +1202,16 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.0,
-        "change": "flat"
+        "prob": 0.0001,
+        "change": "down"
       },
       "relegation": {
-        "prob": 0.0,
-        "change": "flat"
+        "prob": 0.0296,
+        "change": "up"
       },
       "safe": {
-        "prob": 1.0,
-        "change": "up"
+        "prob": 0.9704,
+        "change": "down"
       }
     },
     "群馬": {
@@ -1228,15 +1228,15 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.0,
+        "prob": 0.119,
         "change": "down"
       },
       "safe": {
-        "prob": 1.0,
+        "prob": 0.881,
         "change": "up"
       }
     },
-    "ＦＣ岐阜": {
+    "岐阜": {
       "champion": {
         "prob": 0.0,
         "change": "flat"
@@ -1250,11 +1250,11 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.1876,
-        "change": "up"
+        "prob": 0.2403,
+        "change": "down"
       },
       "safe": {
-        "prob": 0.8124,
+        "prob": 0.7597,
         "change": "up"
       }
     },
@@ -1272,15 +1272,15 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.0073,
-        "change": "down"
+        "prob": 0.5664,
+        "change": "up"
       },
       "safe": {
-        "prob": 0.9927,
-        "change": "up"
+        "prob": 0.4336,
+        "change": "down"
       }
     },
-    "ＡＣ長野パルセイロ": {
+    "長野": {
       "champion": {
         "prob": 0.0,
         "change": "flat"
@@ -1291,15 +1291,15 @@
       },
       "promotion": {
         "prob": 0.0,
-        "change": "flat"
+        "change": "down"
       },
       "relegation": {
-        "prob": 0.9985,
+        "prob": 0.1517,
         "change": "up"
       },
       "safe": {
-        "prob": 0.0015,
-        "change": "up"
+        "prob": 0.8483,
+        "change": "down"
       }
     },
     "沼津": {
@@ -1316,11 +1316,11 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.8066,
+        "prob": 0.7099,
         "change": "up"
       },
       "safe": {
-        "prob": 0.1934,
+        "prob": 0.2901,
         "change": "down"
       }
     }
