@@ -2,11 +2,11 @@
   "J1": {
     "京都": {
       "champion": {
-        "prob": 0.2474,
+        "prob": 0.2565,
         "change": "up"
       },
       "acl": {
-        "prob": 0.6328,
+        "prob": 0.6785,
         "change": "up"
       },
       "promotion": {
@@ -24,11 +24,11 @@
     },
     "柏": {
       "champion": {
-        "prob": 0.2485,
+        "prob": 0.1722,
         "change": "down"
       },
       "acl": {
-        "prob": 0.6629,
+        "prob": 0.6379,
         "change": "down"
       },
       "promotion": {
@@ -46,11 +46,11 @@
     },
     "神戸": {
       "champion": {
-        "prob": 0.1032,
+        "prob": 0.158,
         "change": "up"
       },
       "acl": {
-        "prob": 0.3852,
+        "prob": 0.5263,
         "change": "up"
       },
       "promotion": {
@@ -68,11 +68,11 @@
     },
     "鹿島": {
       "champion": {
-        "prob": 0.2774,
+        "prob": 0.3718,
         "change": "up"
       },
       "acl": {
-        "prob": 0.6621,
+        "prob": 0.7594,
         "change": "up"
       },
       "promotion": {
@@ -90,12 +90,12 @@
     },
     "町田": {
       "champion": {
-        "prob": 0.077,
-        "change": "up"
+        "prob": 0.0,
+        "change": "down"
       },
       "acl": {
-        "prob": 0.3278,
-        "change": "up"
+        "prob": 0.0,
+        "change": "down"
       },
       "promotion": {
         "prob": 0.0,
@@ -112,11 +112,11 @@
     },
     "広島": {
       "champion": {
-        "prob": 0.0266,
+        "prob": 0.0105,
         "change": "down"
       },
       "acl": {
-        "prob": 0.1729,
+        "prob": 0.1195,
         "change": "down"
       },
       "promotion": {
@@ -134,11 +134,11 @@
     },
     "浦和": {
       "champion": {
-        "prob": 0.0161,
+        "prob": 0.0226,
         "change": "down"
       },
       "acl": {
-        "prob": 0.1128,
+        "prob": 0.1732,
         "change": "down"
       },
       "promotion": {
@@ -156,12 +156,12 @@
     },
     "川崎F": {
       "champion": {
-        "prob": 0.0029,
+        "prob": 0.0049,
         "change": "down"
       },
       "acl": {
-        "prob": 0.0329,
-        "change": "down"
+        "prob": 0.0599,
+        "change": "up"
       },
       "promotion": {
         "prob": 0.0,
@@ -178,11 +178,11 @@
     },
     "G大阪": {
       "champion": {
-        "prob": 0.0007,
+        "prob": 0.0032,
         "change": "up"
       },
       "acl": {
-        "prob": 0.0078,
+        "prob": 0.0436,
         "change": "up"
       },
       "promotion": {
@@ -200,11 +200,33 @@
     },
     "C大阪": {
       "champion": {
-        "prob": 0.0001,
+        "prob": 0.0003,
+        "change": "up"
+      },
+      "acl": {
+        "prob": 0.0016,
+        "change": "up"
+      },
+      "promotion": {
+        "prob": 0.0,
+        "change": "flat"
+      },
+      "relegation": {
+        "prob": 0.0,
+        "change": "down"
+      },
+      "safe": {
+        "prob": 1.0,
+        "change": "up"
+      }
+    },
+    "岡山": {
+      "champion": {
+        "prob": 0.0,
         "change": "flat"
       },
       "acl": {
-        "prob": 0.0012,
+        "prob": 0.0,
         "change": "down"
       },
       "promotion": {
@@ -212,22 +234,44 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.0009,
-        "change": "up"
+        "prob": 0.0,
+        "change": "down"
       },
       "safe": {
-        "prob": 0.9991,
-        "change": "down"
+        "prob": 1.0,
+        "change": "up"
       }
     },
-    "岡山": {
+    "福岡": {
       "champion": {
-        "prob": 0.0001,
-        "change": "up"
+        "prob": 0.0,
+        "change": "flat"
       },
       "acl": {
-        "prob": 0.0015,
+        "prob": 0.0,
+        "change": "down"
+      },
+      "promotion": {
+        "prob": 0.0,
+        "change": "flat"
+      },
+      "relegation": {
+        "prob": 0.0,
+        "change": "down"
+      },
+      "safe": {
+        "prob": 1.0,
         "change": "up"
+      }
+    },
+    "清水": {
+      "champion": {
+        "prob": 0.0,
+        "change": "flat"
+      },
+      "acl": {
+        "prob": 0.0001,
+        "change": "flat"
       },
       "promotion": {
         "prob": 0.0,
@@ -239,50 +283,6 @@
       },
       "safe": {
         "prob": 0.9998,
-        "change": "up"
-      }
-    },
-    "福岡": {
-      "champion": {
-        "prob": 0.0,
-        "change": "flat"
-      },
-      "acl": {
-        "prob": 0.0001,
-        "change": "down"
-      },
-      "promotion": {
-        "prob": 0.0,
-        "change": "flat"
-      },
-      "relegation": {
-        "prob": 0.0077,
-        "change": "down"
-      },
-      "safe": {
-        "prob": 0.9923,
-        "change": "up"
-      }
-    },
-    "清水": {
-      "champion": {
-        "prob": 0.0,
-        "change": "flat"
-      },
-      "acl": {
-        "prob": 0.0,
-        "change": "down"
-      },
-      "promotion": {
-        "prob": 0.0,
-        "change": "flat"
-      },
-      "relegation": {
-        "prob": 0.0064,
-        "change": "down"
-      },
-      "safe": {
-        "prob": 0.9936,
         "change": "up"
       }
     },
@@ -300,11 +300,11 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.1336,
+        "prob": 0.0047,
         "change": "down"
       },
       "safe": {
-        "prob": 0.8664,
+        "prob": 0.9953,
         "change": "up"
       }
     },
@@ -322,12 +322,12 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.0544,
-        "change": "down"
+        "prob": 0.9287,
+        "change": "up"
       },
       "safe": {
-        "prob": 0.9456,
-        "change": "up"
+        "prob": 0.0713,
+        "change": "down"
       }
     },
     "名古屋": {
@@ -344,11 +344,11 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.1384,
+        "prob": 0.0179,
         "change": "down"
       },
       "safe": {
-        "prob": 0.8616,
+        "prob": 0.9821,
         "change": "up"
       }
     },
@@ -366,12 +366,12 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.592,
-        "change": "up"
+        "prob": 0.1252,
+        "change": "down"
       },
       "safe": {
-        "prob": 0.408,
-        "change": "down"
+        "prob": 0.8748,
+        "change": "up"
       }
     },
     "湘南": {
@@ -388,12 +388,12 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.2938,
-        "change": "up"
+        "prob": 0.0463,
+        "change": "down"
       },
       "safe": {
-        "prob": 0.7062,
-        "change": "down"
+        "prob": 0.9537,
+        "change": "up"
       }
     },
     "横浜FC": {
@@ -410,12 +410,12 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.8367,
-        "change": "down"
+        "prob": 1.0,
+        "change": "up"
       },
       "safe": {
-        "prob": 0.1633,
-        "change": "up"
+        "prob": 0.0,
+        "change": "down"
       }
     },
     "新潟": {
@@ -432,11 +432,11 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.9359,
+        "prob": 0.877,
         "change": "down"
       },
       "safe": {
-        "prob": 0.0641,
+        "prob": 0.123,
         "change": "up"
       }
     }
@@ -452,7 +452,7 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.391,
+        "prob": 0.6291,
         "change": "up"
       },
       "relegation": {
@@ -474,7 +474,7 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.5373,
+        "prob": 0.5032,
         "change": "down"
       },
       "relegation": {
@@ -496,8 +496,8 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.2673,
-        "change": "up"
+        "prob": 0.0,
+        "change": "down"
       },
       "relegation": {
         "prob": 0.0,
@@ -518,7 +518,7 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.1241,
+        "prob": 0.2872,
         "change": "up"
       },
       "relegation": {
@@ -540,8 +540,8 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.4428,
-        "change": "up"
+        "prob": 0.0,
+        "change": "down"
       },
       "relegation": {
         "prob": 0.0,
@@ -562,7 +562,7 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.1053,
+        "prob": 0.4326,
         "change": "up"
       },
       "relegation": {
@@ -584,7 +584,7 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.0757,
+        "prob": 0.0048,
         "change": "down"
       },
       "relegation": {
@@ -606,7 +606,7 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.0165,
+        "prob": 0.0,
         "change": "down"
       },
       "relegation": {
@@ -628,8 +628,8 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.0319,
-        "change": "down"
+        "prob": 0.0904,
+        "change": "up"
       },
       "relegation": {
         "prob": 0.0,
@@ -650,16 +650,16 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.0053,
-        "change": "down"
-      },
-      "relegation": {
-        "prob": 0.0001,
+        "prob": 0.0356,
         "change": "up"
       },
+      "relegation": {
+        "prob": 0.0,
+        "change": "flat"
+      },
       "safe": {
-        "prob": 0.9999,
-        "change": "down"
+        "prob": 1.0,
+        "change": "flat"
       }
     },
     "甲府": {
@@ -672,15 +672,15 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.0017,
-        "change": "flat"
+        "prob": 0.0164,
+        "change": "up"
       },
       "relegation": {
-        "prob": 0.0002,
+        "prob": 0.0,
         "change": "down"
       },
       "safe": {
-        "prob": 0.9998,
+        "prob": 1.0,
         "change": "up"
       }
     },
@@ -694,15 +694,15 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.0011,
-        "change": "up"
+        "prob": 0.0007,
+        "change": "down"
       },
       "relegation": {
-        "prob": 0.0005,
+        "prob": 0.0,
         "change": "down"
       },
       "safe": {
-        "prob": 0.9995,
+        "prob": 1.0,
         "change": "up"
       }
     },
@@ -720,11 +720,11 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.0379,
+        "prob": 0.0007,
         "change": "down"
       },
       "safe": {
-        "prob": 0.9621,
+        "prob": 0.9993,
         "change": "up"
       }
     },
@@ -742,11 +742,11 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.1951,
+        "prob": 0.3718,
         "change": "up"
       },
       "safe": {
-        "prob": 0.8049,
+        "prob": 0.6282,
         "change": "down"
       }
     },
@@ -764,11 +764,11 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.1307,
+        "prob": 0.0017,
         "change": "down"
       },
       "safe": {
-        "prob": 0.8693,
+        "prob": 0.9983,
         "change": "up"
       }
     },
@@ -786,11 +786,11 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.1256,
+        "prob": 0.0044,
         "change": "down"
       },
       "safe": {
-        "prob": 0.8744,
+        "prob": 0.9956,
         "change": "up"
       }
     },
@@ -808,12 +808,12 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.0741,
-        "change": "up"
+        "prob": 0.0072,
+        "change": "down"
       },
       "safe": {
-        "prob": 0.9259,
-        "change": "down"
+        "prob": 0.9928,
+        "change": "up"
       }
     },
     "富山": {
@@ -830,11 +830,11 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.7002,
+        "prob": 0.6142,
         "change": "down"
       },
       "safe": {
-        "prob": 0.2998,
+        "prob": 0.3858,
         "change": "up"
       }
     },
@@ -852,11 +852,11 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.7831,
+        "prob": 1.0,
         "change": "up"
       },
       "safe": {
-        "prob": 0.2169,
+        "prob": 0.0,
         "change": "down"
       }
     },
@@ -874,11 +874,11 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.9525,
+        "prob": 1.0,
         "change": "up"
       },
       "safe": {
-        "prob": 0.0475,
+        "prob": 0.0,
         "change": "down"
       }
     }
@@ -894,7 +894,7 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.6925,
+        "prob": 0.6173,
         "change": "up"
       },
       "relegation": {
@@ -916,7 +916,7 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.7377,
+        "prob": 0.7197,
         "change": "up"
       },
       "relegation": {
@@ -938,7 +938,7 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.2601,
+        "prob": 0.2772,
         "change": "down"
       },
       "relegation": {
@@ -960,7 +960,7 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.0378,
+        "prob": 0.0055,
         "change": "down"
       },
       "relegation": {
@@ -982,8 +982,8 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.0912,
-        "change": "down"
+        "prob": 0.141,
+        "change": "up"
       },
       "relegation": {
         "prob": 0.0,
@@ -1004,7 +1004,7 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.1549,
+        "prob": 0.2354,
         "change": "down"
       },
       "relegation": {
@@ -1026,16 +1026,16 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.0044,
-        "change": "up"
-      },
-      "relegation": {
-        "prob": 0.0001,
+        "prob": 0.0,
         "change": "down"
       },
-      "safe": {
-        "prob": 0.9999,
+      "relegation": {
+        "prob": 0.0844,
         "change": "up"
+      },
+      "safe": {
+        "prob": 0.9156,
+        "change": "down"
       }
     },
     "相模原": {
@@ -1048,15 +1048,15 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.0006,
+        "prob": 0.0007,
         "change": "down"
       },
       "relegation": {
-        "prob": 0.004,
+        "prob": 0.0,
         "change": "down"
       },
       "safe": {
-        "prob": 0.996,
+        "prob": 1.0,
         "change": "up"
       }
     },
@@ -1070,15 +1070,15 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.0201,
-        "change": "up"
+        "prob": 0.0029,
+        "change": "down"
       },
       "relegation": {
-        "prob": 0.0002,
+        "prob": 0.0,
         "change": "down"
       },
       "safe": {
-        "prob": 0.9998,
+        "prob": 1.0,
         "change": "up"
       }
     },
@@ -1096,11 +1096,11 @@
         "change": "down"
       },
       "relegation": {
-        "prob": 0.0114,
+        "prob": 0.0001,
         "change": "down"
       },
       "safe": {
-        "prob": 0.9886,
+        "prob": 0.9999,
         "change": "up"
       }
     },
@@ -1118,12 +1118,12 @@
         "change": "down"
       },
       "relegation": {
-        "prob": 0.0088,
-        "change": "up"
+        "prob": 0.0002,
+        "change": "down"
       },
       "safe": {
-        "prob": 0.9912,
-        "change": "down"
+        "prob": 0.9998,
+        "change": "up"
       }
     },
     "松本": {
@@ -1136,15 +1136,15 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.0003,
+        "prob": 0.0,
         "change": "down"
       },
       "relegation": {
-        "prob": 0.0064,
+        "prob": 0.0002,
         "change": "down"
       },
       "safe": {
-        "prob": 0.9936,
+        "prob": 0.9998,
         "change": "up"
       }
     },
@@ -1162,11 +1162,11 @@
         "change": "down"
       },
       "relegation": {
-        "prob": 0.0264,
+        "prob": 0.002,
         "change": "down"
       },
       "safe": {
-        "prob": 0.9736,
+        "prob": 0.998,
         "change": "up"
       }
     },
@@ -1184,11 +1184,11 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.1235,
+        "prob": 0.0279,
         "change": "down"
       },
       "safe": {
-        "prob": 0.8765,
+        "prob": 0.9721,
         "change": "up"
       }
     },
@@ -1202,15 +1202,15 @@
         "change": "flat"
       },
       "promotion": {
-        "prob": 0.0001,
+        "prob": 0.0,
         "change": "down"
       },
       "relegation": {
-        "prob": 0.0318,
+        "prob": 0.9771,
         "change": "up"
       },
       "safe": {
-        "prob": 0.9682,
+        "prob": 0.0229,
         "change": "down"
       }
     },
@@ -1228,11 +1228,11 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.1222,
+        "prob": 0.0245,
         "change": "down"
       },
       "safe": {
-        "prob": 0.8778,
+        "prob": 0.9755,
         "change": "up"
       }
     },
@@ -1250,11 +1250,11 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.2467,
+        "prob": 0.1023,
         "change": "down"
       },
       "safe": {
-        "prob": 0.7533,
+        "prob": 0.8977,
         "change": "up"
       }
     },
@@ -1272,12 +1272,12 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.5556,
-        "change": "up"
+        "prob": 0.2005,
+        "change": "down"
       },
       "safe": {
-        "prob": 0.4444,
-        "change": "down"
+        "prob": 0.7995,
+        "change": "up"
       }
     },
     "長野": {
@@ -1294,11 +1294,11 @@
         "change": "down"
       },
       "relegation": {
-        "prob": 0.156,
+        "prob": 0.0922,
         "change": "up"
       },
       "safe": {
-        "prob": 0.844,
+        "prob": 0.9078,
         "change": "down"
       }
     },
@@ -1316,11 +1316,11 @@
         "change": "flat"
       },
       "relegation": {
-        "prob": 0.7069,
+        "prob": 0.4886,
         "change": "down"
       },
       "safe": {
-        "prob": 0.2931,
+        "prob": 0.5114,
         "change": "up"
       }
     }
