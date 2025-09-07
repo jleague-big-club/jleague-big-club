@@ -11,19 +11,19 @@
         {
           "type": "本命",
           "score": "1-0",
-          "odds": "8.0倍",
+          "odds": "8.2倍",
           "class": "favorite"
         },
         {
           "type": "対抗",
           "score": "1-1",
-          "odds": "8.3倍",
+          "odds": "8.8倍",
           "class": "contender"
         },
         {
           "type": "大穴",
-          "score": "3-0",
-          "odds": "20.4倍",
+          "score": "2-2",
+          "odds": "22.6倍",
           "class": "longshot"
         }
       ]
