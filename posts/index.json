@@ -124,5 +124,17 @@
     "slug": "j2-attendance",
     "thumbnail": "posts/img/j2-attendance-transition.webp",
     "date": "2025-08-23"
+  },
+  {
+    "title": "【J2終盤戦】残り10試合！データで紐解くJ1自動昇格＆J3降格クラブ徹底分析",
+    "slug": "j2-2025-analysis",
+    "thumbnail": "posts/img/j2-2025-analysis.webp",
+    "date": "2025-09-08"
+  },
+  {
+    "title": "【J1終盤戦】データで紐解く優勝＆残留争い！残り10試合の行方",
+    "slug": "j1-2025-analysis",
+    "thumbnail": "posts/img/j1-2025-analysis.webp",
+    "date": "2025-09-08"
   }
 ]

@@ -1661,3 +1661,20 @@ transition: background-color 0.2s;
 .change-arrow.flat {
     color: #aab8d8; /* publicサイトの順位テキストの色 */
 }
+/* テーブルの文字色を白にするためのCSS */
+.table-container table {
+    color: #ffffff; /* 文字色を白に指定 */
+}
+
+/* もしヘッダーだけ色を変えたい場合 */
+.table-container table thead th {
+    color: #ffffff; /* ヘッダーの文字色を白に */
+}
+
+/* もしボディだけ色を変えたい場合 */
+.table-container table tbody td {
+    color: #ffffff; /* ボディの文字色を白に */
+}
+.schedule-table {
+    color: #ffffff; /* 文字色を白に指定 */
+}
