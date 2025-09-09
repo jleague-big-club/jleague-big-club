@@ -15,8 +15,8 @@ AIが予測する優勝確率と、今後のスケジュールの難易度を上
   <table style="color: #ffffff;">
     <thead>
       <tr>
-        <th>順位</th>
-        <th>チーム名</th>
+        <th>順</th>
+        <th>チーム</th>
         <th>勝点</th>
         <th><strong>優勝確率</strong></th>
         <th>残り対戦相手平均レート (難易度)</th>
@@ -24,72 +24,72 @@ AIが予測する優勝確率と、今後のスケジュールの難易度を上
     </thead>
     <tbody>
       <tr>
-        <td>1位</td>
-        <td>京都サンガF.C.</td>
+        <td>1</td>
+        <td>京都</td>
         <td>54</td>
         <td><strong>20.1%</strong></td>
         <td>1509.6 (やや厳しい)</td>
       </tr>
       <tr>
-        <td>2位</td>
-        <td><strong>柏レイソル</strong></td>
+        <td>2</td>
+        <td><strong>柏</strong></td>
         <td>53</td>
         <td><strong>36.5%</strong></td>
         <td>1495.3 (やや楽)</td>
       </tr>
       <tr>
-        <td>3位</td>
-        <td>ヴィッセル神戸</td>
+        <td>3</td>
+        <td>神戸</td>
         <td>53</td>
         <td>7.3%</td>
         <td>1524.0 (厳しい)</td>
       </tr>
       <tr>
-        <td>4位</td>
-        <td><strong>鹿島アントラーズ</strong></td>
+        <td>4</td>
+        <td><strong>鹿島</strong></td>
         <td>52</td>
         <td><strong>22.3%</strong></td>
         <td><strong>1491.6 (楽)</strong></td>
       </tr>
       <tr>
-        <td>5位</td>
-        <td>FC町田ゼルビア</td>
+        <td>5</td>
+        <td>町田</td>
         <td>50</td>
         <td>5.5%</td>
         <td>1528.8 (最も厳しい)</td>
       </tr>
        <tr>
-        <td>6位</td>
-        <td>サンフレッチェ広島</td>
+        <td>6</td>
+        <td>広島</td>
         <td>50</td>
         <td>4.3%</td>
         <td>1532.2 (最も厳しい)</td>
       </tr>
        <tr class="separator-row"><td colspan="5"><hr></td></tr>
       <tr>
-        <td>7位</td>
-        <td>浦和レッズ</td>
+        <td>7</td>
+        <td>浦和</td>
         <td>47</td>
         <td>3.2%</td>
         <td>1534.0 (最も厳しい)</td>
       </tr>
       <tr>
-        <td>8位</td>
-        <td>川崎フロンターレ</td>
+        <td>8</td>
+        <td>川崎</td>
         <td>45</td>
         <td>0.7%</td>
         <td>1520.3 (厳しい)</td>
       </tr>
       <tr>
-        <td>9位</td>
-        <td>ガンバ大阪</td>
+        <td>9</td>
+        <td>G大阪</td>
         <td>40</td>
         <td>0.0%</td>
         <td>1513.8 (厳しい)</td>
       </tr>
       <tr>
-        <td>10位</td>
-        <td>セレッソ大阪</td>
+        <td>10</td>
+        <td>C大阪</td>
         <td>39</td>
         <td>0.0%</td>
         <td>1519.3 (厳しい)</td>
@@ -147,7 +147,7 @@ AIが優勝最有力と予測するのは、現在2位の柏。優勝確率36.5%
 | 節 | 対戦相手 | 相手Elo |
 |:---|:---|---:|
 | 29節 (A) | サンフレッチェ広島 | 1584.3 |
-| 30節 (A) | 清水エスパルス | 1466.3 |
+| 30節 (H) | 清水エスパルス | 1466.3 |
 | 31節 (H) | FC町田ゼルビア | 1596.9 |
 | 32節 (A) | セレッソ大阪 | 1529.1 |
 | 33節 (H) | 川崎フロンターレ | 1568.0 |
@@ -165,8 +165,8 @@ AIが優勝最有力と予測するのは、現在2位の柏。優勝確率36.5%
   <table style="color: #ffffff;">
     <thead>
       <tr>
-        <th>順位</th>
-        <th>チーム名</th>
+        <th>順</th>
+        <th>チーム</th>
         <th>勝点</th>
         <th><strong>降格確率</strong></th>
         <th>残り対戦相手平均レート (難易度)</th>
@@ -174,72 +174,72 @@ AIが優勝最有力と予測するのは、現在2位の柏。優勝確率36.5%
     </thead>
     <tbody>
       <tr>
-        <td>20位</td>
-        <td><strong>アルビレックス新潟</strong></td>
+        <td>20</td>
+        <td><strong>新潟</strong></td>
         <td>20</td>
         <td><strong>94.5%</strong></td>
         <td>1482.2 (楽)</td>
       </tr>
       <tr>
-        <td>19位</td>
+        <td>19</td>
         <td><strong>横浜FC</strong></td>
         <td>23</td>
         <td><strong>85.4%</strong></td>
         <td>1523.8 (厳しい)</td>
       </tr>
       <tr>
-        <td>18位</td>
-        <td><strong>湘南ベルマーレ</strong></td>
+        <td>18</td>
+        <td><strong>湘南</strong></td>
         <td>25</td>
         <td><strong>24.1%</strong></td>
         <td>1501.4 (やや楽)</td>
       </tr>
       <tr class="separator-row"><td colspan="5"><hr></td></tr>
       <tr>
-        <td>17位</td>
-        <td><strong>横浜F・マリノス</strong></td>
+        <td>17</td>
+        <td><strong>横浜FM</strong></td>
         <td>25</td>
         <td><strong>53.5%</strong></td>
         <td><strong>1565.0 (最も厳しい)</strong></td>
       </tr>
       <tr>
-        <td>16位</td>
-        <td><strong>名古屋グランパス</strong></td>
+        <td>16</td>
+        <td><strong>名古屋</strong></td>
         <td>29</td>
         <td><strong>17.0%</strong></td>
         <td>1500.5 (やや楽)</td>
       </tr>
       <tr>
-        <td>15位</td>
+        <td>15</td>
         <td>FC東京</td>
         <td>31</td>
         <td>6.8%</td>
         <td>1510.1 (やや厳しい)</td>
       </tr>
       <tr>
-        <td>14位</td>
-        <td><strong>東京ヴェルディ</strong></td>
+        <td>14</td>
+        <td><strong>東京V</strong></td>
         <td>32</td>
         <td><strong>16.2%</strong></td>
         <td>1500.3 (やや楽)</td>
       </tr>
       <tr>
-        <td>13位</td>
-        <td>清水エスパルス</td>
+        <td>13</td>
+        <td>清水</td>
         <td>33</td>
         <td>0.9%</td>
         <td>1510.6 (やや厳しい)</td>
       </tr>
       <tr>
-        <td>12位</td>
-        <td>アビスパ福岡</td>
+        <td>12</td>
+        <td>福岡</td>
         <td>37</td>
         <td>1.2%</td>
         <td><strong>1469.2 (最も楽)</strong></td>
       </tr>
       <tr>
-        <td>11位</td>
-        <td>ファジアーノ岡山</td>
+        <td>11</td>
+        <td>岡山</td>
         <td>39</td>
         <td>0.2%</td>
         <td>1480.0 (楽)</td>

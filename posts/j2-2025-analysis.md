@@ -15,8 +15,8 @@ AIが予測するJ1昇格確率と、今後のスケジュールの難易度を�
   <table style="color: #ffffff;">
     <thead>
       <tr>
-        <th>順位</th>
-        <th>チーム名</th>
+        <th>順</th>
+        <th>チーム</th>
         <th>勝点</th>
         <th><strong>昇格確率</strong></th>
         <th>残り対戦相手平均レート (難易度)</th>
@@ -24,72 +24,72 @@ AIが予測するJ1昇格確率と、今後のスケジュールの難易度を�
     </thead>
     <tbody>
       <tr>
-        <td>1位</td>
-        <td>水戸ホーリーホック</td>
+        <td>1</td>
+        <td>水戸</td>
         <td>53</td>
         <td><strong>38.0%</strong></td>
         <td>1513.9 (厳しい)</td>
       </tr>
       <tr>
-        <td>2位</td>
-        <td><strong>ジェフユナイテッド千葉</strong></td>
+        <td>2</td>
+        <td><strong>千葉</strong></td>
         <td>51</td>
         <td><strong>54.5%</strong></td>
         <td><strong>1483.2 (楽)</strong></td>
       </tr>
       <tr>
-        <td>3位</td>
-        <td>V・ファーレン長崎</td>
+        <td>3</td>
+        <td>長崎</td>
         <td>51</td>
         <td><strong>26.7%</strong></td>
         <td>1512.7 (厳しい)</td>
       </tr>
       <tr>
-        <td>4位</td>
-        <td>徳島ヴォルティス</td>
+        <td>4</td>
+        <td>徳島</td>
         <td>48</td>
         <td><strong>12.2%</strong></td>
         <td>1519.8 (最も厳しい)</td>
       </tr>
       <tr>
-        <td>5位</td>
-        <td><strong>RB大宮アルディージャ</strong></td>
+        <td>5</td>
+        <td><strong>大宮</strong></td>
         <td>47</td>
         <td><strong>44.4%</strong></td>
         <td>1527.8 (最も厳しい)</td>
       </tr>
       <tr class="separator-row"><td colspan="5"><hr></td></tr>
       <tr>
-        <td>6位</td>
-        <td>ベガルタ仙台</td>
+        <td>6</td>
+        <td>仙台</td>
         <td>47</td>
         <td>10.2%</td>
         <td>1511.9 (やや厳しい)</td>
       </tr>
       <tr>
-        <td>7位</td>
-        <td>ジュビロ磐田</td>
+        <td>7</td>
+        <td>磐田</td>
         <td>45</td>
         <td>8.2%</td>
         <td>1500.0 (やや厳しい)</td>
       </tr>
       <tr>
-        <td>8位</td>
-        <td>FC今治</td>
+        <td>8</td>
+        <td>今治</td>
         <td>43</td>
         <td>1.6%</td>
         <td>1542.6 (最も厳しい)</td>
       </tr>
       <tr>
-        <td>9位</td>
-        <td>サガン鳥栖</td>
+        <td>9</td>
+        <td>鳥栖</td>
         <td>43</td>
         <td>3.4%</td>
         <td>1485.5 (楽)</td>
       </tr>
       <tr>
-        <td>10位</td>
-        <td>北海道コンサドーレ札幌</td>
+        <td>10</td>
+        <td>札幌</td>
         <td>40</td>
         <td>0.5%</td>
         <td>1505.8 (やや厳しい)</td>
@@ -223,8 +223,8 @@ Eloレーティング**1638.7**はJ2リーグ最強。しかし、残り対戦�
   <table style="color: #ffffff;">
     <thead>
       <tr>
-        <th>順位</th>
-        <th>チーム名</th>
+        <th>順</th>
+        <th>チーム</th>
         <th>勝点</th>
         <th><strong>降格確率</strong></th>
         <th>残り対戦相手平均レート (難易度)</th>
@@ -232,72 +232,72 @@ Eloレーティング**1638.7**はJ2リーグ最強。しかし、残り対戦�
     </thead>
     <tbody>
       <tr>
-        <td>20位</td>
-        <td><strong>愛媛FC</strong></td>
+        <td>20</td>
+        <td><strong>愛媛</strong></td>
         <td>17</td>
         <td><strong>94.7%</strong></td>
         <td>1517.1 (厳しい)</td>
       </tr>
       <tr>
-        <td>19位</td>
-        <td><strong>レノファ山口FC</strong></td>
+        <td>19</td>
+        <td><strong>山口</strong></td>
         <td>22</td>
         <td><strong>77.7%</strong></td>
         <td>1499.8 (やや楽)</td>
       </tr>
       <tr>
-        <td>18位</td>
-        <td><strong>カターレ富山</strong></td>
+        <td>18</td>
+        <td><strong>富山</strong></td>
         <td>23</td>
         <td><strong>70.2%</strong></td>
         <td>1490.5 (やや楽)</td>
       </tr>
        <tr class="separator-row"><td colspan="5"><hr></td></tr>
       <tr>
-        <td>17位</td>
-        <td>大分トリニータ</td>
+        <td>17</td>
+        <td>大分</td>
         <td>29</td>
         <td>7.7%</td>
         <td>1485.6 (楽)</td>
       </tr>
       <tr>
-        <td>16位</td>
-        <td>ロアッソ熊本</td>
+        <td>16</td>
+        <td>熊本</td>
         <td>30</td>
         <td><strong>12.9%</strong></td>
         <td><strong>1497.0 (やや楽)</strong></td>
       </tr>
       <tr>
-        <td>15位</td>
-        <td>ブラウブリッツ秋田</td>
+        <td>15</td>
+        <td>秋田</td>
         <td>32</td>
         <td><strong>13.1%</strong></td>
         <td>1508.5 (やや厳しい)</td>
       </tr>
       <tr>
-        <td>14位</td>
-        <td>藤枝MYFC</td>
+        <td>14</td>
+        <td>藤枝</td>
         <td>32</td>
         <td><strong>19.5%</strong></td>
         <td>1517.0 (厳しい)</td>
       </tr>
       <tr>
-        <td>13位</td>
-        <td>モンテディオ山形</td>
+        <td>13</td>
+        <td>山形</td>
         <td>32</td>
         <td>4.1%</td>
         <td><strong>1479.5 (最も楽)</strong></td>
       </tr>
       <tr>
-        <td>12位</td>
-        <td>いわきFC</td>
+        <td>12</td>
+        <td>いわき</td>
         <td>36</td>
         <td>0.1%</td>
         <td>1490.6 (やや楽)</td>
       </tr>
       <tr>
-        <td>11位</td>
-        <td>ヴァンフォーレ甲府</td>
+        <td>11</td>
+        <td>甲府</td>
         <td>38</td>
         <td>0.0%</td>
         <td>1520.8 (最も厳しい)</td>
