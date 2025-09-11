@@ -306,7 +306,7 @@ async function showPage(id, btn, fromPopState = false, initialOptions = {}) {
             gtag('event', 'page_view', {
                 page_title: document.title,
                 page_location: window.location.href,
-                page_path: window.location.pathname + window.location.hash
+                page_path: '/' + id
             });
         }
 
