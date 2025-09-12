@@ -20,7 +20,7 @@
   
   <link rel="stylesheet" href="style.min.css">
 <noscript><link rel="stylesheet" href="style.min.css"></noscript>
-
+ <script async src="https://www.googletagmanager.com/gtag/js?id=G-RZ7LMDQ2KM"></script>
 </head>
 <body>
 <button id="hamburger-btn" class="hamburger-btn" aria-label="メニューを開く">
@@ -605,12 +605,6 @@ function loadGoogleScripts() {
     document.removeEventListener('scroll', loadGoogleScripts);
     document.removeEventListener('mousemove', loadGoogleScripts);
     document.removeEventListener('touchstart', loadGoogleScripts);
-
-    // Google Tag Manager
-    const gtagScript = document.createElement('script');
-    gtagScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-RZ7LMDQ2KM';
-    gtagScript.async = true;
-    document.head.appendChild(gtagScript);
 
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
