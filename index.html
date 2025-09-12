@@ -20,7 +20,15 @@
   
   <link rel="stylesheet" href="style.min.css">
 <noscript><link rel="stylesheet" href="style.min.css"></noscript>
+ <!-- Google Analytics -->
  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RZ7LMDQ2KM"></script>
+ <script>
+   window.dataLayer = window.dataLayer || [];
+   function gtag(){dataLayer.push(arguments);}
+   gtag('js', new Date());
+ 
+   gtag('config', 'G-RZ7LMDQ2KM');
+ </script>
 </head>
 <body>
 <button id="hamburger-btn" class="hamburger-btn" aria-label="メニューを開く">
@@ -599,17 +607,12 @@ function loadGoogleScripts() {
                     window.location.protocol === 'file:';
 
     if (isLocal) {
-        console.log('%c[Local Env] Google Analytics tracking skipped.', 'color: #f0ad4e; font-weight: bold;');
+        console.log('%c[Local Env] Google AdSense skipped.', 'color: #f0ad4e; font-weight: bold;');
         return;
     }
     document.removeEventListener('scroll', loadGoogleScripts);
     document.removeEventListener('mousemove', loadGoogleScripts);
     document.removeEventListener('touchstart', loadGoogleScripts);
-
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-RZ7LMDQ2KM', { 'send_page_view': false });
 
     // Google AdSense
     const adSenseScript = document.createElement('script');
@@ -619,7 +622,7 @@ function loadGoogleScripts() {
     document.head.appendChild(adSenseScript);
 }
 
-// ユーザーがスクロール、マウス移動、タッチのいずれかを行ったらスクリプトを読み込む
+// ユーザーがスクロール、マウス移動、タッチのいずれかを行ったらAdSenseスクリプトを読み込む
 document.addEventListener('scroll', loadGoogleScripts, { once: true });
 document.addEventListener('mousemove', loadGoogleScripts, { once: true });
 document.addEventListener('touchstart', loadGoogleScripts, { once: true });
