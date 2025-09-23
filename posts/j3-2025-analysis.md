@@ -25,21 +25,21 @@ AIが予測するJ2昇格確率と、今後のスケジュールの難易度を�
     <tbody>
       <tr>
         <td>1位</td>
-        <td><strong>ヴァンラーレ八戸</strong></td>
+        <td><strong>八戸</strong></td>
         <td>57</td>
         <td><strong>66.9%</strong></td>
         <td>1483.0 (やや楽)</td>
       </tr>
       <tr>
         <td>2位</td>
-        <td><strong>鹿児島ユナイテッドFC</strong></td>
+        <td><strong>鹿児島</strong></td>
         <td>54</td>
         <td><strong>46.9%</strong></td>
         <td>1488.2 (やや厳しい)</td>
       </tr>
       <tr>
         <td>3位</td>
-        <td><strong>栃木シティ</strong></td>
+        <td><strong>栃木C</strong></td>
         <td>54</td>
         <td><strong>68.7%</strong></td>
         <td>1494.0 (厳しい)</td>
@@ -53,7 +53,7 @@ AIが予測するJ2昇格確率と、今後のスケジュールの難易度を�
       </tr>
       <tr>
         <td>5位</td>
-        <td>テゲバジャーロ宮崎</td>
+        <td>宮崎</td>
         <td>47</td>
         <td>9.3%</td>
         <td>1451.8 (楽)</td>
@@ -61,7 +61,7 @@ AIが予測するJ2昇格確率と、今後のスケジュールの難易度を�
        <tr class="separator-row"><td colspan="5"><hr></td></tr>
       <tr>
         <td>6位</td>
-        <td>奈良クラブ</td>
+        <td>奈良</td>
         <td>44</td>
         <td>1.6%</td>
         <td>1495.9 (厳しい)</td>
@@ -75,21 +75,21 @@ AIが予測するJ2昇格確率と、今後のスケジュールの難易度を�
       </tr>
       <tr>
         <td>8位</td>
-        <td>ギラヴァンツ北九州</td>
+        <td>北九州</td>
         <td>40</td>
         <td>0.1%</td>
         <td>1495.7 (厳しい)</td>
       </tr>
       <tr>
         <td>9位</td>
-        <td>福島ユナイテッドFC</td>
+        <td>福島</td>
         <td>38</td>
         <td>0.0%</td>
         <td>1463.9 (やや楽)</td>
       </tr>
       <tr>
         <td>10位</td>
-        <td>ガイナーレ鳥取</td>
+        <td>鳥取</td>
         <td>36</td>
         <td>0.0%</td>
         <td>1514.9 (最も厳しい)</td>
@@ -178,21 +178,21 @@ AIが昇格最有力と予測するのは、現在3位の栃木シティだ。�
     <tbody>
       <tr>
         <td>20位</td>
-        <td><strong>アスルクラロ沼津</strong></td>
+        <td><strong>沼津</strong></td>
         <td>21</td>
         <td><strong>73.0%</strong></td>
         <td><strong>1441.2 (最も楽)</strong></td>
       </tr>
       <tr>
         <td>19位</td>
-        <td><strong>AC長野パルセイロ</strong></td>
+        <td><strong>長野</strong></td>
         <td>26</td>
         <td><strong>20.9%</strong></td>
         <td>1485.0 (やや厳しい)</td>
       </tr>
       <tr>
         <td>18位</td>
-        <td><strong>ザスパ群馬</strong></td>
+        <td><strong>群馬</strong></td>
         <td>27</td>
         <td><strong>27.1%</strong></td>
         <td>1483.6 (やや厳しい)</td>
@@ -200,49 +200,49 @@ AIが昇格最有力と予測するのは、現在3位の栃木シティだ。�
        <tr class="separator-row"><td colspan="5"><hr></td></tr>
       <tr>
         <td>17位</td>
-        <td>カマタマーレ讃岐</td>
+        <td>讃岐</td>
         <td>28</td>
         <td>55.7%</td>
         <td>1497.1 (最も厳しい)</td>
       </tr>
       <tr>
         <td>16位</td>
-        <td>高知ユナイテッドSC</td>
+        <td>高知</td>
         <td>31</td>
         <td>9.3%</td>
         <td>1455.3 (楽)</td>
       </tr>
       <tr>
         <td>15位</td>
-        <td>FC岐阜</td>
+        <td>岐阜</td>
         <td>32</td>
         <td>6.7%</td>
         <td>1492.4 (厳しい)</td>
       </tr>
       <tr>
         <td>14位</td>
-        <td>FC琉球</td>
+        <td>琉球</td>
         <td>34</td>
         <td>4.8%</td>
         <td>1519.0 (最も厳しい)</td>
       </tr>
       <tr>
         <td>13位</td>
-        <td>ツエーゲン金沢</td>
+        <td>金沢</td>
         <td>35</td>
         <td>0.1%</td>
         <td>1449.3 (楽)</td>
       </tr>
       <tr>
         <td>12位</td>
-        <td>松本山雅FC</td>
+        <td>松本山雅</td>
         <td>35</td>
         <td>0.3%</td>
         <td>1487.0 (やや厳しい)</td>
       </tr>
       <tr>
         <td>11位</td>
-        <td>SC相模原</td>
+        <td>相模原</td>
         <td>36</td>
         <td>1.1%</td>
         <td>1472.1 (楽)</td>
