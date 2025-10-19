@@ -1678,3 +1678,331 @@ transition: background-color 0.2s;
 .schedule-table {
     color: #ffffff; /* 文字色を白に指定 */
 }
+/* --- style.min.css に追記 --- */
+
+/* ======================================================= */
+/* === 経営シミュレーションゲーム専用スタイル === */
+/* ======================================================= */
+
+#simulation-game-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #2a3758;
+    border-radius: 16px;
+    color: #f0f0f0;
+    border: 1.5px solid #4a5a7f;
+}
+
+.sim-game-screen {
+    display: none; /* 通常は非表示 */
+}
+.sim-game-screen.active {
+    display: block; /* .active クラスで表示 */
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.sim-game-screen h2 {
+    color: #baf7fa;
+    text-align: center;
+    margin-bottom: 25px;
+}
+.sim-game-screen p {
+    color: #abc;
+    line-height: 1.7;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #eaf7fc;
+}
+.sim-game-input {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 2px solid #5a75a7;
+    background-color: #232947;
+    color: #fff;
+    box-sizing: border-box;
+}
+
+.sim-game-btn {
+    display: block;
+    width: 100%;
+    padding: 15px 20px;
+    font-size: 1.1em;
+    font-weight: 700;
+    color: #143060;
+    background: linear-gradient(90deg, #27aee7 60%, #aaf7fd);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all .2s;
+    text-align: center;
+    box-sizing: border-box;
+    margin-top: 25px;
+}
+.sim-game-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(42, 184, 242, 0.4);
+}
+
+/* 経営判断画面 */
+.budget-sliders .slider-group {
+    margin-bottom: 25px;
+}
+.slider-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.slider-label .label-text { color: #eaf7fc; }
+.slider-label .label-value { color: #ffd700; font-size: 1.1em; }
+.sim-game-slider {
+    width: 100%;
+    -webkit-appearance: none;
+    height: 10px;
+    background: #4a5a7f;
+    outline: none;
+    border-radius: 5px;
+}
+.sim-game-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    background: #299ad3;
+    cursor: pointer;
+    border-radius: 50%;
+}
+#budget-summary {
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-top: 30px;
+    padding: 15px;
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 8px;
+}
+
+/* シーズン進行画面 */
+#season-progress-bar-container {
+    width: 100%;
+    background-color: #4a5a7f;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+#season-progress-bar {
+    width: 0%;
+    height: 25px;
+    background: linear-gradient(90deg, #27aee7, #aaf7fd);
+    text-align: center;
+    line-height: 25px;
+    color: #143060;
+    font-weight: bold;
+    transition: width 0.1s linear;
+}
+#season-live-standings { text-align: center; font-size: 1.2em; font-weight: bold; }
+#season-log {
+    height: 200px;
+    overflow-y: scroll;
+    background-color: #232947;
+    border: 1px solid #4a5a7f;
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #abc;
+}
+
+/* 結果画面 */
+.result-summary {
+    background-color: rgba(0,0,0,0.2);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+.result-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    text-align: center;
+}
+.result-item h3 {
+    color: #abc;
+    font-size: 1em;
+    margin: 0 0 5px 0;
+}
+.result-item .value {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #eaf7fc;
+}
+.result-item .value.positive { color: #A9D18E; }
+.result-item .value.negative { color: #FF9999; }
+#promotion-relegation-text { font-size: 1.3em; font-weight: bold; text-align: center; margin: 25px 0; }
+#next-season-info { text-align: center; }
+
+/* --- style.min.css に追記 --- */
+
+/* 経営データ画面のスタイル */
+.data-tabs { display: flex; justify-content: center; margin-bottom: 20px; }
+.data-tab-btn { background-color: #4a5a7f; color: #eaf7fc; border: none; padding: 10px 20px; cursor: pointer; font-size: 1em; font-weight: bold; }
+.data-tab-btn.active { background-color: #299ad3; }
+.data-content { display: none; }
+.data-content.active { display: block; }
+.data-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+.data-table th, .data-table td { padding: 8px; border: 1px solid #4a5a7f; text-align: center; }
+.data-table th { background-color: #3e507b; }
+
+/* 結果画面のレイアウトと順位表 */
+.result-flex-container { display: flex; gap: 20px; align-items: flex-start; }
+.result-main-content { flex: 1; }
+.standings-table-container { width: 300px; flex-shrink: 0; }
+.standings-table-container h4 { margin-top: 0; text-align: center; color: #baf7fa; }
+.standings-table-container table { width: 100%; font-size: 0.9em; border-collapse: collapse; }
+.standings-table-container th, .standings-table-container td { padding: 6px; text-align: center; border-bottom: 1px solid #4a5a7f; }
+.standings-table-container th { background-color: #3e507b; }
+.standings-table-container .my-club { background-color: rgba(41, 154, 211, 0.2); font-weight: bold; }
+
+@media (max-width: 768px) {
+    .result-flex-container { flex-direction: column; }
+    .standings-table-container { width: 100%; margin-top: 20px; }
+}
+
+/* 演出用スタイル */
+.result-promote, .result-relegate, .result-celebrate, .result-fail {
+    display: inline-block;
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-weight: bold;
+    color: #fff;
+    animation: fadeInScale 1s ease-out;
+}
+.result-promote { background-color: #28a745; }
+.result-celebrate { background: linear-gradient(45deg, #ffc107, #ff9800); }
+.result-relegate, .result-fail { background-color: #dc3545; }
+
+@keyframes fadeInScale {
+    0% { opacity: 0; transform: scale(0.5); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* --- style.min.css に追記 --- */
+
+/* 経営データ画面のスタイル */
+.data-tabs { display: flex; justify-content: center; margin-bottom: 20px; }
+.data-tab-btn { background-color: #4a5a7f; color: #eaf7fc; border: none; padding: 10px 20px; cursor: pointer; font-size: 1em; font-weight: bold; }
+.data-tab-btn.active { background-color: #299ad3; }
+.data-content { display: none; }
+.data-content.active { display: block; }
+.data-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+.data-table th, .data-table td { padding: 8px; border: 1px solid #4a5a7f; text-align: center; }
+.data-table th { background-color: #3e507b; }
+.data-table .positive { color: #A9D18E; }
+.data-table .negative { color: #FF9999; }
+.chart-container { height: 250px; margin-bottom: 20px; }
+
+/* 結果画面のレイアウトと順位表 */
+.result-flex-container { display: flex; gap: 20px; align-items: flex-start; }
+.result-main-content { flex: 1; }
+.standings-table-container { width: 300px; flex-shrink: 0; }
+.standings-table-container h4 { margin-top: 0; text-align: center; color: #baf7fa; }
+.standings-table-container table { width: 100%; font-size: 0.9em; border-collapse: collapse; }
+.standings-table-container th, .standings-table-container td { padding: 6px; text-align: center; border-bottom: 1px solid #4a5a7f; }
+.standings-table-container th { background-color: #3e507b; }
+.standings-table-container .my-club { background-color: rgba(41, 154, 211, 0.2); font-weight: bold; }
+
+@media (max-width: 768px) {
+    .result-flex-container { flex-direction: column; }
+    .standings-table-container { width: 100%; margin-top: 20px; }
+}
+
+/* 演出用スタイル */
+.result-promote, .result-relegate, .result-celebrate, .result-fail {
+    display: inline-block;
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-weight: bold;
+    color: #fff;
+    animation: fadeInScale 1s ease-out;
+}
+.result-promote { background-color: #28a745; }
+.result-celebrate { background: linear-gradient(45deg, #ffc107, #ff9800); }
+.result-relegate, .result-fail { background-color: #dc3545; }
+
+@keyframes fadeInScale {
+    0% { opacity: 0; transform: scale(0.5); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* === 経営シミュレーションゲーム：データ分析室のスタイル（修正版） === */
+
+/* グラフ表示エリア全体を囲むラッパー */
+.chart-area-wrapper {
+    background-color: rgba(0, 0, 0, 0.15); /* 背景を少し暗くする */
+    border-radius: 12px; /* 角を丸くする */
+    padding: 25px; /* 内側の余白 */
+    margin-top: 20px; /* 上のタブとの余白 */
+}
+
+/* グラフの種類を選択するボタンのコンテナ */
+.chart-selector-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 25px; /* グラフとの余白 */
+}
+
+/* グラフの種類を選択するボタン */
+.chart-selector-btn {
+    background-color: #3e507b;
+    color: #eaf7fc;
+    border: 1.5px solid #5a75a7;
+    padding: 8px 18px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.chart-selector-btn:hover {
+    background-color: #516894;
+}
+
+/* アクティブなグラフ選択ボタン */
+.chart-selector-btn.active {
+    background: linear-gradient(90deg, #27aee7 60%, #aaf7fd);
+    color: #143060;
+    border-color: #299ad3;
+}
+
+/* グラフを描画するcanvasを直接囲むコンテナ */
+.chart-container {
+    position: relative; /* canvasのサイズ調整に必要 */
+    height: 450px; /* グラフの高さ */
+    width: 100%;   /* 幅をコンテナに合わせる */
+}
+
+/* canvas自体の背景を透過させる */
+#simulation-game-container canvas {
+    background-color: transparent !important;
+}
+

@@ -83,6 +83,7 @@
   <a href="#simulation" onmouseover="preloadModule('simulation'); preloadModule('find-my-club');" onclick="event.preventDefault(); toggleSubMenu(this, event);" id="nav-simulation-btn">シミュレーション</a>
   <div class="nav-dropdown-content">
       <a href="#simulation" onmouseover="preloadModule('simulation')" onclick="event.preventDefault(); event.stopPropagation(); showPage('simulation', document.getElementById('nav-simulation-btn'));">ビッグクラブシミュレーター</a>
+      <a href="#simulation-game" onmouseover="preloadModule('simulation-game')" onclick="event.preventDefault(); event.stopPropagation(); showPage('simulation-game', this);">オリジナルクラブ経営</a>
       <a href="#find-my-club" onmouseover="preloadModule('find-my-club')" onclick="event.preventDefault(); event.stopPropagation(); showPage('find-my-club', this);">推しクラブマッチング</a>
       <a href="#best11" onmouseover="preloadModule('best11')" onclick="event.preventDefault(); event.stopPropagation(); showPage('best11', this);">ベスト11メーカー</a>
   </div>
@@ -510,6 +511,10 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
 <div id="find-my-club" class="page-section">
   <div id="find-my-club-questions"></div>
   <div id="find-my-club-result" style="display: none;"></div>
+</div>
+<div id="page-title-simulation-game" class="page-title-row" style="display:none;"><h1>オリジナルクラブ経営シミュレーション「Jへの道」</h1></div>
+<div id="simulation-game" class="page-section">
+    <!-- この中身は simulationGame.js によって動的に生成されます -->
 </div>
 </main>
 <div class="support-widget-wrapper">
