@@ -123,6 +123,11 @@ async function showArticleDetail(slug, title, fromPopState = false) {
 // === ページ表示ロジック ===
 async function showPage(id, btn, fromPopState = false, initialOptions = {}) {
     try {
+        const clubStatusBoard = document.getElementById('club-status-board');
+        if (clubStatusBoard) {
+            clubStatusBoard.style.display = 'none';
+        }
+
         window.scrollTo(0, 0);
 
         // 汎用的な #/introduce URLを、デフォルトクラブID付きのURLにリダイレクトする

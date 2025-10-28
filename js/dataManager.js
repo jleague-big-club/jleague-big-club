@@ -56,8 +56,15 @@ export async function loadInitialData() {
         obj.rankScore = parseFloat(obj["平均順位スコア"]) || 0;
         obj.lat = parseFloat(obj["緯度"]) || 0;
         obj.lon = parseFloat(obj["経度"]) || 0;
-        obj.teamId = obj["teamId"] || '';
+        obj.teamId = obj.name;
         obj['ホームタウン'] = obj["ホームタウン"] || '';
+
+        obj.sum_prev = parseFloat(obj["総合的ビッグクラブスコア_prev"]) || null;
+        obj.revenue_prev = parseFloat(obj["売上高（億円）_prev"]) || null;
+        obj.audience_prev = parseInt(obj["平均観客動員数_prev"]) || null;
+        obj.titles_prev = parseInt(obj["タイトル計_prev"]) || null;
+        obj.rankScore_prev = parseFloat(obj["J1在籍10年平均順位スコア_prev"]) || null;
+
         return obj;
     });
     clubData.sort((a, b) => b.sum - a.sum);

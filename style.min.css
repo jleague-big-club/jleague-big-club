@@ -1995,7 +1995,7 @@ transition: background-color 0.2s;
 }
 
 /* グラフを描画するcanvasを直接囲むコンテナ */
-.chart-container {
+
     position: relative; /* canvasのサイズ調整に必要 */
     height: 450px; /* グラフの高さ */
     width: 100%;   /* 幅をコンテナに合わせる */
@@ -2006,3 +2006,173 @@ transition: background-color 0.2s;
     background-color: transparent !important;
 }
 
+/* === クラブステータスポップアップ 完成版CSS === */
+#club-status-board {
+    background: linear-gradient(115deg, #1e283f 80%, #299ad3);
+    border-radius: 17px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    color: #fff;
+    display: none;
+    font-size: 1.11rem;
+    left: 50%;
+    max-width: 95vw;
+    padding: 32px 28px 28px;
+    position: fixed;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    z-index: 9999;
+    box-sizing: border-box;
+}
+#club-status-board .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    line-height: 1;
+}
+#club-status-board .club-title-rank-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+#club-status-board .rank-display {
+    font-size: 1.6em;
+    font-weight: 800;
+}
+#club-status-board .rank-display .rank-label {
+    display: block;
+    font-size: 0.5em;
+    font-weight: normal;
+    color: #aab8d8;
+    margin-bottom: -2px;
+}
+#club-status-board .rank-display.prev-rank {
+    color: #aab8d8;
+    font-size: 1.3em;
+}
+#club-status-board .rank-display.current-rank {
+    color: #fff;
+}
+#club-status-board .rank-change-arrow {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+#club-status-board .rank-change-arrow.up { color: #A9D18E; }
+#club-status-board .rank-change-arrow.down { color: #FF9999; }
+#club-status-board .rank-change-arrow.flat { color: #c0c0c0; }
+#club-status-board .club-title {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    text-align: center;
+}
+#club-status-board .club-status-grid {
+    display: grid;
+    gap: 15px;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 20px;
+}
+#club-status-board .status-item {
+    background: rgba(0, 0, 0, .2);
+    border-radius: 8px;
+    padding: 12px 15px;
+}
+#club-status-board .status-item.full-width {
+    grid-column: 1 / -1;
+    text-align: center;
+}
+#club-status-board .status-label {
+    color: #abc;
+    display: block;
+    font-size: .85rem;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+#club-status-board .status-value {
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+#club-status-board .status-value.score {
+    color: gold;
+    font-size: 1.3rem;
+}
+#club-status-board .change-info {
+    display: block;
+    font-size: 0.8em;
+    font-weight: normal;
+    margin-top: 4px;
+    opacity: 0.8;
+}
+#club-status-board .change-info.up { color: #A9D18E; }
+#club-status-board .change-info.down { color: #FF9999; }
+#club-status-board .change-info.flat { color: #c0c0c0; }
+
+/* スマホ表示用のスタイル調整 */
+@media (max-width: 768px) {
+    #club-status-board {
+        font-size: 1rem !important;
+        width: 95vw !important;
+        padding: 25px 15px 20px;
+    }
+    #club-status-board .club-status-grid {
+        gap: 10px;
+    }
+    #club-status-board .status-item { 
+        padding: 10px;
+    }
+    #club-status-board .status-value { 
+        font-size: 1.05rem;
+    }
+    #club-status-board .status-value.score { 
+        font-size: 1.15rem;
+    }
+}
+
+/* === style.min.css に追記 === */
+#club-status-board .status-item.link-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    background: linear-gradient(90deg, #27aee7, #1c8acb);
+    transition: all .2s;
+}
+#club-status-board .status-item.link-item:hover {
+    background: linear-gradient(90deg, #37bef7, #2ca0db);
+    transform: scale(1.03);
+}
+#club-status-board .link-item-text {
+    font-weight: bold;
+    color: #fff;
+    font-size: 0.9em;
+}
+#club-status-board .link-item-arrow {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #fff;
+}
+/* full-widthクラスを削除し、グリッド内の通常のアイテムとして扱う */
+#club-status-board .status-item.full-width {
+    grid-column: auto;
+    text-align: left;
+}
+
+@media (max-width: 768px) {
+    /* スマホでは「平均順位スコア」と「リンク」を1列表示に戻す */
+    #club-status-board .status-item:nth-last-child(-n+2) {
+        grid-column: 1 / -1;
+        text-align: center;
+    }
+    #club-status-board .status-item.link-item {
+        justify-content: center; /* 中央揃えにする */
+        gap: 10px;
+    }
+}

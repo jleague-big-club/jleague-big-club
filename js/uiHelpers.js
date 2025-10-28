@@ -134,10 +134,9 @@ export function setupCarousel(carouselId, interval) {
         setTimeout(() => { isAnimating = false; }, cooldownTime);
     }
     
-    // カルーセル内のすべてのリンクに対して、クリックイベントを強制的に再設定する
     const links = track.querySelectorAll('a');
     links.forEach(link => {
-        link.removeAttribute('onclick'); // 既存のonclick属性を削除
+        link.removeAttribute('onclick');
         
         link.addEventListener('click', function(event) {
             event.preventDefault();
@@ -146,7 +145,7 @@ export function setupCarousel(carouselId, interval) {
             if (href) {
                 window.location.hash = href;
             }
-        }, true); // イベントを先にキャッチする
+        }, true);
     });
 
     nextBtn.addEventListener('click', () => {
@@ -186,9 +185,7 @@ export function setupEventListeners(showPage) {
         menuOverlay.addEventListener('click', toggleMenu);
     }
 
-    // ナビゲーションリンクのクリックイベントを一元管理
     document.querySelectorAll('#nav-links a, #mobile-header a').forEach(link => {
-        // toggleSubMenuを呼び出すリンクは除外
         if (!link.hasAttribute('onmouseover') && link.getAttribute('onclick') !== "event.preventDefault(); toggleSubMenu(this, event);") {
             link.addEventListener('click', (event) => {
                 event.preventDefault();
@@ -197,7 +194,6 @@ export function setupEventListeners(showPage) {
                     window.location.hash = href;
                 }
 
-                // スマホメニューが開いていれば閉じる
                 if (navLinks && navLinks.classList.contains('open')) {
                     navLinks.classList.remove('open');
                     menuOverlay.classList.remove('open');
@@ -229,9 +225,12 @@ export function setupEventListeners(showPage) {
 
     document.addEventListener("click", (e) => {
         const board = document.getElementById("club-status-board");
-        if (board && board.style.display === "block" && !board.contains(e.target) && !e.target.matches("td[onclick^='showClubStatus']")) {
+        // ▼▼▼【この if 文の条件を修正】▼▼▼
+        if (board && board.style.display === "block" && !board.contains(e.target) && !e.target.closest('[onclick^="showClubStatus"]')) {
             board.style.display = "none";
         }
+        // ▲▲▲【ここまで修正】▲▲▲
+
         if (scorePop && scorePop.classList.contains('popup-visible') && !scorePop.contains(e.target) && !scoreBtn.contains(e.target)) {
             scorePop.classList.remove('popup-visible');
         }
@@ -280,26 +279,20 @@ export function setupEventListeners(showPage) {
 }
 
 
-// ▼▼▼【ここから修正】▼▼▼
 export function handleInitialURL(showPage) {
     const hash = location.hash;
 
     if (hash.startsWith('#blog/')) {
         const slug = hash.substring('#blog/'.length);
         
-        // 1. 先に 'blog' ページを表示状態にする
         showPage('blog', null, true);
 
-        // 2. slugに基づいて記事詳細の表示を試みる
-        //    setTimeoutを使い、showPageの描画処理と競合しないようにする
         setTimeout(() => {
             import('./dataManager.js').then(dataManager => {
                 dataManager.getBlogPosts().then(posts => {
                     const post = posts.find(p => p.slug === slug);
-                    // index.jsonに記事があればそのタイトルを、なければslugから仮のタイトルを生成
                     const title = post ? post.title : slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
                     
-                    // 履歴を重複させないため fromPopState=true を渡す
                     window.showArticleDetail(slug, title, true);
                 });
             });
@@ -310,7 +303,6 @@ export function handleInitialURL(showPage) {
         showPage(pageId, null, true);
     }
 }
-// ▲▲▲【ここまで修正】▲▲▲
 
 function setupFooterButtonObserver() {
     const scoreBtn = document.getElementById('score-method-btn');
@@ -345,7 +337,7 @@ function setupFooterButtonObserver() {
 export function loadScript(src) {
     return new Promise((resolve, reject) => {
         if (document.querySelector(`script[src="${src}"]`)) {
-            if (window[src.split('/').pop().split('.')[0]]) { // e.g. window['marked']
+            if (window[src.split('/').pop().split('.')[0]]) {
                 resolve();
                 return;
             }
