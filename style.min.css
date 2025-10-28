@@ -1302,6 +1302,7 @@ transition: background-color 0.2s;
     border-radius: 8px;
 }
 }
+
 /* === 各クラブ紹介ページ専用スタイル（追加修正） === */
 /* レーダーチャートのサイズがグローバルCSSで固定されている問題を修正 */
 #club-radar-chart {
@@ -1995,7 +1996,7 @@ transition: background-color 0.2s;
 }
 
 /* グラフを描画するcanvasを直接囲むコンテナ */
-
+#simulation-game-container .chart-container { 
     position: relative; /* canvasのサイズ調整に必要 */
     height: 450px; /* グラフの高さ */
     width: 100%;   /* 幅をコンテナに合わせる */
@@ -2175,4 +2176,12 @@ transition: background-color 0.2s;
         justify-content: center; /* 中央揃えにする */
         gap: 10px;
     }
+}
+
+/* --- style.min.css の一番最後にこのコードを追加 --- */
+
+/* ブログ記事内のグラフコンテナの高さ制限を解除し、内容に合わせて自動調整させる */
+#blog-content .chart-container {
+  height: auto !important;
+  min-height: unset !important; /* 念のため最小高さもリセット */
 }

@@ -83,7 +83,7 @@ function showClubStatus(event, teamId, currentRank) {
                 ${getChangeHtml(parseFloat(club.o), club.rankScore_prev)}
             </div>
             <a href="#/introduce/${club.teamId}" class="status-item link-item">
-                <span class="link-item-text">クラブの詳細データを見る</span>
+                <span class="link-item-text">各クラブのデータを見る</span>
                 <span class="link-item-arrow">→</span>
             </a>
         </div>
