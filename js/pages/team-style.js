@@ -43,7 +43,7 @@ function toHalfWidth(str) {
     return str.replace(/[Ａ-Ｚａ-ｚ０-９．・]/g, s => String.fromCharCode(s.charCodeAt(0) - 0xFEE0)).replace(/　/g, " ");
 }
 
-// 偏差値を計算する関数 (平均50)
+// 偏差値を計算する関数
 function calculateDeviation(value, values) {
     const mean = values.reduce((a, b) => a + b, 0) / values.length;
     const stdDev = Math.sqrt(values.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b, 0) / values.length);
@@ -59,7 +59,6 @@ async function processData() {
 
     const dataByLeague = { J1: [], J2: [], J3: [] };
 
-    // 1. 生データの収集
     for (const teamStyle of styleData) {
         const league = teamStyle.リーグ;
         if (!dataByLeague[league]) continue;
@@ -83,7 +82,6 @@ async function processData() {
                     'チーム名': originalName,
                     '省略名': shortName,
                     'リーグ': league,
-                    // 1試合平均値
                     'avgShoot': parseFloat((parseInt(teamStyle.シュート総数, 10) / matches).toFixed(2)),
                     'avgGoal': parseFloat((parseInt(teamRankData.得点, 10) / matches).toFixed(2)),
                     'avgConceded': parseFloat((parseInt(teamRankData.失点, 10) / matches).toFixed(2)),
@@ -95,12 +93,10 @@ async function processData() {
         }
     }
 
-    // 2. 偏差値計算とスコア化
     for (const league of Object.keys(dataByLeague)) {
         const teams = dataByLeague[league];
         if (teams.length === 0) continue;
 
-        // 各項目の配列作成
         const shoots = teams.map(t => t.avgShoot);
         const goals = teams.map(t => t.avgGoal);
         const conceded = teams.map(t => t.avgConceded);
@@ -116,22 +112,21 @@ async function processData() {
             const foulDev = calculateDeviation(team.avgFoul, fouls);
             const cardDev = calculateDeviation(team.avgCard, cards);
 
-            // --- 軸スコアの計算 (重み付け) ---
+            // --- ★ここを変更：結果（強さ）を優先した比重 ---
             
-            // X軸: 攻撃支配力 (シュート量 40% + クロス量 30% + 得点力 30%)
-            // 右に行くほど攻撃的で点も取れている
-            team.xScore = (shootDev * 0.4) + (crossDev * 0.3) + (goalDev * 0.3);
+            // X軸: 攻撃力 (得点60% + シュート30% + スタイル10%)
+            // 「点が取れていること」を最重要視
+            team.xScore = (goalDev * 0.6) + (shootDev * 0.3) + (crossDev * 0.1);
 
-            // Y軸: 守備強度 (ファウル激しさ 30% + 警告 20% + 守備結果 50%)
-            // 失点偏差値は「低い＝良い」なので、(100 - 失点偏差値) で「高い＝良い」に反転させる
-            // 上に行くほど、激しく体を張りつつ失点も抑えている
-            const defenseQuality = 100 - concededDev; // 反転
-            team.yScore = (foulDev * 0.3) + (cardDev * 0.2) + (defenseQuality * 0.5);
+            // Y軸: 守備力 (失点阻止80% + 激しさ20%)
+            // 「失点が少ないこと」を最重要視。激しさ(ファウル)はあくまで味付け
+            const defenseQuality = 100 - concededDev; // 高いほど失点が少ない
+            const intensity = (foulDev + cardDev) / 2;
+            team.yScore = (defenseQuality * 0.8) + (intensity * 0.2);
 
-            // 色分け用: クロス依存度 (サイド攻撃か中央突破か)
+            // 色分け用: クロス依存度 (変更なし)
             team.colorScore = crossDev; 
             
-            // 保存用 (レーダーチャート等で使用)
             team.deviations = {
                 shoot: shootDev, goal: goalDev, cross: crossDev,
                 conceded: concededDev, foul: foulDev, card: cardDev
@@ -147,7 +142,6 @@ function renderScatterChart() {
     const data = mergedData[currentLeague];
     if (!data || data.length === 0) return;
     
-    // グラフの範囲決定
     const xValues = data.map(d => d.xScore);
     const yValues = data.map(d => d.yScore);
 
@@ -165,7 +159,7 @@ function renderScatterChart() {
     const chartData = data.map(team => ({
         x: team.xScore,
         y: team.yScore,
-        r: 10, // 円の大きさは固定
+        r: 10,
         label: team['チーム名'],
         shortLabel: team['省略名'],
         raw: team
@@ -179,13 +173,9 @@ function renderScatterChart() {
         data: {
             datasets: [{
                 data: chartData,
-                // 色分け: クロス偏差値 (青=中央突破/クロス少 -> 赤=サイド攻撃/クロス多)
                 backgroundColor: (context) => {
                     const val = context.raw.raw.colorScore;
-                    // 偏差値30~70の範囲で色を変化
                     const ratio = Math.max(0, Math.min(1, (val - 30) / 40));
-                    
-                    // 青 -> 赤 グラデーション
                     const r = Math.round(54 + (201 * ratio));
                     const g = Math.round(162 - (63 * ratio));
                     const b = Math.round(235 - (103 * ratio));
@@ -211,7 +201,6 @@ function renderScatterChart() {
                     callbacks: {
                         label: function(context) {
                             const d = context.raw;
-                            // クロス偏差値に基づく判定
                             const crossVal = d.raw.colorScore;
                             let styleText = "バランス型";
                             if (crossVal >= 55) styleText = "サイド攻撃主体";
@@ -225,7 +214,7 @@ function renderScatterChart() {
                             ];
                         },
                         afterBody: function() {
-                            return "※数値はリーグ平均を50とした総合偏差値です";
+                            return "※数値は偏差値による総合評価です";
                         }
                     }
                 },
@@ -240,20 +229,19 @@ function renderScatterChart() {
                 },
                 annotation: {
                     annotations: {
-                        // 4象限の背景
-                        quadrant1: { // 右上: 圧倒的
+                        quadrant1: { 
                             type: 'box', xMin: 50, xMax: chartMaxX, yMin: 50, yMax: chartMaxY,
                             backgroundColor: 'rgba(169, 209, 142, 0.15)', borderWidth: 0
                         },
-                        quadrant2: { // 左上: 堅守・塩試合
+                        quadrant2: { 
                             type: 'box', xMin: chartMinX, xMax: 50, yMin: 50, yMax: chartMaxY,
                             backgroundColor: 'rgba(255, 230, 153, 0.15)', borderWidth: 0
                         },
-                        quadrant3: { // 左下: 崩壊・不調
+                        quadrant3: { 
                             type: 'box', xMin: chartMinX, xMax: 50, yMin: chartMinY, yMax: 50,
                             backgroundColor: 'rgba(230, 230, 230, 0.2)', borderWidth: 0
                         },
-                        quadrant4: { // 右下: 特攻・ザル守備
+                        quadrant4: { 
                             type: 'box', xMin: 50, xMax: chartMaxX, yMin: chartMinY, yMax: 50,
                             backgroundColor: 'rgba(244, 177, 131, 0.15)', borderWidth: 0
                         },
@@ -265,24 +253,23 @@ function renderScatterChart() {
                             type: 'line', yMin: 50, yMax: 50, xMin: chartMinX, xMax: chartMaxX,
                             borderColor: 'rgba(100, 100, 100, 0.4)', borderWidth: 2, borderDash: [4, 4]
                         },
-                        // ラベル
                         labelQ1: {
-                            type: 'label', content: ['圧倒的王者', '攻守充実'],
+                            type: 'label', content: ['攻守圧倒', '王者'],
                             xValue: (50 + chartMaxX) / 2, yValue: (50 + chartMaxY) / 2,
                             color: 'rgba(100, 140, 80, 0.5)', font: { size: 16, weight: 'bold' }
                         },
                         labelQ2: {
-                            type: 'label', content: ['堅守・塩試合', 'ウノゼロ'],
+                            type: 'label', content: ['堅守速攻', '現実的'],
                             xValue: (chartMinX + 50) / 2, yValue: (50 + chartMaxY) / 2,
                             color: 'rgba(180, 160, 50, 0.5)', font: { size: 16, weight: 'bold' }
                         },
                         labelQ3: {
-                            type: 'label', content: ['崩壊・不調', '攻め手なし'],
+                            type: 'label', content: ['不調・我慢'],
                             xValue: (chartMinX + 50) / 2, yValue: (chartMinY + 50) / 2,
                             color: 'rgba(150, 150, 150, 0.5)', font: { size: 16, weight: 'bold' }
                         },
                         labelQ4: {
-                            type: 'label', content: ['特攻・ザル守備', '打ち合い'],
+                            type: 'label', content: ['攻撃偏重', '打ち合い'],
                             xValue: (50 + chartMaxX) / 2, yValue: (chartMinY + 50) / 2,
                             color: 'rgba(180, 100, 60, 0.5)', font: { size: 16, weight: 'bold' }
                         }
@@ -292,14 +279,13 @@ function renderScatterChart() {
             scales: {
                 x: { 
                     min: chartMinX, max: chartMaxX,
-                    title: { display: true, text: '攻撃支配力 (量・質) →', font: { size: 12, weight: 'bold' }, color: '#666' },
+                    title: { display: true, text: '攻撃力 (得点力重視) →', font: { size: 12, weight: 'bold' }, color: '#666' },
                     grid: { display: false }
                 },
                 y: { 
                     min: chartMinY, max: chartMaxY,
-                    // 守備力スコアは計算で既に「高い＝良い」になっているので reverse: false
                     reverse: false, 
-                    title: { display: true, text: '守備強度 (激しさ・失点少) ↑', font: { size: 12, weight: 'bold' }, color: '#666' },
+                    title: { display: true, text: '守備力 (失点少重視) ↑', font: { size: 12, weight: 'bold' }, color: '#666' },
                     grid: { display: false }
                 }
             },
@@ -323,23 +309,18 @@ function renderRadarChart(selectedTeam, allTeamData) {
 
     const dev = selectedTeam.deviations;
 
-    // レーダーチャート用データ (全て偏差値)
-    // 失点、ファウル、警告については「グラフの外側＝特徴が強い」とする
-    // 守備スコアとは異なり、ここでは純粋な特徴量（失点が多い＝外側、ファウル多い＝外側）として表示した方が
-    // 「どんなチームか」は分かりやすい。
-    // ただし、失点は「少ないほうが良い」ので、優秀さを表すなら反転すべき。
-    // ここでは散布図の軸に合わせて「能力（優秀さ）」を表示することにする。
-    
-    // 失点は反転 (少ないほど外側)、ファウル・警告はそのまま (多いほど外側＝激しい)
+    // レーダーチャート: 特徴をわかりやすくするため
+    // 失点は「少ない＝外側（優秀）」、ファウルは「多い＝外側（特徴）」とする
+    // ここでは純粋な「能力の高さ」として統一するため、失点は反転させる
     const reverseConceded = 50 + (50 - dev.conceded);
 
     const teamData = [
         dev.shoot,      // 攻撃頻度
         dev.goal,       // 決定力
         dev.cross,      // サイド攻撃
-        reverseConceded,// 守備堅固さ (反転)
-        dev.foul,       // 激しさ
-        dev.card        // 警告数
+        reverseConceded,// 守備堅固さ (優秀さが外側)
+        dev.foul,       // 激しさ (多いほうが外側)
+        dev.card        // 警告数 (多いほうが外側)
     ];
 
     const radarLabels = [
@@ -416,11 +397,10 @@ function renderTable() {
 
 async function updatePage() {
     await processData();
-    
     // 不要な要素(セレクター)があれば削除
     const oldSelector = document.getElementById('axis-selector-container');
     if(oldSelector) oldSelector.remove();
-    const oldNote = oldSelector?.nextElementSibling; // 注意書きがあれば
+    const oldNote = oldSelector?.nextElementSibling;
     if(oldNote && oldNote.style.color === 'rgb(170, 187, 204)') oldNote.remove();
 
     renderScatterChart();
