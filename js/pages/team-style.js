@@ -4,6 +4,7 @@ let mergedData = null;
 let scatterChart = null;
 let radarChart = null;
 let currentLeague = 'J1';
+let selectedTeamName = null;
 
 // クラブ名略称マップ
 const clubAbbreviations = {
@@ -43,7 +44,6 @@ function toHalfWidth(str) {
     return str.replace(/[Ａ-Ｚａ-ｚ０-９．・]/g, s => String.fromCharCode(s.charCodeAt(0) - 0xFEE0)).replace(/　/g, " ");
 }
 
-// 偏差値を計算する関数
 function calculateDeviation(value, values) {
     const mean = values.reduce((a, b) => a + b, 0) / values.length;
     const stdDev = Math.sqrt(values.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b, 0) / values.length);
@@ -112,19 +112,10 @@ async function processData() {
             const foulDev = calculateDeviation(team.avgFoul, fouls);
             const cardDev = calculateDeviation(team.avgCard, cards);
 
-            // --- ★ここを変更：結果（強さ）を優先した比重 ---
-            
-            // X軸: 攻撃力 (得点60% + シュート30% + スタイル10%)
-            // 「点が取れていること」を最重要視
-            team.xScore = (goalDev * 0.6) + (shootDev * 0.3) + (crossDev * 0.1);
-
-            // Y軸: 守備力 (失点阻止80% + 激しさ20%)
-            // 「失点が少ないこと」を最重要視。激しさ(ファウル)はあくまで味付け
-            const defenseQuality = 100 - concededDev; // 高いほど失点が少ない
+            team.xScore = (goalDev * 0.8) + (shootDev * 0.2);
+            const defenseQuality = 100 - concededDev; 
             const intensity = (foulDev + cardDev) / 2;
             team.yScore = (defenseQuality * 0.8) + (intensity * 0.2);
-
-            // 色分け用: クロス依存度 (変更なし)
             team.colorScore = crossDev; 
             
             team.deviations = {
@@ -136,6 +127,69 @@ async function processData() {
 
     mergedData = dataByLeague;
     return mergedData;
+}
+
+function renderTeamSelector() {
+    const existingContainer = document.getElementById('team-selector-container');
+    if (existingContainer) existingContainer.remove();
+
+    const container = document.createElement('div');
+    container.id = 'team-selector-container';
+    container.style.cssText = 'display:flex; justify-content:center; align-items:center; gap:10px; margin-bottom:15px; flex-wrap:wrap;';
+
+    const select = document.createElement('select');
+    select.id = 'team-drilldown-select';
+    select.style.cssText = 'padding:6px 12px; border-radius:8px; background:#232947; color:#fff; border:1px solid #4a5a7f; font-weight:bold; cursor:pointer;';
+    
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = '全クラブ表示';
+    select.appendChild(defaultOption);
+
+    const data = mergedData[currentLeague];
+    if (data) {
+        const sortedTeams = [...data].sort((a, b) => a['チーム名'].localeCompare(b['チーム名'], 'ja'));
+        sortedTeams.forEach(team => {
+            const option = document.createElement('option');
+            option.value = team['チーム名'];
+            option.textContent = team['チーム名'];
+            if (selectedTeamName === team['チーム名']) option.selected = true;
+            select.appendChild(option);
+        });
+    }
+
+    const resetBtn = document.createElement('button');
+    resetBtn.textContent = 'リセット';
+    resetBtn.style.cssText = 'padding:6px 12px; border-radius:8px; background:#4a5a7f; color:#fff; border:none; cursor:pointer; font-weight:bold;';
+    resetBtn.addEventListener('click', () => {
+        selectedTeamName = null;
+        select.value = '';
+        renderScatterChart();
+        document.getElementById('team-style-radar-container').style.display = 'none';
+    });
+
+    select.addEventListener('change', (e) => {
+        selectedTeamName = e.target.value || null;
+        renderScatterChart();
+        
+        if (selectedTeamName) {
+            const teamData = data.find(t => t['チーム名'] === selectedTeamName);
+            if (teamData) {
+                renderRadarChart(teamData, data);
+                // レーダーチャートまでスクロール
+                document.getElementById('team-style-radar-container').style.display = 'block';
+                document.getElementById('team-style-radar-container').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        } else {
+            document.getElementById('team-style-radar-container').style.display = 'none';
+        }
+    });
+
+    container.appendChild(select);
+    container.appendChild(resetBtn);
+
+    const controlsDiv = document.getElementById('team-style-controls');
+    controlsDiv.parentNode.insertBefore(container, controlsDiv.nextSibling);
 }
 
 function renderScatterChart() {
@@ -156,7 +210,23 @@ function renderScatterChart() {
     const chartMinY = Math.floor(yMin - padding);
     const chartMaxY = Math.ceil(yMax + padding);
 
-    const chartData = data.map(team => ({
+    // ★★★ 修正点: データフィルタリング時に「該当なし」を防ぐ ★★★
+    let displayData = data;
+    if (selectedTeamName) {
+        // 現在のリーグに、選択中のチームが存在するか確認
+        const exists = data.some(t => t['チーム名'] === selectedTeamName);
+        if (exists) {
+            displayData = data.filter(t => t['チーム名'] === selectedTeamName);
+        } else {
+            // 存在しない場合（リーグ切り替え時など）はリセットして全件表示
+            selectedTeamName = null;
+            const select = document.getElementById('team-drilldown-select');
+            if(select) select.value = '';
+            document.getElementById('team-style-radar-container').style.display = 'none';
+        }
+    }
+
+    const chartData = displayData.map(team => ({
         x: team.xScore,
         y: team.yScore,
         r: 10,
@@ -174,7 +244,9 @@ function renderScatterChart() {
             datasets: [{
                 data: chartData,
                 backgroundColor: (context) => {
-                    const val = context.raw.raw.colorScore;
+                    const raw = context.raw?.raw; // エラー防止
+                    if (!raw) return 'rgba(0,0,0,0)';
+                    const val = raw.colorScore;
                     const ratio = Math.max(0, Math.min(1, (val - 30) / 40));
                     const r = Math.round(54 + (201 * ratio));
                     const g = Math.round(162 - (63 * ratio));
@@ -292,8 +364,16 @@ function renderScatterChart() {
             onClick: (e, elements) => {
                 if (elements.length > 0) {
                     const clickedIndex = elements[0].index;
-                    const selectedTeam = data[clickedIndex];
+                    const selectedTeam = chartData[clickedIndex].raw; 
                     renderRadarChart(selectedTeam, data);
+                    
+                    selectedTeamName = selectedTeam['チーム名'];
+                    const select = document.getElementById('team-drilldown-select');
+                    if(select) select.value = selectedTeamName;
+
+                    renderScatterChart(); 
+                    // クリック時もレーダーチャートへスクロール
+                    document.getElementById('team-style-radar-container').style.display = 'block';
                     document.getElementById('team-style-radar-container').scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
             }
@@ -308,19 +388,15 @@ function renderRadarChart(selectedTeam, allTeamData) {
     radarContainer.style.display = 'block';
 
     const dev = selectedTeam.deviations;
-
-    // レーダーチャート: 特徴をわかりやすくするため
-    // 失点は「少ない＝外側（優秀）」、ファウルは「多い＝外側（特徴）」とする
-    // ここでは純粋な「能力の高さ」として統一するため、失点は反転させる
     const reverseConceded = 50 + (50 - dev.conceded);
 
     const teamData = [
-        dev.shoot,      // 攻撃頻度
-        dev.goal,       // 決定力
-        dev.cross,      // サイド攻撃
-        reverseConceded,// 守備堅固さ (優秀さが外側)
-        dev.foul,       // 激しさ (多いほうが外側)
-        dev.card        // 警告数 (多いほうが外側)
+        dev.shoot,      
+        dev.goal,       
+        dev.cross,      
+        reverseConceded,
+        dev.foul,       
+        dev.card        
     ];
 
     const radarLabels = [
@@ -397,12 +473,13 @@ function renderTable() {
 
 async function updatePage() {
     await processData();
-    // 不要な要素(セレクター)があれば削除
-    const oldSelector = document.getElementById('axis-selector-container');
-    if(oldSelector) oldSelector.remove();
-    const oldNote = oldSelector?.nextElementSibling;
-    if(oldNote && oldNote.style.color === 'rgb(170, 187, 204)') oldNote.remove();
-
+    
+    // ★★★ 修正点: リーグ切り替え時は必ず選択状態をリセット ★★★
+    selectedTeamName = null;
+    const select = document.getElementById('team-drilldown-select');
+    if(select) select.value = '';
+    
+    renderTeamSelector(); // ドロップダウン再生成
     renderScatterChart();
     renderTable();
     document.getElementById('team-style-radar-container').style.display = 'none';
