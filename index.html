@@ -60,6 +60,7 @@
       <a href="#attendance" onmouseover="preloadModule('attendance')" onclick="event.preventDefault(); event.stopPropagation(); showPage('attendance', this);">平均観客数</a>
       <a href="#history" onmouseover="preloadModule('history')" onclick="event.preventDefault(); event.stopPropagation(); showPage('history', this);">過去10年順位</a>
       <a href="#introduce" onmouseover="preloadModule('introduce')" onclick="event.preventDefault(); event.stopPropagation(); showPage('introduce', this);">各クラブ紹介</a>
+      <a href="#team-style" onmouseover="preloadModule('team-style')" onclick="event.preventDefault(); event.stopPropagation(); showPage('team-style', this);">チームスタイル分析</a> 
     </div>
   </span>
   <span class="nav-dropdown">
@@ -203,6 +204,26 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
   <div id="page-title-blog" class="page-title-row" style="display:none;"><h1>記事・ブログ</h1></div>
 <div id="page-title-winner" class="page-title-row" style="display:none;"><h1>Jリーグ WINNER予測</h1></div>
 <div id="page-title-elo-ratings" class="page-title-row" style="display:none;"><h1>Jリーグ Eloレーティング</h1></div>
+<div id="page-title-team-style" class="page-title-row" style="display:none;">
+    <h1>
+        チームスタイル分析
+        <span class="score-calc-btn" tabindex="0">
+            分析の見方
+            <span class="score-calc-pop team-style-pop">
+                縦軸は守備力（上が失点少）、横軸は攻撃力（右がシュート多）を表します。
+                <br>
+                ・<b>右上</b>：攻守に優れた<span style="color:#a9d18e;font-weight:bold;">王道スタイル</span>
+                ・<b>左上</b>：守備が堅い<span style="color:#ffe699;font-weight:bold;">堅守速攻</span>
+                ・<b>右下</b>：攻撃的だが失点も多い<span style="color:#f4b183;font-weight:bold;">打ち合い上等</span>
+                ・<b>左下</b>：攻守に課題がある<span style="color:#ccc;font-weight:bold;">我慢の時期</span>
+                <div class="calc-note">
+                    ※円の大きさは「平均得点」を表します。<br>
+                    ※データは1試合平均値です。
+                </div>
+            </span>
+        </span>
+    </h1>
+</div>
   <div id="page-title-europe-rankings" class="page-title-row" style="display:none;"><h1>5大リーグ 順位表 25-26シーズン</h1></div>
 
 <div id="top" class="page-section visible">
@@ -261,7 +282,7 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
   <label for="metric-select" style="font-weight: bold; margin-right: 10px;">表示する指標:</label>
   <select id="metric-select">
     <option value="revenue">売上高（2024）</option>
-    <option value="audience">観客動員数（2024）</option>
+    <option value="audience">観客動員数（2025）</option>
     <option value="titles">タイトル数（2025まで）</option>
   </select>
 </div>
@@ -513,6 +534,30 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
 </div>
 <div id="simulation-game" class="page-section">
 </div>
+<div id="team-style" class="page-section">
+    <div class="team-style-container" style="background-color: #2a3758; border-radius: 16px; padding: 20px; border: 1.5px solid #4a5a7f;">
+        <h2 style="text-align: center; color: #baf7fa; margin-top: 0; margin-bottom: 20px;">チームスタイル分析</h2>
+        
+        <div id="team-style-controls" style="text-align:center; margin-bottom: 20px;">
+          <button class="rank-tab-btn active" data-league="J1">J1</button>
+          <button class="rank-tab-btn" data-league="J2">J2</button>
+          <button class="rank-tab-btn" data-league="J3">J3</button>
+        </div>
+        
+        <div class="metrics-chart-wrap" style="background-color: #ffffff; border-radius: 12px; padding: 15px; min-height: 500px;">
+            <canvas id="team-style-scatter-chart"></canvas>
+        </div>
+    </div>
+    
+    <div id="team-style-radar-container" style="display: none; margin-top: 30px;">
+        <h3 id="radar-chart-title" style="text-align: center; color: #baf7fa; font-size: 1.5em; margin-bottom: 15px;"></h3>
+        <div class="metrics-chart-wrap" style="background-color: #ffffff; border-radius: 12px; max-width: 500px; min-height: 400px; padding: 15px;">
+            <canvas id="team-style-radar-chart"></canvas>
+        </div>
+    </div>
+
+    <div id="team-style-table-container" style="margin-top: 30px;"></div>
+</div>
 </main>
 <div id="club-status-board"></div>
 <div class="support-widget-wrapper">
@@ -598,6 +643,7 @@ width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js" defer></script>
 <script type="module" src="js/main.js" defer></script>
 
 <script>

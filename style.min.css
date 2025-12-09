@@ -2185,3 +2185,12 @@ transition: background-color 0.2s;
   height: auto !important;
   min-height: unset !important; /* 念のため最小高さもリセット */
 }
+
+/* チームスタイル分析のヘルプポップアップ用 */
+.team-style-pop {
+    min-width: 320px !important;
+    width: 380px;
+    max-width: 90vw;
+    font-size: 0.95rem;
+    line-height: 1.8;
+}

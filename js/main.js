@@ -22,7 +22,8 @@ const pageModules = {
     'barchartrace': './pages/barchartrace.js',
     'winner': './pages/winner.js',
     'elo-ratings': './pages/elo-ratings.js',
-    'find-my-club': './pages/findMyClub.js'
+    'find-my-club': './pages/findMyClub.js',
+    'team-style': './pages/team-style.js'
 };
 
 // 読み込み済みのモジュールをキャッシュ

@@ -247,3 +247,32 @@ export async function getEuropeRankingData() {
         return null;
     }
 }
+
+let teamStyleData = null;
+
+export async function getTeamStyleData() {
+    if (teamStyleData) return teamStyleData;
+
+    try {
+        const response = await fetch('/data/team_style_stats_all_2025.csv');
+        if (!response.ok) throw new Error('CSVの読み込みに失敗しました。');
+        
+        const csvText = await response.text();
+        const lines = csvText.trim().split('\n');
+        const headers = lines[0].split(',').map(h => h.trim());
+        const data = lines.slice(1).map(line => {
+            const values = line.split(',');
+            const obj = {};
+            headers.forEach((header, index) => {
+                obj[header] = values[index] ? values[index].trim() : '';
+            });
+            return obj;
+        });
+        
+        teamStyleData = data;
+        return teamStyleData;
+    } catch (error) {
+        console.error("チームスタイルデータの取得エラー:", error);
+        return null;
+    }
+}
