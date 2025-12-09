@@ -142,5 +142,23 @@
     "slug": "j3-2025-analysis",
     "thumbnail": "posts/img/j3-2025-analysis.webp",
     "date": "2025-09-23"
+  },
+  {
+    "title": "【2025シーズン総括】AIはJリーグをどこまで予測できたのか？WINNER予測ver.1モデル精度を徹底検証！",
+    "slug": "winner-prediction-v1-summary",
+    "thumbnail": "posts/img/winner-prediction-v1-summary.webp",
+    "date": "2025-12-08"
+  },
+  {
+    "title": "【2025シーズン総括】AIはJリーグをどう予測したか？ 7月の初期予測と最終結果を徹底比較！",
+    "slug": "season-prediction-2025-summary",
+    "thumbnail": "posts/img/season-prediction-2025-summary.webp",
+    "date": "2025-12-08"
+  },
+  {
+    "title": "WINNER予測モデルがver.1.1へ進化！攻撃力と守備力の分離で何が変わるのか？",
+    "slug": "winner-prediction-v1-1-explainer",
+    "thumbnail": "posts/img/winner-prediction-v1-1-explainer.webp",
+    "date": "2025-12-09"
   }
 ]
