@@ -57,11 +57,13 @@ async function handleTabClick(event) {
 
 async function handleArchiveChange(event) {
     const pageContainer = document.getElementById('winner');
-    const filePath = event.target.value === 'current' ? './data/winner-predictions.json' : `./predictions-archive/${event.target.value}`;
+    // <option value="current"> を削除するため、常にアーカイブフォルダを参照します
+    const filePath = `./predictions-archive/${event.target.value}`;
     winnerData = await loadWinnerData(filePath);
     const activeLeague = pageContainer.querySelector('.winner-tab-btn.active').dataset.league;
     renderWinnerCards(activeLeague, winnerData);
 }
+// ▲▲▲【変更ここまで】▲▲▲
 
 export async function initializeWinnerPage(pageContainer) {
     if (!pageContainer || pageContainer.childElementCount > 0) return;
@@ -76,6 +78,7 @@ export async function initializeWinnerPage(pageContainer) {
         return `<option value="${file}">(${version}) ${dateStr} の予測</option>`;
     }).join('') : '';
 
+    // ▼▼▼【変更点】<option value="current"> を削除 ▼▼▼
     pageContainer.innerHTML = `
         <a href="#winner/results" class="editors-pick-banner">
             <span class="editors-pick-text">最新の結果はこちら</span>
@@ -84,7 +87,7 @@ export async function initializeWinnerPage(pageContainer) {
             <div class="winner-archive-selector">
                 <label for="archive-select">過去の予測を見る:</label>
                 <select id="archive-select">
-                    <option value="current">最新の予測</option>
+                    <!-- ここにあった「最新の予測」を削除し、具体的な日付のみにします -->
                     ${dateOptions}
                 </select>
             </div>
@@ -104,13 +107,22 @@ export async function initializeWinnerPage(pageContainer) {
             </p>
         </div>
     `;
+    // ▲▲▲【変更ここまで】▲▲▲
 
     const tabs = pageContainer.querySelectorAll('.winner-tab-btn');
     tabs.forEach(tab => tab.addEventListener('click', handleTabClick));
     pageContainer.querySelector('#archive-select').addEventListener('change', handleArchiveChange);
 
-    winnerData = await loadWinnerData(); 
+    // ▼▼▼【変更点】初期ロード時にアーカイブの先頭（最新）を読み込むように変更 ▼▼▼
+    // デフォルトファイルではなく、リストにある最新のファイルを読み込みます
+    let initialFilePath = './data/winner-predictions.json'; // 万が一リストが空の場合の予備
+    if (archiveList && archiveList.length > 0) {
+        initialFilePath = `./predictions-archive/${archiveList[0]}`;
+    }
+
+    winnerData = await loadWinnerData(initialFilePath); 
     renderWinnerCards('J1', winnerData);
+    // ▲▲▲【変更ここまで】▲▲▲
 }
 
 
@@ -207,17 +219,20 @@ async function loadAndRenderResults(version, dateFile, league, manifest, schedul
         return;
     }
     
+    // ▼▼▼【変更点】「latest」の判定を削除し、常に渡されたファイルパスを使用 ▼▼▼
     let predictionFilePath;
-    if (dateFile === 'latest') {
-        predictionFilePath = versionFiles.length > 0 ? `./predictions-archive/${versionFiles[0]}` : null;
-    } else {
-        predictionFilePath = `./predictions-archive/${dateFile}`;
+    if (dateFile && dateFile !== 'latest') {
+         predictionFilePath = `./predictions-archive/${dateFile}`;
+    } else if (versionFiles.length > 0) {
+        // dateFileが空、または万が一 'latest' が渡ってきた場合はリストの先頭(最新)を使用
+        predictionFilePath = `./predictions-archive/${versionFiles[0]}`;
     }
-    
+
     if (!predictionFilePath) {
         container.innerHTML = `<p>表示する予測データがありません。</p>`;
         return;
     }
+    // ▲▲▲【変更ここまで】▲▲▲
     
     const predictionData = await loadWinnerData(predictionFilePath);
     if (!predictionData) {
@@ -243,12 +258,19 @@ async function loadAndRenderResults(version, dateFile, league, manifest, schedul
 function updateDateOptions(selectedVersion, dateSelect, manifest) {
     const filteredDates = manifest.filter(file => file.startsWith(selectedVersion + '/'));
     const currentSelected = dateSelect.value;
-    dateSelect.innerHTML = `<option value="latest">最新の結果</option>${filteredDates.map(file => {
-        return `<option value="${file}">${file.split('_')[1].replace('.json','')} の結果</option>`;
-    }).join('')}`;
+    
+    // ▼▼▼【変更点】「最新の結果」という固定オプションを削除し、実ファイルのみをリスト化 ▼▼▼
+    dateSelect.innerHTML = filteredDates.map(file => {
+        // ファイル名から日付部分を抽出 (例: winner-predictions_2024-05-01.json -> 2024-05-01)
+        const datePart = file.split('_')[1].replace('.json','');
+        return `<option value="${file}">${datePart} の結果</option>`;
+    }).join('');
+
+    // 現在選択中のものが新しいリストにもあればそれを維持、なければ自動的に先頭(ブラウザのデフォルト挙動)になる
     if (filteredDates.some(f => f === currentSelected)) {
         dateSelect.value = currentSelected;
     }
+    // ▲▲▲【変更ここまで】▲▲▲
 }
 
 export async function showPredictionResults() {

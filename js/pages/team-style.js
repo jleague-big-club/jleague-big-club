@@ -9,32 +9,32 @@ let selectedTeamName = null;
 // クラブ名略称マップ
 const clubAbbreviations = {
     // J1
-    "北海道コンサドーレ札幌": "札幌", "鹿島アントラーズ": "鹿島", "浦和レッズ": "浦和", 
-    "柏レイソル": "柏", "ＦＣ東京": "FC東京", "FC東京": "FC東京", "東京ヴェルディ": "東京V", 
-    "ＦＣ町田ゼルビア": "町田", "FC町田ゼルビア": "町田", "川崎フロンターレ": "川崎F", 
-    "横浜Ｆ・マリノス": "横浜FM", "横浜F・マリノス": "横浜FM", "湘南ベルマーレ": "湘南", 
-    "アルビレックス新潟": "新潟", "ジュビロ磐田": "磐田", "名古屋グランパス": "名古屋", 
-    "京都サンガF.C.": "京都", "ガンバ大阪": "G大阪", "セレッソ大阪": "C大阪", 
+    "北海道コンサドーレ札幌": "札幌", "鹿島アントラーズ": "鹿島", "浦和レッズ": "浦和",
+    "柏レイソル": "柏", "ＦＣ東京": "FC東京", "FC東京": "FC東京", "東京ヴェルディ": "東京V",
+    "ＦＣ町田ゼルビア": "町田", "FC町田ゼルビア": "町田", "川崎フロンターレ": "川崎F",
+    "横浜Ｆ・マリノス": "横浜FM", "横浜F・マリノス": "横浜FM", "湘南ベルマーレ": "湘南",
+    "アルビレックス新潟": "新潟", "ジュビロ磐田": "磐田", "名古屋グランパス": "名古屋",
+    "京都サンガF.C.": "京都", "ガンバ大阪": "G大阪", "セレッソ大阪": "C大阪",
     "ヴィッセル神戸": "神戸", "サンフレッチェ広島": "広島", "アビスパ福岡": "福岡", "サガン鳥栖": "鳥栖",
     // J2
-    "ベガルタ仙台": "仙台", "ブラウブリッツ秋田": "秋田", "モンテディオ山形": "山形", 
-    "いわきＦＣ": "いわき", "いわきFC": "いわき", "水戸ホーリーホック": "水戸", 
+    "ベガルタ仙台": "仙台", "ブラウブリッツ秋田": "秋田", "モンテディオ山形": "山形",
+    "いわきＦＣ": "いわき", "いわきFC": "いわき", "水戸ホーリーホック": "水戸",
     "栃木ＳＣ": "栃木", "栃木SC": "栃木", "ザスパ群馬": "群馬", "ザスパクサツ群馬": "群馬",
-    "ジェフユナイテッド千葉": "千葉", "横浜ＦＣ": "横浜FC", "横浜FC": "横浜FC", 
+    "ジェフユナイテッド千葉": "千葉", "横浜ＦＣ": "横浜FC", "横浜FC": "横浜FC",
     "ヴァンフォーレ甲府": "甲府", "清水エスパルス": "清水", "藤枝ＭＹＦＣ": "藤枝", "藤枝MYFC": "藤枝",
     "ファジアーノ岡山": "岡山", "レノファ山口ＦＣ": "山口", "レノファ山口FC": "山口",
-    "徳島ヴォルティス": "徳島", "愛媛ＦＣ": "愛媛", "愛媛FC": "愛媛", 
-    "Ｖ・ファーレン長崎": "長崎", "V・ファーレン長崎": "長崎", "ロアッソ熊本": "熊本", 
+    "徳島ヴォルティス": "徳島", "愛媛ＦＣ": "愛媛", "愛媛FC": "愛媛",
+    "Ｖ・ファーレン長崎": "長崎", "V・ファーレン長崎": "長崎", "ロアッソ熊本": "熊本",
     "大分トリニータ": "大分", "鹿児島ユナイテッドＦＣ": "鹿児島", "鹿児島ユナイテッドFC": "鹿児島",
     // J3
-    "ヴァンラーレ八戸": "八戸", "福島ユナイテッドＦＣ": "福島", "福島ユナイテッドFC": "福島", 
+    "ヴァンラーレ八戸": "八戸", "福島ユナイテッドＦＣ": "福島", "福島ユナイテッドFC": "福島",
     "大宮アルディージャ": "大宮", "ＲＢ大宮アルディージャ": "大宮",
     "Ｙ．Ｓ．Ｃ．Ｃ．横浜": "YS横浜", "Y.S.C.C.横浜": "YS横浜", "ＳＣ相模原": "相模原", "SC相模原": "相模原",
     "松本山雅ＦＣ": "松本", "松本山雅FC": "松本", "ＡＣ長野パルセイロ": "長野", "AC長野パルセイロ": "長野",
-    "カターレ富山": "富山", "ツエーゲン金沢": "金沢", "アスルクラロ沼津": "沼津", 
-    "ＦＣ岐阜": "岐阜", "FC岐阜": "岐阜", "ＦＣ大阪": "FC大阪", "FC大阪": "FC大阪", 
-    "奈良クラブ": "奈良", "ガイナーレ鳥取": "鳥取", "カマタマーレ讃岐": "讃岐", 
-    "ＦＣ今治": "今治", "FC今治": "今治", "ギラヴァンツ北九州": "北九州", 
+    "カターレ富山": "富山", "ツエーゲン金沢": "金沢", "アスルクラロ沼津": "沼津",
+    "ＦＣ岐阜": "岐阜", "FC岐阜": "岐阜", "ＦＣ大阪": "FC大阪", "FC大阪": "FC大阪",
+    "奈良クラブ": "奈良", "ガイナーレ鳥取": "鳥取", "カマタマーレ讃岐": "讃岐",
+    "ＦＣ今治": "今治", "FC今治": "今治", "ギラヴァンツ北九州": "北九州",
     "テゲバジャーロ宮崎": "宮崎", "ＦＣ琉球": "琉球", "FC琉球": "琉球",
     "高知ユナイテッドＳＣ": "高知", "高知ユナイテッドSC": "高知", "栃木シティ": "栃木C"
 };
@@ -53,7 +53,7 @@ function calculateDeviation(value, values) {
 
 async function processData() {
     if (mergedData) return mergedData;
-    
+
     const [styleData, rankingData] = await Promise.all([getTeamStyleData(), getRankingData()]);
     if (!styleData || !rankingData) return [];
 
@@ -62,11 +62,11 @@ async function processData() {
     for (const teamStyle of styleData) {
         const league = teamStyle.リーグ;
         if (!dataByLeague[league]) continue;
-        
+
         let teamRankData = null;
         if (rankingData[league] && rankingData[league].data) {
-             teamRankData = rankingData[league].data.find(d => 
-                d.チーム名 === teamStyle.チーム名 || 
+            teamRankData = rankingData[league].data.find(d =>
+                d.チーム名 === teamStyle.チーム名 ||
                 toHalfWidth(d.チーム名) === toHalfWidth(teamStyle.チーム名)
             );
         }
@@ -113,11 +113,11 @@ async function processData() {
             const cardDev = calculateDeviation(team.avgCard, cards);
 
             team.xScore = (goalDev * 0.8) + (shootDev * 0.2);
-            const defenseQuality = 100 - concededDev; 
+            const defenseQuality = 100 - concededDev;
             const intensity = (foulDev + cardDev) / 2;
             team.yScore = (defenseQuality * 0.8) + (intensity * 0.2);
-            team.colorScore = crossDev; 
-            
+            team.colorScore = crossDev;
+
             team.deviations = {
                 shoot: shootDev, goal: goalDev, cross: crossDev,
                 conceded: concededDev, foul: foulDev, card: cardDev
@@ -140,7 +140,7 @@ function renderTeamSelector() {
     const select = document.createElement('select');
     select.id = 'team-drilldown-select';
     select.style.cssText = 'padding:6px 12px; border-radius:8px; background:#232947; color:#fff; border:1px solid #4a5a7f; font-weight:bold; cursor:pointer;';
-    
+
     const defaultOption = document.createElement('option');
     defaultOption.value = '';
     defaultOption.textContent = '全クラブ表示';
@@ -171,7 +171,7 @@ function renderTeamSelector() {
     select.addEventListener('change', (e) => {
         selectedTeamName = e.target.value || null;
         renderScatterChart();
-        
+
         if (selectedTeamName) {
             const teamData = data.find(t => t['チーム名'] === selectedTeamName);
             if (teamData) {
@@ -195,7 +195,7 @@ function renderTeamSelector() {
 function renderScatterChart() {
     const data = mergedData[currentLeague];
     if (!data || data.length === 0) return;
-    
+
     const xValues = data.map(d => d.xScore);
     const yValues = data.map(d => d.yScore);
 
@@ -221,7 +221,7 @@ function renderScatterChart() {
             // 存在しない場合（リーグ切り替え時など）はリセットして全件表示
             selectedTeamName = null;
             const select = document.getElementById('team-drilldown-select');
-            if(select) select.value = '';
+            if (select) select.value = '';
             document.getElementById('team-style-radar-container').style.display = 'none';
         }
     }
@@ -234,7 +234,7 @@ function renderScatterChart() {
         shortLabel: team['省略名'],
         raw: team
     }));
-    
+
     const ctx = document.getElementById('team-style-scatter-chart').getContext('2d');
     if (scatterChart) scatterChart.destroy();
 
@@ -271,7 +271,7 @@ function renderScatterChart() {
                     titleColor: '#baf7fa',
                     bodyFont: { size: 13 },
                     callbacks: {
-                        label: function(context) {
+                        label: function (context) {
                             const d = context.raw;
                             const crossVal = d.raw.colorScore;
                             let styleText = "バランス型";
@@ -285,7 +285,7 @@ function renderScatterChart() {
                                 `スタイル: ${styleText}`
                             ];
                         },
-                        afterBody: function() {
+                        afterBody: function () {
                             return "※数値は偏差値による総合評価です";
                         }
                     }
@@ -301,19 +301,19 @@ function renderScatterChart() {
                 },
                 annotation: {
                     annotations: {
-                        quadrant1: { 
+                        quadrant1: {
                             type: 'box', xMin: 50, xMax: chartMaxX, yMin: 50, yMax: chartMaxY,
                             backgroundColor: 'rgba(169, 209, 142, 0.15)', borderWidth: 0
                         },
-                        quadrant2: { 
+                        quadrant2: {
                             type: 'box', xMin: chartMinX, xMax: 50, yMin: 50, yMax: chartMaxY,
                             backgroundColor: 'rgba(255, 230, 153, 0.15)', borderWidth: 0
                         },
-                        quadrant3: { 
+                        quadrant3: {
                             type: 'box', xMin: chartMinX, xMax: 50, yMin: chartMinY, yMax: 50,
                             backgroundColor: 'rgba(230, 230, 230, 0.2)', borderWidth: 0
                         },
-                        quadrant4: { 
+                        quadrant4: {
                             type: 'box', xMin: 50, xMax: chartMaxX, yMin: chartMinY, yMax: 50,
                             backgroundColor: 'rgba(244, 177, 131, 0.15)', borderWidth: 0
                         },
@@ -326,37 +326,41 @@ function renderScatterChart() {
                             borderColor: 'rgba(100, 100, 100, 0.4)', borderWidth: 2, borderDash: [4, 4]
                         },
                         labelQ1: {
-                            type: 'label', content: ['攻守圧倒', '王者'],
+                            type: 'label',
+                            content: ['【攻守安定】', '優勝・昇格候補'],
                             xValue: (50 + chartMaxX) / 2, yValue: (50 + chartMaxY) / 2,
-                            color: 'rgba(100, 140, 80, 0.5)', font: { size: 16, weight: 'bold' }
+                            color: 'rgba(50, 100, 50, 0.7)', font: { size: 14, weight: 'bold' }
                         },
                         labelQ2: {
-                            type: 'label', content: ['堅守速攻', '現実的'],
+                            type: 'label',
+                            content: ['【堅守】', 'ロースコア傾向'],
                             xValue: (chartMinX + 50) / 2, yValue: (50 + chartMaxY) / 2,
-                            color: 'rgba(180, 160, 50, 0.5)', font: { size: 16, weight: 'bold' }
+                            color: 'rgba(120, 100, 30, 0.7)', font: { size: 14, weight: 'bold' }
                         },
                         labelQ3: {
-                            type: 'label', content: ['不調・我慢'],
+                            type: 'label',
+                            content: ['【課題あり】', '改善が必要'],
                             xValue: (chartMinX + 50) / 2, yValue: (chartMinY + 50) / 2,
-                            color: 'rgba(150, 150, 150, 0.5)', font: { size: 16, weight: 'bold' }
+                            color: 'rgba(100, 100, 100, 0.7)', font: { size: 14, weight: 'bold' }
                         },
                         labelQ4: {
-                            type: 'label', content: ['攻撃偏重', '打ち合い'],
+                            type: 'label',
+                            content: ['【攻撃特化】', '打ち合い傾向'],
                             xValue: (50 + chartMaxX) / 2, yValue: (chartMinY + 50) / 2,
-                            color: 'rgba(180, 100, 60, 0.5)', font: { size: 16, weight: 'bold' }
+                            color: 'rgba(140, 70, 40, 0.7)', font: { size: 14, weight: 'bold' }
                         }
                     }
                 }
             },
             scales: {
-                x: { 
+                x: {
                     min: chartMinX, max: chartMaxX,
                     title: { display: true, text: '攻撃力 (得点力重視) →', font: { size: 12, weight: 'bold' }, color: '#666' },
                     grid: { display: false }
                 },
-                y: { 
+                y: {
                     min: chartMinY, max: chartMaxY,
-                    reverse: false, 
+                    reverse: false,
                     title: { display: true, text: '守備力 (失点少重視) ↑', font: { size: 12, weight: 'bold' }, color: '#666' },
                     grid: { display: false }
                 }
@@ -364,14 +368,14 @@ function renderScatterChart() {
             onClick: (e, elements) => {
                 if (elements.length > 0) {
                     const clickedIndex = elements[0].index;
-                    const selectedTeam = chartData[clickedIndex].raw; 
+                    const selectedTeam = chartData[clickedIndex].raw;
                     renderRadarChart(selectedTeam, data);
-                    
+
                     selectedTeamName = selectedTeam['チーム名'];
                     const select = document.getElementById('team-drilldown-select');
-                    if(select) select.value = selectedTeamName;
+                    if (select) select.value = selectedTeamName;
 
-                    renderScatterChart(); 
+                    renderScatterChart();
                     // クリック時もレーダーチャートへスクロール
                     document.getElementById('team-style-radar-container').style.display = 'block';
                     document.getElementById('team-style-radar-container').scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -391,12 +395,12 @@ function renderRadarChart(selectedTeam, allTeamData) {
     const reverseConceded = 50 + (50 - dev.conceded);
 
     const teamData = [
-        dev.shoot,      
-        dev.goal,       
-        dev.cross,      
+        dev.shoot,
+        dev.goal,
+        dev.cross,
         reverseConceded,
-        dev.foul,       
-        dev.card        
+        dev.foul,
+        dev.card
     ];
 
     const radarLabels = [
@@ -406,7 +410,7 @@ function renderRadarChart(selectedTeam, allTeamData) {
 
     const ctx = document.getElementById('team-style-radar-chart').getContext('2d');
     if (radarChart) radarChart.destroy();
-    
+
     radarChart = new Chart(ctx, {
         type: 'radar',
         data: {
@@ -444,12 +448,12 @@ function renderTable() {
         container.innerHTML = ''; return;
     };
     const data = mergedData[currentLeague];
-    const headers = { 
+    const headers = {
         'チーム名': 'クラブ', 'avgShoot': 'シュート', 'avgGoal': '得点', 'avgConceded': '失点',
-        'avgCross': 'クロス', 'avgFoul': 'ファウル', 'avgCard': '警告' 
+        'avgCross': 'クロス', 'avgFoul': 'ファウル', 'avgCard': '警告'
     };
-    const sortedData = [...data].sort((a,b) => b.xScore - a.xScore);
-    
+    const sortedData = [...data].sort((a, b) => b.xScore - a.xScore);
+
     const tableHTML = `
         <h3 style="text-align: center; color: #baf7fa; font-size: 1.3em; margin-bottom: 10px;">リーグデータ一覧 (1試合平均)</h3>
         <div class="table-scroll-wrapper" style="overflow-x: auto;">
@@ -473,12 +477,12 @@ function renderTable() {
 
 async function updatePage() {
     await processData();
-    
+
     // ★★★ 修正点: リーグ切り替え時は必ず選択状態をリセット ★★★
     selectedTeamName = null;
     const select = document.getElementById('team-drilldown-select');
-    if(select) select.value = '';
-    
+    if (select) select.value = '';
+
     renderTeamSelector(); // ドロップダウン再生成
     renderScatterChart();
     renderTable();

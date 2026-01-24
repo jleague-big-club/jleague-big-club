@@ -1,5 +1,3 @@
-// js/pages/blog.js
-
 import { getBlogPosts } from '../dataManager.js';
 import { loadScript } from '../uiHelpers.js';
 
@@ -23,6 +21,14 @@ export function hideArticleDetail() {
     if (contentDiv) {
         contentDiv.style.display = 'none';
         contentDiv.innerHTML = '';
+        contentDiv.style.backgroundColor = ''; 
+        contentDiv.style.color = '';
+        contentDiv.style.padding = '';
+        contentDiv.style.borderRadius = '';
+        
+        // ★これもリセット
+        contentDiv.style.maxWidth = '';
+        contentDiv.style.margin = '';
     }
     // ブログリストを再表示する
     if (listContainer) listContainer.style.display = 'flex';
@@ -43,6 +49,12 @@ export async function showArticleDetail(slug, title, fromPopState = false) {
     if(contentDiv) {
         contentDiv.innerHTML = '<p>記事を読み込んでいます...</p>';
         contentDiv.style.display = 'block';
+        contentDiv.style.backgroundColor = '#ffffff';
+        contentDiv.style.color = '#333333';  // 白背景なので文字は濃い色に
+        contentDiv.style.padding = '25px';   // 端に文字がくっつかないよう余白
+        contentDiv.style.borderRadius = '10px'; // 角を少し丸くする
+        contentDiv.style.maxWidth = '800px'; 
+        contentDiv.style.margin = '0 auto';  
     } else {
         return;
     }

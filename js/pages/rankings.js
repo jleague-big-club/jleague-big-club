@@ -6,18 +6,18 @@ import { clubAbbreviations } from '../config.js';
 
 const borderPoints = {
     'J1': {
-        acl: '勝点66',
-        survival: '勝点39'
+        acl: '勝点67',
+        survival: '勝点38'
     },
     'J2': {
-        promotion: '勝点76',
+        promotion: '勝点73',
         playoff: '勝点64',
-        survival: '勝点35'
+        survival: '勝点37'
     },
     'J3': {
-        promotion: '勝点62',
-        playoff: '勝点54',
-        survival: '勝点36'
+        promotion: '勝点69',
+        playoff: '勝点58',
+        survival: '勝点40'
     }
 };
 
@@ -25,18 +25,18 @@ const borderPoints = {
 function getInfoText(league) {
     const points = borderPoints[league];
     if (!points) return '';
-    
+
     let texts = [];
     if (points.acl) texts.push(`<span class="info-text-acl">ACL圏目安: ${points.acl}</span>`);
     if (points.promotion) texts.push(`<span class="info-text-promotion">自動昇格目安: ${points.promotion}</span>`);
     if (points.playoff) texts.push(`<span class="info-text-playoff">昇格PO目安: ${points.playoff}</span>`);
-    
+
     if ((league === 'J2' || league === 'J3') && points.survival) {
         texts.push(`<br><span class="info-text-survival">残留目安: ${points.survival}</span>`);
     } else if (points.survival) {
         texts.push(`<span class="info-text-survival">残留目安: ${points.survival}</span>`);
     }
-    
+
     return texts.join(' / ');
 }
 // ▲▲▲【ここまで変更】▲▲▲
@@ -55,8 +55,8 @@ function showRankingTable(league) {
             container.innerHTML = "<p>順位データがありません。</p>";
             return;
         }
-        
-        let topRowHtml = '<div class="rank-info-row">';
+
+        let topRowHtml = '<div class="rank-info-row" style="margin-top: 20px;">';
         let leftSideInfo = '<div class="rank-info-left">';
 
         let legendHtml = '<div class="rank-legend">';
@@ -72,25 +72,25 @@ function showRankingTable(league) {
                 legendHtml += '<div class="legend-item"><span class="legend-color-box legend-playoff"></span>昇格PO</div>';
                 legendHtml += '<div class="legend-item"><span class="legend-color-box legend-relegation-main"></span>自動降格</div>';
                 if (league === 'J3') {
-                     legendHtml += '<div class="legend-item"><span class="legend-color-box legend-relegation-playoff"></span>JFL入替戦</div>';
+                    legendHtml += '<div class="legend-item"><span class="legend-color-box legend-relegation-playoff"></span>JFL入替戦</div>';
                 }
                 break;
             case 'JFL':
-                 legendHtml += '<div class="legend-item"><span class="legend-color-box legend-promotion-main"></span>J3昇格</div>';
-                 legendHtml += '<div class="legend-item"><span class="legend-color-box legend-playoff"></span>J3入替戦</div>';
-                 legendHtml += '<div class="legend-item"><span class="legend-color-box legend-relegation-playoff"></span>地域L入替戦</div>';
-                 legendHtml += '<div class="legend-item"><span class="legend-color-box legend-relegation-main"></span>地域L降格</div>';
+                legendHtml += '<div class="legend-item"><span class="legend-color-box legend-promotion-main"></span>J3昇格</div>';
+                legendHtml += '<div class="legend-item"><span class="legend-color-box legend-playoff"></span>J3入替戦</div>';
+                legendHtml += '<div class="legend-item"><span class="legend-color-box legend-relegation-playoff"></span>地域L入替戦</div>';
+                legendHtml += '<div class="legend-item"><span class="legend-color-box legend-relegation-main"></span>地域L降格</div>';
                 break;
         }
         legendHtml += '</div>';
         leftSideInfo += legendHtml;
-        
+
         const infoText = getInfoText(league);
         if (infoText) {
             // ここでinnerHTMLを使うことで、<br>タグや<span>タグが正しく解釈される
             leftSideInfo += `<div class="qualification-info">${infoText}</div>`;
         }
-        
+
         leftSideInfo += '</div>';
 
         let dateHtml = '';
@@ -99,7 +99,7 @@ function showRankingTable(league) {
             const formattedDate = updatedDate.toLocaleString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
             dateHtml = `<p class="update-date-note">更新日時: ${formattedDate}</p>`;
         }
-        
+
         topRowHtml += leftSideInfo + dateHtml + '</div>';
 
         const headers = Object.keys(data[0]);
@@ -155,7 +155,7 @@ function showRankingTable(league) {
             tableHTML += `</tr>`;
         });
         tableHTML += `</tbody></table></div>`;
-        
+
         container.innerHTML = topRowHtml + tableHTML;
     });
 }
@@ -165,7 +165,7 @@ window.showRankingTable = showRankingTable;
 
 export default function initRankingPage() {
     const rankButtons = document.getElementById('rank-buttons');
-    if (!rankButtons.dataset.initialized) {
+    if (rankButtons && !rankButtons.dataset.initialized) {
         rankButtons.dataset.initialized = 'true';
     }
     showRankingTable('J1');

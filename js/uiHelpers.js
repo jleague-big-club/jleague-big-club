@@ -18,16 +18,13 @@ export function updateNavActiveState(id, btn) {
     } else {
         const pageToSelectorMap = {
             'top': '#nav-analysis-btn',
-            'metrics': 'a[href="#metrics"]',
-            'attendance': 'a[href="#attendance"]',
-            'history': 'a[href="#history"]',
+            'trends': 'a[href="#trends"]',
             'introduce': 'a[href="#introduce"]',
-            'rankings': '#nav-rankings-btn',
-            'prediction': 'a[href="#prediction"]',
-            'simulation': '#nav-simulation-btn',
-            'best11': 'a[href="#best11"]',
-            'europe': '#nav-europe-btn',
-            'europe-top20': 'a[href="#europe-top20"]',
+            'attendance': 'a[href="#attendance"]',
+            'elo-ratings': 'a[href="#elo-ratings"]',
+            'rankings': 'a[href="#rankings"]',
+            'prediction': '#nav-prediction-btn',
+            'winner': 'a[href="#winner"]',
             'blog': 'a[href="#blog"]',
         };
         // blog/slug のような形式にも対応
@@ -42,7 +39,7 @@ export function updateNavActiveState(id, btn) {
         const parentDropdown = targetEl.closest('.nav-dropdown');
         if (parentDropdown) {
             const parentTrigger = parentDropdown.querySelector('a');
-            if(parentTrigger) parentTrigger.classList.add('active');
+            if (parentTrigger) parentTrigger.classList.add('active');
         }
     }
 }
@@ -133,12 +130,12 @@ export function setupCarousel(carouselId, interval) {
         }
         setTimeout(() => { isAnimating = false; }, cooldownTime);
     }
-    
+
     const links = track.querySelectorAll('a');
     links.forEach(link => {
         link.removeAttribute('onclick');
-        
-        link.addEventListener('click', function(event) {
+
+        link.addEventListener('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
             const href = this.getAttribute('href');
@@ -190,7 +187,7 @@ export function setupEventListeners(showPage) {
             link.addEventListener('click', (event) => {
                 event.preventDefault();
                 const href = link.getAttribute('href');
-                if(href) {
+                if (href) {
                     window.location.hash = href;
                 }
 
@@ -263,19 +260,8 @@ export function setupEventListeners(showPage) {
             });
         }
     }
-    
+
     setupFooterButtonObserver();
-    
-    window.addEventListener('resize', () => {
-        const best11CopyBtn = document.getElementById('copy-best11-img-btn');
-        if (best11CopyBtn) {
-            if (window.innerWidth <= 768) {
-                best11CopyBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg><span>ダウンロード</span>';
-            } else {
-                best11CopyBtn.innerHTML = '画像をコピー';
-            }
-        }
-    });
 }
 
 
@@ -284,7 +270,7 @@ export function handleInitialURL(showPage) {
 
     if (hash.startsWith('#blog/')) {
         const slug = hash.substring('#blog/'.length);
-        
+
         showPage('blog', null, true);
 
         setTimeout(() => {
@@ -292,7 +278,7 @@ export function handleInitialURL(showPage) {
                 dataManager.getBlogPosts().then(posts => {
                     const post = posts.find(p => p.slug === slug);
                     const title = post ? post.title : slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                    
+
                     window.showArticleDetail(slug, title, true);
                 });
             });

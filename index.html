@@ -1,684 +1,379 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jリーグビッグクラブ分析</title>
-<link rel="preload" href="/img/banner1.webp" as="image" fetchpriority="high">
+  <title>Jリーグビッグクラブ分析</title>
+  <link rel="preload" href="/img/banner1.webp" as="image" fetchpriority="high">
 
-<meta name="description" content="Jリーグの「ビッグクラブ」をデータで徹底分析！独自のビッグクラブ指数で、浦和レッズや鹿島アントラーズからあなたの推しクラブまで、そのポテンシャルを可視化します。観客数や売上高、順位データも満載。">
-<link rel="icon" href="/img/favicon.png" type="image/png">
+  <meta name="description"
+    content="Jリーグの「ビッグクラブ」をデータで徹底分析！独自のビッグクラブ指数で、浦和レッズや鹿島アントラーズからあなたの推しクラブまで、そのポテンシャルを可視化します。観客数や売上高、順位データも満載。">
+  <link rel="icon" href="/img/favicon.png" type="image/png">
 
   <meta property="og:url" content="https://bigclub-japan.com/" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Jリーグビッグクラブ分析" />
-  <meta property="og:description" content="Jリーグの「ビッグクラブ」をデータで徹底分析！独自のビッグクラブ指数で、浦和レッズや鹿島アントラーズからあなたの推しクラブまで、そのポテンシャルを可視化します。" />
+  <meta property="og:description"
+    content="Jリーグの「ビッグクラブ」をデータで徹底分析！独自のビッグクラブ指数で、浦和レッズや鹿島アントラーズからあなたの推しクラブまで、そのポテンシャルを可視化します。" />
   <meta property="og:site_name" content="Big Club Japan" />
   <meta property="og:image" content="https://bigclub-japan.com/img/ogp_image.webp" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@BigClub_Japan" /> 
-  
+  <meta name="twitter:site" content="@BigClub_Japan" />
+
   <link rel="stylesheet" href="style.min.css">
-<noscript><link rel="stylesheet" href="style.min.css"></noscript>
- <!-- Google Analytics -->
- <script async src="https://www.googletagmanager.com/gtag/js?id=G-RZ7LMDQ2KM"></script>
- <script>
-   window.dataLayer = window.dataLayer || [];
-   function gtag(){dataLayer.push(arguments);}
-   gtag('js', new Date());
- 
-   gtag('config', 'G-RZ7LMDQ2KM', { 'send_page_view': false });
- </script>
+  <noscript>
+    <link rel="stylesheet" href="style.min.css">
+  </noscript>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RZ7LMDQ2KM"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-RZ7LMDQ2KM', { 'send_page_view': false });
+  </script>
+  <style>
+    @media (max-width: 768px) {
+      /* スマホメニュー内の直接のリンク(aタグ)に余白を持たせる */
+      #nav-links > a {
+        display: block;       /* ブロック要素にして余白を効かせる */
+        margin-bottom: 15px;  /* 下に15pxの隙間を作る */
+      }
+      /* 最後の要素だけ余白がいらない場合はこれ（お好みで） */
+      #nav-links > a:last-child {
+        margin-bottom: 20px; /* 一番下は少し広めでもOK */
+      }
+    }
+  </style>
 </head>
+
 <body>
-<button id="hamburger-btn" class="hamburger-btn" aria-label="メニューを開く">
+  <button id="hamburger-btn" class="hamburger-btn" aria-label="メニューを開く">
     <span></span>
     <span></span>
     <span></span>
-</button>
+  </button>
 
-<header id="mobile-header">
-<a href="#top" onclick="event.preventDefault(); showPage('top', null);" class="home-icon-link">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-    <circle cx="12" cy="12" r="10"></circle>
-    <path d="M12 2a10 10 0 0 0-3.54 19.53m7.08-19.53A10 10 0 0 1 15.54 21.53M2 12h20M12 2v20"></path>
-</svg>
-        <span>Big Club Japan</span>
-    </a>
-</header>
-<nav>
-<a href="#top" onclick="event.preventDefault(); showPage('top', document.querySelector('nav button'));" class="home-icon-link">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 0-3.54 19.53m7.08-19.53A10 10 0 0 1 15.54 21.53M2 12h20M12 2v20"></path></svg>
-    <span>Big Club Japan</span>    </a>
-    <div id="nav-links" class="nav-links">
-  <span class="nav-dropdown">
-    <a href="#top" onmouseover="preloadModule('top')" onclick="event.preventDefault(); toggleSubMenu(this, event);" id="nav-analysis-btn" class="active">Jリーグ分析</a>
-    <div class="nav-dropdown-content">
-      <a href="#top" onmouseover="preloadModule('top')" onclick="event.preventDefault(); event.stopPropagation(); showPage('top', document.getElementById('nav-analysis-btn'));">ビッグクラブ指数</a>
-<a href="#elo-ratings" onmouseover="preloadModule('elo-ratings')" onclick="event.preventDefault(); event.stopPropagation(); showPage('elo-ratings', this);">Eloレーティング</a>
-      <a href="#metrics" onmouseover="preloadModule('metrics')" onclick="event.preventDefault(); event.stopPropagation(); showPage('metrics', this);">クラブ指標</a>
-      <a href="#attendance" onmouseover="preloadModule('attendance')" onclick="event.preventDefault(); event.stopPropagation(); showPage('attendance', this);">平均観客数</a>
-      <a href="#history" onmouseover="preloadModule('history')" onclick="event.preventDefault(); event.stopPropagation(); showPage('history', this);">過去10年順位</a>
-      <a href="#introduce" onmouseover="preloadModule('introduce')" onclick="event.preventDefault(); event.stopPropagation(); showPage('introduce', this);">各クラブ紹介</a>
-      <a href="#team-style" onmouseover="preloadModule('team-style')" onclick="event.preventDefault(); event.stopPropagation(); showPage('team-style', this);">チームスタイル分析</a> 
-    </div>
-  </span>
-  <span class="nav-dropdown">
-    <a href="#rankings" onmouseover="preloadModule('rankings')" onclick="event.preventDefault(); toggleSubMenu(this, event);" id="nav-rankings-btn">Jリーグ順位表</a>
-    <div class="nav-dropdown-content">
-      <a href="#rankings" onmouseover="preloadModule('rankings')" onclick="event.preventDefault(); event.stopPropagation(); showPage('rankings', this);">順位表</a>
-      <a href="#barchartrace" onmouseover="preloadModule('barchartrace')" onclick="event.preventDefault(); event.stopPropagation(); showPage('barchartrace', this);">バーチャートレース</a>
-    </div>
-  </span>
-
-  <span class="nav-dropdown">
-    <a href="#winner" onmouseover="preloadModule('winner')" onclick="event.preventDefault(); toggleSubMenu(this, event);" id="nav-prediction-btn">Jリーグ予想</a>
-    <div class="nav-dropdown-content">
- <a href="#prediction" onmouseover="preloadModule('prediction')" onclick="event.preventDefault(); event.stopPropagation(); showPage('prediction', this);">シーズン予測</a>
-        <a href="#winner" onmouseover="preloadModule('winner')" onclick="event.preventDefault(); event.stopPropagation(); showPage('winner', this);">WINNER予測</a>
-       
-    </div>
-  </span>
-  
-<span class="nav-dropdown">
-  <a href="#simulation" onmouseover="preloadModule('simulation'); preloadModule('find-my-club');" onclick="event.preventDefault(); toggleSubMenu(this, event);" id="nav-simulation-btn">シミュレーション</a>
-  <div class="nav-dropdown-content">
-      <a href="#simulation" onmouseover="preloadModule('simulation')" onclick="event.preventDefault(); event.stopPropagation(); showPage('simulation', document.getElementById('nav-simulation-btn'));">ビッグクラブシミュレーター</a>
-      <a href="#find-my-club" onmouseover="preloadModule('find-my-club')" onclick="event.preventDefault(); event.stopPropagation(); showPage('find-my-club', this);">推しクラブマッチング</a>
-      <a href="#best11" onmouseover="preloadModule('best11')" onclick="event.preventDefault(); event.stopPropagation(); showPage('best11', this);">ベスト11メーカー</a>
-  </div>
-</span>
-  
-  <span class="nav-dropdown">
-    <a href="#europe" onmouseover="preloadModule('europe')" onclick="event.preventDefault(); toggleSubMenu(this, event);" id="nav-europe-btn">海外サッカー</a>
-    <div class="nav-dropdown-content">
-        <a href="#europe" onmouseover="preloadModule('europe')" onclick="event.preventDefault(); event.stopPropagation(); showPage('europe', document.getElementById('nav-europe-btn'));">5大リーグ日本人選手</a>
-        <a href="#europe-rankings" onmouseover="preloadModule('europe-rankings')" onclick="event.preventDefault(); event.stopPropagation(); showPage('europe-rankings', this);">5大リーグ順位表</a>
-    </div>
-  </span>
-  
-  <a href="#blog" onmouseover="preloadModule('blog')" onclick="event.preventDefault(); showPage('blog', this);">記事</a>
-</div>
-</nav>
-<div id="menu-overlay" class="menu-overlay"></div>
-<main>
-
-<div class="carousel-container" id="banner-carousel">
-  <div class="carousel-track">
-  <div class="carousel-item">
-   <a href="#blog/bigclub-challenge">
-       <img src="/img/banner1.webp" alt="ビッグクラブの挑戦"
-       width="380" height="100" fetchpriority="high" decoding="async" loading="eager">
-      <div class="banner-text">
-        データで見るJリーグ・ビッグクラブの夜明け
-      </div>
-    </a>
-  </div>
-  <div class="carousel-item">
-   <a href="#blog/prediction-intro">
-      <img src="/img/banner2.webp" alt="シーズン予測ページ紹介"
-width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
-      <div class="banner-text">
-        シーズン予測で推しクラブの未来を見よう！
-      </div>
-    </a>
-  </div>
-  <div class="carousel-item">
-   <a href="#blog/find-my-club-intro">
-      <img src="/img/banner7.webp" alt="推しクラブ診断"
-      width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
-      <div class="banner-text">
-        J初心者必見！あなたに合うJクラブを見つけよう
-      </div>
-    </a>
-  </div>
-  <div class="carousel-item">
-   <a href="#blog/best11-intro">
-       <img src="/img/banner3.webp" alt="ベスト11メーカー"
-width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
-      <div class="banner-text">
-        君だけの最強イレブンを作ろう！
-      </div>
-    </a>
-  </div>
-  <div class="carousel-item">
-  <a href="#blog/simulation-intro">
-      <img src="/img/banner4.webp" alt="ビッグクラブシミュレーター"
- width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
-      <div class="banner-text">
-        ビッグクラブシミュレーターを使ってみよう！
-      </div>
-    </a>
-  </div>
-  <div class="carousel-item">
-   <a href="#blog/attendance-intro">
-      <img src="/img/banner5.webp" alt="平均観客数"
-width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
-      <div class="banner-text">
-        Jリーグで最も熱いスタジアムはどこだ？
-      </div>
-    </a>
-  </div>
-  <div class="carousel-item">
-   <a href="#blog/europe-intro">
-      <img src="/img/banner6.webp" alt="欧州の日本人選手"
-width="380" height="100" fetchpriority="low" decoding="async" loading="lazy">
-      <div class="banner-text">
-        世界で戦うサムライたちをチェック
-      </div>
-    </a>
-  </div>
-</div>
-  
-  <button class="carousel-btn prev" id="carousel-prev-btn">❮</button>
-  <button class="carousel-btn next" id="carousel-next-btn">❯</button>
-
-</div>
-
-<div id="page-title-top" class="page-title-row" style="display:flex;">
-    <h1>
-      Jリーグ ビッグクラブ指数
-      <span class="score-calc-btn" tabindex="0">ビッグクラブ指数とは
-        <span class="score-calc-pop">
-          Jリーグ各クラブがどれだけ「ビッグクラブ」に近づいているのかを、実績や人気など4つの指標を基にスコア化したものです。
-          ・<b>50以上</b>：<span style="color:#ffd700;font-weight:bold;">ビッグクラブ</span>
-          ・<b>30～49.9</b>：<span style="color:#e94444;font-weight:bold;">有望ビッグクラブ</span>
-          ・<b>20～29.9</b>：<span style="color:#22bbf0;font-weight:bold;">潜在的ビッグクラブ</span>
-          ・<b>5～19.9</b>：<span style="color:#999;font-weight:bold;">中堅クラブ</span>
-          ・<b>4.9以下</b>：<span style="color:#aaa;font-weight:bold;">ローカルクラブ</span>
-          <div class="calc-note">
-            ※2024年までのデータで計算
-            ※詳しくはスコア計算方法ボタンをクリック
-          </div>
-        </span>
-      </span>
-    </h1>
-  </div>
-  <div id="page-title-metrics" class="page-title-row" style="display:none;"><h1>クラブ指標</h1></div>
-  <div id="page-title-history" class="page-title-row" style="display:none;"><h1>Jリーグ過去データ</h1></div>
-  <div id="page-title-rankings" class="page-title-row" style="display:none;"><h1>Jリーグ 順位表 2025</h1></div>
-  <div id="page-title-prediction" class="page-title-row" style="display:none;"><h1>Jリーグ 2025シーズン予測</h1></div>
-  <div id="page-title-introduce" class="page-title-row" style="display:none;"><h1>各クラブ紹介</h1></div>
-  <div id="page-title-europe" class="page-title-row" style="display:none;"><h1>25-26シーズン 5大リーグ日本人選手</h1></div>
-  <div id="page-title-best11" class="page-title-row" style="display:none;"><h1>ベスト11を作る</h1></div>
-  <div id="page-title-blog" class="page-title-row" style="display:none;"><h1>記事・ブログ</h1></div>
-<div id="page-title-winner" class="page-title-row" style="display:none;"><h1>Jリーグ WINNER予測</h1></div>
-<div id="page-title-elo-ratings" class="page-title-row" style="display:none;"><h1>Jリーグ Eloレーティング</h1></div>
-<div id="page-title-team-style" class="page-title-row" style="display:none;">
-    <h1>
-        チームスタイル分析 2025
-        <span class="score-calc-btn" tabindex="0">
-            分析の見方
-            <span class="score-calc-pop team-style-pop">
-                縦軸は<b>守備力</b>（失点の少なさ重視）、横軸は<b>攻撃力</b>（得点の多さ重視）を表す総合スコア（偏差値）です。
-                <br>
-                ・<b>右上</b>：攻守に圧倒する<span style="color:#a9d18e;font-weight:bold;">王者スタイル</span>
-                ・<b>左上</b>：得点は少ないが守り切る<span style="color:#ffe699;font-weight:bold;">堅守速攻</span>
-                ・<b>右下</b>：点は取るが失点も多い<span style="color:#f4b183;font-weight:bold;">打ち合い上等</span>
-                ・<b>左下</b>：攻守に課題がある<span style="color:#ccc;font-weight:bold;">我慢の時期</span>
-                <div class="calc-note">
-                    ※軸の数値は<b>「得点」と「失点」の結果</b>を最も重視して計算しています。（シュートが多くても無得点なら左に行きます）<br>
-                    ※円の色は<b>攻撃スタイル</b>を表します。<br>
-                    <span style="color:#ff6384;">● 赤系</span>：サイド攻撃主体（クロス多）<br>
-                    <span style="color:#36a2eb;">● 青系</span>：中央突破主体（クロス少）
-                </div>
-            </span>
-        </span>
-    </h1>
-</div>
-  <div id="page-title-europe-rankings" class="page-title-row" style="display:none;"><h1>5大リーグ 順位表 25-26シーズン</h1></div>
-
-<div id="top" class="page-section visible">
-  <h2 style="position: absolute; left: -9999px;">ビッグクラブトップ5</h2>
-  
-  <div class="big5-container" id="big5-cards"></div>
-  
-  <h2 style="text-align:center; margin-bottom:8px; color:#baf7fa; font-size:1.25rem;">6位以下クラブ</h2>
-  
-  <div class="club-table-container">
-    <div id="club-categories"></div>
-  </div>
-</div>
-<div id="barchartrace" class="page-section">
-      <div id="page-title-barchartrace" class="page-title-row" style="display:none;">
-          <h1>Jリーグ 2025 バーチャートレース</h1>
-      </div>
-      <div class="bcr-page-container">
-        <div class="bcr-league-selector">
-          <button class="bcr-league-btn active" data-league="J1">J1</button>
-          <button class="bcr-league-btn" data-league="J2">J2</button>
-          <button class="bcr-league-btn" data-league="J3">J3</button>
-          <button id="bcr-help-btn" class="bcr-info-btn">なぜ+2？</button>
-        </div>
-        <p class="bcr-description">
-          リーグを選択し、再生ボタンを押すと順位変動アニメーションが始まります。<br>
-          スライダーで好きな節を確認することもできます。
-        </p>
-        <div class="bcr-chart-wrapper">
-          <canvas id="bcr-chart"></canvas>
-<span id="bcr-race-section-display"></span>
-        </div>
-        <div class="bcr-controls-wrapper">
-          <button id="bcr-play-pause-btn" class="bcr-control-btn">再生</button>
-          <button id="bcr-reset-btn" class="bcr-control-btn">リセット</button>
-          <span id="bcr-current-section" class="bcr-section-display">第1節</span>
-          <input type="range" id="bcr-slider" min="1" max="38" value="1" class="bcr-slider">
-          <span id="bcr-total-section" class="bcr-section-display">/</span>
-        </div>
-      </div>
-      <div id="bcr-help-modal" class="bcr-modal">
-        <div class="bcr-modal-content">
-          <span class="bcr-close-btn">×</span>
-          <h3>なぜ勝ち点が一度に「+2」など変動することがあるの？</h3>
-          <p>
-    当システムは、節から次の節へ更新される際に、その間に行われた全試合の結果を一度に集計して順位を算出しています。<br><br>
-    通常、1チームは1節につき1試合しか行いませんが、ACLの日程や試合延期などの理由で、<strong>次の節までの間に2試合以上を戦うチーム</strong>が出てくることがあります。<br><br>
-    その場合、複数試合分の勝ち点が一度に加算されるため、「1勝1分で+4」「2引き分けで+2」といった特殊な変動が起こります。これは、各節終了時点での順位を正確に反映するための、当サイトの集計方法によるものです。
-</p>
-        </div>
-      </div>
-    </div>
-  <div id="metrics" class="page-section">
-    <span class="table-note">※並びはビッグクラブスコア順</span>
-<div class="metric-select-row" style="text-align: center; margin-bottom: 20px;">
-  <label for="metric-select" style="font-weight: bold; margin-right: 10px;">表示する指標:</label>
-  <select id="metric-select">
-    <option value="revenue">売上高（2024）</option>
-    <option value="audience">観客動員数（2025）</option>
-    <option value="titles">タイトル数（2025まで）</option>
-  </select>
-</div>
-    <div class="metrics-chart-wrap">
-      <canvas id="metricChart" width="1000" height="520"></canvas>
-    </div>
-  </div>
-  <div id="history" class="page-section">
-    <span class="table-note">※並びはビッグクラブスコア順<br>※在籍していない年は21位で計算</span>
-    <div id="jleague-history"></div>
-  </div>
-      <div id="rankings" class="page-section">
-    <div id="rank-buttons" style="text-align:center; margin: 20px 0;">
-      <button class="rank-tab-btn active" onclick="showRankingTable('J1')">J1</button>
-      <button class="rank-tab-btn" onclick="showRankingTable('J2')">J2</button>
-      <button class="rank-tab-btn" onclick="showRankingTable('J3')">J3</button>
-      <button class="rank-tab-btn" onclick="showRankingTable('JFL')">JFL</button>
-    </div>
-    <div id="ranking-table-container">
-    </div>
-  </div>
-
-    <div id="prediction" class="page-section" style="display:none;">
-    <div id="prediction-league-tabs" style="text-align:center; margin: 20px 0; display: flex; justify-content: center; align-items: center; gap: 10px;">
-    </div>
-    <div id="prediction-container">
-    </div>
-    <div id="prediction-help-pop">
-        <button class="close-btn" onclick="document.getElementById('prediction-help-pop').style.display='none';">閉じる</button>
-        <h3>シーズン予測の見方</h3>
-<p>これは、シーズン終了時に各チームがどの順位になるかを、コンピューターでシミュレーションして確率で表したものです。</p>
-
-<h4>▼ 予測のしくみ</h4>
-<p>当サイトのシーズン予測は、まだ行われていない全試合の結果を<strong>10,000回</strong>もシミュレーション（仮想試合）し、その未来を統計的に分析したものです。シミュレーションは、主に以下の3つの要素を組み合わせて行われます。</p>
-
-<ol>
-    <li>
-        <p><strong>現在の強さ (Eloレーティング)</strong> <small>&lt;最も重要な要素&gt;</small></p>
-        <p>最新の試合結果を反映した、チームの「真の実力」を示す指標です。単なる勝敗だけでなく、<strong>「誰に勝ったか（勝利の質）」</strong>を重視するのが特徴です。</p>
-        <ul>
-            <li>格上の強い相手に勝つ → レーティングは大幅にアップ</li>
-            <li>格下の弱い相手に勝つ → レーティングは少しだけアップ</li>
-            <li>格下の相手に負ける/引き分ける → レーティングは大幅にダウン</li>
-        </ul>
-    </li>
-    <li>
-        <p><strong>現在の実績 (アドバンテージ)</strong></p>
-        <p>シミュレーションの開始時点での「現在の勝点」などを考慮します。シーズン終盤になるほど、このアドバンテージの重要性が増していきます。</p>
-    </li>
-    <li>
-        <p><strong>ランダム性 (運の要素)</strong></p>
-        <p>サッカーに番狂わせはつきものです。「その日の調子」や「運」といった不確定要素を、統計的な乱数を用いてシミュレーションに組み込んでいます。これにより、格下のチームが格上に勝利する、現実的な試合展開も再現されます。</p>
-    </li>
-</ol>
-<b>※確率は毎節ごとに変動します。</b></p>
-
-        <p style="margin-top: 20px; font-weight: bold; color: #baf7fa;">▼ 各項目の意味</p>
-        <ul>
-            <li><b>🏆 優勝 / 昇格確率:</b><br>
-                残り試合数から10,000回のシュミレーションをして（以下同様）、優勝（またはJ1・J2へ昇格）した回数が多いチームです。</li>
-            <li><b>🌐 ACL出場圏確率 (J1):</b><br>
-                3位以内に入り、ACL出場権を獲得した回数が多いチームです。</li>
-            <li><b>⚠️ 降格確率:</b><br>
-                残念ながら下のリーグに降格してしまった回数が多いチームです。</li>
-            <li><b>✅ 残留以上確率:</b><br>
-                残留以上の順位で終わる回数が多いチームです。</li>
-        </ul>
- <div style="text-align: center; margin-top: 25px; padding-top: 15px; border-top: 1px solid #4a5a7f;">
-        <a href="#blog/prediction-logic-explainer"
-   onclick="document.getElementById('prediction-help-pop').style.display='none';">
-    さらに詳しく (なぜ順位と予測が違う？)
-</a>
-    </div>
-    </div>
-  
-  </div>
-  
-  <div id="winner" class="page-section"></div>
-
- <div id="winner-results" class="page-section"></div>
-
-<div id="elo-ratings" class="page-section"></div>
-  
-  <div id="introduce" class="page-section">
-    <!-- introduce.js がこの中にコンテンツを生成します -->
-  </div>
-
-  <div id="europe" class="page-section" style="display:none;">
-    <div id="europe-pc-view">
-      <h2 style="text-align:center;"></h2>
-      <div id="europe-flex-row" style="display:flex; flex-direction:row; gap:36px; align-items:flex-start; justify-content:flex-start;">
-        <div id="map-container" style="position:relative; width:430px; height:410px; flex-shrink:0;">
-          <img src="/img/europe.webp" alt="ヨーロッパ地図" width="1110" height="1280" style="border-radius:13px; display:block;">
-          
-          <!-- ★★★【修正】各ボタンに class="country-btn" を追加 ★★★ -->
-          <button class="country-btn" data-league="プレミアリーグ" style="position:absolute; left:38px; top:270px; width:55px; height:60px;"></button>
-          <button class="country-btn" data-league="ラ・リーガ" style="position:absolute; left:30px; top:415px; width:55px; height:60px;"></button>
-          <button class="country-btn" data-league="リーグ・アン" style="position:absolute; left:70px; top:350px; width:65px; height:60px;"></button>
-          <button class="country-btn" data-league="セリエA" style="position:absolute; left:160px; top:380px; width:50px; height:75px;"></button>
-          <button class="country-btn" data-league="ブンデスリーガ" style="position:absolute; left:130px; top:290px; width:60px; height:60px;"></button>
-          
-          <!-- ★★★【追加】リーグ選択ボタンを追加 ★★★ -->
-          <div id="europe-league-buttons" style="position:absolute; top: 10px; left: 10px; display: flex; flex-direction: column; gap: 8px;">
-              <button class="country-btn active" data-league="all">5大リーグ全て</button>
-              <button class="country-btn" data-league="プレミアリーグ">イングランド</button>
-              <button class="country-btn" data-league="ラ・リーガ">スペイン</button>
-              <button class="country-btn" data-league="ブンデスリーガ">ドイツ</button>
-              <button class="country-btn" data-league="セリエA">イタリア</button>
-              <button class="country-btn" data-league="リーグ・アン">フランス</button>
-          </div>
-        </div>
-        <div id="player-table-wrap" style="min-width:280px; max-width:1000px; width:100%; padding-top:9px;"></div>
-      </div>
-    </div>
-
-    <div id="europe-mobile-view">
-        <div id="europe-league-selector" style="padding: 10px 5px;"></div>
-        <div id="europe-player-list" style="padding: 10px 5px;"></div>
-    </div>
-</div>
-  <div id="europe-rankings" class="page-section"></div>
-  <div id="best11" class="page-section" style="display:none;">
-    <div id="best11-capture-area">
-      <div style="font-size:2.1em; font-weight:bold; color:#fff; margin-bottom:8px;">#あなたのベストイレブン</div>
-      <div id="formation-title" style="font-size:1.13em; color:#eaf7fc; margin-bottom:14px;">フォーメーション：3-4-3</div>
-      <div id="best11-capture-core">
-        <div style="min-width:370px; max-width:380px; position:relative; height: 350px;">
-          <img src="/img/court.png" style="width:360px;height:350px;border-radius:16px;box-shadow:0 2px 10px #0017;display:block;position:absolute;left:0;top:0;z-index:1;">
-          <div id="court-area"></div>
-        </div>
-        <div style="flex:1; position: relative;">
-          <div id="best11-table"></div>
-          <div id="table-footer">BigClub-Japan.com</div>
-        </div>
-      </div>
-      <div id="capture-buttons" style="position:absolute; right:0; top: -50px; z-index:100; display:flex; gap:10px;">
-         <button id="copy-best11-img-btn" class="capture-action-btn secondary-action">画像をコピー</button>
-  <button id="post-to-x-btn" class="capture-action-btn" title="Xを開く">
-          <svg xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" fill="currentColor" class="bi bi-twitter-x" viewBox="0 0 16 16" aria-hidden="true">
-            <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.6.75ZM11.49 13.5l-1.45-2.086L3.33 2.75h2.1l4.485 6.06L14.24 13.5h-2.75Z"/>
-          </svg>
-          <span>Xを開く</span>
-        </button>
-      </div>
-      <span id="copy-best11-img-msg" style="position:absolute; right:26px; top:65px; color:#fff970; font-size:1em;"></span>
-    </div>
-    <div id="best11-controls">
-      <div id="formation-buttons" style="text-align:center;margin:19px auto 8px auto;">
-        <div style="margin-bottom:7px; font-weight:bold;">フォーメーションを選んでください</div>
-        
-        <button class="formation-btn active" onclick="setFormation('343', this)">3-4-3</button>
-        <button class="formation-btn" onclick="setFormation('433', this)">4-3-3</button>
-      </div>
-
-      <div id="position-tabs" style="max-width:950px; margin:0 auto 15px auto;">
-        <div style="margin-bottom:7px; font-weight:bold;">ポジションを選んでください</div>
-        <div id="position-btn-container" class="position-btn-row">
-        </div>
-      </div>
-
-      <div id="best11-filters" style="text-align: center; margin-bottom: 20px; padding: 10px; background: #2a3758; border-radius: 12px;">
-      </div>
-      
-      <div id="player-choice-list" style="text-align:center; margin-bottom: 26px;">
-      </div>
-    </div>
-    </div>
-<div id="page-title-attendance" class="page-title-row" style="display:none;"><h1>Jリーグ 平均観客数</h1></div>
-<div id="attendance" class="page-section" style="display:none;">
-  
-  <div id="attendance-controls" style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 15px 20px; margin-bottom: 25px;">
-    
-    <div style="display: flex; align-items: center; gap: 8px;">
-        <label for="attendance-year-select" style="font-weight: bold;">年度:</label>
-        <select id="attendance-year-select" style="padding: 8px 12px; font-size: 1rem; border-radius: 8px; border: 2px solid #5a75a7; background-color: #232947; color: #fff; font-weight: bold;">
-        </select>
-    </div>
-
-    <div id="attendance-league-btns">
-    </div>
-    
-    <select id="attendance-club-select" style="padding: 8px 12px; font-size: 1rem; border-radius: 8px; border: 2px solid #5a75a7; background-color: #232947; color: #fff; font-weight: bold;">
-    </select>
-  </div>
-  
-  <div id="attendance-output-container">
-  </div>
-  
-  <div id="attendance-chart-wrap" class="metrics-chart-wrap" style="display: none;">
-      <h3 id="attendance-chart-title" style="text-align: center; margin: 0 0 15px 0; color: #333; font-size: 1.5em;"></h3>
-      <canvas id="attendanceChart"></canvas>
-      <div id="attendance-chart-footer" style="padding-top: 10px;"></div>
-  </div>
-
-</div>
-  <div id="blog" class="page-section" style="display:none;">
-    <div id="blog-content" style="display: none; text-align: left; max-width: 800px; margin: 20px auto; padding: 25px; background: #fff; color: #333; border-radius: 12px; box-shadow: 0 2px 10px #0002;"></div>
-    <div id="blog-list-container" style="display:flex; flex-wrap:wrap; gap:20px; justify-content:center;"></div>
-    <div id="pagination" style="text-align:center; margin-top:20px;"></div>
-  </div>
-<div id="simulation" class="page-section" style="display:none;">
-    <div class="sim-container">
-        <h2>ビッグクラブ シミュレーション</h2>
-        <p class="sim-note">クラブを選択し、いずれかの数値を変更するとビッグクラブスコアがどう変わるか計算できます。</p>
-        
-        <div class="sim-controls">
-            <div class="sim-select-group">
-                <label for="sim-league-select">リーグ選択</label>
-                <select id="sim-league-select"></select>
-            </div>
-            <div class="sim-select-group">
-                <label for="sim-club-select">クラブ選択</label>
-                <select id="sim-club-select" disabled></select>
-            </div>
-        </div>
-        
-        <div class="sim-form-area">
-            <div class="sim-input-grid">
-                <div class="sim-input-group">
-                    <label for="sim-revenue">売上高 (億円)</label>
-                    <input type="number" id="sim-revenue" class="sim-input" placeholder="数値を入力..." disabled>
-                </div>
-                <div class="sim-input-group">
-                    <label for="sim-audience">平均観客動員数 (人)</label>
-                    <input type="number" id="sim-audience" class="sim-input" placeholder="数値を入力..." disabled>
-                </div>
-                <div class="sim-input-group">
-                    <label for="sim-titles">累計タイトル数</label>
-                    <input type="number" id="sim-titles" class="sim-input" placeholder="数値を入力..." disabled>
-                </div>
-                <div class="sim-input-group">
-                    <label for="sim-avg-rank">過去10年 J1平均順位</label>
-                    <input type="number" step="0.1" id="sim-avg-rank" class="sim-input" placeholder="数値を入力..." disabled>
-                </div>
-            </div>
-        </div>
-
-        <div id="sim-result-area">
-            <p>クラブを選択すると、ここにスコアが表示されます。</p>
-        </div>
-    </div>
-</div>
-<!-- ★★★【このブロックを丸ごとコピーして貼り付け】★★★ -->
-<div id="page-title-find-my-club" class="page-title-row" style="display:none;"><h1>あなたに合うJリーグクラブを見つけよう！</h1></div>
-
-<div id="find-my-club" class="page-section">
-  <div id="find-my-club-questions"></div>
-  <div id="find-my-club-result" style="display: none;"></div>
-</div>
-<div id="simulation-game" class="page-section">
-</div>
-<div id="team-style" class="page-section">
-    <div class="team-style-container" style="background-color: #2a3758; border-radius: 16px; padding: 20px; border: 1.5px solid #4a5a7f;">
-        <h2 style="text-align: center; color: #baf7fa; margin-top: 0; margin-bottom: 20px;">チームスタイル分析</h2>
-        
-        <div id="team-style-controls" style="text-align:center; margin-bottom: 20px;">
-          <button class="rank-tab-btn active" data-league="J1">J1</button>
-          <button class="rank-tab-btn" data-league="J2">J2</button>
-          <button class="rank-tab-btn" data-league="J3">J3</button>
-        </div>
-        
-        <div class="metrics-chart-wrap" style="background-color: #ffffff; border-radius: 12px; padding: 15px; min-height: 500px;">
-            <canvas id="team-style-scatter-chart"></canvas>
-        </div>
-    </div>
-    
-    <div id="team-style-radar-container" style="display: none; margin-top: 30px;">
-        <h3 id="radar-chart-title" style="text-align: center; color: #baf7fa; font-size: 1.5em; margin-bottom: 15px;"></h3>
-        <div class="metrics-chart-wrap" style="background-color: #ffffff; border-radius: 12px; max-width: 500px; min-height: 400px; padding: 15px;">
-            <canvas id="team-style-radar-chart"></canvas>
-        </div>
-    </div>
-
-    <div id="team-style-table-container" style="margin-top: 30px;"></div>
-</div>
-</main>
-<div id="club-status-board"></div>
-<div class="support-widget-wrapper">
-  <div class="support-widget">
-    <h3 class="support-title">このサイトを応援する！</h3>
-    <a href="https://ko-fi.com/bigclub_japan" target="_blank" rel="noopener noreferrer" class="support-button">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.09C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.42 22 8.5C22 12.28 18.6 15.36 13.45 20.04L12 21.35Z"/>
-        <text x="12" y="15.5" font-size="10" font-weight="bold" fill="#232947" text-anchor="middle">¥</text>
+  <header id="mobile-header">
+    <a href="#top" onclick="event.preventDefault(); showPage('top', null);" class="home-icon-link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none"
+        stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="M12 2a10 10 0 0 0-3.54 19.53m7.08-19.53A10 10 0 0 1 15.54 21.53M2 12h20M12 2v20"></path>
       </svg>
-      チップで応援する
+      <span>Big Club Japan</span>
     </a>
-  </div>
-</div>
-<footer class="site-footer">
-  <div class="footer-container">
-    <div class="footer-logo">
-      <a href="#top" onclick="event.preventDefault(); showPage('top', document.querySelector('nav a'));">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="12" cy="12" r="10"></circle>
-    <path d="M12 2a10 10 0 0 0-3.54 19.53m7.08-19.53A10 10 0 0 1 15.54 21.53M2 12h20M12 2v20"></path>
-</svg>
-        <span>Big Club Japan</span>
-      </a>
+  </header>
+  <nav>
+    <a href="#top" onclick="event.preventDefault(); showPage('top', document.querySelector('nav button'));"
+      class="home-icon-link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="M12 2a10 10 0 0 0-3.54 19.53m7.08-19.53A10 10 0 0 1 15.54 21.53M2 12h20M12 2v20"></path>
+      </svg>
+      <span>Big Club Japan</span> </a>
+    <div id="nav-links" class="nav-links">
+      <span class="nav-dropdown">
+        <a href="#top" onmouseover="preloadModule('top')" onclick="event.preventDefault(); toggleSubMenu(this, event);"
+          id="nav-analysis-btn" class="active">各クラブデータ ▼</a>
+        <div class="nav-dropdown-content">
+          <a href="#top" onmouseover="preloadModule('top')"
+            onclick="event.preventDefault(); event.stopPropagation(); showPage('top', document.getElementById('nav-analysis-btn'));">ビッグクラブ指数</a>
+          <a href="#trends" onmouseover="preloadModule('trends')"
+            onclick="event.preventDefault(); event.stopPropagation(); showPage('trends', this);">指数推移レポート</a>
+          <a href="#introduce" onmouseover="preloadModule('introduce')"
+            onclick="event.preventDefault(); event.stopPropagation(); showPage('introduce', this);">全クラブ指標一覧</a>
+          <a href="#attendance" onmouseover="preloadModule('attendance')"
+            onclick="event.preventDefault(); event.stopPropagation(); showPage('attendance', this);">平均観客数推移</a>
+          <a href="#elo-ratings" onmouseover="preloadModule('elo-ratings')"
+            onclick="event.preventDefault(); event.stopPropagation(); showPage('elo-ratings', this);">Eloレーティング</a>
+        </div>
+      </span>
+
+      <span class="nav-dropdown">
+        <a href="#prediction" onmouseover="preloadModule('prediction')"
+          onclick="event.preventDefault(); toggleSubMenu(this, event);" id="nav-prediction-btn">AI予測▼</a>
+        <div class="nav-dropdown-content">
+          <a href="#prediction" onmouseover="preloadModule('prediction')"
+            onclick="event.preventDefault(); event.stopPropagation(); showPage('prediction', document.getElementById('nav-prediction-btn'));">26-27シーズン最終順位予測</a>
+          <a href="#winner" onmouseover="preloadModule('winner')"
+            onclick="event.preventDefault(); event.stopPropagation(); showPage('winner', this);">WINNER予想</a>
+        </div>
+      </span>
+
+      <a href="#rankings" onmouseover="preloadModule('rankings')"
+        onclick="event.preventDefault(); showPage('rankings', this);">Jリーグ順位表</a>
+
+      <a href="#blog" onmouseover="preloadModule('blog')"
+        onclick="event.preventDefault(); showPage('blog', this);">記事</a>
     </div>
-    <div class="footer-links">
-  <a href="#top" onclick="event.preventDefault(); showPage('top', document.querySelector('nav a'));">ホーム</a>
- <a href="#blog/about-this-site" onclick="event.preventDefault(); window.location.hash='#blog/about-this-site';">当サイトについて</a>
-  <a href="#blog" onclick="event.preventDefault(); showPage('blog', document.querySelector('#nav-links > a:last-of-type'));">記事一覧</a>
-      <a href="legal/contact.html" target="_blank" rel="noopener noreferrer">お問い合わせ</a>
-      <a href="legal/privacy-policy.html" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a>
-      
-      <a href="https://x.com/BigClub_Japan" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="Xのプロフィールページ">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
-          <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.6.75ZM11.49 13.5l-1.45-2.086L3.33 2.75h2.1l4.485 6.06L14.24 13.5h-2.75Z"/>
+  </nav>
+  <div id="menu-overlay" class="menu-overlay"></div>
+  <main>
+
+    <div class="carousel-container" id="banner-carousel">
+      <div class="carousel-track">
+        <div class="carousel-item">
+          <a href="#blog/bigclub-challenge">
+            <img src="/img/banner1.webp" alt="ビッグクラブの挑戦" width="380" height="100" fetchpriority="high" decoding="async"
+              loading="eager">
+            <div class="banner-text">
+              データで見るJリーグ・ビッグクラブの夜明け
+            </div>
+          </a>
+        </div>
+        <div class="carousel-item">
+          <a href="#blog/prediction-intro">
+            <img src="/img/banner2.webp" alt="シーズン予測ページ紹介" width="380" height="100" fetchpriority="low" decoding="async"
+              loading="lazy">
+            <div class="banner-text">
+              シーズン予測で推しクラブの未来を見よう！
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <button class="carousel-btn prev" id="carousel-prev-btn">❮</button>
+      <button class="carousel-btn next" id="carousel-next-btn">❯</button>
+
+    </div>
+
+    <div id="page-title-top" class="page-title-row" style="display:flex;">
+      <h1>
+        Jリーグ ビッグクラブ指数
+        <span class="score-calc-btn" tabindex="0">ビッグクラブ指数とは
+          <span class="score-calc-pop">
+            Jリーグ各クラブがどれだけ「ビッグクラブ」に近づいているのかを、実績や人気など4つの指標を基にスコア化したものです。
+            ・<b>50以上</b>：<span style="color:#ffd700;font-weight:bold;">ビッグクラブ</span>
+            ・<b>30～49.9</b>：<span style="color:#e94444;font-weight:bold;">有望ビッグクラブ</span>
+            ・<b>20～29.9</b>：<span style="color:#22bbf0;font-weight:bold;">潜在的ビッグクラブ</span>
+            ・<b>5～19.9</b>：<span style="color:#999;font-weight:bold;">中堅クラブ</span>
+            ・<b>4.9以下</b>：<span style="color:#aaa;font-weight:bold;">ローカルクラブ</span>
+            <div class="calc-note">
+              ※2025年までのデータで計算
+              ※詳しくはスコア計算方法ボタンをクリック
+            </div>
+          </span>
+        </span>
+      </h1>
+    </div>
+    <div id="page-title-prediction" class="page-title-row" style="display:none;">
+      <h1>2026シーズン最終順位予測</h1>
+    </div>
+    <div id="page-title-attendance" class="page-title-row" style="display:none;">
+      <h1>平均観客数推移</h1>
+    </div>
+    <div id="page-title-rankings" class="page-title-row" style="display:none;">
+      <h1>26-27シーズン Jリーグ順位表</h1>
+    </div>
+    <div id="page-title-introduce" class="page-title-row" style="display:none;">
+      <h1>クラブ指標一覧</h1>
+    </div>
+    <div id="page-title-trends" class="page-title-row" style="display:none;">
+      <h1>ビッグクラブ指数 推移＆分析</h1>
+    </div>
+    <div id="page-title-blog" class="page-title-row" style="display:none;">
+      <h1>記事・レポート</h1>
+    </div>
+    <div id="page-title-winner" class="page-title-row" style="display:none;">
+      <h1>Jリーグ WINNER予想</h1>
+    </div>
+    <div id="page-title-elo-ratings" class="page-title-row" style="display:none;">
+      <h1>Jリーグ Eloレーティング</h1>
+    </div>
+
+    <!-- Page Section Containers -->
+    <div id="top" class="page-section visible"></div>
+    <div id="introduce" class="page-section"></div>
+    <div id="trends" class="page-section"></div>
+
+    <div id="prediction" class="page-section">
+      <div id="prediction-league-tabs" class="tabs"></div>
+      <div id="prediction-container"></div>
+
+      <div id="prediction-help-pop"
+        style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#232947; padding:25px; border-radius:12px; border: 2px solid #29b6e6; box-shadow:0 10px 40px rgba(0,0,0,0.7); z-index:10001; width:90%; max-width:500px; color:#fff;">
+        
+        <!-- タイトル：水色文字・下線付き -->
+        <h3 style="margin-top:0; text-align:center; color:#baf7fa; border-bottom:1px solid #3a486b; padding-bottom:10px; margin-bottom:15px; font-size:1.2em;">
+            シーズン予測について
+        </h3>
+        
+        <!-- 本文：白っぽい文字 -->
+        <p style="line-height: 1.8; font-size: 0.95em; color:#eaf7fc; margin-bottom: 20px;">
+            この予測は、モンテカルロシミュレーションという統計的手法を用いて、残り試合をランダムに10万回シミュレーションした結果です。<br><br>
+            各クラブの強さは過去の試合結果やEloレーティングを基に算出されています。
+        </p>
+        
+        <!-- 閉じるボタン：枠線スタイル -->
+        <div style="text-align:center;">
+            <button onclick="document.getElementById('prediction-help-pop').style.display='none'"
+              style="padding:8px 30px; background:rgba(41, 182, 230, 0.1); color:#29b6e6; border:1px solid #29b6e6; border-radius:6px; cursor:pointer; font-weight:bold; font-size:1em; transition: 0.2s;">
+              閉じる
+            </button>
+        </div>
+      </div>
+     </div>
+
+    <div id="attendance" class="page-section"></div>
+
+    <div id="rankings" class="page-section">
+      <div id="rank-buttons" class="tabs">
+        <button class="rank-tab-btn" onclick="showRankingTable('J1')">J1</button>
+        <button class="rank-tab-btn" onclick="showRankingTable('J2')">J2</button>
+        <button class="rank-tab-btn" onclick="showRankingTable('J3')">J3</button>
+        <button class="rank-tab-btn" onclick="showRankingTable('JFL')">JFL</button>
+      </div>
+      <div id="ranking-table-container"></div>
+    </div>
+
+    <div id="winner" class="page-section"></div>
+    <div id="winner-results" class="page-section"></div>
+    <div id="elo-ratings" class="page-section"></div>
+
+    <div id="blog" class="page-section">
+      <div id="blog-list">
+        <div id="blog-list-container"></div>
+        <div id="pagination"></div>
+      </div>
+      <div id="blog-content" style="display:none;"></div>
+    </div>
+
+  </main>
+  <div id="club-status-board"></div>
+  <div class="support-widget-wrapper">
+    <div class="support-widget">
+      <h3 class="support-title">このサイトを応援する！</h3>
+      <a href="https://ko-fi.com/bigclub_japan" target="_blank" rel="noopener noreferrer" class="support-button">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M12 21.35L10.55 20.03C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.09C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.42 22 8.5C22 12.28 18.6 15.36 13.45 20.04L12 21.35Z" />
+          <text x="12" y="15.5" font-size="10" font-weight="bold" fill="#232947" text-anchor="middle">¥</text>
         </svg>
+        チップで応援する
       </a>
     </div>
-    <div class="footer-copyright">
-      © 2025 Big Club Japan. All Rights Reserved.
-      <span style="font-size: 0.85em; color: #89a;">本サイトの一部コンテンツでは、音声読み上げソフト「VOICEVOX:ずんだもん」を使用しています。</span>
+  </div>
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-logo">
+        <a href="#top" onclick="event.preventDefault(); showPage('top', document.querySelector('nav a'));">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 2a10 10 0 0 0-3.54 19.53m7.08-19.53A10 10 0 0 1 15.54 21.53M2 12h20M12 2v20"></path>
+          </svg>
+          <span>Big Club Japan</span>
+        </a>
+      </div>
+      <div class="footer-links">
+        <a href="#top" onclick="event.preventDefault(); showPage('top', document.querySelector('nav a'));">ホーム</a>
+        <a href="#blog/about-this-site"
+          onclick="event.preventDefault(); window.location.hash='#blog/about-this-site';">当サイトについて</a>
+        <a href="#blog"
+          onclick="event.preventDefault(); showPage('blog', document.querySelector('#nav-links > a:last-of-type'));">記事一覧</a>
+        <a href="legal/contact.html" target="_blank" rel="noopener noreferrer">お問い合わせ</a>
+        <a href="legal/privacy-policy.html" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a>
+
+        <a href="https://x.com/BigClub_Japan" target="_blank" rel="noopener noreferrer" class="footer-social-link"
+          aria-label="Xのプロフィールページ">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+            <path
+              d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.6.75ZM11.49 13.5l-1.45-2.086L3.33 2.75h2.1l4.485 6.06L14.24 13.5h-2.75Z" />
+          </svg>
+        </a>
+      </div>
+      <div class="footer-copyright">
+        © 2025 Big Club Japan. All Rights Reserved.
+        <span style="font-size: 0.85em; color: #89a;">本サイトの一部コンテンツでは、音声読み上げソフト「VOICEVOX:ずんだもん」を使用しています。</span>
+      </div>
+    </div>
+  </footer>
+  <button id="score-method-btn">
+    スコア計算方法
+  </button>
+  <div id="score-method-pop"
+    style="position: fixed; bottom: 77px; right: 33px; min-width: 330px; max-width: 450px; min-height: 400px; background: #fff; color: #222; border-radius: 17px; box-shadow: 0 2px 19px #2226; padding: 22px 22px 18px 24px; z-index: 10001; font-size: 1.04rem; line-height: 1.7; border: 1.4px solid #29b6e6;">
+    <div style="font-size: 1.18em; font-weight: bold; margin-bottom: 11px;">ビッグクラブ指数の計算方法</div>
+    <ul style="margin:0 0 0 1em; padding: 0 0 0 0.6em;">
+      <li><b>売上スコア：</b> = 売上高（億円） ÷ 200 × 100</li>
+      <li><b>観客スコア：</b> = 平均観客動員数 ÷ 45,000 × 100</li>
+      <li><b>タイトルスコア：</b> = タイトル数（スーパー杯除く） ÷ 98 × 100</li>
+      <li><b>J1在籍10年平均順位スコア：</b> = 21 − J1在籍10年平均順位</li>
+      <li style="margin-top:7px;"><b>ビッグクラブスコア：</b><br> = 売上スコア × 0.3 ＋ 観客スコア × 0.15 ＋ タイトルスコア × 0.25 ＋ 平均順位スコア × 0.3
+      </li>
+    </ul>
+    <div style="text-align:right; margin-top:14px;">
+      <a href="#" id="score-detail-link"
+        style="color:#299ad3; text-decoration:underline; font-weight:bold; font-size:0.98em; cursor:pointer;">数値の設定など詳細</a>
     </div>
   </div>
-</footer>
-<button id="score-method-btn">
-  スコア計算方法
-</button>
-<div id="score-method-pop" style="position: fixed; bottom: 77px; right: 33px; min-width: 330px; max-width: 450px; min-height: 400px; background: #fff; color: #222; border-radius: 17px; box-shadow: 0 2px 19px #2226; padding: 22px 22px 18px 24px; z-index: 10001; font-size: 1.04rem; line-height: 1.7; border: 1.4px solid #29b6e6;">
-  <div style="font-size: 1.18em; font-weight: bold; margin-bottom: 11px;">ビッグクラブ指数の計算方法</div>
-  <ul style="margin:0 0 0 1em; padding: 0 0 0 0.6em;">
-    <li><b>売上スコア：</b> = 売上高（億円） ÷ 200 × 100</li>
-    <li><b>観客スコア：</b> = 平均観客動員数 ÷ 45,000 × 100</li>
-    <li><b>タイトルスコア：</b> = タイトル数（スーパー杯除く） ÷ 98 × 100</li>
-    <li><b>J1在籍10年平均順位スコア：</b> = 21 − J1在籍10年平均順位</li>
-    <li style="margin-top:7px;"><b>ビッグクラブスコア：</b><br> = 売上スコア × 0.3 ＋ 観客スコア × 0.15 ＋ タイトルスコア × 0.25 ＋ 平均順位スコア × 0.3</li>
-  </ul>
-  <div style="text-align:right; margin-top:14px;">
-    <a href="#" id="score-detail-link" style="color:#299ad3; text-decoration:underline; font-weight:bold; font-size:0.98em; cursor:pointer;">数値の設定など詳細</a>
+  <div id="score-detail-pop"
+    style="position: fixed; bottom: 77px; right: 33px; min-width: 330px; max-width: 450px; min-height: 450px; background: #fff; color: #222; border-radius: 17px; box-shadow: 0 2px 19px #2226; padding: 22px 22px 18px 24px; z-index: 10001; font-size: 1.04rem; line-height: 1.7; border: 1.4px solid #29b6e6; max-height: 72vh; overflow-y: auto;">
+    <div style="font-size: 1.06em; margin-top: 19px; line-height: 1.85;">
+      <b>なぜこの指標を使うのか？</b><br>
+      <ul style="margin-top: 8px;">
+        <li>本サイトの「ビッグクラブ指数」は、<b>日本サッカー界で“ビッグクラブ”とされる条件</b>をできるだけ数値で可視化するために作成しました。</li>
+        <li>「ビッグクラブ」と呼ばれるクラブは、<b>経営規模（売上）</b>・<b>観客動員</b>・<b>タイトル獲得数</b>・<b>J1での実績</b>という4つの側面で明らかな強みを持っています。</li>
+        <li>ヨーロッパ主要リーグのビッグクラブ（例：マンチェスターU、レアル・マドリードなど）も、経営規模や観客数、タイトル獲得、安定した上位成績といった指標が注目されています。</li>
+        <li>Jリーグでも同じ視点で比較できるよう、<b>4つの指標</b>を組み合わせてスコア化しています。</li>
+      </ul>
+      <b>なぜこの比率（重み）なのか？</b><br>
+      <ul style="margin-top: 8px;">
+        <li>売上高や観客動員は“人気”や“影響力”の指標、タイトルや順位は“実績”や“強さ”の指標です。</li>
+        <li>クラブの総合力・“ビッグクラブらしさ”が最も反映されるよう、<b>売上/順位=30%ずつ、タイトル=25%、観客動員=15%</b>の比重で調整しています。※観客動員は無料観客も含むので比重は低く設定</li>
+      </ul>
+      <b>【例】浦和レッズのスコア</b><br>
+      <ul style="margin-top: 8px;">
+        <li>2024年時点で、浦和レッズは「過去10年のJ1平均順位」は7.2位ですが、「売上高」「観客動員数」「タイトル数」はJリーグトップクラスです。</li>
+        <li>そのため、指標の合計スコアがもっとも高く、ビッグクラブ指数1位となります。</li>
+        <li>このように、<b>経営規模・人気・強さの全てで際立つクラブが“ビッグクラブ”と評価される構造</b>になっています。</li>
+      </ul>
+      <span style="color: #18a; font-size: 0.98em;">※ 今後も最新データや意見をもとにアップデート予定です。</span>
+    </div>
   </div>
-</div>
-<div id="score-detail-pop" style="position: fixed; bottom: 77px; right: 33px; min-width: 330px; max-width: 450px; min-height: 450px; background: #fff; color: #222; border-radius: 17px; box-shadow: 0 2px 19px #2226; padding: 22px 22px 18px 24px; z-index: 10001; font-size: 1.04rem; line-height: 1.7; border: 1.4px solid #29b6e6; max-height: 72vh; overflow-y: auto;">
-  <div style="font-size: 1.06em; margin-top: 19px; line-height: 1.85;">
-    <b>なぜこの指標を使うのか？</b><br>
-    <ul style="margin-top: 8px;">
-      <li>本サイトの「ビッグクラブ指数」は、<b>日本サッカー界で“ビッグクラブ”とされる条件</b>をできるだけ数値で可視化するために作成しました。</li>
-      <li>「ビッグクラブ」と呼ばれるクラブは、<b>経営規模（売上）</b>・<b>観客動員</b>・<b>タイトル獲得数</b>・<b>J1での実績</b>という4つの側面で明らかな強みを持っています。</li>
-      <li>ヨーロッパ主要リーグのビッグクラブ（例：マンチェスターU、レアル・マドリードなど）も、経営規模や観客数、タイトル獲得、安定した上位成績といった指標が注目されています。</li>
-      <li>Jリーグでも同じ視点で比較できるよう、<b>4つの指標</b>を組み合わせてスコア化しています。</li>
-    </ul>
-    <b>なぜこの比率（重み）なのか？</b><br>
-    <ul style="margin-top: 8px;">
-      <li>売上高や観客動員は“人気”や“影響力”の指標、タイトルや順位は“実績”や“強さ”の指標です。</li>
-      <li>クラブの総合力・“ビッグクラブらしさ”が最も反映されるよう、<b>売上/順位=30%ずつ、タイトル=25%、観客動員=15%</b>の比重で調整しています。※観客動員は無料観客も含むので比重は低く設定</li>
-    </ul>
-    <b>【例】浦和レッズのスコア</b><br>
-    <ul style="margin-top: 8px;">
-      <li>2024年時点で、浦和レッズは「過去10年のJ1平均順位」は7.2位ですが、「売上高」「観客動員数」「タイトル数」はJリーグトップクラスです。</li>
-      <li>そのため、指標の合計スコアがもっとも高く、ビッグクラブ指数1位となります。</li>
-      <li>このように、<b>経営規模・人気・強さの全てで際立つクラブが“ビッグクラブ”と評価される構造</b>になっています。</li>
-    </ul>
-    <span style="color: #18a; font-size: 0.98em;">※ 今後も最新データや意見をもとにアップデート予定です。</span>
-  </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js" defer></script>
-<script type="module" src="js/main.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"
+    defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"
+    defer></script>
+  <script type="module" src="js/main.js" defer></script>
 
-<script>
-function loadGoogleScripts() {
-        const isLocal = window.location.hostname === 'localhost' || 
-                    window.location.hostname === '127.0.0.1' || 
-                    window.location.hostname.startsWith('192.168.') ||
-                    window.location.hostname.endsWith('.local') ||
-                    window.location.hostname === '' || // for file:/// protocol
-                    window.location.protocol === 'file:';
+  <script>
+    function loadGoogleScripts() {
+      const isLocal = window.location.hostname === 'localhost' ||
+        window.location.hostname === '127.0.0.1' ||
+        window.location.hostname.startsWith('192.168.') ||
+        window.location.hostname.endsWith('.local') ||
+        window.location.hostname === '' || // for file:/// protocol
+        window.location.protocol === 'file:';
 
-    if (isLocal) {
+      if (isLocal) {
         console.log('%c[Local Env] Google AdSense skipped.', 'color: #f0ad4e; font-weight: bold;');
         return;
+      }
+      document.removeEventListener('scroll', loadGoogleScripts);
+      document.removeEventListener('mousemove', loadGoogleScripts);
+      document.removeEventListener('touchstart', loadGoogleScripts);
+
+      // Google AdSense
+      const adSenseScript = document.createElement('script');
+      adSenseScript.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1470345215148439';
+      adSenseScript.async = true;
+      adSenseScript.crossOrigin = 'anonymous';
+      document.head.appendChild(adSenseScript);
     }
-    document.removeEventListener('scroll', loadGoogleScripts);
-    document.removeEventListener('mousemove', loadGoogleScripts);
-    document.removeEventListener('touchstart', loadGoogleScripts);
 
-    // Google AdSense
-    const adSenseScript = document.createElement('script');
-    adSenseScript.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1470345215148439';
-    adSenseScript.async = true;
-    adSenseScript.crossOrigin = 'anonymous';
-    document.head.appendChild(adSenseScript);
-}
-
-// ユーザーがスクロール、マウス移動、タッチのいずれかを行ったらAdSenseスクリプトを読み込む
-document.addEventListener('scroll', loadGoogleScripts, { once: true });
-document.addEventListener('mousemove', loadGoogleScripts, { once: true });
-document.addEventListener('touchstart', loadGoogleScripts, { once: true });
-</script>
+    // ユーザーがスクロール、マウス移動、タッチのいずれかを行ったらAdSenseスクリプトを読み込む
+    document.addEventListener('scroll', loadGoogleScripts, { once: true });
+    document.addEventListener('mousemove', loadGoogleScripts, { once: true });
+    document.addEventListener('touchstart', loadGoogleScripts, { once: true });
+  </script>
 
 
 </body>
+
 </html>

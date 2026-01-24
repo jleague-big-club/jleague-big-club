@@ -7,10 +7,11 @@ let attendanceData = [];
 let rankingData = {};
 let predictionProbabilities = {};
 let europeTopClubs = [];
-let europeRankingData = null; 
+let europeRankingData = null;
 let updateDates = {};
 let scheduleData = '';
 let introductionsData = null;
+let teamStyleData = null;
 
 const dataCache = {};
 
@@ -41,29 +42,32 @@ export async function loadInitialData() {
         const obj = {};
         headers.forEach((h, i) => obj[h] = values[i] ? values[i].trim() : '');
         obj.name = obj["クラブ名"] || 'N/A';
+        
+        // 当年データ
         obj.revenue = parseFloat(obj["売上高（億円）"]) || 0;
         obj.audience = parseInt(obj["平均観客動員数"]) || 0;
         obj.titles = parseInt(obj["タイトル計"]) || 0;
         obj.sum = parseFloat(obj["総合的ビッグクラブスコア"]) || 0;
-        obj.l = obj["過去10年J1在籍年数"] || '0';
-        obj.m = obj["J1在籍10年平均順位"] || 'N/A';
         obj.o = obj["J1在籍10年平均順位スコア"] || '0';
+        obj.rankScore = parseFloat(obj["平均順位スコア"]) || 0;
+        
         obj.p = obj["所属リーグ"] || 'N/A';
         obj.color = obj["チームカラー"] || '#4a5a7f';
         obj.revenueScore = parseFloat(obj["売上スコア"]) || 0;
         obj.audienceScore = parseFloat(obj["観客スコア"]) || 0;
         obj.titleScore = parseFloat(obj["タイトルスコア"]) || 0;
-        obj.rankScore = parseFloat(obj["平均順位スコア"]) || 0;
+        
         obj.lat = parseFloat(obj["緯度"]) || 0;
         obj.lon = parseFloat(obj["経度"]) || 0;
         obj.teamId = obj.name;
         obj['ホームタウン'] = obj["ホームタウン"] || '';
 
-        obj.sum_prev = parseFloat(obj["総合的ビッグクラブスコア_prev"]) || null;
-        obj.revenue_prev = parseFloat(obj["売上高（億円）_prev"]) || null;
-        obj.audience_prev = parseInt(obj["平均観客動員数_prev"]) || null;
-        obj.titles_prev = parseInt(obj["タイトル計_prev"]) || null;
-        obj.rankScore_prev = parseFloat(obj["J1在籍10年平均順位スコア_prev"]) || null;
+        // ★★★ 前年データの読み込み（ここを追加・修正） ★★★
+        obj.sum_prev = parseFloat(obj["総合的ビッグクラブスコア_prev"]) || 0;
+        obj.revenue_prev = parseFloat(obj["売上高（億円）_prev"]) || 0;
+        obj.audience_prev = parseInt(obj["平均観客動員数_prev"]) || 0;
+        obj.titles_prev = parseInt(obj["タイトル計_prev"]) || 0;
+        obj.rankScore_prev = parseFloat(obj["J1在籍10年平均順位スコア_prev"]) || 0;
 
         return obj;
     });
@@ -98,7 +102,6 @@ export async function getBlogPosts() {
     return blogPosts;
 }
 
-
 export async function getAttendanceData() {
     if (attendanceData.length > 0) return attendanceData;
     const [csvText, datesJson] = await Promise.all([
@@ -114,8 +117,8 @@ export async function getAttendanceData() {
             const val = values[i] ? values[i].trim() : '';
             if (['年', '年間最高観客数', '年間最低観客数', 'ゲーム数'].includes(h)) {
                 obj[h] = parseInt(val) || 0;
-            } else if (h === '平均観客数') {
-                obj[h] = parseFloat(val) || 0;
+            } else if (h.includes('平均観客数')) {
+                obj['平均観客数'] = parseFloat(val) || 0;
             } else {
                 obj[h] = val;
             }
@@ -198,14 +201,15 @@ export async function getEuropeTopClubsData() {
     europeTopClubs = lines.slice(1).map(line => parseCsvLine(line));
     return europeTopClubs;
 }
+
 export async function getEuropeRankingData() {
     if (europeRankingData) return europeRankingData;
 
     try {
         const csvText = await fetchData("/data/5league-rankings.csv");
-        const lines = csvText.trim().split("\n").slice(1); 
+        const lines = csvText.trim().split("\n").slice(1);
         const headers = ['年', 'リーグ', '順位', 'クラブ名', '試合数', '勝', '分', '敗', '得点', '失点', '得失点差', '勝点'];
-        
+
         let currentLeague = '';
         let currentYear = '';
 
@@ -238,7 +242,7 @@ export async function getEuropeRankingData() {
             }
             return acc;
         }, {});
-        
+
         europeRankingData = groupedData;
         return europeRankingData;
 
@@ -248,15 +252,13 @@ export async function getEuropeRankingData() {
     }
 }
 
-let teamStyleData = null;
-
 export async function getTeamStyleData() {
     if (teamStyleData) return teamStyleData;
 
     try {
         const response = await fetch('/data/team_style_stats_all_2025.csv');
         if (!response.ok) throw new Error('CSVの読み込みに失敗しました。');
-        
+
         const csvText = await response.text();
         const lines = csvText.trim().split('\n');
         const headers = lines[0].split(',').map(h => h.trim());
@@ -268,11 +270,47 @@ export async function getTeamStyleData() {
             });
             return obj;
         });
-        
+
         teamStyleData = data;
         return teamStyleData;
     } catch (error) {
         console.error("チームスタイルデータの取得エラー:", error);
         return null;
     }
+}
+
+export async function getHistoricalData() {
+    if (!clubData || clubData.length === 0) return [];
+
+    const results = [];
+    const scorePrefix = "総合的ビッグクラブスコア";
+
+    clubData.forEach(club => {
+        Object.keys(club).forEach(key => {
+            if (key.startsWith(scorePrefix)) {
+                let year = null;
+                if (key === scorePrefix) {
+                    year = 2025;
+                } else if (key.endsWith("_prev")) {
+                    year = 2024;
+                } else {
+                    const match = key.match(/_(\d{4})$/);
+                    if (match) {
+                        year = parseInt(match[1]);
+                    }
+                }
+
+                const score = parseFloat(club[key]);
+                if (year !== null && !isNaN(score)) {
+                    results.push({
+                        year: year,
+                        club: club.name,
+                        score: score
+                    });
+                }
+            }
+        });
+    });
+
+    return results;
 }

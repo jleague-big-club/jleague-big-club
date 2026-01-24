@@ -12,13 +12,10 @@ function showClubStatus(event, teamId, currentRank) {
     if (event) event.stopPropagation();
 
     const allClubData = getClubData();
-    // ▼▼▼【タイプミスを修正】▼▼▼
     const jLeagueClubs = allClubData.filter(club => club.p !== 'JFL').sort((a, b) => b.sum - a.sum);
-    // ▲▲▲【ここまで修正】▲▲▲
     const club = jLeagueClubs.find(c => c.teamId === teamId);
     if (!club) return;
-    
-    // ...以降のコードは変更なし...
+
     const jLeagueClubsPrev = allClubData
         .filter(c => c.p !== 'JFL' && c.sum_prev !== null && !isNaN(c.sum_prev))
         .sort((a, b) => b.sum_prev - a.sum_prev);
@@ -33,12 +30,14 @@ function showClubStatus(event, teamId, currentRank) {
     };
 
     const getChangeHtml = (current, prev) => {
-        if (prev === null || isNaN(prev)) return '<span class="change-info flat">→ 前年 -</span>';
+        if (prev === null || isNaN(prev) || prev === 0) return '<span class="change-info flat">→ 前年 -</span>';
         const diff = current - prev;
         let arrowClass = 'flat';
         let arrowSymbol = '→';
-        if (diff > 0.01) { arrowClass = 'up'; arrowSymbol = '▲'; } 
+        if (diff > 0.01) { arrowClass = 'up'; arrowSymbol = '▲'; }
         else if (diff < -0.01) { arrowClass = 'down'; arrowSymbol = '▼'; }
+        
+        // 変化なしでも前年値を表示
         return `<span class="change-info ${arrowClass}">${arrowSymbol} 前年 ${formatValue(prev)}</span>`;
     };
 
@@ -47,7 +46,10 @@ function showClubStatus(event, teamId, currentRank) {
         if (currentRank < prevRank) { rankChangeHtml = '<span class="rank-change-arrow up">▲</span>'; }
         else if (currentRank > prevRank) { rankChangeHtml = '<span class="rank-change-arrow down">▼</span>'; }
     }
-    
+
+    // 平均順位スコアの比較には club.o (文字列の場合あり) を数値化して使う
+    const currentRankScore = parseFloat(club.o) || 0;
+
     board.innerHTML = `
         <button onclick="this.parentElement.style.display='none'" class="close-btn">&times;</button>
         <div class="club-title-rank-row">
@@ -79,8 +81,8 @@ function showClubStatus(event, teamId, currentRank) {
             </div>
             <div class="status-item">
                 <span class="status-label">平均順位スコア</span>
-                <span class="status-value">${formatValue(parseFloat(club.o))}</span>
-                ${getChangeHtml(parseFloat(club.o), club.rankScore_prev)}
+                <span class="status-value">${formatValue(currentRankScore)}</span>
+                ${getChangeHtml(currentRankScore, club.rankScore_prev)}
             </div>
             <a href="#/introduce/${club.teamId}" class="status-item link-item">
                 <span class="link-item-text">各クラブのデータを見る</span>
@@ -138,9 +140,9 @@ function renderOthers(clubs) {
     others.forEach((club, idx) => {
         const currentRank = idx + 6;
         let category, colorClass;
-        if (club.sum >= 30) { category = "有望ビッグクラブ"; colorClass = "top-club"; } 
-        else if (club.sum >= 20) { category = "潜在的ビッグクラブ"; colorClass = "potential-big"; } 
-        else if (club.sum >= 5) { category = "中堅クラブ"; colorClass = "middle"; } 
+        if (club.sum >= 30) { category = "有望ビッグクラブ"; colorClass = "top-club"; }
+        else if (club.sum >= 20) { category = "潜在的ビッグクラブ"; colorClass = "potential-big"; }
+        else if (club.sum >= 5) { category = "中堅クラブ"; colorClass = "middle"; }
         else { category = "ローカルクラブ"; colorClass = "local"; }
         const tr = tbody.insertRow();
         tr.className = colorClass;
@@ -153,10 +155,17 @@ function renderOthers(clubs) {
     tableDiv.appendChild(table);
 }
 
-export default function initTopPage() {
+export default function initTopPage(container) {
+    if (!container) return;
+
+    // Create the HTML structure for the top page
+    container.innerHTML = `
+        <div id="big5-cards"></div>
+        <div id="club-categories"></div>
+    `;
+
     const allClubData = getClubData();
     if (allClubData.length > 0) {
-        // 常にこのモジュール内でソートを実行して順位を確定させる
         const jLeagueClubs = allClubData.filter(club => club.p !== 'JFL').sort((a, b) => b.sum - a.sum);
         renderBig5(jLeagueClubs);
         renderOthers(jLeagueClubs);

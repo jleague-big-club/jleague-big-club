@@ -16,7 +16,7 @@ function renderPrediction(league) {
         if (updatedTimestamp) {
             const updatedDate = new Date(updatedTimestamp);
             const formattedDate = updatedDate.toLocaleString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-            dateHtml = `<p class="update-date-note">更新日時: ${formattedDate}</p>`;
+                        dateHtml = `<p class="update-date-note" style="text-align: right; margin: 5px 0;">更新日時: ${formattedDate}</p>`;
         }
 
         const teamList = Object.keys(leagueProbs).map(teamName => ({ name: teamName, ...leagueProbs[teamName] }));
@@ -30,39 +30,41 @@ function renderPrediction(league) {
             })
             .map(({ item }) => item);
         
-        // ▼▼▼【ここから変更】データ構造の変更に合わせてソートキーを修正 ▼▼▼
+        // ▼▼▼【変更点】表示数をすべて20件(全クラブ分)に拡大 ▼▼▼
         const predictions = {
-            champion: stableSort(teamList, (a, b) => b.champion.prob - a.champion.prob).slice(0, 5).filter(t => t.champion.prob > 0),
-            acl: stableSort(teamList, (a, b) => b.acl.prob - a.acl.prob).slice(0, 5).filter(t => t.acl.prob > 0),
-            promotion: stableSort(teamList, (a, b) => b.promotion.prob - a.promotion.prob).slice(0, 5).filter(t => t.promotion.prob > 0),
-            relegation: stableSort(teamList, (a, b) => b.relegation.prob - a.relegation.prob).slice(0, 5).filter(t => t.relegation.prob > 0),
-            full_ranking: stableSort(teamList, (a, b) => b.safe.prob - a.safe.prob).slice(0, 15)
+            champion: stableSort(teamList, (a, b) => b.champion.prob - a.champion.prob).slice(0, 20),
+            acl: stableSort(teamList, (a, b) => b.acl.prob - a.acl.prob).slice(0, 20),
+            promotion: stableSort(teamList, (a, b) => b.promotion.prob - a.promotion.prob).slice(0, 20),
+            relegation: stableSort(teamList, (a, b) => b.relegation.prob - a.relegation.prob).slice(0, 20),
+            full_ranking: stableSort(teamList, (a, b) => b.safe.prob - a.safe.prob).slice(0, 20)
         };
-        // ▲▲▲【ここまで変更】▲▲▲
+        // ▲▲▲【変更ここまで】▲▲▲
 
+        // ▼▼▼【変更点】タイトルをTOP20に変更し、誤字(確立→確率)も修正 ▼▼▼
         const categorySettings = {
-            champion: { title: '🏆 優勝確率 TOP5', probKey: 'champion', className: 'champion' },
-            acl: { title: '🌐 ACL出場圏確率 TOP5', probKey: 'acl', className: 'acl' },
-            promotion: { title: '⬆️ 昇格確率 TOP5', probKey: 'promotion', className: 'promotion' },
-            relegation: { title: '⚠️ 降格確立 TOP5', probKey: 'relegation', className: 'relegation' },
-            full_ranking: { title: '✅ 残留以上確率 TOP15', probKey: 'safe', className: 'safe' }
+            champion: { title: '🏆 優勝確率 TOP20', probKey: 'champion', className: 'champion' },
+            acl: { title: '🌐 ACL出場圏確率 TOP20', probKey: 'acl', className: 'acl' },
+            promotion: { title: '⬆️ 昇格確率 TOP20', probKey: 'promotion', className: 'promotion' },
+            relegation: { title: '⚠️ 降格確率 TOP20', probKey: 'relegation', className: 'relegation' },
+            full_ranking: { title: '✅ 残留以上確率 TOP20', probKey: 'safe', className: 'safe' }
         };
 
         let displayOrder;
         if (league === 'J1') {
-            categorySettings.relegation.title = '⚠️ J2降格確立 TOP5';
+            categorySettings.relegation.title = '⚠️ J2降格確率 TOP20';
             displayOrder = ['champion', 'relegation', 'full_ranking', 'acl'];
         } else if (league === 'J2') {
-            categorySettings.promotion.title = '⬆️ J1昇格確率 TOP5';
-            categorySettings.relegation.title = '⚠️ J3降格確立 TOP5';
+            categorySettings.promotion.title = '⬆️ J1昇格確率 TOP20';
+            categorySettings.relegation.title = '⚠️ J3降格確率 TOP20';
             displayOrder = ['promotion', 'relegation', 'full_ranking'];
         } else if (league === 'J3') {
-            categorySettings.promotion.title = '⬆️ J2昇格確率 TOP5';
-            categorySettings.relegation.title = '⚠️ JFL降格確立 TOP5';
+            categorySettings.promotion.title = '⬆️ J2昇格確率 TOP20';
+            categorySettings.relegation.title = '⚠️ JFL降格確率 TOP20';
             displayOrder = ['promotion', 'relegation', 'full_ranking'];
         } else {
             displayOrder = [];
         }
+        // ▲▲▲【変更ここまで】▲▲▲
 
         let html = '<div class="prediction-grid">';
         displayOrder.forEach(key => {
@@ -78,7 +80,6 @@ function renderPrediction(league) {
                 <div class="prediction-card-body">
                     <ul class="prediction-list">
                     ${teams.map((team, index) => {
-                        // ▼▼▼【ここから変更】確率と変動情報を取得し、矢印HTMLを生成 ▼▼▼
                         const probData = team[cat.probKey];
                         const probability = probData.prob;
                         const change = probData.change;
@@ -101,7 +102,6 @@ function renderPrediction(league) {
                             </div>
                             ${probText ? `<span class="probability">${changeHtml}${probText}</span>` : ''}
                         </li>`;
-                        // ▲▲▲【ここまで変更】▲▲▲
                     }).join('')}
                     </ul>
                 </div>
@@ -134,7 +134,11 @@ export default function initPredictionPage() {
             <button class="rank-tab-btn" onclick="showPredictionView('J1')">J1</button>
             <button class="rank-tab-btn" onclick="showPredictionView('J2')">J2</button>
             <button class="rank-tab-btn" onclick="showPredictionView('J3')">J3</button>
-            <button id="prediction-help-btn" onclick="document.getElementById('prediction-help-pop').style.display='block'">シーズン予測とは？</button>
+            <button id="prediction-help-btn" 
+                onclick="document.getElementById('prediction-help-pop').style.display='block'" 
+                style="margin-left: 10px; margin-top: 15px;">
+                シーズン予測とは？
+            </button>
         `;
         tabsContainer.dataset.initialized = 'true';
     }

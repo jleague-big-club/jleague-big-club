@@ -1,8 +1,0 @@
-git add .
-
-git commit -m "更新"
-
-git push origin main
-
-
-python -m http.server 8000
