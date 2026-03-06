@@ -5295,3 +5295,307 @@ canvas {
     font-size: 0.95rem;
     line-height: 1.8;
 }
+
+/* ======================================================= */
+/* === スタジアムページ専用スタイル（スマホ最適化・統計付） === */
+/* ======================================================= */
+
+#stadium {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* ▼▼▼ 追加：サマリー（統計）グリッドのスタイル ▼▼▼ */
+.stadium-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* PCでは4列並び */
+    gap: 15px;
+    margin-bottom: 25px;
+}
+.summary-box {
+    background-color: #2a3758;
+    border: 1px solid #4a5a7f;
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+.sum-title {
+    font-weight: bold;
+    color: #fff;
+    border-radius: 6px;
+    padding: 4px 0;
+    margin-bottom: 8px;
+    font-size: 0.95em;
+    letter-spacing: 0.05em;
+}
+.sum-title-all {
+    background: linear-gradient(135deg, #ffd700, #fca311);
+    color: #14213d; /* 全体のみゴールドで目立たせる */
+}
+.sum-title-cat {
+    background: linear-gradient(90deg, #27aee7, #1c8acb);
+}
+.sum-row {
+    font-size: 0.85em;
+    color: #eaf7fc;
+    margin-bottom: 4px;
+}
+.fc-num {
+    color: #A9D18E; /* 球技専用の緑 */
+    font-size: 1.4em;
+    font-weight: bold;
+}
+.warn-num {
+    color: #ffc107; /* 建設・構想の黄 */
+    font-size: 1.4em;
+    font-weight: bold;
+}
+.sum-total {
+    font-size: 0.9em;
+    color: #8899bb;
+    margin-left: 2px;
+}
+/* ▲▲▲ 追加ここまで ▲▲▲ */
+
+.stadium-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    background-color: rgba(0, 0, 0, 0.15);
+    padding: 15px;
+    border-radius: 12px;
+}
+
+.stadium-legend .legend-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.9em;
+    color: #eaf7fc;
+    font-weight: bold;
+}
+
+.stadium-legend .legend-color-box {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    border-radius: 3px;
+}
+
+/* テーブルの大枠 */
+.stadium-wrapper {
+    border-radius: 12px;
+    border: 1px solid #4a5a7f;
+    overflow: hidden; /* 角丸を効かせるため */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    background-color: #2a3758;
+}
+
+.stadium-table {
+    width: 100%;
+    border-collapse: collapse; 
+    color: #f0f0f0;
+    margin: 0 !important; /* ベースのテーブル余白を打ち消してピッタリ収める */
+}
+
+.stadium-table th,
+.stadium-table td {
+    padding: 14px 10px;
+    text-align: center;
+    border-bottom: 1px solid #3a486b;
+    font-size: 0.95rem;
+}
+
+.stadium-table th {
+    background: linear-gradient(90deg, #27aee7 65%, #b0e7fa);
+    color: #fff;
+    font-weight: 700;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    letter-spacing: 0.05em;
+    border-bottom: none;
+}
+
+/* 最後の行の線を消す（詳細行とメイン行） */
+.stadium-table tr:last-child td,
+.stadium-table tbody > tr.stadium-main-row:nth-last-child(2) td {
+    border-bottom: none;
+}
+
+/* 縞模様 */
+.stadium-main-row:nth-child(4n-3) td {
+    background-color: transparent;
+}
+.stadium-main-row:nth-child(4n-1) td {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+.stadium-main-row:hover td {
+    background-color: rgba(41, 182, 246, 0.1) !important;
+}
+
+/* クラブ名セル（カラーバー含む） */
+.stadium-table .club-name-cell {
+    font-weight: 700;
+    text-align: left;
+    padding-left: 15px;
+    color: #fff;
+}
+.stadium-table .mobile-name {
+    display: none;
+}
+
+/* 収容人数 */
+.stadium-table .num-col {
+    font-family: 'Roboto Mono', monospace;
+    font-weight: bold;
+    color: #ffd700;
+    font-size: 1.15em;
+    letter-spacing: 1px;
+}
+
+/* ステータスセル（PC） */
+.stadium-table .status-cell {
+    text-align: left;
+    padding-left: 20px;
+}
+
+/* 球技専用の行のハイライト */
+.football-specific-row td {
+    background-color: rgba(40, 167, 69, 0.08);
+}
+.football-specific-row:hover td {
+    background-color: rgba(40, 167, 69, 0.2) !important;
+}
+
+/* バッジ類 */
+.tag-football {
+    background: linear-gradient(135deg, #28a745, #218838);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-size: 0.85em;
+    font-weight: bold;
+}
+.tag-track {
+    background: linear-gradient(135deg, #6c757d, #5a6268);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-size: 0.85em;
+}
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8em;
+    font-weight: bold;
+    display: inline-block;
+}
+.status-building { background-color: #ffc107; color: #000; }
+.status-plan { background-color: #17a2b8; color: #fff; }
+
+.note-text-inline {
+    font-size: 0.85em;
+    color: #abc;
+    margin-left: 8px;
+}
+
+/* 表示制御用クラス */
+.sp-only { display: none !important; }
+.sp-guide-text { display: none; }
+
+/* ======================================================= */
+/* スマホ対応（横幅固定＆アコーディオン） */
+/* ======================================================= */
+@media (max-width: 768px) {
+    /* サマリーを2列×2行にする */
+    .stadium-summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .pc-only { display: none !important; }
+    .sp-only { display: table-cell !important; }
+    .sp-br { display: block; }
+    .sp-guide-text { display: block; }
+    
+    .stadium-wrapper {
+        border-radius: 8px;
+    }
+
+    .stadium-table th,
+    .stadium-table td {
+        padding: 14px 4px;
+        font-size: 0.85rem;
+    }
+    
+    .stadium-table .pc-name { display: none; }
+    .stadium-table .mobile-name { display: inline; }
+    
+    .stadium-table .col-club,
+    .stadium-table .club-name-cell {
+        width: 80px;
+        min-width: 80px;
+        max-width: 80px;
+        white-space: nowrap;
+        padding-left: 8px;
+        border-left-width: 4px !important;
+    }
+
+    .stadium-table .col-capacity { width: 75px; }
+    .stadium-table .num-col { font-size: 1rem; letter-spacing: 0; }
+    .stadium-table .col-type { width: 70px; }
+    
+    .stadium-table .col-toggle { width: 30px; }
+    .toggle-cell {
+        color: #8899bb;
+        font-size: 0.9em;
+        vertical-align: middle;
+    }
+
+    .tag-football, .tag-track {
+        font-size: 0.7em;
+        padding: 4px 6px;
+    }
+
+    .stadium-main-row {
+        cursor: pointer;
+    }
+    .stadium-main-row:active td {
+        background-color: rgba(41, 182, 246, 0.2) !important;
+    }
+
+    /* --- アコーディオン詳細行 --- */
+    .stadium-detail-row .detail-cell {
+        padding: 0 !important;
+        border-bottom: 2px solid #232947;
+    }
+    .detail-content {
+        background-color: rgba(0, 0, 0, 0.25);
+        padding: 12px 15px 15px 15px;
+        text-align: left;
+        box-shadow: inset 0 3px 6px rgba(0,0,0,0.1);
+    }
+    .detail-label {
+        color: #baf7fa;
+        font-size: 0.8em;
+        font-weight: bold;
+        margin-bottom: 8px;
+        border-bottom: 1px solid rgba(186, 247, 250, 0.2);
+        padding-bottom: 4px;
+        display: inline-block;
+    }
+    .detail-note {
+        margin-top: 6px;
+        font-size: 0.85rem;
+        color: #f0f0f0;
+        line-height: 1.5;
+    }
+    .status-badge {
+        font-size: 0.75em;
+        padding: 3px 8px;
+        margin-bottom: 0;
+    }
+}

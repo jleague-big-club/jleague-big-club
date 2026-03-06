@@ -20,6 +20,7 @@ export function updateNavActiveState(id, btn) {
             'top': '#nav-analysis-btn',
             'trends': 'a[href="#trends"]',
             'introduce': 'a[href="#introduce"]',
+            'stadium': 'a[href="#stadium"]',
             'attendance': 'a[href="#attendance"]',
             'elo-ratings': 'a[href="#elo-ratings"]',
             'rankings': 'a[href="#rankings"]',

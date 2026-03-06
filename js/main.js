@@ -8,6 +8,7 @@ import { initializeBlog, showBlogList, showArticleDetail as originalShowArticleD
 const pageModules = {
     'top': './pages/top.js',
     'introduce': './pages/introduce.js',
+    'stadium': './pages/stadium.js',
     'rankings': './pages/rankings.js',
     'prediction': './pages/prediction.js',
     'blog': './pages/blog.js',
@@ -136,6 +137,7 @@ async function showPage(id, btn, fromPopState = false, initialOptions = {}) {
         const pageTitles = {
             'top': 'ビッグクラブ指数',
             'introduce': '全クラブ指標一覧',
+            'stadium': 'スタジアム一覧',
             'rankings': 'Jリーグ順位表',
             'prediction': '26-27シーズン最終順位予測',
             'winner': 'WINNER予想',
@@ -153,6 +155,7 @@ async function showPage(id, btn, fromPopState = false, initialOptions = {}) {
         const pageDescriptions = {
             'top': '独自のビッグクラブ指数でJリーグ全クラブをランキング。浦和レッズ、鹿島アントラーズなど、あなたの応援するクラブの真の実力をデータで分析します。',
             'introduce': 'Jリーグ全60クラブの経営規模、観客動員数、ビッククラブ指数などを一覧で比較分析できるデータベースページ。さらに戦術データ（チームスタイル）も可視化。',
+            'stadium': 'Jリーグ全クラブのホームスタジアム一覧。収容人数や球技専用スタジアムの有無、新スタジアムの建設・構想状況をまとめました。', 
             'rankings': 'J1, J2, J3, JFLの最新順位表を掲載。昇格・降格圏内のチームをリアルタイムでチェック。',
             'prediction': '独自のAIがJリーグの2026シーズン最終順位をシミュレーション。優勝確率や降格確率を毎節更新します。',
             'winner': 'AIがサッカーくじWINNERの試合結果を予測。データに基づいた本命・対抗・大穴予想で、あなたのWINNERライフをサポート。',
