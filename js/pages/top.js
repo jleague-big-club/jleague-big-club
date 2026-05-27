@@ -158,9 +158,14 @@ function renderOthers(clubs) {
 export default function initTopPage(container) {
     if (!container) return;
 
-    // Create the HTML structure for the top page
     container.innerHTML = `
         <div id="big5-cards"></div>
+        
+        <!-- 追加: 表の上の注記 -->
+        <div style="text-align: right; font-size: 0.85em; color: #aaa; margin: 15px 10px 5px 0;">
+            ※柏・湘南・札幌・鳥取・讃岐・高知・北九州は2024の売上
+        </div>
+
         <div id="club-categories"></div>
     `;
 

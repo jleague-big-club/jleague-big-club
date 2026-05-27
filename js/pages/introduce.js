@@ -213,7 +213,7 @@ export async function render(content) {
                     <span style="color:#299ad3;">▼</span> クラブ名をタップすると詳細データが表示されます
                 </div>
                 <div class="intro-note-right">
-                    ※2025年度のデータ
+                    ※柏・湘南・札幌・鳥取・讃岐・高知・北九州は2024の売上
                 </div>
             </div>
 

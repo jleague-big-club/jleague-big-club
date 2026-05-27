@@ -19,8 +19,20 @@ export async function render(content) {
             diff,
             color: club.color
         };
-    }).filter(d => d.prev > 0);
+    }).filter(d => {
+        // ★除外するクラブ
+        if (['Y.S.C.C.横浜', 'いわてグルージャ盛岡', 'アスルクラロ沼津'].includes(d.name)) {
+            return false;
+        }
+        // ★含めたいクラブ（前年データ0でも強制的に含める）
+        if (d.name === 'レイラック滋賀') {
+            return true;
+        }
+        // その他のクラブは前年データがあるものだけ表示
+        return d.prev > 0;
+    });
 
+    // 増減の大きい順にソート
     growthData.sort((a, b) => b.diff - a.diff);
     const topGrowth = growthData.slice(0, 10);
 
@@ -58,12 +70,46 @@ export async function render(content) {
                 /* デフォルト高さ */
                 height: 450px; 
             }
+            
+            /* ランキングテーブル用のスタイル */
+            .ranking-table {
+                width: 100%;
+                border-collapse: collapse;
+                color: #eaf7fc;
+                font-size: 0.95rem;
+                min-width: 500px;
+            }
+            .ranking-table th, .ranking-table td {
+                padding: 12px 10px;
+                text-align: left;
+                border-bottom: 1px solid #4a5a7f;
+            }
+            .ranking-table th {
+                background-color: rgba(0,0,0,0.2);
+                font-weight: bold;
+                color: #baf7fa;
+                white-space: nowrap;
+            }
+            .ranking-table tbody tr:hover {
+                background-color: rgba(255,255,255,0.05);
+            }
+            .diff-up { color: #299ad3; font-weight: bold; }
+            .diff-down { color: #e94444; font-weight: bold; }
+            .diff-flat { color: #8899bb; }
+            
+            .chart-help-text {
+                font-size: 0.85em;
+                color: #8899bb;
+                display: block;
+                margin-top: 5px;
+            }
         </style>
     `;
 
     content.innerHTML = `
         ${styleOverride}
         <div class="trends-page fade-in">
+            <p style="color:#abc; line-height:1.6; margin-bottom:30px; text-align:center;">
                 過去の指数推移や、最新の分析データをグラフで可視化します。<br>
                 成長率や売上高との相関から、クラブのポテンシャルを探ります。※2025年シーズンまでのデータ
             </p>
@@ -71,17 +117,19 @@ export async function render(content) {
             <!-- 1. 推移グラフ -->
             <div class="trends-chart-wrapper">
                 <h3>📉 指数推移（前年比）</h3>
-                <p>主要クラブのビッグクラブ指数の変遷です。</p>
+                <p>
+                    主要クラブのビッグクラブ指数の変遷です。<br>
+                    <span class="chart-help-text">※線にカーソルを近づけると数値が表示されます。下部のクラブ名（凡例）をクリックすると、特定のクラブの表示ON/OFFが可能です。</span>
+                </p>
                 <div class="trends-canvas-container" style="height: 450px;">
                     <canvas id="trendLineChart"></canvas>
                 </div>
             </div>
 
-            <!-- 2. 成長率ランキング -->
+            <!-- 2. 成長率ランキング（上位10） -->
             <div class="trends-chart-wrapper">
                 <h3>📈 急成長クラブ Top 10 (前年比)</h3>
                 <p>前年からBC指数を大きく伸ばしたクラブのランキングです。</p>
-                <!-- ★★★ 修正箇所：高さを 550px -> 650px に拡張 ★★★ -->
                 <div class="trends-canvas-container" style="height: 500px;">
                     <canvas id="growthChart"></canvas>
                 </div>
@@ -95,6 +143,9 @@ export async function render(content) {
                     <canvas id="correlationChart"></canvas>
                 </div>
             </div>
+            
+            <!-- 4. 全クラブ 指数増減数ランキングテーブル -->
+            ${createRankingTableHTML(growthData)}
             
              <div class="analysis-note" style="background:#2a3758; padding:20px; border-radius:12px; border-left:5px solid #299ad3; max-width: 1000px; margin: 0 auto;">
                 <h4 style="margin-top:0; color:#fff;">💡 分析サマリー</h4>
@@ -118,6 +169,62 @@ export async function render(content) {
         renderGrowthChart(topGrowth);
         renderCorrelationChart(clubData);
     }, 0);
+}
+
+// ★ランキングテーブルのHTMLを生成する関数
+function createRankingTableHTML(growthData) {
+    let html = `
+        <div class="trends-chart-wrapper">
+            <h3>📋 全クラブ 指数増減ランキング</h3>
+            <p>前年からのBC指数の増減ランキングです。</p>
+            <div style="overflow-x: auto;">
+                <table class="ranking-table">
+                    <thead>
+                        <tr>
+                            <th>順位</th>
+                            <th>クラブ名</th>
+                            <th>最新スコア</th>
+                            <th>前年スコア</th>
+                            <th>増減</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+    `;
+    
+    growthData.forEach((d, index) => {
+        let diffStr = '';
+        let diffClass = '';
+        
+        // 小数点の誤差（-0.0001など）を考慮して判定
+        if (d.diff > 0.05) {
+            diffStr = `+${d.diff.toFixed(1)}`;
+            diffClass = 'diff-up';
+        } else if (d.diff < -0.05) {
+            diffStr = `${d.diff.toFixed(1)}`;
+            diffClass = 'diff-down';
+        } else {
+            diffStr = '±0.0';
+            diffClass = 'diff-flat';
+        }
+        
+        html += `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${d.name}</td>
+                <td>${d.current.toFixed(1)}</td>
+                <td>${d.prev > 0 ? d.prev.toFixed(1) : '-'}</td>
+                <td class="${diffClass}">${diffStr}</td>
+            </tr>
+        `;
+    });
+    
+    html += `
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+    return html;
 }
 
 function renderTrendChart(historyData, clubData) {
@@ -148,8 +255,9 @@ function renderTrendChart(historyData, clubData) {
             tension: 0.3,
             pointBackgroundColor: '#fff',
             pointBorderColor: color,
-            pointRadius: 5,
-            pointHoverRadius: 8
+            pointRadius: 6,         // ★少しポイントを大きく
+            pointHoverRadius: 10,    // ★ホバー時のポイントをさらに大きく
+            hitRadius: 20           // ★【重要】マウス判定の当たり領域を大幅に拡大（離れていても反応する）
         };
     }).filter(ds => ds !== null);
 
@@ -159,6 +267,12 @@ function renderTrendChart(historyData, clubData) {
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            // ★【重要】ポイントの真上でなくても、マウスに一番近いデータに反応させる
+            interaction: {
+                mode: 'nearest',
+                axis: 'xy',
+                intersect: false
+            },
             layout: { padding: { right: 20, bottom: 20, left: 10, top: 10 } },
             plugins: {
                 legend: {
@@ -175,7 +289,9 @@ function renderTrendChart(historyData, clubData) {
                     bodyColor: '#fff',
                     borderColor: '#4a5a7f',
                     borderWidth: 1,
-                    padding: 10
+                    padding: 12,
+                    titleFont: { size: 14 },
+                    bodyFont: { size: 13 }
                 }
             },
             scales: {
@@ -197,7 +313,6 @@ function renderGrowthChart(data) {
     const ctx = document.getElementById('growthChart')?.getContext('2d');
     if (!ctx) return;
 
-    // ★修正箇所: スマホの場合は config.js の省略名を使用するロジックを追加
     const isMobile = window.innerWidth <= 768;
     const labels = data.map(d => {
         if (isMobile && clubAbbreviations[d.name]) {
@@ -209,7 +324,7 @@ function renderGrowthChart(data) {
     new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: labels, // ★修正箇所: 省略対応したラベルを使用
+            labels: labels, 
             datasets: [{
                 label: 'スコア上昇ポイント',
                 data: data.map(d => d.diff),
@@ -235,7 +350,6 @@ function renderGrowthChart(data) {
                     bodyFont: { size: 14, family: "'Segoe UI', 'Meiryo', sans-serif" },
                     padding: 12,
                     callbacks: {
-                        // ★修正箇所: ツールチップでは常に正式名称を表示
                         title: (tooltipItems) => data[tooltipItems[0].dataIndex].name,
                         label: (ctx) => ` +${Number(ctx.raw).toFixed(2)} ポイント`
                     }
@@ -280,12 +394,17 @@ function renderCorrelationChart(data) {
                 borderColor: '#fff',
                 borderWidth: 1,
                 pointRadius: 8,
-                pointHoverRadius: 12
+                pointHoverRadius: 12,
+                hitRadius: 15 // ★相関図も少しホバー判定を緩くしました
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            interaction: {
+                mode: 'nearest',
+                intersect: false
+            },
             layout: { padding: { top: 10, right: 20, bottom: 20, left: 10 } },
             plugins: {
                 legend: { display: false },
