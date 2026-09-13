@@ -110,7 +110,14 @@ function renderPrediction(league) {
         });
         html += '</div>';
 
-        container.innerHTML = dateHtml + html;
+        // シーズン序盤（第9節まで）はデータ蓄積が不十分なため、
+        // 参考値であることを知らせるバナーを出す。
+        let bannerHtml = '';
+        if (predictionProbabilities.is_reference) {
+            bannerHtml = `<div style="background-color: #ffe066; color: #333; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; text-align: center;">⚠️ 【お知らせ】現在の予測データは参考値です<br><span style="font-size: 0.9em; font-weight: normal;">ver.1.1モデルは当該シーズンのデータのみを利用して計算を行っています。データが蓄積され精度が安定する「第10節」までは参考値としてお楽しみください。</span></div>`;
+        }
+
+        container.innerHTML = dateHtml + bannerHtml + html;
     });
 }
 
