@@ -1,3 +1,4 @@
+import re
 import csv
 import math
 from pathlib import Path
@@ -6,6 +7,8 @@ from pathlib import Path
 
 # ★★★【設定項目】予測の対象とするシーズンを指定 ★★★
 TARGET_YEAR = 2026
+# 的中率の集計を開始する節（これ未満は参考値）。winner.js と合わせること。
+ACCURACY_START_SECTION = 10
 
 # ★★★【設定項目】ホームチームの有利さを調整する係数 ★★★
 # 1.0より大きい値にするとホームが有利に、小さい値にすると不利になります。
@@ -75,27 +78,24 @@ def main():
     match_limit_per_league = 15
     matches_processed = {"J1": 0, "J2": 0, "J3": 0}
 
-    # 2.5 消化済みの試合数をカウントして参考値（10節未満）かどうかを判定
-    total_finished = 0
-    try:
-        with open(SCHEDULE_CSV_PATH, 'r', encoding='utf-8-sig') as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                try:
-                    if int(row.get('年')) == TARGET_YEAR and row.get('ホーム得点'):
-                        total_finished += 1
-                except (ValueError, TypeError):
-                    continue
-    except Exception:
-        pass
-        
-    predictions["is_reference"] = total_finished < 300
+    # 2.5 参考値（第9節まで）かどうかは、予測対象の節で判定する。
+    #      消化試合数で判定すると、第10節の予測を作る時点では
+    #      まだ第9節までしか終わっておらず、第10節が参考値扱いになってしまうため。
+    earliest_section = None
 
     # 3. 試合スケジュールを読み込み、未対戦の試合を予測
     #    ※ 中止・延期などで「日付が過去なのに結果が未入力」の試合が
     #      CSVの先頭に残っているため、日付で絞り込んでから日付順に並べる。
     #      （絞り込まないと『今後の試合予測』に第1節などの過去の試合が並んでしまう）
     today = datetime.date.today()
+
+    # アーカイブのファイル名に使う「対象試合日」（予測対象のうち最も早い試合日）
+    earliest_match_date = None
+
+    def parse_section_number(setsu_str):
+        """'第8節' のような文字列から節番号を取り出す"""
+        matched = re.search(r'(\d+)', setsu_str or '')
+        return int(matched.group(1)) if matched else None
 
     def parse_match_date(date_str):
         try:
@@ -185,6 +185,11 @@ def main():
                     }
                     predictions[league].append(match_prediction)
                     matches_processed[league] += 1
+                    if earliest_match_date is None or match_date < earliest_match_date:
+                        earliest_match_date = match_date
+                    section_no = parse_section_number(setsu)
+                    if section_no is not None and (earliest_section is None or section_no < earliest_section):
+                        earliest_section = section_no
 
                     print(f"  > [{league} {setsu}] {home_team} vs {away_team} の予測を生成しました。")
 
@@ -192,6 +197,11 @@ def main():
         print(f"エラー: スケジュールファイルが見つかりません: {SCHEDULE_CSV_PATH}")
     except Exception as e:
         print(f"エラー: スケジュールファイルの処理中に問題が発生しました - {e}")
+
+    # 第9節までは参考値。予測ページのお知らせバナーの表示に使う。
+    predictions["is_reference"] = (
+        earliest_section is not None and earliest_section < ACCURACY_START_SECTION
+    )
 
     # --- JSONへの保存とアーカイブ化 ---
     import json
@@ -206,7 +216,14 @@ def main():
     version_dir = root_archive_dir / 'ver.1.1'
     os.makedirs(version_dir, exist_ok=True)
     
-    target_date = datetime.datetime.now().strftime('%Y-%m-%d')
+    # アーカイブ名は対象試合日を使う（ver.1 と同じ規則）。
+    # 生成日で命名すると、同じ節を週に何度も生成したときに
+    # 中身が同じファイルが日付違いで増え、的中率の集計で
+    # 同一試合を二重カウントしてしまうため。
+    if earliest_match_date is not None:
+        target_date = earliest_match_date.strftime('%Y-%m-%d')
+    else:
+        target_date = datetime.datetime.now().strftime('%Y-%m-%d')
     
     # 1. 最新データの保存
     output_json_path = data_dir / 'winner-predictions.json'
@@ -218,19 +235,20 @@ def main():
     except Exception as e:
         print(f"エラー: JSONの保存に失敗しました - {e}")
 
-    # ▼▼▼【変更】第9節まで（消化試合300未満）は参考値としてアーカイブしない ▼▼▼
-    if predictions.get("is_reference"):
-        print("\n[お知らせ] 現在は第9節までの参考値期間のため、過去の予測（アーカイブ）への保存はスキップします。")
-    else:
-        # 2. アーカイブの保存
-        archive_filename = f"winner-predictions_{target_date}.json"
-        archive_path = version_dir / archive_filename
-        try:
-            with open(archive_path, 'w', encoding='utf-8') as f:
-                json.dump(predictions, f, indent=2, ensure_ascii=False)
-            print(f"[完了] アーカイブを '{archive_path}' に保存しました。")
-        except Exception as e:
-            print(f"エラー: アーカイブの保存に失敗しました: {e}")
+    # 2. アーカイブの保存
+    #    参考値期間（第9節まで）でもアーカイブする。
+    #    結果検証ページは predictions-archive のみを参照するため、
+    #    保存しないと今季の予測が結果検証ページに一切出てこない。
+    #    第9節までの試合は winner.js 側で的中率の集計から除外される。
+    archive_filename = f"winner-predictions_{target_date}.json"
+    archive_path = version_dir / archive_filename
+    try:
+        with open(archive_path, 'w', encoding='utf-8') as f:
+            json.dump(predictions, f, indent=2, ensure_ascii=False)
+        note = "（参考値期間のため的中率の集計対象外）" if predictions.get("is_reference") else ""
+        print(f"[完了] アーカイブを '{archive_path}' に保存しました。{note}")
+    except Exception as e:
+        print(f"エラー: アーカイブの保存に失敗しました: {e}")
 
     # 3. マニフェストの更新
     try:

@@ -3,6 +3,10 @@
 let winnerData = null;
 let archiveList = null;
 
+// 的中率の集計を開始する節。これ未満（第9節まで）は
+// データ蓄積が不十分なため参考値扱いとし、精度集計から除外する。
+const ACCURACY_START_SECTION = 10;
+
 // 「最新の予測」を表す <option> の値と、その参照先
 const CURRENT_PREDICTION_VALUE = 'current';
 const CURRENT_PREDICTION_PATH = './data/winner-predictions.json';
@@ -32,6 +36,13 @@ async function loadWinnerData(filePath = './data/winner-predictions.json') {
     }
 }
 
+// kickoff 文字列（例: "26/9/19 19:00 (第8節)"）から節番号を取り出す。
+// ver.1 の kickoff には節が入っていないため null を返す。
+function getSectionNumber(kickoff) {
+    const matched = /第(\d+)節/.exec(kickoff || '');
+    return matched ? parseInt(matched[1], 10) : null;
+}
+
 // =======================================================
 // === 予測ページ ( #winner ) 用のロジック ===
 // =======================================================
@@ -44,11 +55,18 @@ function createWinnerCardHTML(match) {
 function renderWinnerCards(league, data) {
     const container = document.querySelector('#winner .winner-cards-container');
     if (!container) return;
-    if (!data || !data[league] || data[league].length === 0) {
-        container.innerHTML = `<p style="text-align:center; color:#fff; padding: 50px 0;">現在、この日の${league}のWINNER対象試合の予測はありません。</p>`;
-    } else {
-        container.innerHTML = data[league].map(createWinnerCardHTML).join('');
+
+    let html = '';
+    if (data && data.is_reference) {
+        html += `<div style="background-color: #ffe066; color: #333; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; text-align: center;">⚠️ 【お知らせ】現在の予測データは参考値です<br><span style="font-size: 0.9em; font-weight: normal;">ver.1.1モデルは当該シーズンのデータのみを利用して計算を行っています。データが蓄積され精度が安定する「第10節」までは参考値としてお楽しみください。</span></div>`;
     }
+
+    if (!data || !data[league] || data[league].length === 0) {
+        html += `<p style="text-align:center; color:#fff; padding: 50px 0;">現在、この日の${league}のWINNER対象試合の予測はありません。</p>`;
+    } else {
+        html += data[league].map(createWinnerCardHTML).join('');
+    }
+    container.innerHTML = html;
 }
 
 async function handleTabClick(event) {
@@ -170,6 +188,7 @@ function parseSchedule(scheduleText) {
 
 async function calculateAndRenderAccuracy(selectedVersion, versionFiles, scheduleMap, container) {
     let total = 0, hits = { honmei: 0, taiko: 0, ooana: 0 };
+    let skippedEarly = 0;
 
     for (const file of versionFiles) {
         try {
@@ -181,6 +200,14 @@ async function calculateAndRenderAccuracy(selectedVersion, versionFiles, schedul
             ['J1', 'J2', 'J3'].forEach(league => {
                 if (data[league]) {
                     data[league].forEach(match => {
+                        // 第9節までは参考値期間のため集計対象外。
+                        // 節が取れない ver.1 の予測は従来どおり全件集計する。
+                        const section = getSectionNumber(match.kickoff);
+                        if (section !== null && section < ACCURACY_START_SECTION) {
+                            skippedEarly++;
+                            return;
+                        }
+
                         const resultKey = `${yearFromFilename}-${match.home}-${match.away}`;
                         const resultScore = scheduleMap.get(resultKey);
                         if (resultScore) {
@@ -196,7 +223,11 @@ async function calculateAndRenderAccuracy(selectedVersion, versionFiles, schedul
     }
     
     if (total > 0) {
-        container.innerHTML = `<h3>${selectedVersion} モデル精度 (集計試合数: ${total})</h3><div class="accuracy-grid"><div>本命 的中率: <strong>${(hits.honmei/total*100).toFixed(1)}%</strong> <span>(${hits.honmei}件)</span></div><div>対抗 的中率: <strong>${(hits.taiko/total*100).toFixed(1)}%</strong> <span>(${hits.taiko}件)</span></div><div>大穴 的中率: <strong>${(hits.ooana/total*100).toFixed(1)}%</strong> <span>(${hits.ooana}件)</span></div></div>`;
+        // 節情報を持たない ver.1 では節での除外が起きないため、その断り書きも出さない。
+        const scopeNote = skippedEarly > 0 ? `第${ACCURACY_START_SECTION}節以降 / ` : '';
+        container.innerHTML = `<h3>${selectedVersion} モデル精度 (${scopeNote}集計試合数: ${total})</h3><div class="accuracy-grid"><div>本命 的中率: <strong>${(hits.honmei/total*100).toFixed(1)}%</strong> <span>(${hits.honmei}件)</span></div><div>対抗 的中率: <strong>${(hits.taiko/total*100).toFixed(1)}%</strong> <span>(${hits.taiko}件)</span></div><div>大穴 的中率: <strong>${(hits.ooana/total*100).toFixed(1)}%</strong> <span>(${hits.ooana}件)</span></div></div>`;
+    } else if (skippedEarly > 0) {
+        container.innerHTML = `<p>${selectedVersion} は第${ACCURACY_START_SECTION}節から集計します。現在は参考値期間のため、精度はまだ表示しません。</p>`;
     } else {
         container.innerHTML = `<p>${selectedVersion} の集計データはまだありません。</p>`;
     }
