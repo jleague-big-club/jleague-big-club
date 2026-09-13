@@ -104,12 +104,35 @@ export async function render(content) {
                 margin-top: 5px;
             }
 
-            /* クラブ名: PCはフルネーム、スマホは省略名に切り替える */
-            .ranking-table .club-name-abbr { display: none; }
+            /* クラブ名・見出し: PCはフル表記、スマホは短縮表記に切り替える */
+            .ranking-table .club-name-abbr,
+            .ranking-table .th-short { display: none; }
+
+            /* スマホでは横スクロールさせず画面幅に収める */
             @media (max-width: 768px) {
-                .ranking-table .club-name-full { display: none; }
-                .ranking-table .club-name-abbr { display: inline; }
-                .ranking-table .club-name-cell { white-space: nowrap; }
+                .ranking-table .club-name-full,
+                .ranking-table .th-full { display: none; }
+                .ranking-table .club-name-abbr,
+                .ranking-table .th-short { display: inline; }
+
+                .ranking-table {
+                    /* PC用の min-width:500px を解除しないと必ず横スクロールになる */
+                    min-width: 0;
+                    table-layout: fixed;
+                }
+                .ranking-table th, .ranking-table td {
+                    padding: 10px 2px;
+                    text-align: center;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                /* 列幅配分（合計100%） */
+                .ranking-table th:nth-child(1), .ranking-table td:nth-child(1) { width: 12%; }
+                .ranking-table th:nth-child(2), .ranking-table td:nth-child(2) { width: 30%; text-align: left; padding-left: 4px; }
+                .ranking-table th:nth-child(3), .ranking-table td:nth-child(3) { width: 20%; }
+                .ranking-table th:nth-child(4), .ranking-table td:nth-child(4) { width: 20%; }
+                .ranking-table th:nth-child(5), .ranking-table td:nth-child(5) { width: 18%; }
             }
         </style>
     `;
@@ -191,8 +214,8 @@ function createRankingTableHTML(growthData) {
                         <tr>
                             <th>順位</th>
                             <th>クラブ名</th>
-                            <th>最新スコア</th>
-                            <th>前年スコア</th>
+                            <th><span class="th-full">最新スコア</span><span class="th-short">最新</span></th>
+                            <th><span class="th-full">前年スコア</span><span class="th-short">前年</span></th>
                             <th>増減</th>
                         </tr>
                     </thead>
