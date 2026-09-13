@@ -3295,6 +3295,14 @@ canvas {
     color: #ffd700;
 }
 
+/* スマホでは全テーブル共通の font-size:13px が効いてしまうため、
+   3列しかないEloの表はもう少し大きくする（平均観客数推移の表と同じ15px基準） */
+@media (max-width: 768px) {
+    .rating-table-container table {
+        font-size: 15px
+    }
+}
+
 /* --- style.min.css に追記 --- */
 
 /* ======================================================= */

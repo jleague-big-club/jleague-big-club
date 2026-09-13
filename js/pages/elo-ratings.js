@@ -1,5 +1,7 @@
 // js/pages/elo-ratings.js
 
+import { formatSeasonLabel } from '../config.js';
+
 let ratingsData = null;
 
 const abbreviationMap = {
@@ -34,12 +36,15 @@ function createRatingTableHTML(league, data) {
 export default async function initializeEloRatingsPage(pageContainer) {
     if (!pageContainer || pageContainer.childElementCount > 0) return;
 
-    const currentYear = new Date().getFullYear();
+    // 秋春制のため、シーズンは開幕年で数える（1〜6月は前年開幕のシーズン）
+    const now = new Date();
+    const seasonYear = now.getMonth() + 1 >= 7 ? now.getFullYear() : now.getFullYear() - 1;
+    const seasonLabel = formatSeasonLabel(seasonYear);
     const pageTitleH1 = document.querySelector('#page-title-elo-ratings h1');
     if (pageTitleH1) {
-        pageTitleH1.textContent = `Jリーグ ${currentYear} Eloレーティング`;
+        pageTitleH1.textContent = `${seasonLabel} Eloレーティング`;
     }
-    document.title = `Jリーグ ${currentYear} Eloレーティング - Jリーグビッグクラブ分析`;
+    document.title = `${seasonLabel} Eloレーティング - Jリーグビッグクラブ分析`;
     
     let lastUpdated = '不明';
     try {
@@ -54,7 +59,7 @@ export default async function initializeEloRatingsPage(pageContainer) {
     
     pageContainer.innerHTML = `
         <div class="elo-header">
-            <p>このレーティングは、${currentYear}シーズンの試合結果のみを基にEloレーティングシステムで算出された、各チームの現在の強さを示す指標です。<br>数値は毎試合の結果に応じて変動します。</p>
+            <p>このレーティングは、${seasonLabel}シーズンの試合結果のみを基にEloレーティングシステムで算出された、各チームの現在の強さを示す指標です。<br>数値は毎試合の結果に応じて変動します。</p>
             <a href="#blog/elo-rating-explainer" class="article-link-button small">Eloレーティングとは？(解説記事)</a>
         </div>
         <div class="update-date-note">最終更新日: ${lastUpdated}</div>

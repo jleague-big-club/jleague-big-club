@@ -28,3 +28,12 @@ export const clubAbbreviations = {
     "栃木ＳＣ": "栃木SC",
 
 };
+
+// 年度をシーズン表記に変換する
+// 2026年からJリーグが秋春制に移行したため「26-27」形式。2025年以前は春秋制なので単年表記
+export function formatSeasonLabel(year) {
+    const y = parseInt(year, 10);
+    if (!Number.isFinite(y)) return String(year);
+    if (y < 2026) return `${y}`;
+    return `${String(y).slice(-2)}-${String(y + 1).slice(-2)}`;
+}

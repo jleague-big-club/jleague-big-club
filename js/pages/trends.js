@@ -103,6 +103,14 @@ export async function render(content) {
                 display: block;
                 margin-top: 5px;
             }
+
+            /* クラブ名: PCはフルネーム、スマホは省略名に切り替える */
+            .ranking-table .club-name-abbr { display: none; }
+            @media (max-width: 768px) {
+                .ranking-table .club-name-full { display: none; }
+                .ranking-table .club-name-abbr { display: inline; }
+                .ranking-table .club-name-cell { white-space: nowrap; }
+            }
         </style>
     `;
 
@@ -210,7 +218,7 @@ function createRankingTableHTML(growthData) {
         html += `
             <tr>
                 <td>${index + 1}</td>
-                <td>${d.name}</td>
+                <td class="club-name-cell"><span class="club-name-full">${d.name}</span><span class="club-name-abbr">${clubAbbreviations[d.name] || d.name}</span></td>
                 <td>${d.current.toFixed(1)}</td>
                 <td>${d.prev > 0 ? d.prev.toFixed(1) : '-'}</td>
                 <td class="${diffClass}">${diffStr}</td>
