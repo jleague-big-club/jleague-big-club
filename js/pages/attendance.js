@@ -1,5 +1,11 @@
 import { getAttendanceData } from '../dataManager.js';
-import { clubAbbreviations, formatSeasonLabel } from '../config.js';
+import { clubAbbreviations } from '../config.js';
+
+// 年度をシーズン表記に変換（例: 2026 → "2026-27"）
+const formatSeasonLabel = (year) => {
+    const y = parseInt(year);
+    return `${y}-${String(y + 1).slice(-2)}`;
+};
 import { loadScript } from '../uiHelpers.js';
 
 let attendanceChart = null;
