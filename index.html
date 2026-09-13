@@ -46,16 +46,18 @@
         margin-bottom: 20px; /* 一番下は少し広めでもOK */
       }
     }
-    /* Stripe Buy Button レイアウト */
+    /* 支援ボタン（Stripe Payment Link）レイアウト */
     .support-stripe-buttons {
       display: flex;
-      flex-direction: column;
-      gap: 8px;
+      flex-wrap: wrap;
+      gap: 10px;
       align-items: center;
+      justify-content: center;
       width: 100%;
     }
-    .support-stripe-buttons stripe-buy-button {
-      width: 100%;
+    .support-stripe-buttons .support-button {
+      padding: 12px 26px;
+      font-size: 1rem;
     }
     .support-desc {
       font-size: 0.78em;
@@ -65,7 +67,6 @@
       line-height: 1.4;
     }
   </style>
-  <script async src="https://js.stripe.com/v3/buy-button.js"></script>
 </head>
 
 <body>
@@ -276,18 +277,9 @@
       <h3 class="support-title">このサイトを応援する！</h3>
       <p class="support-desc">サポートはデータ収集・サイト維持に使用されます</p>
       <div class="support-stripe-buttons">
-        <stripe-buy-button
-          buy-button-id="buy_btn_1TuZd1Q1YRiimCCQ64Mg1Wrc"
-          publishable-key="pk_live_51RyPKdQ1YRiimCCQwmmBTFEb1WMvmdE1Q78clCEHDojKtn0hwa7VhTHVm3DJJjbfk0fRgt2y1zXnZGjcUT8QfURiU0OqnjLma42"
-        ></stripe-buy-button>
-        <stripe-buy-button
-          buy-button-id="buy_btn_1TuZeeQ1YRiimCCQzdrKJL1I"
-          publishable-key="pk_live_51RyPKdQ1YRiimCCQwmmBTFEb1WMvmdE1Q78clCEHDojKtn0hwa7VhTHVm3DJJjbfk0fRgt2y1zXnZGjcUT8QfURiU0OqnjLma42"
-        ></stripe-buy-button>
-        <stripe-buy-button
-          buy-button-id="buy_btn_1TuZf7Q1YRiimCCQDpopOsHu"
-          publishable-key="pk_live_51RyPKdQ1YRiimCCQwmmBTFEb1WMvmdE1Q78clCEHDojKtn0hwa7VhTHVm3DJJjbfk0fRgt2y1zXnZGjcUT8QfURiU0OqnjLma42"
-        ></stripe-buy-button>
+        <a class="support-button" href="https://donate.stripe.com/9B64gBcaCaAOdJ7dbq7ss01" target="_blank" rel="noopener noreferrer">¥300</a>
+        <a class="support-button" href="https://donate.stripe.com/dRmfZj0rU10e6gF8Va7ss02" target="_blank" rel="noopener noreferrer">¥500</a>
+        <a class="support-button" href="https://donate.stripe.com/9B67sN5Me24ieNb3AQ7ss03" target="_blank" rel="noopener noreferrer">¥1,000</a>
       </div>
     </div>
   </div>
