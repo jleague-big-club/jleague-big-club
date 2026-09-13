@@ -7,6 +7,9 @@ let archiveList = null;
 // データ蓄積が不十分なため参考値扱いとし、精度集計から除外する。
 const ACCURACY_START_SECTION = 10;
 
+// キックオフ後この時間までは予測カードを残しておく（2時間）。
+const MATCH_DISPLAY_GRACE_MS = 2 * 60 * 60 * 1000;
+
 // 「最新の予測」を表す <option> の値と、その参照先
 const CURRENT_PREDICTION_VALUE = 'current';
 const CURRENT_PREDICTION_PATH = './data/winner-predictions.json';
@@ -15,7 +18,8 @@ const CURRENT_PREDICTION_PATH = './data/winner-predictions.json';
 async function loadArchiveList() {
     if (archiveList) return;
     try {
-        const response = await fetch('./predictions-archive/archive-manifest.json');
+        // アーカイブは逐次増えるので、古いキャッシュを掴まないようタイムスタンプを付ける
+        const response = await fetch('./predictions-archive/archive-manifest.json?v=' + new Date().getTime());
         archiveList = response.ok ? await response.json() : [];
     } catch (error) {
         console.warn("過去の予測リストの読み込みに失敗:", error);
@@ -36,6 +40,15 @@ async function loadWinnerData(filePath = './data/winner-predictions.json') {
     }
 }
 
+// kickoff 文字列（例: "26/9/19 19:00"）からキックオフ日時を取り出す。
+// ver.1 の "9/13 (土) 19:00" は年がなくパースできないため null。
+function getKickoffTime(kickoff) {
+    const matched = /(\d+)\/(\d+)\/(\d+)\s+(\d+):(\d+)/.exec(kickoff || '');
+    if (!matched) return null;
+    const [, yy, mm, dd, hh, mi] = matched.map(Number);
+    return new Date(2000 + yy, mm - 1, dd, hh, mi).getTime();
+}
+
 // kickoff 文字列（例: "26/9/19 19:00 (第8節)"）から節番号を取り出す。
 // ver.1 の kickoff には節が入っていないため null を返す。
 function getSectionNumber(kickoff) {
@@ -52,6 +65,34 @@ function createWinnerCardHTML(match) {
     return `<div class="winner-card"><div class="match-info"><div class="kickoff">${match.kickoff}</div><div class="teams"><span class="home-team">${match.home}</span><span class="vs">vs</span><span class="away-team">${match.away}</span></div></div><div class="prediction-title">▼ データ分析によるスコア予測</div><div class="prediction-list">${predictionsHTML}</div></div>`;
 }
 
+// 予測データは1リーグ15件まで入っており、節をまたいだり
+// 終了済みの試合が混ざったりする。表示は「まだ終わっていない直近の1節」に絞る。
+function selectMatchesToShow(matches) {
+    if (!Array.isArray(matches) || matches.length === 0) return [];
+
+    // 1. 予測が入っていない試合は出さない
+    const validMatches = matches.filter(m => m.predictions && m.predictions.length > 0);
+    if (validMatches.length === 0) return [];
+
+    // 2. キックオフから2時間後までは「まだ表示しておきたい試合」として残す
+    const now = Date.now();
+    let upcoming = validMatches.filter(m => {
+        const kickoffTime = getKickoffTime(m.kickoff);
+        if (kickoffTime === null) return true;
+        return kickoffTime + MATCH_DISPLAY_GRACE_MS > now;
+    });
+
+    // 過去のアーカイブを開いている場合は全部過去になるので、その時は絞らない
+    if (upcoming.length === 0) upcoming = validMatches;
+
+    // 3. 残った中で最も早い節だけに絞る
+    const sections = upcoming.map(m => getSectionNumber(m.kickoff)).filter(s => s !== null);
+    if (sections.length === 0) return upcoming;
+
+    const minSection = Math.min(...sections);
+    return upcoming.filter(m => getSectionNumber(m.kickoff) === minSection);
+}
+
 function renderWinnerCards(league, data) {
     const container = document.querySelector('#winner .winner-cards-container');
     if (!container) return;
@@ -61,10 +102,11 @@ function renderWinnerCards(league, data) {
         html += `<div style="background-color: #ffe066; color: #333; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; text-align: center;">⚠️ 【お知らせ】現在の予測データは参考値です<br><span style="font-size: 0.9em; font-weight: normal;">ver.1.1モデルは当該シーズンのデータのみを利用して計算を行っています。データが蓄積され精度が安定する「第10節」までは参考値としてお楽しみください。</span></div>`;
     }
 
-    if (!data || !data[league] || data[league].length === 0) {
+    const targetMatches = selectMatchesToShow(data && data[league]);
+    if (targetMatches.length === 0) {
         html += `<p style="text-align:center; color:#fff; padding: 50px 0;">現在、この日の${league}のWINNER対象試合の予測はありません。</p>`;
     } else {
-        html += data[league].map(createWinnerCardHTML).join('');
+        html += targetMatches.map(createWinnerCardHTML).join('');
     }
     container.innerHTML = html;
 }

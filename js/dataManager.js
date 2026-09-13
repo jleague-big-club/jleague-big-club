@@ -23,7 +23,9 @@ async function fetchData(url) {
     if (!res.ok) {
         throw new Error(`${url} の読み込みに失敗しました: ${res.status}`);
     }
-    const data = url.endsWith('.json') ? await res.json() : await res.text();
+    // キャッシュバスター等のクエリが付いていても .json を見失わないようにする
+    const isJson = url.split('?')[0].endsWith('.json');
+    const data = isJson ? await res.json() : await res.text();
     dataCache[url] = data;
     return data;
 }
@@ -161,7 +163,8 @@ export async function getRankingData() {
 export async function getPredictionData() {
     if (Object.keys(predictionProbabilities).length > 0) return { predictionProbabilities, updateDates };
     const [preds, dates] = await Promise.all([
-        fetchData("/data/prediction_probabilities.json"),
+        // 毎節更新されるので、古いキャッシュを掴まないようタイムスタンプを付ける
+        fetchData("/data/prediction_probabilities.json?v=" + new Date().getTime()),
         fetchData("/data/update_dates.json")
     ]);
     predictionProbabilities = preds;
