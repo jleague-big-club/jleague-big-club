@@ -1,7 +1,1135 @@
 {
   "version": "ver.1.1",
-  "J1": [],
-  "J2": [],
-  "J3": [],
+  "J1": [
+    {
+      "kickoff": "26/9/19 19:00 (第8節)",
+      "home": "アビスパ福岡",
+      "away": "サンフレッチェ広島",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "0-2",
+          "odds": "9.6倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "0-3",
+          "odds": "10.6倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-2",
+          "odds": "26.5倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/19 19:00 (第8節)",
+      "home": "川崎フロンターレ",
+      "away": "鹿島アントラーズ",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "2-1",
+          "odds": "12.7倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "3-1",
+          "odds": "14.3倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "1-2",
+          "odds": "20.7倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/19 19:00 (第8節)",
+      "home": "V・ファーレン長崎",
+      "away": "セレッソ大阪",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-1",
+          "odds": "8.3倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-0",
+          "odds": "9.1倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "3-1",
+          "odds": "20.5倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/19 19:00 (第8節)",
+      "home": "清水エスパルス",
+      "away": "ジェフユナイテッド千葉",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-0",
+          "odds": "4.7倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "0-0",
+          "odds": "4.7倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "3-0",
+          "odds": "27.7倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/19 19:00 (第8節)",
+      "home": "浦和レッズ",
+      "away": "東京ヴェルディ",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-0",
+          "odds": "6.7倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "2-0",
+          "odds": "7.2倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "4-0",
+          "odds": "25.5倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/19 19:00 (第8節)",
+      "home": "FC東京",
+      "away": "名古屋グランパス",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "2-0",
+          "odds": "8.4倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "3-0",
+          "odds": "9.5倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "5-0",
+          "odds": "26.6倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/19 19:00 (第8節)",
+      "home": "ファジアーノ岡山",
+      "away": "京都サンガF.C.",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "2-0",
+          "odds": "9.5倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "2-1",
+          "odds": "10.2倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-2",
+          "odds": "21.7倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/19 19:00 (第8節)",
+      "home": "横浜F・マリノス",
+      "away": "水戸ホーリーホック",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-1",
+          "odds": "8.6倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "2-1",
+          "odds": "11.0倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "0-2",
+          "odds": "20.8倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/20 19:00 (第8節)",
+      "home": "FC町田ゼルビア",
+      "away": "柏レイソル",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "2-1",
+          "odds": "12.1倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "3-1",
+          "odds": "12.1倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-2",
+          "odds": "23.9倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/20 19:00 (第8節)",
+      "home": "ガンバ大阪",
+      "away": "ヴィッセル神戸",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "0-1",
+          "odds": "6.5倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "0-2",
+          "odds": "7.0倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "0-4",
+          "odds": "24.1倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/9 19:00 (第9節)",
+      "home": "柏レイソル",
+      "away": "ヴィッセル神戸",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-1",
+          "odds": "8.0倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "0-1",
+          "odds": "8.2倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-2",
+          "odds": "21.6倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/9 19:00 (第9節)",
+      "home": "鹿島アントラーズ",
+      "away": "ガンバ大阪",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "2-1",
+          "odds": "12.3倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "3-1",
+          "odds": "12.8倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "1-0",
+          "odds": "23.9倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/10 19:00 (第9節)",
+      "home": "セレッソ大阪",
+      "away": "横浜F・マリノス",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "0-1",
+          "odds": "7.2倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-1",
+          "odds": "8.4倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "1-3",
+          "odds": "20.4倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/10 19:00 (第9節)",
+      "home": "FC東京",
+      "away": "浦和レッズ",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "3-1",
+          "odds": "13.2倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "4-1",
+          "odds": "15.2倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "4-0",
+          "odds": "20.6倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/10 19:00 (第9節)",
+      "home": "アビスパ福岡",
+      "away": "ファジアーノ岡山",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-1",
+          "odds": "8.0倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "0-1",
+          "odds": "9.1倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-0",
+          "odds": "20.2倍",
+          "class": "longshot"
+        }
+      ]
+    }
+  ],
+  "J2": [
+    {
+      "kickoff": "26/9/18 19:00 (第7節)",
+      "home": "ヴァンラーレ八戸",
+      "away": "テゲバジャーロ宮崎",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "0-0",
+          "odds": "4.5倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "0-1",
+          "odds": "5.2倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-0",
+          "odds": "21.5倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/19 19:00 (第7節)",
+      "home": "北海道コンサドーレ札幌",
+      "away": "大分トリニータ",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "0-1",
+          "odds": "5.0倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "0-0",
+          "odds": "5.8倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "0-3",
+          "odds": "22.6倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/19 19:00 (第7節)",
+      "home": "藤枝MYFC",
+      "away": "RB大宮アルディージャ",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-1",
+          "odds": "7.6倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "0-1",
+          "odds": "8.2倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-2",
+          "odds": "22.8倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/19 19:00 (第7節)",
+      "home": "モンテディオ山形",
+      "away": "カターレ富山",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "0-0",
+          "odds": "5.2倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-0",
+          "odds": "6.0倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-2",
+          "odds": "45.8倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/19 19:00 (第7節)",
+      "home": "横浜FC",
+      "away": "FC今治",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "3-0",
+          "odds": "8.3倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "2-0",
+          "odds": "8.5倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "1-1",
+          "odds": "21.0倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/19 19:00 (第7節)",
+      "home": "サガン鳥栖",
+      "away": "いわきFC",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-0",
+          "odds": "7.9倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "2-0",
+          "odds": "8.7倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "1-2",
+          "odds": "21.8倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/19 19:00 (第7節)",
+      "home": "ヴァンフォーレ甲府",
+      "away": "徳島ヴォルティス",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "0-0",
+          "odds": "4.5倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-0",
+          "odds": "5.2倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "0-2",
+          "odds": "21.9倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/19 19:00 (第7節)",
+      "home": "アルビレックス新潟",
+      "away": "ジュビロ磐田",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-1",
+          "odds": "7.6倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "0-1",
+          "odds": "8.0倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-2",
+          "odds": "22.7倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/19 19:00 (第7節)",
+      "home": "湘南ベルマーレ",
+      "away": "ブラウブリッツ秋田",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "0-0",
+          "odds": "5.0倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-0",
+          "odds": "5.6倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "1-2",
+          "odds": "22.1倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/20 19:00 (第7節)",
+      "home": "栃木シティ",
+      "away": "ベガルタ仙台",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-1",
+          "odds": "8.9倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "2-1",
+          "odds": "10.6倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "3-0",
+          "odds": "23.6倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/26 19:00 (第8節)",
+      "home": "カターレ富山",
+      "away": "横浜FC",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-0",
+          "odds": "8.4倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-1",
+          "odds": "8.6倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-2",
+          "odds": "21.3倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/26 19:00 (第8節)",
+      "home": "大分トリニータ",
+      "away": "藤枝MYFC",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "0-0",
+          "odds": "4.3倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-0",
+          "odds": "5.7倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-1",
+          "odds": "21.5倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/26 19:00 (第8節)",
+      "home": "FC今治",
+      "away": "湘南ベルマーレ",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "0-1",
+          "odds": "4.9倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "0-0",
+          "odds": "6.8倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "1-3",
+          "odds": "28.8倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/26 19:00 (第8節)",
+      "home": "RB大宮アルディージャ",
+      "away": "ヴァンフォーレ甲府",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-0",
+          "odds": "5.6倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "2-0",
+          "odds": "5.8倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "3-1",
+          "odds": "20.2倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/26 19:00 (第8節)",
+      "home": "徳島ヴォルティス",
+      "away": "栃木シティ",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "0-1",
+          "odds": "6.3倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "0-2",
+          "odds": "6.8倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "0-4",
+          "odds": "23.9倍",
+          "class": "longshot"
+        }
+      ]
+    }
+  ],
+  "J3": [
+    {
+      "kickoff": "26/9/14 19:00 (第6節)",
+      "home": "FC大阪",
+      "away": "愛媛FC",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-1",
+          "odds": "9.7倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-2",
+          "odds": "10.1倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "0-0",
+          "odds": "20.1倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/18 19:00 (第7節)",
+      "home": "FC大阪",
+      "away": "福島ユナイテッドFC",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "2-1",
+          "odds": "10.5倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "2-0",
+          "odds": "12.2倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "1-2",
+          "odds": "20.9倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/18 19:00 (第7節)",
+      "home": "ロアッソ熊本",
+      "away": "松本山雅FC",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-0",
+          "odds": "4.2倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "0-0",
+          "odds": "4.9倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "3-1",
+          "odds": "44.1倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/19 19:00 (第7節)",
+      "home": "愛媛FC",
+      "away": "カマタマーレ讃岐",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "5-0",
+          "odds": "12.3倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "4-0",
+          "odds": "12.5倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "3-1",
+          "odds": "20.8倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/19 19:00 (第7節)",
+      "home": "ガイナーレ鳥取",
+      "away": "奈良クラブ",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "2-2",
+          "odds": "13.9倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "2-1",
+          "odds": "14.9倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "3-1",
+          "odds": "20.0倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/19 19:00 (第7節)",
+      "home": "ザスパ群馬",
+      "away": "高知ユナイテッドSC",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-0",
+          "odds": "6.7倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "2-0",
+          "odds": "8.0倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "1-2",
+          "odds": "24.2倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/19 19:00 (第7節)",
+      "home": "鹿児島ユナイテッドFC",
+      "away": "栃木SC",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "2-0",
+          "odds": "9.9倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "2-1",
+          "odds": "10.3倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-2",
+          "odds": "21.5倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/20 19:00 (第7節)",
+      "home": "ツエーゲン金沢",
+      "away": "レノファ山口FC",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "0-1",
+          "odds": "6.0倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "0-0",
+          "odds": "7.5倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-1",
+          "odds": "20.2倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/20 19:00 (第7節)",
+      "home": "AC長野パルセイロ",
+      "away": "FC岐阜",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "0-2",
+          "odds": "6.8倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "0-1",
+          "odds": "7.2倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "1-0",
+          "odds": "25.5倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/20 19:00 (第7節)",
+      "home": "SC相模原",
+      "away": "ギラヴァンツ北九州",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "3-0",
+          "odds": "12.4倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "4-0",
+          "odds": "12.5倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "3-2",
+          "odds": "31.0倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/20 19:00 (第7節)",
+      "home": "レイラック滋賀",
+      "away": "FC琉球",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-1",
+          "odds": "8.7倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-2",
+          "odds": "10.9倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "1-3",
+          "odds": "20.5倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/26 19:00 (第8節)",
+      "home": "ツエーゲン金沢",
+      "away": "ガイナーレ鳥取",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "2-1",
+          "odds": "10.8倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-1",
+          "odds": "11.5倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "3-2",
+          "odds": "21.5倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/26 19:00 (第8節)",
+      "home": "レノファ山口FC",
+      "away": "SC相模原",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "0-0",
+          "odds": "5.4倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-0",
+          "odds": "6.0倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-2",
+          "odds": "43.4倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/26 19:00 (第8節)",
+      "home": "奈良クラブ",
+      "away": "レイラック滋賀",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "2-2",
+          "odds": "14.4倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "2-1",
+          "odds": "16.6倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "3-1",
+          "odds": "21.0倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/9/26 19:00 (第8節)",
+      "home": "FC琉球",
+      "away": "愛媛FC",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-1",
+          "odds": "9.8倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-2",
+          "odds": "10.2倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "0-0",
+          "odds": "21.7倍",
+          "class": "longshot"
+        }
+      ]
+    }
+  ],
   "is_reference": true
 }
