@@ -3,6 +3,7 @@ import { clubAbbreviations, formatSeasonLabel } from '../config.js';
 import { loadScript } from '../uiHelpers.js';
 
 let attendanceChart = null;
+let leagueChart = null;
 const CHART_JS_URL = 'https://cdn.jsdelivr.net/npm/chart.js';
 
 // メインの描画関数
@@ -94,6 +95,33 @@ export default async function initAttendancePage(container) {
 
             canvas#attendanceChart {
                 background-color: transparent !important;
+            }
+
+            /* リーグ別グラフ（表の上に常時表示） */
+            .league-chart-wrapper {
+                background: #1f253d;
+                border: 1px solid #4a5a7f;
+                border-radius: 12px;
+                padding: 16px;
+                margin: 0 auto 20px;
+                width: 100%;
+                max-width: 800px;
+                box-sizing: border-box;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+            }
+            /* style.min.css のグローバル canvas 指定
+               (height:480px !important / width:100% !important / background:#fff)
+               に潰されるため、ID込みの詳細度で上書きする */
+            #attendance-league-chart-box canvas {
+                height: 100% !important;
+                width: 100% !important;
+                background: transparent !important;
+                margin-bottom: 0;
+            }
+            @media (max-width: 768px) {
+                .league-chart-wrapper {
+                    padding: 10px 6px;
+                }
             }
             
             .back-btn {
@@ -210,6 +238,13 @@ export default async function initAttendancePage(container) {
                 </div>
             </div>
 
+            <!-- リーグ別グラフ（表と連動） -->
+            <div id="attendance-league-chart-wrap" class="league-chart-wrapper">
+                <div id="attendance-league-chart-box" style="position:relative; width:100%;">
+                    <canvas id="attendanceLeagueChart"></canvas>
+                </div>
+            </div>
+
             <!-- テーブル表示エリア -->
             <div id="attendance-output-container" class="attendance-table-container">
                 <p style="text-align:center; color:#abc; padding:20px;">データを読み込み中...</p>
@@ -245,8 +280,7 @@ export default async function initAttendancePage(container) {
             leagueBtnContainer.querySelectorAll('.rank-tab-btn').forEach(b => b.classList.remove('active'));
             e.target.classList.add('active');
 
-            document.getElementById('attendance-chart-wrap').style.display = 'none';
-            document.getElementById('attendance-output-container').style.display = 'flex'; // PC基準のflex
+            showListView();
             document.getElementById('attendance-club-select').value = 'all';
 
             updateAttendanceFilters();
@@ -257,18 +291,115 @@ export default async function initAttendancePage(container) {
         if (e.target.value && e.target.value !== 'all') {
             renderAttendanceChart(e.target.value);
         } else {
-            document.getElementById('attendance-chart-wrap').style.display = 'none';
-            document.getElementById('attendance-output-container').style.display = '';
+            showListView();
         }
     });
 
     document.getElementById('chart-back-btn').addEventListener('click', () => {
-        document.getElementById('attendance-chart-wrap').style.display = 'none';
-        document.getElementById('attendance-output-container').style.display = '';
+        showListView();
         document.getElementById('attendance-club-select').value = 'all';
     });
 
     updateAttendanceFilters();
+}
+
+const LEAGUE_COLORS = { 'J1': '#ff4b4b', 'J2': '#00d2ff', 'J3': '#00ff88', 'JFL': '#ffae00' };
+
+// 一覧表示（リーグ別グラフ＋テーブル）に戻す
+function showListView() {
+    document.getElementById('attendance-chart-wrap').style.display = 'none';
+    document.getElementById('attendance-league-chart-wrap').style.display = '';
+    document.getElementById('attendance-output-container').style.display = '';
+}
+
+// リーグ別グラフ描画（年度・リーグの絞り込みに連動）
+async function renderLeagueChart(rows, selectedYear, selectedLeague) {
+    const wrap = document.getElementById('attendance-league-chart-wrap');
+    const canvas = document.getElementById('attendanceLeagueChart');
+    if (!wrap || !canvas) return;
+
+    if (!rows || rows.length === 0) {
+        if (leagueChart) { leagueChart.destroy(); leagueChart = null; }
+        wrap.style.display = 'none';
+        return;
+    }
+
+    try {
+        await loadScript(CHART_JS_URL);
+    } catch (e) {
+        wrap.style.display = 'none';
+        return;
+    }
+
+    const sorted = [...rows].sort((a, b) => b.平均観客数 - a.平均観客数);
+
+    // クラブ数に応じて高さを可変に。横棒なのでクラブ名が読め、横スクロールも出ない
+    const isMobile = window.innerWidth <= 768;
+    const barHeight = isMobile ? 16 : 20;
+    // Chart.js(responsive + maintainAspectRatio:false) は親要素の高さに追従するので、
+    // canvas ではなく内側コンテナ側に高さを与える
+    document.getElementById('attendance-league-chart-box').style.height =
+        (sorted.length * barHeight + 70) + 'px';
+
+    if (leagueChart) leagueChart.destroy();
+
+    const leagueLabel = selectedLeague === 'all' ? '全リーグ' : selectedLeague;
+
+    leagueChart = new Chart(canvas.getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: sorted.map(d => clubAbbreviations[d.クラブ] || d.クラブ),
+            datasets: [{
+                data: sorted.map(d => d.平均観客数),
+                backgroundColor: sorted.map(d => (LEAGUE_COLORS[d.リーグ] || '#4a90e2') + 'cc'),
+                borderColor: sorted.map(d => LEAGUE_COLORS[d.リーグ] || '#4a90e2'),
+                borderWidth: 1,
+                borderRadius: 3
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: false,
+            plugins: {
+                legend: { display: false },
+                title: {
+                    display: true,
+                    text: `${formatSeasonLabel(selectedYear)} ${leagueLabel} 平均観客数`,
+                    color: '#eaf7fc',
+                    font: { size: isMobile ? 13 : 16, weight: 'bold' },
+                    padding: { bottom: 12 }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(20, 25, 40, 0.9)',
+                    displayColors: false,
+                    callbacks: {
+                        title: (items) => sorted[items[0].dataIndex].クラブ,
+                        label: (ctx) => `${sorted[ctx.dataIndex].リーグ}: ${Math.round(ctx.raw).toLocaleString()} 人`
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { color: 'rgba(255,255,255,0.06)' },
+                    ticks: {
+                        color: '#8899bb',
+                        font: { size: isMobile ? 9 : 11 },
+                        callback: (v) => v >= 10000 ? (v / 10000) + '万' : v.toLocaleString()
+                    },
+                    beginAtZero: true
+                },
+                y: {
+                    grid: { display: false },
+                    ticks: { color: '#eaf7fc', font: { size: isMobile ? 10 : 12 }, autoSkip: false }
+                }
+            },
+            onClick: (evt, elements) => {
+                if (elements.length > 0) renderAttendanceChart(sorted[elements[0].index].クラブ);
+            }
+        }
+    });
 }
 
 // フィルタリングとテーブル更新
@@ -292,6 +423,7 @@ function updateAttendanceFilters() {
 
         const dataForTable = attendanceData.filter(d => d.年 === selectedYear && (selectedLeague === 'all' || d.リーグ === selectedLeague));
         renderAttendanceTable(dataForTable);
+        renderLeagueChart(dataForTable, selectedYear, selectedLeague);
     });
 }
 
@@ -360,6 +492,7 @@ window.renderAttendanceChart = async function(clubName) {
     const canvas = document.getElementById('attendanceChart');
     
     document.getElementById('attendance-output-container').style.display = 'none';
+    document.getElementById('attendance-league-chart-wrap').style.display = 'none';
     chartWrap.style.display = 'block';
     
     const clubSelect = document.getElementById('attendance-club-select');
