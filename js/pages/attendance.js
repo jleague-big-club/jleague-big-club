@@ -312,17 +312,12 @@ function showListView() {
     document.getElementById('attendance-output-container').style.display = '';
 }
 
-// リーグ別グラフ描画（年度・リーグの絞り込みに連動）
-async function renderLeagueChart(rows, selectedYear, selectedLeague) {
+// リーグ平均観客数の推移グラフ（1993年〜）。リーグボタンの選択に連動する
+// 「全て」なら J1/J2/J3 の3本、個別リーグなら1本を表示する
+async function renderLeagueChart(allData, selectedLeague) {
     const wrap = document.getElementById('attendance-league-chart-wrap');
     const canvas = document.getElementById('attendanceLeagueChart');
     if (!wrap || !canvas) return;
-
-    if (!rows || rows.length === 0) {
-        if (leagueChart) { leagueChart.destroy(); leagueChart = null; }
-        wrap.style.display = 'none';
-        return;
-    }
 
     try {
         await loadScript(CHART_JS_URL);
@@ -331,52 +326,80 @@ async function renderLeagueChart(rows, selectedYear, selectedLeague) {
         return;
     }
 
-    const sorted = [...rows].sort((a, b) => b.平均観客数 - a.平均観客数);
+    const targetLeagues = selectedLeague === 'all' ? ['J1', 'J2', 'J3'] : [selectedLeague];
 
-    // クラブ数に応じて高さを可変に。横棒なのでクラブ名が読め、横スクロールも出ない
+    // 年ごと・リーグごとに、所属クラブの平均観客数を平均する（表に出ている数値の平均）
+    const totals = {};
+    allData.forEach(d => {
+        if (!targetLeagues.includes(d.リーグ)) return;
+        if (!d.平均観客数) return;
+        const key = d.リーグ + '_' + d.年;
+        if (!totals[key]) totals[key] = { sum: 0, count: 0 };
+        totals[key].sum += d.平均観客数;
+        totals[key].count += 1;
+    });
+
+    const years = [...new Set(allData
+        .filter(d => targetLeagues.includes(d.リーグ))
+        .map(d => d.年))].sort((a, b) => a - b);
+
+    if (years.length === 0) {
+        if (leagueChart) { leagueChart.destroy(); leagueChart = null; }
+        wrap.style.display = 'none';
+        return;
+    }
+
     const isMobile = window.innerWidth <= 768;
-    const barHeight = isMobile ? 16 : 20;
-    // Chart.js(responsive + maintainAspectRatio:false) は親要素の高さに追従するので、
-    // canvas ではなく内側コンテナ側に高さを与える
-    document.getElementById('attendance-league-chart-box').style.height =
-        (sorted.length * barHeight + 70) + 'px';
+    document.getElementById('attendance-league-chart-box').style.height = (isMobile ? 280 : 400) + 'px';
+
+    const datasets = targetLeagues.map(lg => {
+        const color = LEAGUE_COLORS[lg] || '#4a90e2';
+        return {
+            label: lg,
+            // 該当年にそのリーグが存在しない場合は null にして線を繋がない（J3は2014年開始）
+            data: years.map(y => {
+                const t = totals[lg + '_' + y];
+                return t ? Math.round(t.sum / t.count) : null;
+            }),
+            borderColor: color,
+            backgroundColor: color,
+            pointBackgroundColor: color,
+            borderWidth: 2,
+            pointRadius: isMobile ? 0 : 2,
+            pointHoverRadius: 5,
+            tension: 0.3,
+            spanGaps: false
+        };
+    });
 
     if (leagueChart) leagueChart.destroy();
 
-    const leagueLabel = selectedLeague === 'all' ? '全リーグ' : selectedLeague;
-
     leagueChart = new Chart(canvas.getContext('2d'), {
-        type: 'bar',
-        data: {
-            labels: sorted.map(d => clubAbbreviations[d.クラブ] || d.クラブ),
-            datasets: [{
-                data: sorted.map(d => d.平均観客数),
-                backgroundColor: sorted.map(d => (LEAGUE_COLORS[d.リーグ] || '#4a90e2') + 'cc'),
-                borderColor: sorted.map(d => LEAGUE_COLORS[d.リーグ] || '#4a90e2'),
-                borderWidth: 1,
-                borderRadius: 3
-            }]
-        },
+        type: 'line',
+        data: { labels: years.map(y => formatSeasonLabel(y)), datasets },
         options: {
-            indexAxis: 'y',
             responsive: true,
             maintainAspectRatio: false,
             animation: false,
+            interaction: { mode: 'index', intersect: false },
             plugins: {
-                legend: { display: false },
+                legend: {
+                    display: targetLeagues.length > 1,
+                    labels: { color: '#eaf7fc', boxWidth: 14, font: { size: isMobile ? 11 : 13 } }
+                },
                 title: {
                     display: true,
-                    text: `${formatSeasonLabel(selectedYear)} ${leagueLabel} 平均観客数`,
+                    text: (selectedLeague === 'all' ? 'リーグ別' : selectedLeague) + ' 平均観客数の推移',
                     color: '#eaf7fc',
                     font: { size: isMobile ? 13 : 16, weight: 'bold' },
-                    padding: { bottom: 12 }
+                    padding: { bottom: 10 }
                 },
                 tooltip: {
                     backgroundColor: 'rgba(20, 25, 40, 0.9)',
-                    displayColors: false,
                     callbacks: {
-                        title: (items) => sorted[items[0].dataIndex].クラブ,
-                        label: (ctx) => `${sorted[ctx.dataIndex].リーグ}: ${Math.round(ctx.raw).toLocaleString()} 人`
+                        label: (ctx) => ctx.raw === null
+                            ? null
+                            : `${ctx.dataset.label}: ${ctx.raw.toLocaleString()} 人`
                     }
                 }
             },
@@ -386,21 +409,30 @@ async function renderLeagueChart(rows, selectedYear, selectedLeague) {
                     ticks: {
                         color: '#8899bb',
                         font: { size: isMobile ? 9 : 11 },
+                        maxRotation: 0,
+                        autoSkip: true,
+                        maxTicksLimit: isMobile ? 6 : 12
+                    }
+                },
+                y: {
+                    grid: { color: 'rgba(255,255,255,0.06)' },
+                    ticks: {
+                        color: '#8899bb',
+                        font: { size: isMobile ? 9 : 11 },
                         callback: (v) => v >= 10000 ? (v / 10000) + '万' : v.toLocaleString()
                     },
                     beginAtZero: true
-                },
-                y: {
-                    grid: { display: false },
-                    ticks: { color: '#eaf7fc', font: { size: isMobile ? 10 : 12 }, autoSkip: false }
                 }
-            },
-            onClick: (evt, elements) => {
-                if (elements.length > 0) renderAttendanceChart(sorted[elements[0].index].クラブ);
             }
         }
     });
+
+    // クラブ別グラフを開いている最中は一覧側を出さない
+    // （ドリルダウン中に年度を変更したときに勝手に復帰してしまうのを防ぐ）
+    const clubChartOpen = document.getElementById('attendance-chart-wrap').style.display === 'block';
+    if (!clubChartOpen) wrap.style.display = '';
 }
+
 
 // フィルタリングとテーブル更新
 function updateAttendanceFilters() {
@@ -423,7 +455,7 @@ function updateAttendanceFilters() {
 
         const dataForTable = attendanceData.filter(d => d.年 === selectedYear && (selectedLeague === 'all' || d.リーグ === selectedLeague));
         renderAttendanceTable(dataForTable);
-        renderLeagueChart(dataForTable, selectedYear, selectedLeague);
+        renderLeagueChart(attendanceData, selectedLeague);
     });
 }
 
