@@ -115,6 +115,9 @@ def main():
         else:
             combined_df = new_season_df
             
+        # 同一リーグ・同一年・同一クラブの行が二重に入らないようにする
+        # (過去に2019〜2022年のJ2で84行の重複が混入していた)
+        combined_df = combined_df.drop_duplicates(subset=['リーグ', '年', 'クラブ'], keep='last')
         combined_df = combined_df.sort_values(by=['リーグ', '年', '平均観客数'], ascending=[True, False, False])
         combined_df.to_csv(ATTENDANCE_CSV_PATH, index=False, encoding='utf-8-sig')
         
