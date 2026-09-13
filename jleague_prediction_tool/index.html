@@ -1,0 +1,183 @@
+import pandas as pd
+import json
+import math
+import random
+import os
+
+# --- 設定項目 ---
+BASE_DIR = r'C:\Users\mura\Desktop\jleague-big-club'
+DATA_DIR = os.path.join(BASE_DIR, 'data')
+
+INITIAL_RATING = 1500
+# ▼▼▼ Kファクターを変動させるための設定 ▼▼▼
+K_INITIAL = 40  # シーズン序盤のKファクター
+K_FINAL = 16    # シーズン終盤のKファクター
+SIMULATIONS = 10000 
+HISTORY_FACTOR = 5 
+HOME_ADVANTAGE = 50 
+
+# --- Eloレーティングの計算ロジック（Kファクターを引数で受け取るように変更） ---
+def calculate_elo(rating_a, rating_b, score_a, score_b, k_factor):
+    expected_a = 1 / (1 + 10**((rating_b - rating_a) / 400))
+    actual_a = 0.5
+    if score_a > score_b: actual_a = 1.0
+    elif score_a < score_b: actual_a = 0.0
+    
+    new_rating_a = rating_a + k_factor * (actual_a - expected_a)
+    new_rating_b = rating_b - k_factor * (actual_a - expected_a)
+    return new_rating_a, new_rating_b
+
+# --- メイン処理 ---
+def main():
+    try:
+        schedule_df = pd.read_csv(os.path.join(DATA_DIR, 'schedule.csv'), dtype={'ホーム得点': 'Int64', 'アウェイ得点': 'Int64'})
+        yearrank_df = pd.read_csv(os.path.join(DATA_DIR, 'yearrank.csv'))
+        all_teams_df = pd.read_csv(os.path.join(DATA_DIR, 'data.csv'))
+        all_teams = list(all_teams_df['クラブ名'].unique())
+    except FileNotFoundError as e:
+        print(f"エラー: データファイルが見つかりません。パスを確認してください。 - {e}")
+        return
+
+    # 地力スコアの計算
+    current_year = 2025
+    historical_strength = {}
+    for team in all_teams:
+        past_ranks = []
+        for year in range(current_year - 10, current_year):
+            team_year_data = yearrank_df[(yearrank_df['年'] == year) & (yearrank_df['チーム'] == team) & (yearrank_df['リーグ'] == 'J1')]
+            if not team_year_data.empty:
+                past_ranks.append(int(team_year_data.iloc[0]['順位']))
+            else:
+                past_ranks.append(21)
+        avg_rank = sum(past_ranks) / len(past_ranks) if past_ranks else 21
+        historical_strength[team] = 21 - avg_rank
+
+    # 現在のEloレートを計算（Kファクター変動を適用）
+    ratings = {team: INITIAL_RATING for team in all_teams}
+    finished_games = schedule_df.dropna(subset=['ホーム得点', 'アウェイ得点'])
+    total_games_in_season = len(schedule_df[schedule_df['年'] == current_year])
+    
+    for index, row in finished_games.iterrows():
+        home_team, away_team = row['ホーム'], row['アウェイ']
+        if home_team in ratings and away_team in ratings:
+            # ▼▼▼【修正点】試合の進行度に応じてKファクターを変動させる ▼▼▼
+            game_progress = index / total_games_in_season
+            current_k = K_INITIAL - (K_INITIAL - K_FINAL) * game_progress
+            
+            ratings[home_team], ratings[away_team] = calculate_elo(
+                ratings[home_team], ratings[away_team], row['ホーム得点'], row['アウェイ得点'], current_k
+            )
+
+    # モンテカルロ・シミュレーションの実施
+    future_games = schedule_df[schedule_df['ホーム得点'].isna()]
+    
+    final_rankings_tally = {}
+    for league in ['J1', 'J2', 'J3']:
+        try:
+            df = pd.read_csv(os.path.join(DATA_DIR, f'{league.lower()}rank.csv'))
+            teams_in_league = list(df['チーム名'].unique())
+            final_rankings_tally[league] = {team: {
+                'champion': 0, 'acl': 0, 'promotion': 0, 'relegation': 0
+            } for team in teams_in_league}
+        except FileNotFoundError:
+            continue
+
+    print(f"{SIMULATIONS}回のシミュレーションを開始します...")
+    for i in range(SIMULATIONS):
+        if (i + 1) % 1000 == 0:
+            print(f"  ... {i + 1}/{SIMULATIONS}")
+
+        sim_ratings = {team: base_rating + (historical_strength.get(team, 0) * HISTORY_FACTOR) for team, base_rating in ratings.items()}
+        
+        sim_standings = {}
+        for league in ['J1', 'J2', 'J3']:
+            if league in final_rankings_tally:
+                df = pd.read_csv(os.path.join(DATA_DIR, f'{league.lower()}rank.csv'))
+                sim_standings[league] = {row['チーム名']: {'勝点': int(row['勝点'])} for _, row in df.iterrows()}
+
+        for index, game in future_games.iterrows():
+            league, home_team, away_team = game['リーグ'], game['ホーム'], game['アウェイ']
+            if league not in sim_standings or home_team not in sim_standings[league] or away_team not in sim_standings[league]: continue
+
+            home_power = sim_ratings[home_team] + HOME_ADVANTAGE
+            away_power = sim_ratings[away_team]
+            
+            # ▼▼▼【修正点】引き分け確率のロジックをリーグ全体の平均値も考慮するように改善 ▼▼▼
+            rating_diff = abs(home_power - away_power)
+            # リーグ全体の平均引き分け率を約25%と仮定し、レート差が小さいほどその値に近づく
+            draw_prob = 0.25 + 0.15 * math.exp(-0.005 * rating_diff)
+
+            prob_home_win = 1 / (1 + 10**((away_power - home_power) / 400))
+            prob_home_win_adjusted = prob_home_win * (1 - draw_prob)
+            
+            rand_val = random.random()
+            score_home, score_away = 0, 0
+            if rand_val < prob_home_win_adjusted:
+                sim_standings[league][home_team]['勝点'] += 3
+                score_home = 1
+            elif rand_val < prob_home_win_adjusted + draw_prob:
+                 sim_standings[league][home_team]['勝点'] += 1
+                 sim_standings[league][away_team]['勝点'] += 1
+            else:
+                sim_standings[league][away_team]['勝点'] += 3
+                score_away = 1
+
+            game_progress = index / total_games_in_season
+            current_k = K_INITIAL - (K_INITIAL - K_FINAL) * game_progress
+            sim_ratings[home_team], sim_ratings[away_team] = calculate_elo(
+                sim_ratings[home_team], sim_ratings[away_team], score_home, score_away, current_k
+            )
+
+        for league in ['J1', 'J2', 'J3']:
+            if league not in sim_standings: continue
+            
+            df = pd.read_csv(os.path.join(DATA_DIR, f'{league.lower()}rank.csv'))
+            initial_ranks = {team: rank for rank, team in enumerate(df['チーム名'])}
+            
+            sorted_teams = sorted(sim_standings[league].items(), key=lambda item: (item[1]['勝点'], -initial_ranks.get(item[0], 99)), reverse=True)
+            
+            if not sorted_teams: continue
+            if not final_rankings_tally.get(league): continue
+
+            # (集計ロジックは変更なし)
+            if league == 'J1':
+                if sorted_teams and sorted_teams[0][0] in final_rankings_tally[league]:
+                    final_rankings_tally[league][sorted_teams[0][0]]['champion'] += 1
+                for i in range(min(3, len(sorted_teams))): 
+                    if sorted_teams[i][0] in final_rankings_tally[league]:
+                        final_rankings_tally[league][sorted_teams[i][0]]['acl'] += 1
+                for i in range(-3, 0): 
+                    if abs(i) <= len(sorted_teams) and sorted_teams[i][0] in final_rankings_tally[league]:
+                        final_rankings_tally[league][sorted_teams[i][0]]['relegation'] += 1
+            elif league == 'J2':
+                for i in range(min(2, len(sorted_teams))): 
+                    if sorted_teams[i][0] in final_rankings_tally[league]:
+                        final_rankings_tally[league][sorted_teams[i][0]]['promotion'] += 1
+                for i in range(-3, 0): 
+                    if abs(i) <= len(sorted_teams) and sorted_teams[i][0] in final_rankings_tally[league]:
+                        final_rankings_tally[league][sorted_teams[i][0]]['relegation'] += 1
+            elif league == 'J3':
+                for i in range(min(2, len(sorted_teams))): 
+                    if sorted_teams[i][0] in final_rankings_tally[league]:
+                        final_rankings_tally[league][sorted_teams[i][0]]['promotion'] += 1
+
+    # 確率を計算してJSONファイルに出力
+    final_probabilities = {}
+    for league, teams_data in final_rankings_tally.items():
+        final_probabilities[league] = {}
+        for team, counts in teams_data.items():
+            final_probabilities[league][team] = {
+                'champion': counts['champion'] / SIMULATIONS,
+                'acl': counts['acl'] / SIMULATIONS,
+                'promotion': counts['promotion'] / SIMULATIONS,
+                'relegation': counts['relegation'] / SIMULATIONS,
+            }
+            
+    output_path = os.path.join(DATA_DIR, 'prediction_probabilities.json')
+    with open(output_path, 'w', encoding='utf-8') as f:
+        json.dump(final_probabilities, f, ensure_ascii=False, indent=2)
+
+    print(f"予測データの生成が完了しました: {output_path}")
+
+if __name__ == '__main__':
+    main()
