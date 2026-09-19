@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
             await fetchAllData();
             renderAllPanels();
             setupAllEventListeners();
-            switchPanel('panel-graph-generator');
+            switchPanel('panel-prediction');
         } catch (error) {
             console.error("ダッシュボード初期化エラー:", error);
             document.body.innerHTML = `<div style="color: #f85149; padding: 20px; text-align: center;">初期化エラー。データファイルの読み込みを確認してください。</div>`;
@@ -66,23 +66,25 @@ document.addEventListener("DOMContentLoaded", () => {
     // === パネル切り替え ===
     function switchPanel(panelId) {
         navButtons.forEach(b => b.classList.toggle('active', b.dataset.panel === panelId));
-        Object.values(panels).forEach(p => p.classList.toggle('active', p.id === panelId));
-        if(panelId === 'panel-graph-generator') updateChart();
-        if(panelId === 'panel-attendance') handleAttendanceViewChange();
-        if(panelId === 'panel-prediction') renderPredictionCards('J1');
-        if(panelId === 'panel-sns-post') renderSnsPostPanel('J1'); // ★★★【修正】SNSパネルの初期表示
-        if(panelId === 'panel-simulation') runSimulation();
-        if(panelId === 'panel-best11') renderBest11Selectors();
+        Object.values(panels).forEach(p => {
+            if (p) p.classList.toggle('active', p.id === panelId);
+        });
+        if(panelId === 'panel-graph-generator' && panels.graph) updateChart();
+        if(panelId === 'panel-attendance' && panels.attendance) handleAttendanceViewChange();
+        if(panelId === 'panel-prediction' && panels.prediction) renderPredictionCards('J1');
+        if(panelId === 'panel-sns-post' && panels.sns) renderSnsPostPanel('J1'); 
+        if(panelId === 'panel-simulation' && panels.simulation) runSimulation();
+        if(panelId === 'panel-best11' && panels.best11) renderBest11Selectors();
     }
 
     // === 全パネルのHTMLを動的生成 ===
     function renderAllPanels() {
-        panels.graph.innerHTML = getGraphGeneratorHTML();
-        panels.attendance.innerHTML = getAttendanceAnalysisHTML();
-        panels.prediction.innerHTML = getPredictionHTML();
-        panels.sns.innerHTML = getSnsPostHTML(); // ★★★【修正】SNSパネルのHTMLを生成
-        panels.simulation.innerHTML = getSimulationHTML();
-        panels.best11.innerHTML = getBest11HTML();
+        if (panels.graph) panels.graph.innerHTML = getGraphGeneratorHTML();
+        if (panels.attendance) panels.attendance.innerHTML = getAttendanceAnalysisHTML();
+        if (panels.prediction) panels.prediction.innerHTML = getPredictionHTML();
+        if (panels.sns) panels.sns.innerHTML = getSnsPostHTML(); 
+        if (panels.simulation) panels.simulation.innerHTML = getSimulationHTML();
+        if (panels.best11) panels.best11.innerHTML = getBest11HTML();
     }
 
     // === イベントリスナー設定 ===
@@ -298,34 +300,43 @@ function renderPredictionCards(league) {
         order = ['promotion', 'relegation', 'safe'];
     }
 
+    let dateStr = "";
+    if (updateDates['prediction_probabilities.json']) {
+        const d = new Date(updateDates['prediction_probabilities.json']);
+        dateStr = `${d.getMonth()+1}月${d.getDate()}日時点`;
+    }
+
     container.innerHTML = order.map(catKey => {
         const cat = cats[catKey];
-        const sorted = teams.sort((a, b) => b[cat.key].prob - a[cat.key].prob).slice(0, 5);
+        const sorted = teams.sort((a, b) => b[cat.key].prob - a[cat.key].prob).slice(0, 20);
         
+        const renderRows = (arr, startIndex) => arr.map((t, i) => {
+            const probData = t[cat.key];
+            const probability = probData.prob;
+            const change = probData.change;
+
+            let changeHtml = '';
+            if (change === 'up') changeHtml = '<span class="change-arrow up">▲</span>';
+            else if (change === 'down') changeHtml = '<span class="change-arrow down">▼</span>';
+            else changeHtml = '<span class="change-arrow flat">–</span>';
+
+            return `<tr><td class="rank">${startIndex + i + 1}</td><td class="club">${t.name}</td><td class="prob">${changeHtml}${(probability*100).toFixed(1)}%</td></tr>`;
+        }).join('');
+
+        const leftHalf = sorted.slice(0, 10);
+        const rightHalf = sorted.slice(10, 20);
+
         return `<div class="prediction-wrapper">
             <div id="pred-card-${catKey}" class="capture-area prediction-card">
-                <div class="card-header ${cat.class}">${cat.icon} ${cat.title} 確率 Top 5</div>
-                <div class="card-body"><table class="prediction-table"><tbody>${sorted.map((t, i) => {
-                    const probData = t[cat.key];
-                    const probability = probData.prob;
-                    const change = probData.change;
-
-                    let changeHtml = '';
-                    if (change === 'up') {
-                        changeHtml = '<span class="change-arrow up">▲</span>';
-                    } else if (change === 'down') {
-                        changeHtml = '<span class="change-arrow down">▼</span>';
-                    } else {
-                        changeHtml = '<span class="change-arrow flat">–</span>';
-                    }
-
-                    return `
-                    <tr>
-                        <td class="rank">${i+1}</td>
-                        <td class="club">${t.name}</td>
-                        <td class="prob">${changeHtml}${(probability*100).toFixed(1)}%</td>
-                    </tr>`;
-                }).join('')}</tbody></table></div>
+                <div class="card-header ${cat.class}">
+                    <span>${cat.icon} ${cat.title} 確率 Top 20</span>
+                    <span style="font-size: 0.85rem; color: var(--subtext-color); font-weight: normal; margin-left: auto;">${dateStr}</span>
+                </div>
+                <div class="card-body" style="display: flex; gap: 15px; padding: 15px;">
+                    <div style="flex: 1;"><table class="prediction-table"><tbody>${renderRows(leftHalf, 0)}</tbody></table></div>
+                    <div style="width: 1px; background-color: var(--border-color); margin: 10px 0;"></div>
+                    <div style="flex: 1;"><table class="prediction-table"><tbody>${renderRows(rightHalf, 10)}</tbody></table></div>
+                </div>
             </div>
             <div class="actions" style="margin-top: -5px;"><button class="copy-btn" data-capture-id="pred-card-${catKey}">コピー</button></div>
         </div>`;
