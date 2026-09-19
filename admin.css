@@ -332,3 +332,13 @@ body {
 .change-arrow.flat {
     color: var(--subtext-color);
 }
+/* 1節前からの増減（+0.4pt など） */
+.prob-diff {
+    font-size: 0.72em;
+    font-weight: 600;
+    min-width: 3.6em;
+    text-align: right;
+    color: var(--subtext-color);
+}
+.prob-diff.up { color: var(--green-color); }
+.prob-diff.down { color: var(--red-color); }

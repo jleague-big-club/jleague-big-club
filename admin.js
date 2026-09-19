@@ -320,7 +320,19 @@ function renderPredictionCards(league) {
             else if (change === 'down') changeHtml = '<span class="change-arrow down">▼</span>';
             else changeHtml = '<span class="change-arrow flat">–</span>';
 
-            return `<tr><td class="rank">${startIndex + i + 1}</td><td class="club">${t.name}</td><td class="prob">${changeHtml}${(probability*100).toFixed(1)}%</td></tr>`;
+            // 1節前からの増減。diffが無い古いデータでは何も出さない。
+            // 変化なしの行は空の枠だけ置いて、%の位置が他の行とずれないようにする
+            let diffHtml = '';
+            if (typeof probData.diff === 'number') {
+                if (probData.diff === 0) {
+                    diffHtml = '<span class="prob-diff"></span>';
+                } else {
+                    const pt = (probData.diff * 100).toFixed(1);
+                    diffHtml = `<span class="prob-diff ${change}">${probData.diff > 0 ? '+' : ''}${pt}pt</span>`;
+                }
+            }
+
+            return `<tr><td class="rank">${startIndex + i + 1}</td><td class="club">${t.name}</td><td class="prob">${changeHtml}${(probability*100).toFixed(1)}%${diffHtml}</td></tr>`;
         }).join('');
 
         const leftHalf = sorted.slice(0, 10);

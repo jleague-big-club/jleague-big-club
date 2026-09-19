@@ -15,9 +15,11 @@ echo           Gitへのアップロードを開始します...
 echo ======================================================
 echo.
 
+pushd ..\..\
 git add .
 git commit -m "Auto-update attendance data"
 git push
+popd
 
 echo.
 echo ======================================================

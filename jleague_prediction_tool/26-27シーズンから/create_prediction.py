@@ -12,10 +12,17 @@ from datetime import datetime
 BASE_DIR = r'C:\Users\mura\Desktop\その他\webサイト\jleague-big-club'
 DATA_DIR = os.path.join(BASE_DIR, 'data')
 ARCHIVE_DIR = os.path.join(DATA_DIR, 'archive')
+# 変化率(▲▼)を比べる基準。「前回の実行」ではなく「1節前」の確率をここに保存する。
+BASELINE_PATH = os.path.join(DATA_DIR, 'prediction_baseline.json')
+# 次の試合まで何日空いたら「節が一区切りついた」とみなすか
+ROUND_GAP_DAYS = 2
 
 INITIAL_RATING = 1500
 K_FACTOR = 24
 SIMULATIONS = 10000
+# 乱数の種を固定する。これをしないと、試合結果が1つも増えていなくても
+# 実行のたびに確率が最大1pt程度ブレて、意味のない▲▼が出てしまう。
+SIM_SEED = 20260101
 HISTORY_FACTOR = 0
 HOME_ADVANTAGE = 65
 RANDOMNESS_FACTOR = 70
@@ -33,6 +40,53 @@ def calculate_elo(rating_a, rating_b, score_a, score_b):
     new_rating_a = rating_a + K_FACTOR * (actual_a - expected_a)
     new_rating_b = rating_b - K_FACTOR * (actual_a - expected_a)
     return new_rating_a, new_rating_b
+
+def parse_match_dates(df):
+    """schedule.csv の '日付' を日付型にして返す。
+
+    今の表記（'26/8/7'）は年を含んでいるので、そのまま %y/%m/%d で読む。
+    '年' 列はカレンダー年ではなくシーズン（2026 = 26-27シーズン = 26/8〜27/6）なので、
+    年をまたぐシーズンでは日付の補完に使ってはいけない。
+
+    ただし2025年以前の古い行は '4/5' のように年が入っておらず、
+    当時は1シーズン＝1暦年だったため '年' 列で補える。その行だけ補完する。
+    """
+    dates = pd.to_datetime(df['日付'], format='%y/%m/%d', errors='coerce')
+    no_year = dates.isna() & df['日付'].notna()
+    if no_year.any():
+        dates.loc[no_year] = pd.to_datetime(
+            df.loc[no_year, '年'].astype(str) + '/' + df.loc[no_year, '日付'].astype(str),
+            format='%Y/%m/%d', errors='coerce'
+        )
+    return dates
+
+
+def check_round_boundary(league_schedule):
+    """その節の試合が一区切りついたかを、試合日の間隔から判定する。
+
+    節番号ではなく日付の間隔で見るのは、台風などで一部の試合だけ延期されると
+    「その節の全試合が終わる」日が来ないままになり、基準が永久に更新されなくなるため。
+
+    戻り値: (一区切りついたか, 最後に試合が行われた日)
+    """
+    dates = parse_match_dates(league_schedule)
+    played = league_schedule['ホーム得点'].notna() & league_schedule['アウェイ得点'].notna()
+
+    played_dates = dates[played].dropna()
+    if played_dates.empty:
+        return False, None  # 開幕前。比較のしようがない
+    last_played = played_dates.max()
+
+    # 未消化なのに日付が過ぎている試合（延期で新日程が未定など）は判定から外す。
+    # これを残すと、その1試合のせいで節がいつまでも終わらない扱いになってしまう。
+    today = pd.Timestamp.today().normalize()
+    upcoming = dates[(~played) & (dates >= today)].dropna()
+    if upcoming.empty:
+        return True, last_played  # 残り試合なし = シーズン終了
+
+    gap_days = (upcoming.min() - last_played).days
+    return gap_days >= ROUND_GAP_DAYS, last_played
+
 
 # --- メイン処理 ---
 def main():
@@ -98,11 +152,12 @@ def main():
     finished_games = current_season_schedule.dropna(subset=['ホーム得点', 'アウェイ得点']).copy()
     
     if not finished_games.empty:
-        finished_games['日付_obj'] = pd.to_datetime(
-            finished_games['年'].astype(str) + '/' + finished_games['日付'],
-            format='%Y/%m/%d',
-            errors='coerce'
-        )
+        # 以前はここで '2026' + '/' + '26/8/7' という文字列を作っていたため
+        # 全試合の日付変換が失敗し、Eloが日付順ではなくCSVの行順で計算されていた
+        finished_games['日付_obj'] = parse_match_dates(finished_games)
+        unparsed = finished_games['日付_obj'].isna().sum()
+        if unparsed:
+            print(f"警告: 日付を読めなかった試合が {unparsed} 件あります。並び順の先頭に置きます。")
         finished_games.sort_values('日付_obj', inplace=True, na_position='first')
         
         for _, row in finished_games.iterrows():
@@ -137,6 +192,7 @@ def main():
             print(f"警告: {league}のデータ処理中にエラーが発生しました。スキップします。 - {e}")
             continue
 
+    random.seed(SIM_SEED)
     print(f"{SIMULATIONS}回のシミュレーションを開始します...")
     for i in range(SIMULATIONS):
         if (i + 1) % 1000 == 0:
@@ -220,29 +276,37 @@ def main():
                     elif team_name in relegation_teams: final_rankings_tally[league][team_name]['relegation'] += 1
                     else: final_rankings_tally[league][team_name]['safe'] += 1
 
-    # --- 前回データ読み込み & アーカイブ処理 ---
+    # --- 前回データのアーカイブ処理 ---
     output_path = os.path.join(DATA_DIR, 'prediction_probabilities.json')
-    prev_data = {}
     if os.path.exists(output_path):
         try:
-            with open(output_path, 'r', encoding='utf-8') as f:
-                prev_data = json.load(f)
-                print("前回予測データを読み込みました。")
-            
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
             archive_filename = f'prediction_probabilities_{timestamp}.json'
             archive_path = os.path.join(ARCHIVE_DIR, archive_filename)
             shutil.move(output_path, archive_path)
             print(f"前回データをアーカイブしました: {archive_path}")
+        except Exception as e:
+            print(f"警告: 前回予測データのアーカイブに失敗しました。 - {e}")
 
-        except (json.JSONDecodeError, Exception) as e:
-            print(f"警告: 前回予測データの読み込みまたはアーカイブに失敗しました。比較はスキップされます。 - {e}")
+    # --- 比較の基準（1節前の確率）を読み込む ---
+    # 土日に2回実行しても「土曜比」にならないよう、基準は実行ごとではなく節ごとに更新する
+    baseline = {}
+    if os.path.exists(BASELINE_PATH):
+        try:
+            with open(BASELINE_PATH, 'r', encoding='utf-8') as f:
+                baseline = json.load(f)
+            print("比較の基準（1節前）を読み込みました。")
+        except Exception as e:
+            print(f"警告: 基準データの読み込みに失敗しました。比較はスキップされます。 - {e}")
 
     # --- 最終的な確率計算ロジック ---
     final_probabilities_with_change = {}
+    current_snapshot = {}
     for league, teams_data in final_rankings_tally.items():
         if not teams_data: continue
         final_probabilities_with_change[league] = {}
+        current_snapshot[league] = {}
+        baseline_probs = baseline.get(league, {}).get('probs', {})
         for team_full, counts in teams_data.items():
             team_abbr = abbreviation_map.get(team_full, team_full)
             current_probs = {
@@ -250,16 +314,31 @@ def main():
                 'promotion': counts['promotion'] / SIMULATIONS, 'relegation': counts['relegation'] / SIMULATIONS,
                 'safe': (counts['promotion'] + counts['safe']) / SIMULATIONS
             }
+            current_snapshot[league][team_abbr] = current_probs
             final_probabilities_with_change[league][team_abbr] = {}
             for key, new_prob in current_probs.items():
-                change = 'flat'
+                change, diff = 'flat', 0.0
                 try:
-                    prev_prob_data = prev_data.get(league, {}).get(team_abbr, {}).get(key, 0)
-                    old_prob = float(prev_prob_data.get('prob', 0)) if isinstance(prev_prob_data, dict) else float(prev_prob_data)
-                    if new_prob > old_prob: change = 'up'
-                    elif new_prob < old_prob: change = 'down'
-                except (KeyError, TypeError, ValueError): pass
-                final_probabilities_with_change[league][team_abbr][key] = {'prob': new_prob, 'change': change}
+                    old_prob = baseline_probs.get(team_abbr, {}).get(key)
+                    if old_prob is not None:
+                        diff = round(new_prob - float(old_prob), 4)
+                        if diff > 0: change = 'up'
+                        elif diff < 0: change = 'down'
+                except (AttributeError, TypeError, ValueError): pass
+                final_probabilities_with_change[league][team_abbr][key] = {'prob': new_prob, 'change': change, 'diff': diff}
+
+    # --- 節が一区切りついたリーグだけ、比較の基準を今回の値に更新する ---
+    for league, snapshot in current_snapshot.items():
+        league_schedule = current_season_schedule[current_season_schedule['リーグ'] == league]
+        closed, last_played = check_round_boundary(league_schedule)
+        if not closed:
+            print(f"[{league}] 節の途中のため、比較の基準は据え置きます。")
+            continue
+        baseline[league] = {
+            'last_played': last_played.strftime('%Y-%m-%d') if last_played is not None else None,
+            'probs': snapshot,
+        }
+        print(f"[{league}] 節が一区切りついたため、比較の基準を更新しました。")
 
     # ▼▼▼【追加】10節未満（300試合未満）の場合は参考値フラグを立てる ▼▼▼
     # finished_games は既に対象シーズンで絞り込み済みなので、そのまま件数を数える
@@ -274,6 +353,13 @@ def main():
             json.dump(final_probabilities_with_change, f, ensure_ascii=False, indent=2)
         os.replace(temp_output_path, output_path)
         print(f"新しい予測データの生成が完了しました: {output_path}")
+
+        # 予測データの書き込みが成功したときだけ、比較の基準を保存する
+        temp_baseline_path = BASELINE_PATH + '.tmp'
+        with open(temp_baseline_path, 'w', encoding='utf-8') as f:
+            json.dump(baseline, f, ensure_ascii=False, indent=2)
+        os.replace(temp_baseline_path, BASELINE_PATH)
+        print(f"比較の基準を保存しました: {BASELINE_PATH}")
     except Exception as e:
         print(f"エラー: 予測データのファイル書き込みに失敗しました。 - {e}")
         if os.path.exists(temp_output_path):
