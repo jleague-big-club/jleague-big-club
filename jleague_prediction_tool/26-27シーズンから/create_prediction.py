@@ -23,6 +23,8 @@ SIMULATIONS = 10000
 # 乱数の種を固定する。これをしないと、試合結果が1つも増えていなくても
 # 実行のたびに確率が最大1pt程度ブレて、意味のない▲▼が出てしまう。
 SIM_SEED = 20260101
+# J1のACL圏（ACL Elite）の枠数
+ACL_SLOTS = 5
 HISTORY_FACTOR = 0
 HOME_ADVANTAGE = 65
 RANDOMNESS_FACTOR = 70
@@ -279,7 +281,8 @@ def main():
             if league == 'J1':
                 relegation_teams = {t[0] for t in sorted_teams[-3:]}
                 if sorted_teams: final_rankings_tally[league][sorted_teams[0][0]]['champion'] += 1
-                for i in range(min(3, len(sorted_teams))): final_rankings_tally[league][sorted_teams[i][0]]['acl'] += 1
+                # ACL圏 = 1〜5位（ACL Elite）。順位表の色分け（rankings.js）と合わせること
+                for i in range(min(ACL_SLOTS, len(sorted_teams))): final_rankings_tally[league][sorted_teams[i][0]]['acl'] += 1
             elif league == 'J2':
                 promotion_teams = {t[0] for t in sorted_teams[:2]}
                 relegation_teams = {t[0] for t in sorted_teams[-3:]}

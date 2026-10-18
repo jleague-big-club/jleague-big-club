@@ -63,7 +63,6 @@ function showRankingTable(league) {
         switch (league) {
             case 'J1':
                 legendHtml += '<div class="legend-item"><span class="legend-color-box legend-promotion-main"></span>ACL Elite</div>';
-                legendHtml += '<div class="legend-item"><span class="legend-color-box legend-promotion-sub"></span>ACL 2</div>';
                 legendHtml += '<div class="legend-item"><span class="legend-color-box legend-relegation-main"></span>自動降格</div>';
                 break;
             case 'J2':
@@ -115,8 +114,8 @@ function showRankingTable(league) {
             let rowClass = '';
             switch (league) {
                 case 'J1':
-                    if (rank <= 2) rowClass = 'rank-promotion-main';
-                    else if (rank === 3) rowClass = 'rank-promotion-sub';
+                    // 1〜5位が ACL Elite。ACL 2 の枠は表示しない
+                    if (rank <= 5) rowClass = 'rank-promotion-main';
                     else if (rank >= 18) rowClass = 'rank-relegation-main';
                     break;
                 case 'J2':
