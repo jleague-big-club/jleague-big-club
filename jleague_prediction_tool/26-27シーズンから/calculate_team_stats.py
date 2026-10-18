@@ -1,11 +1,9 @@
 import csv
+from datetime import datetime
 from pathlib import Path
 from collections import defaultdict
 
 # --- 設定 ---
-CURRENT_SEASON = 2026
-PREVIOUS_SEASON = 2025
-
 # 切り替えの基準となる試合数（各チーム平均◯試合終わったら新シーズンデータに切り替える）
 # ユーザーの要望により、1節からでも当該シーズンのデータのみで算出するため「0」に変更
 SWITCH_MATCH_COUNT = 0 
@@ -14,8 +12,57 @@ SCRIPT_DIR = Path(__file__).parent
 SCHEDULE_CSV_PATH = SCRIPT_DIR.parent.parent / 'data' / 'schedule.csv'
 OUTPUT_CSV_PATH = SCRIPT_DIR / 'team_stats.csv'
 
+def parse_match_date(row):
+    """schedule.csv の1行から試合日を取り出す。'26/8/7' も古い '4/5' も読む。"""
+    raw = (row.get('日付') or '').strip()
+    if not raw:
+        return None
+    try:
+        return datetime.strptime(raw, '%y/%m/%d').date()
+    except ValueError:
+        pass
+    # 2025年以前の古い行は年が入っておらず、当時は1シーズン＝1暦年だったので '年' で補う
+    try:
+        return datetime.strptime(f"{(row.get('年') or '').strip()}/{raw}", '%Y/%m/%d').date()
+    except ValueError:
+        return None
+
+
+def detect_seasons(schedule_path):
+    """今のシーズンと、その1つ前のシーズンを schedule.csv から判定して返す。
+
+    '年' 列はカレンダー年ではなくシーズン（2026 = 26-27シーズン = 26/8〜27/6）なので、
+    暦の年で決め打ちにはできない。「すでに開幕しているシーズンのうち最も新しいもの」を選ぶ。
+    """
+    starts = {}
+    with open(schedule_path, 'r', encoding='utf-8-sig') as f:
+        for row in csv.DictReader(f):
+            try:
+                year = int(row['年'])
+            except (ValueError, KeyError, TypeError):
+                continue
+            match_date = parse_match_date(row)
+            if match_date is None:
+                continue
+            if year not in starts or match_date < starts[year]:
+                starts[year] = match_date
+
+    if not starts:
+        raise ValueError('schedule.csv から試合日を読み取れませんでした。')
+
+    today = datetime.today().date()
+    started = {y: d for y, d in starts.items() if d <= today}
+    pool = started or starts
+    current = max(pool, key=lambda y: pool[y])
+    earlier = [y for y in starts if y < current]
+    return current, (max(earlier) if earlier else current)
+
+
 def main():
     print(f"--- チーム統計（攻撃力・守備力）計算ツール ---")
+
+    CURRENT_SEASON, PREVIOUS_SEASON = detect_seasons(SCHEDULE_CSV_PATH)
+    print(f"対象シーズン: {CURRENT_SEASON}（schedule.csv の試合日から判定 / 前シーズン: {PREVIOUS_SEASON}）")
     
     # データを格納する辞書
     teams_current = defaultdict(lambda: {'matches': 0, 'goals_scored': 0, 'goals_conceded': 0, 'league': ''})
@@ -85,7 +132,7 @@ def main():
     # 最終的な出力データの計算
     output_rows = []
     
-    # 現在のシーズン（2026）に存在する全チームのリストを取得
+    # 今シーズンに存在する全チームのリストを取得
     all_teams_this_year = set()
     with open(SCHEDULE_CSV_PATH, 'r', encoding='utf-8-sig') as f:
         reader = csv.DictReader(f)

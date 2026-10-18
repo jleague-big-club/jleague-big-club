@@ -61,6 +61,22 @@ def parse_match_dates(df):
     return dates
 
 
+def detect_current_season(schedule_df):
+    """今のシーズンラベルを schedule.csv から判定する。
+
+    '年' 列はカレンダー年ではなくシーズン（2026 = 26-27シーズン = 26/8〜27/6）。
+    「すでに開幕しているシーズンのうち最も新しいもの」を試合日から選ぶので、
+    来シーズンの日程がCSVに入れば自動で切り替わる。
+    """
+    dates = parse_match_dates(schedule_df)
+    starts = dates.groupby(schedule_df['年'].astype(str)).min().dropna()
+    if starts.empty:
+        raise ValueError('schedule.csv から試合日を読み取れませんでした。')
+    today = pd.Timestamp.today().normalize()
+    started = starts[starts <= today]
+    return str(started.idxmax() if not started.empty else starts.idxmin())
+
+
 def check_round_boundary(league_schedule):
     """その節の試合が一区切りついたかを、試合日の間隔から判定する。
 
@@ -144,7 +160,8 @@ def main():
         all_teams_df['クラブ名'], schedule_df['ホーム'], schedule_df['アウェイ'],
         j1_df['チーム名'], j2_df['チーム名'], j3_df['チーム名']
     ])
-    target_year_str = '2026'
+    target_year_str = detect_current_season(schedule_df)
+    print(f"対象シーズン: {target_year_str}（schedule.csv の試合日から判定）")
     all_teams = sorted([team for team in all_names_series.unique() if isinstance(team, str) and team])
     ratings = {team: INITIAL_RATING for team in all_teams}
     

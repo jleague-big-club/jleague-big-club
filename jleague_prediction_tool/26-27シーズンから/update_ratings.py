@@ -29,6 +29,42 @@ def calculate_elo(rating_a, rating_b, score_a, score_b):
     
     return new_rating_a, new_rating_b
 
+def parse_match_dates(df):
+    """schedule.csv の '日付' を日付型にして返す。
+
+    今の表記（'26/8/7'）は年を含んでいるので、そのまま %y/%m/%d で読む。
+    '年' 列はカレンダー年ではなくシーズン（2026 = 26-27シーズン = 26/8〜27/6）なので、
+    年をまたぐシーズンでは日付の補完に使ってはいけない。
+    2025年以前の古い行だけ '4/5' のように年が無く、当時は1シーズン＝1暦年だったので
+    その行だけ '年' 列で補う。
+    """
+    dates = pd.to_datetime(df['日付'], format='%y/%m/%d', errors='coerce')
+    no_year = dates.isna() & df['日付'].notna()
+    if no_year.any():
+        dates.loc[no_year] = pd.to_datetime(
+            df.loc[no_year, '年'].astype(str) + '/' + df.loc[no_year, '日付'].astype(str),
+            format='%Y/%m/%d', errors='coerce'
+        )
+    return dates
+
+
+def detect_current_season(schedule_df):
+    """今のシーズンラベルを schedule.csv から判定する。
+
+    以前は datetime.now().year を使っていたが、'年' 列はカレンダー年ではなく
+    シーズンなので、2027年1月1日に '2027' を探しに行って該当0件になり、
+    シーズン途中なのに全チームのレートが1500に戻ってしまう。
+    そこで「すでに開幕しているシーズンのうち最も新しいもの」を日付から選ぶ。
+    """
+    dates = parse_match_dates(schedule_df)
+    starts = dates.groupby(schedule_df['年']).min().dropna()
+    if starts.empty:
+        raise ValueError('schedule.csv から試合日を読み取れませんでした。')
+    today = pd.Timestamp.today().normalize()
+    started = starts[starts <= today]
+    return str(started.idxmax() if not started.empty else starts.idxmin())
+
+
 # --- メイン処理 ---
 def main():
     print("--- チームレーティング更新ツールを開始します ---")
@@ -63,7 +99,7 @@ def main():
     }
     schedule_df.replace(team_name_normalization_map, inplace=True)
     
-    current_season_year = str(datetime.now().year)
+    current_season_year = detect_current_season(schedule_df)
     print(f"{current_season_year}年シーズンのレーティングを計算します。")
     
     season_games = schedule_df[schedule_df['年'] == current_season_year].copy()
@@ -92,12 +128,12 @@ def main():
     finished_games = season_games.dropna(subset=['ホーム得点', 'アウェイ得点']).copy()
     
     if not finished_games.empty:
-        # 日付のフォーマットが '25/2/14' と '4/5' の両方に対応
-        finished_games['日付_obj'] = pd.to_datetime(
-            finished_games['年'] + '/' + finished_games['日付'],
-            format='%Y/%m/%d',
-            errors='coerce'
-        )
+        # 以前は '2026' + '/' + '26/8/7' という文字列を作っていたため全試合の
+        # 日付変換が失敗し、日付順ではなくCSVの行順で計算されていた
+        finished_games['日付_obj'] = parse_match_dates(finished_games)
+        unparsed = finished_games['日付_obj'].isna().sum()
+        if unparsed:
+            print(f"警告: 日付を読めなかった試合が {unparsed} 件あります。並び順の先頭に置きます。")
         finished_games.sort_values('日付_obj', inplace=True, na_position='first')
         
         for _, row in finished_games.iterrows():

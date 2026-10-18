@@ -1,12 +1,14 @@
 import re
 import csv
+import datetime
 import math
 from pathlib import Path
 
 # --- 設定 ---
 
-# ★★★【設定項目】予測の対象とするシーズンを指定 ★★★
-TARGET_YEAR = 2026
+# 予測の対象シーズンは schedule.csv の試合日から自動で判定する（detect_current_season）。
+# '年' 列はカレンダー年ではなくシーズン（2026 = 26-27シーズン = 26/8〜27/6）なので、
+# 暦の年で決め打ちにはできない。
 # 的中率の集計を開始する節（これ未満は参考値）。winner.js と合わせること。
 ACCURACY_START_SECTION = 10
 
@@ -36,9 +38,54 @@ def poisson_probability(actual, mean):
 
 # --- メイン処理 ---
 
+def parse_schedule_date(row):
+    """schedule.csv の1行から試合日を取り出す。'26/8/7' も古い '4/5' も読む。"""
+    raw = (row.get('日付') or '').strip()
+    if not raw:
+        return None
+    try:
+        return datetime.datetime.strptime(f"20{raw}", "%Y/%m/%d").date()
+    except ValueError:
+        pass
+    # 2025年以前の古い行は年が入っておらず、当時は1シーズン＝1暦年だったので '年' で補う
+    try:
+        return datetime.datetime.strptime(f"{(row.get('年') or '').strip()}/{raw}", "%Y/%m/%d").date()
+    except ValueError:
+        return None
+
+
+def detect_current_season(schedule_path):
+    """今のシーズンラベルを schedule.csv から判定する。
+
+    「すでに開幕しているシーズンのうち最も新しいもの」を試合日から選ぶので、
+    来シーズンの日程がCSVに入って開幕日を過ぎれば自動で切り替わる。
+    """
+    starts = {}
+    with open(schedule_path, 'r', encoding='utf-8-sig') as f:
+        for row in csv.DictReader(f):
+            try:
+                year = int(row['年'])
+            except (ValueError, KeyError, TypeError):
+                continue
+            match_date = parse_schedule_date(row)
+            if match_date is None:
+                continue
+            if year not in starts or match_date < starts[year]:
+                starts[year] = match_date
+
+    if not starts:
+        raise ValueError('schedule.csv から試合日を読み取れませんでした。')
+
+    today = datetime.date.today()
+    started = {y: d for y, d in starts.items() if d <= today}
+    pool = started or starts
+    return max(pool, key=lambda y: pool[y])
+
+
 def main():
     """チームスタッツと試合スケジュールから、未対戦の試合結果を予測する。"""
-    print(f"--- 試合予測プログラム v1.1 (対象シーズン: {TARGET_YEAR}) ---")
+    target_year = detect_current_season(SCHEDULE_CSV_PATH)
+    print(f"--- 試合予測プログラム v1.1 (対象シーズン: {target_year} / schedule.csv の試合日から判定) ---")
     
     predictions = [] # ★ ここで初期化
 
@@ -111,7 +158,7 @@ def main():
                     match_year = int(row.get('年'))
                 except (ValueError, TypeError):
                     continue
-                if match_year != TARGET_YEAR or row.get('ホーム得点'):
+                if match_year != target_year or row.get('ホーム得点'):
                     continue
                 if row.get('リーグ') not in matches_processed:
                     continue
