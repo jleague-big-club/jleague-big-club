@@ -1,0 +1,1135 @@
+{
+  "version": "ver.1.1",
+  "J1": [
+    {
+      "kickoff": "26/10/24 19:00 (第12節)",
+      "home": "サンフレッチェ広島",
+      "away": "清水エスパルス",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "2-0",
+          "odds": "6.8倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "3-0",
+          "odds": "7.9倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "0-0",
+          "odds": "22.6倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/24 19:00 (第12節)",
+      "home": "東京ヴェルディ",
+      "away": "アビスパ福岡",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "0-1",
+          "odds": "5.6倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "0-0",
+          "odds": "7.2倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "0-3",
+          "odds": "20.6倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/24 19:00 (第12節)",
+      "home": "鹿島アントラーズ",
+      "away": "柏レイソル",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "2-2",
+          "odds": "16.3倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "3-2",
+          "odds": "17.3倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-3",
+          "odds": "20.1倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/24 19:00 (第12節)",
+      "home": "ヴィッセル神戸",
+      "away": "FC町田ゼルビア",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-1",
+          "odds": "7.5倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "0-1",
+          "odds": "7.8倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-2",
+          "odds": "25.3倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/24 19:00 (第12節)",
+      "home": "ガンバ大阪",
+      "away": "京都サンガF.C.",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-1",
+          "odds": "10.6倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "2-1",
+          "odds": "10.7倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "0-1",
+          "odds": "21.2倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/25 19:00 (第12節)",
+      "home": "名古屋グランパス",
+      "away": "横浜F・マリノス",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "0-1",
+          "odds": "7.2倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-1",
+          "odds": "7.8倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-0",
+          "odds": "23.0倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/25 19:00 (第12節)",
+      "home": "セレッソ大阪",
+      "away": "ジェフユナイテッド千葉",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-0",
+          "odds": "7.2倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-1",
+          "odds": "8.0倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "3-0",
+          "odds": "21.5倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/25 19:00 (第12節)",
+      "home": "浦和レッズ",
+      "away": "V・ファーレン長崎",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "2-1",
+          "odds": "13.0倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "2-2",
+          "odds": "14.1倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-3",
+          "odds": "22.9倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/25 19:00 (第12節)",
+      "home": "FC東京",
+      "away": "水戸ホーリーホック",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "2-0",
+          "odds": "6.2倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-0",
+          "odds": "6.7倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "0-1",
+          "odds": "28.6倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/25 19:00 (第12節)",
+      "home": "川崎フロンターレ",
+      "away": "ファジアーノ岡山",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "2-1",
+          "odds": "10.5倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-1",
+          "odds": "11.7倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "3-2",
+          "odds": "22.2倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/31 19:00 (第13節)",
+      "home": "ファジアーノ岡山",
+      "away": "FC東京",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "0-1",
+          "odds": "6.6倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "0-2",
+          "odds": "7.8倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-1",
+          "odds": "25.2倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/31 19:00 (第13節)",
+      "home": "水戸ホーリーホック",
+      "away": "サンフレッチェ広島",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "0-2",
+          "odds": "8.1倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "0-1",
+          "odds": "8.6倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "0-4",
+          "odds": "21.2倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/31 19:00 (第13節)",
+      "home": "京都サンガF.C.",
+      "away": "清水エスパルス",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-1",
+          "odds": "7.6倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-0",
+          "odds": "7.8倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-2",
+          "odds": "23.9倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/31 19:00 (第13節)",
+      "home": "鹿島アントラーズ",
+      "away": "セレッソ大阪",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "2-1",
+          "odds": "10.7倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "2-0",
+          "odds": "11.3倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-2",
+          "odds": "20.2倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/31 19:00 (第13節)",
+      "home": "ヴィッセル神戸",
+      "away": "名古屋グランパス",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-0",
+          "odds": "6.1倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "2-0",
+          "odds": "6.3倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "4-0",
+          "odds": "20.3倍",
+          "class": "longshot"
+        }
+      ]
+    }
+  ],
+  "J2": [
+    {
+      "kickoff": "26/10/24 19:00 (第13節)",
+      "home": "RB大宮アルディージャ",
+      "away": "横浜FC",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-1",
+          "odds": "9.1倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "2-1",
+          "odds": "11.4倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "0-2",
+          "odds": "20.0倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/24 19:00 (第13節)",
+      "home": "藤枝MYFC",
+      "away": "徳島ヴォルティス",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-0",
+          "odds": "4.9倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "0-0",
+          "odds": "5.2倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "3-0",
+          "odds": "26.1倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/25 19:00 (第13節)",
+      "home": "ブラウブリッツ秋田",
+      "away": "FC今治",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-0",
+          "odds": "8.5倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-1",
+          "odds": "9.0倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-2",
+          "odds": "21.7倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/25 19:00 (第13節)",
+      "home": "モンテディオ山形",
+      "away": "テゲバジャーロ宮崎",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "0-0",
+          "odds": "6.0倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-0",
+          "odds": "6.3倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-2",
+          "odds": "37.4倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/25 19:00 (第13節)",
+      "home": "カターレ富山",
+      "away": "北海道コンサドーレ札幌",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "2-0",
+          "odds": "8.0倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-0",
+          "odds": "9.5倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "0-0",
+          "odds": "22.5倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/25 19:00 (第13節)",
+      "home": "サガン鳥栖",
+      "away": "ヴァンラーレ八戸",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-0",
+          "odds": "5.5倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "0-0",
+          "odds": "7.2倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "1-2",
+          "odds": "24.5倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/25 19:00 (第13節)",
+      "home": "アルビレックス新潟",
+      "away": "ベガルタ仙台",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "0-1",
+          "odds": "8.0倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "0-2",
+          "odds": "8.5倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-1",
+          "odds": "23.2倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/25 19:00 (第13節)",
+      "home": "大分トリニータ",
+      "away": "ヴァンフォーレ甲府",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "2-0",
+          "odds": "5.4倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-0",
+          "odds": "6.1倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "5-0",
+          "odds": "28.1倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/25 19:00 (第13節)",
+      "home": "いわきFC",
+      "away": "ジュビロ磐田",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-1",
+          "odds": "8.0倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-0",
+          "odds": "8.4倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-2",
+          "odds": "21.1倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/25 19:00 (第13節)",
+      "home": "湘南ベルマーレ",
+      "away": "栃木シティ",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-0",
+          "odds": "7.4倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-1",
+          "odds": "7.9倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "3-0",
+          "odds": "22.4倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/31 19:00 (第14節)",
+      "home": "北海道コンサドーレ札幌",
+      "away": "湘南ベルマーレ",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "0-1",
+          "odds": "6.7倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "0-0",
+          "odds": "7.4倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-2",
+          "odds": "30.1倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/31 19:00 (第14節)",
+      "home": "ブラウブリッツ秋田",
+      "away": "藤枝MYFC",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "0-0",
+          "odds": "6.4倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "0-1",
+          "odds": "6.8倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-2",
+          "odds": "34.4倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/31 19:00 (第14節)",
+      "home": "アルビレックス新潟",
+      "away": "カターレ富山",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-2",
+          "odds": "10.1倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "0-2",
+          "odds": "10.2倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-1",
+          "odds": "20.4倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/31 19:00 (第14節)",
+      "home": "ヴァンラーレ八戸",
+      "away": "モンテディオ山形",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "0-0",
+          "odds": "4.9倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "0-1",
+          "odds": "4.9倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-0",
+          "odds": "27.4倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/31 19:00 (第14節)",
+      "home": "ベガルタ仙台",
+      "away": "RB大宮アルディージャ",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-0",
+          "odds": "7.2倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-1",
+          "odds": "8.5倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "3-1",
+          "odds": "20.0倍",
+          "class": "longshot"
+        }
+      ]
+    }
+  ],
+  "J3": [
+    {
+      "kickoff": "26/10/21 19:00 (第12節)",
+      "home": "栃木SC",
+      "away": "レイラック滋賀",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-1",
+          "odds": "8.6倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-2",
+          "odds": "11.0倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-0",
+          "odds": "20.8倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/24 19:00 (第13節)",
+      "home": "FC大阪",
+      "away": "鹿児島ユナイテッドFC",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-1",
+          "odds": "9.1倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "2-1",
+          "odds": "11.1倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "3-1",
+          "odds": "20.3倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/24 19:00 (第13節)",
+      "home": "ザスパ群馬",
+      "away": "カマタマーレ讃岐",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-1",
+          "odds": "9.1倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-2",
+          "odds": "11.8倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "0-0",
+          "odds": "21.0倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/24 19:00 (第13節)",
+      "home": "奈良クラブ",
+      "away": "FC琉球",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-1",
+          "odds": "7.7倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-0",
+          "odds": "9.1倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-2",
+          "odds": "20.5倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/24 19:00 (第13節)",
+      "home": "SC相模原",
+      "away": "栃木SC",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-0",
+          "odds": "7.4倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "2-0",
+          "odds": "8.1倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "1-2",
+          "odds": "24.5倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/25 19:00 (第13節)",
+      "home": "ロアッソ熊本",
+      "away": "FC岐阜",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "0-0",
+          "odds": "4.6倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-0",
+          "odds": "5.4倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "0-2",
+          "odds": "20.1倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/25 19:00 (第13節)",
+      "home": "ガイナーレ鳥取",
+      "away": "高知ユナイテッドSC",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-0",
+          "odds": "6.1倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "2-0",
+          "odds": "6.2倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "0-1",
+          "odds": "23.4倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/25 19:00 (第13節)",
+      "home": "ギラヴァンツ北九州",
+      "away": "AC長野パルセイロ",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-1",
+          "odds": "9.5倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-2",
+          "odds": "11.5倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-0",
+          "odds": "20.5倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/25 19:00 (第13節)",
+      "home": "松本山雅FC",
+      "away": "レノファ山口FC",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "0-0",
+          "odds": "4.8倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "0-1",
+          "odds": "4.9倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-0",
+          "odds": "28.2倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/25 19:00 (第13節)",
+      "home": "レイラック滋賀",
+      "away": "ツエーゲン金沢",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "2-1",
+          "odds": "11.7倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-1",
+          "odds": "11.8倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "3-2",
+          "odds": "21.0倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/25 19:00 (第13節)",
+      "home": "愛媛FC",
+      "away": "福島ユナイテッドFC",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "4-1",
+          "odds": "15.0倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "3-1",
+          "odds": "16.4倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "4-0",
+          "odds": "20.8倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/31 19:00 (第14節)",
+      "home": "FC岐阜",
+      "away": "FC大阪",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-1",
+          "odds": "8.1倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-0",
+          "odds": "8.7倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-2",
+          "odds": "20.4倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/31 19:00 (第14節)",
+      "home": "栃木SC",
+      "away": "愛媛FC",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "0-2",
+          "odds": "9.5倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-2",
+          "odds": "10.3倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "0-4",
+          "odds": "21.4倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/31 19:00 (第14節)",
+      "home": "ツエーゲン金沢",
+      "away": "ザスパ群馬",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "2-0",
+          "odds": "9.3倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "2-1",
+          "odds": "10.2倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-2",
+          "odds": "22.3倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/10/31 19:00 (第14節)",
+      "home": "高知ユナイテッドSC",
+      "away": "SC相模原",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "0-2",
+          "odds": "5.7倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "0-1",
+          "odds": "6.8倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "0-5",
+          "odds": "24.3倍",
+          "class": "longshot"
+        }
+      ]
+    }
+  ],
+  "is_reference": false
+}

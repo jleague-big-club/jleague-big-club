@@ -145,147 +145,147 @@
     }
   },
   "J2": {
-    "last_played": "2026-10-18",
+    "last_played": "2026-10-21",
     "probs": {
       "仙台": {
         "champion": 0.0,
         "acl": 0.0,
-        "promotion": 0.4999,
-        "relegation": 0.003,
-        "safe": 0.997
-      },
-      "大宮": {
-        "champion": 0.0,
-        "acl": 0.0,
-        "promotion": 0.2452,
-        "relegation": 0.0159,
-        "safe": 0.9841
+        "promotion": 0.5636,
+        "relegation": 0.0014,
+        "safe": 0.9986
       },
       "新潟": {
         "champion": 0.0,
         "acl": 0.0,
-        "promotion": 0.2405,
-        "relegation": 0.0167,
-        "safe": 0.9833
+        "promotion": 0.2905,
+        "relegation": 0.007,
+        "safe": 0.993
       },
       "富山": {
         "champion": 0.0,
         "acl": 0.0,
-        "promotion": 0.1766,
-        "relegation": 0.0284,
-        "safe": 0.9716
+        "promotion": 0.2569,
+        "relegation": 0.0108,
+        "safe": 0.9892
       },
       "横浜FC": {
         "champion": 0.0,
         "acl": 0.0,
-        "promotion": 0.1345,
-        "relegation": 0.0436,
-        "safe": 0.9564
+        "promotion": 0.1933,
+        "relegation": 0.0184,
+        "safe": 0.9816
+      },
+      "大宮": {
+        "champion": 0.0,
+        "acl": 0.0,
+        "promotion": 0.1466,
+        "relegation": 0.0251,
+        "safe": 0.9749
       },
       "湘南": {
         "champion": 0.0,
         "acl": 0.0,
-        "promotion": 0.1909,
-        "relegation": 0.0297,
-        "safe": 0.9703
+        "promotion": 0.153,
+        "relegation": 0.0307,
+        "safe": 0.9693
       },
       "大分": {
         "champion": 0.0,
         "acl": 0.0,
-        "promotion": 0.1184,
-        "relegation": 0.0504,
-        "safe": 0.9496
-      },
-      "いわき": {
-        "champion": 0.0,
-        "acl": 0.0,
-        "promotion": 0.0511,
-        "relegation": 0.1274,
-        "safe": 0.8726
-      },
-      "藤枝": {
-        "champion": 0.0,
-        "acl": 0.0,
-        "promotion": 0.0468,
-        "relegation": 0.1364,
-        "safe": 0.8636
+        "promotion": 0.0853,
+        "relegation": 0.0601,
+        "safe": 0.9399
       },
       "宮崎": {
         "champion": 0.0,
         "acl": 0.0,
-        "promotion": 0.0477,
-        "relegation": 0.1278,
-        "safe": 0.8722
+        "promotion": 0.0672,
+        "relegation": 0.0716,
+        "safe": 0.9284
+      },
+      "いわき": {
+        "champion": 0.0,
+        "acl": 0.0,
+        "promotion": 0.0441,
+        "relegation": 0.105,
+        "safe": 0.895
+      },
+      "藤枝": {
+        "champion": 0.0,
+        "acl": 0.0,
+        "promotion": 0.0367,
+        "relegation": 0.1326,
+        "safe": 0.8674
       },
       "磐田": {
         "champion": 0.0,
         "acl": 0.0,
-        "promotion": 0.0476,
-        "relegation": 0.1413,
-        "safe": 0.8587
+        "promotion": 0.0274,
+        "relegation": 0.1695,
+        "safe": 0.8305
       },
       "鳥栖": {
         "champion": 0.0,
         "acl": 0.0,
-        "promotion": 0.0389,
-        "relegation": 0.1531,
-        "safe": 0.8469
+        "promotion": 0.023,
+        "relegation": 0.1977,
+        "safe": 0.8023
       },
       "徳島": {
         "champion": 0.0,
         "acl": 0.0,
-        "promotion": 0.0458,
-        "relegation": 0.1413,
-        "safe": 0.8587
-      },
-      "山形": {
-        "champion": 0.0,
-        "acl": 0.0,
-        "promotion": 0.0244,
-        "relegation": 0.2054,
-        "safe": 0.7946
-      },
-      "秋田": {
-        "champion": 0.0,
-        "acl": 0.0,
-        "promotion": 0.0279,
-        "relegation": 0.1946,
-        "safe": 0.8054
-      },
-      "栃木C": {
-        "champion": 0.0,
-        "acl": 0.0,
-        "promotion": 0.0138,
-        "relegation": 0.3079,
-        "safe": 0.6921
+        "promotion": 0.0195,
+        "relegation": 0.201,
+        "safe": 0.799
       },
       "札幌": {
         "champion": 0.0,
         "acl": 0.0,
-        "promotion": 0.0135,
-        "relegation": 0.3035,
-        "safe": 0.6965
-      },
-      "今治": {
-        "champion": 0.0,
-        "acl": 0.0,
-        "promotion": 0.0179,
-        "relegation": 0.2717,
-        "safe": 0.7283
+        "promotion": 0.0259,
+        "relegation": 0.1834,
+        "safe": 0.8166
       },
       "八戸": {
         "champion": 0.0,
         "acl": 0.0,
-        "promotion": 0.0109,
-        "relegation": 0.3095,
-        "safe": 0.6905
+        "promotion": 0.0227,
+        "relegation": 0.1784,
+        "safe": 0.8216
+      },
+      "山形": {
+        "champion": 0.0,
+        "acl": 0.0,
+        "promotion": 0.0091,
+        "relegation": 0.278,
+        "safe": 0.722
+      },
+      "秋田": {
+        "champion": 0.0,
+        "acl": 0.0,
+        "promotion": 0.0161,
+        "relegation": 0.2314,
+        "safe": 0.7686
+      },
+      "栃木C": {
+        "champion": 0.0,
+        "acl": 0.0,
+        "promotion": 0.0082,
+        "relegation": 0.3064,
+        "safe": 0.6936
+      },
+      "今治": {
+        "champion": 0.0,
+        "acl": 0.0,
+        "promotion": 0.0073,
+        "relegation": 0.3146,
+        "safe": 0.6854
       },
       "甲府": {
         "champion": 0.0,
         "acl": 0.0,
-        "promotion": 0.0077,
-        "relegation": 0.3924,
-        "safe": 0.6076
+        "promotion": 0.0036,
+        "relegation": 0.4769,
+        "safe": 0.5231
       }
     }
   },
