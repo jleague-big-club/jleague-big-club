@@ -300,10 +300,14 @@ function renderPredictionCards(league) {
         order = ['promotion', 'relegation', 'safe'];
     }
 
+    // リーグごとに回すので、更新日時もリーグごと。古いデータはファイル全体の日時を使う
+    const leagueUpdated = predictionData.updated_at?.[league] || updateDates['prediction_probabilities.json'];
     let dateStr = "";
-    if (updateDates['prediction_probabilities.json']) {
-        const d = new Date(updateDates['prediction_probabilities.json']);
+    if (leagueUpdated) {
+        const d = new Date(leagueUpdated);
         dateStr = `${d.getMonth()+1}月${d.getDate()}日時点`;
+        const note = document.querySelector('#panel-prediction .update-date-note');
+        if (note) note.textContent = `データ更新日時: ${d.toLocaleString('ja-JP')}`;
     }
 
     container.innerHTML = order.map(catKey => {

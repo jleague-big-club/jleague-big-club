@@ -12,7 +12,8 @@ function renderPrediction(league) {
         }
 
         let dateHtml = '';
-        const updatedTimestamp = updateDates['prediction_probabilities.json'];
+        // リーグごとに回すので、更新日時もリーグごと。古いデータはファイル全体の日時を使う
+        const updatedTimestamp = predictionProbabilities.updated_at?.[league] || updateDates['prediction_probabilities.json'];
         if (updatedTimestamp) {
             const updatedDate = new Date(updatedTimestamp);
             const formattedDate = updatedDate.toLocaleString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
