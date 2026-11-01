@@ -2,106 +2,6 @@
   "version": "ver.1.1",
   "J1": [
     {
-      "kickoff": "26/11/1 19:00 (第13節)",
-      "home": "横浜F・マリノス",
-      "away": "川崎フロンターレ",
-      "predictions": [
-        {
-          "type": "本命",
-          "score": "1-1",
-          "odds": "8.7倍",
-          "class": "favorite"
-        },
-        {
-          "type": "対抗",
-          "score": "2-1",
-          "odds": "11.2倍",
-          "class": "contender"
-        },
-        {
-          "type": "大穴",
-          "score": "0-2",
-          "odds": "20.2倍",
-          "class": "longshot"
-        }
-      ]
-    },
-    {
-      "kickoff": "26/11/1 19:00 (第13節)",
-      "home": "ジェフユナイテッド千葉",
-      "away": "アビスパ福岡",
-      "predictions": [
-        {
-          "type": "本命",
-          "score": "1-1",
-          "odds": "8.3倍",
-          "class": "favorite"
-        },
-        {
-          "type": "対抗",
-          "score": "0-1",
-          "odds": "11.3倍",
-          "class": "contender"
-        },
-        {
-          "type": "大穴",
-          "score": "1-3",
-          "odds": "25.5倍",
-          "class": "longshot"
-        }
-      ]
-    },
-    {
-      "kickoff": "26/11/1 19:00 (第13節)",
-      "home": "V・ファーレン長崎",
-      "away": "東京ヴェルディ",
-      "predictions": [
-        {
-          "type": "本命",
-          "score": "1-0",
-          "odds": "6.9倍",
-          "class": "favorite"
-        },
-        {
-          "type": "対抗",
-          "score": "2-0",
-          "odds": "8.1倍",
-          "class": "contender"
-        },
-        {
-          "type": "大穴",
-          "score": "1-2",
-          "odds": "23.7倍",
-          "class": "longshot"
-        }
-      ]
-    },
-    {
-      "kickoff": "26/11/1 19:00 (第13節)",
-      "home": "FC町田ゼルビア",
-      "away": "ガンバ大阪",
-      "predictions": [
-        {
-          "type": "本命",
-          "score": "3-0",
-          "odds": "9.9倍",
-          "class": "favorite"
-        },
-        {
-          "type": "対抗",
-          "score": "4-0",
-          "odds": "11.0倍",
-          "class": "contender"
-        },
-        {
-          "type": "大穴",
-          "score": "5-1",
-          "odds": "20.5倍",
-          "class": "longshot"
-        }
-      ]
-    },
-    {
       "kickoff": "26/11/7 19:00 (第14節)",
       "home": "清水エスパルス",
       "away": "東京ヴェルディ",
@@ -109,19 +9,19 @@
         {
           "type": "本命",
           "score": "1-0",
-          "odds": "6.2倍",
+          "odds": "6.8倍",
           "class": "favorite"
         },
         {
           "type": "対抗",
           "score": "0-0",
-          "odds": "6.5倍",
+          "odds": "6.9倍",
           "class": "contender"
         },
         {
           "type": "大穴",
-          "score": "3-0",
-          "odds": "33.6倍",
+          "score": "2-2",
+          "odds": "31.7倍",
           "class": "longshot"
         }
       ]
@@ -159,19 +59,19 @@
         {
           "type": "本命",
           "score": "1-0",
-          "odds": "6.7倍",
+          "odds": "8.0倍",
           "class": "favorite"
         },
         {
           "type": "対抗",
           "score": "2-0",
-          "odds": "8.0倍",
+          "odds": "8.2倍",
           "class": "contender"
         },
         {
           "type": "大穴",
           "score": "1-2",
-          "odds": "24.3倍",
+          "odds": "24.9倍",
           "class": "longshot"
         }
       ]
@@ -190,13 +90,13 @@
         {
           "type": "対抗",
           "score": "0-1",
-          "odds": "11.1倍",
+          "odds": "10.4倍",
           "class": "contender"
         },
         {
           "type": "大穴",
           "score": "1-3",
-          "odds": "24.9倍",
+          "odds": "23.1倍",
           "class": "longshot"
         }
       ]
@@ -221,7 +121,7 @@
         {
           "type": "大穴",
           "score": "5-1",
-          "odds": "21.5倍",
+          "odds": "21.6倍",
           "class": "longshot"
         }
       ]
@@ -233,20 +133,20 @@
       "predictions": [
         {
           "type": "本命",
-          "score": "2-2",
-          "odds": "15.2倍",
+          "score": "3-2",
+          "odds": "16.6倍",
           "class": "favorite"
         },
         {
           "type": "対抗",
-          "score": "2-1",
-          "odds": "16.5倍",
+          "score": "2-2",
+          "odds": "16.9倍",
           "class": "contender"
         },
         {
           "type": "大穴",
-          "score": "1-2",
-          "odds": "20.5倍",
+          "score": "4-2",
+          "odds": "21.8倍",
           "class": "longshot"
         }
       ]
@@ -284,19 +184,19 @@
         {
           "type": "本命",
           "score": "1-1",
-          "odds": "8.0倍",
+          "odds": "7.7倍",
           "class": "favorite"
         },
         {
           "type": "対抗",
           "score": "1-0",
-          "odds": "9.8倍",
+          "odds": "8.7倍",
           "class": "contender"
         },
         {
           "type": "大穴",
-          "score": "3-1",
-          "odds": "25.0倍",
+          "score": "2-2",
+          "odds": "21.2倍",
           "class": "longshot"
         }
       ]
@@ -308,20 +208,20 @@
       "predictions": [
         {
           "type": "本命",
-          "score": "2-1",
-          "odds": "10.4倍",
+          "score": "1-1",
+          "odds": "9.8倍",
           "class": "favorite"
         },
         {
           "type": "対抗",
-          "score": "1-1",
-          "odds": "10.8倍",
+          "score": "2-1",
+          "odds": "10.2倍",
           "class": "contender"
         },
         {
           "type": "大穴",
-          "score": "0-1",
-          "odds": "22.3倍",
+          "score": "0-0",
+          "odds": "22.2倍",
           "class": "longshot"
         }
       ]
@@ -334,7 +234,7 @@
         {
           "type": "本命",
           "score": "1-1",
-          "odds": "8.3倍",
+          "odds": "8.9倍",
           "class": "favorite"
         },
         {
@@ -346,7 +246,7 @@
         {
           "type": "大穴",
           "score": "0-2",
-          "odds": "20.8倍",
+          "odds": "28.1倍",
           "class": "longshot"
         }
       ]
@@ -372,6 +272,106 @@
           "type": "大穴",
           "score": "5-0",
           "odds": "25.4倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/11/20 19:00 (第15節)",
+      "home": "柏レイソル",
+      "away": "ジェフユナイテッド千葉",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "3-1",
+          "odds": "12.6倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "2-1",
+          "odds": "13.9倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "3-2",
+          "odds": "20.9倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/11/20 19:00 (第15節)",
+      "home": "鹿島アントラーズ",
+      "away": "清水エスパルス",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "2-0",
+          "odds": "11.0倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "3-0",
+          "odds": "11.1倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "5-0",
+          "odds": "25.1倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/11/21 19:00 (第15節)",
+      "home": "FC町田ゼルビア",
+      "away": "V・ファーレン長崎",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "2-0",
+          "odds": "7.2倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "3-0",
+          "odds": "8.0倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "4-1",
+          "odds": "20.9倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/11/21 19:00 (第15節)",
+      "home": "サンフレッチェ広島",
+      "away": "横浜F・マリノス",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "2-0",
+          "odds": "7.9倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "1-0",
+          "odds": "8.2倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "0-1",
+          "odds": "22.2倍",
           "class": "longshot"
         }
       ]
@@ -411,7 +411,7 @@
         {
           "type": "本命",
           "score": "1-1",
-          "odds": "10.4倍",
+          "odds": "10.3倍",
           "class": "favorite"
         },
         {
@@ -498,7 +498,7 @@
         {
           "type": "大穴",
           "score": "2-1",
-          "odds": "25.7倍",
+          "odds": "25.8倍",
           "class": "longshot"
         }
       ]
@@ -511,7 +511,7 @@
         {
           "type": "本命",
           "score": "1-0",
-          "odds": "5.0倍",
+          "odds": "4.9倍",
           "class": "favorite"
         },
         {
@@ -573,7 +573,7 @@
         {
           "type": "大穴",
           "score": "3-1",
-          "odds": "21.1倍",
+          "odds": "21.2倍",
           "class": "longshot"
         }
       ]
@@ -617,7 +617,7 @@
         {
           "type": "対抗",
           "score": "0-1",
-          "odds": "10.1倍",
+          "odds": "10.0倍",
           "class": "contender"
         },
         {
@@ -698,7 +698,7 @@
         {
           "type": "大穴",
           "score": "0-2",
-          "odds": "23.2倍",
+          "odds": "23.1倍",
           "class": "longshot"
         }
       ]
@@ -717,7 +717,7 @@
         {
           "type": "対抗",
           "score": "1-1",
-          "odds": "11.9倍",
+          "odds": "11.8倍",
           "class": "contender"
         },
         {
@@ -756,31 +756,6 @@
   ],
   "J3": [
     {
-      "kickoff": "26/10/31 19:00 (第14節)",
-      "home": "AC長野パルセイロ",
-      "away": "レイラック滋賀",
-      "predictions": [
-        {
-          "type": "本命",
-          "score": "1-1",
-          "odds": "9.9倍",
-          "class": "favorite"
-        },
-        {
-          "type": "対抗",
-          "score": "2-1",
-          "odds": "11.6倍",
-          "class": "contender"
-        },
-        {
-          "type": "大穴",
-          "score": "3-1",
-          "odds": "20.5倍",
-          "class": "longshot"
-        }
-      ]
-    },
-    {
       "kickoff": "26/11/3 19:00 (第15節)",
       "home": "レノファ山口FC",
       "away": "鹿児島ユナイテッドFC",
@@ -794,7 +769,7 @@
         {
           "type": "対抗",
           "score": "1-0",
-          "odds": "7.8倍",
+          "odds": "7.7倍",
           "class": "contender"
         },
         {
@@ -838,7 +813,7 @@
         {
           "type": "本命",
           "score": "2-1",
-          "odds": "12.6倍",
+          "odds": "12.5倍",
           "class": "favorite"
         },
         {
@@ -900,7 +875,7 @@
         {
           "type": "大穴",
           "score": "1-0",
-          "odds": "21.1倍",
+          "odds": "21.0倍",
           "class": "longshot"
         }
       ]
@@ -925,7 +900,7 @@
         {
           "type": "大穴",
           "score": "0-1",
-          "odds": "20.4倍",
+          "odds": "20.3倍",
           "class": "longshot"
         }
       ]
@@ -1000,7 +975,7 @@
         {
           "type": "大穴",
           "score": "2-2",
-          "odds": "21.1倍",
+          "odds": "21.2倍",
           "class": "longshot"
         }
       ]
@@ -1025,7 +1000,7 @@
         {
           "type": "大穴",
           "score": "2-2",
-          "odds": "48.8倍",
+          "odds": "48.9倍",
           "class": "longshot"
         }
       ]
@@ -1125,7 +1100,32 @@
         {
           "type": "大穴",
           "score": "0-1",
-          "odds": "23.2倍",
+          "odds": "23.1倍",
+          "class": "longshot"
+        }
+      ]
+    },
+    {
+      "kickoff": "26/11/7 19:00 (第16節)",
+      "home": "松本山雅FC",
+      "away": "ツエーゲン金沢",
+      "predictions": [
+        {
+          "type": "本命",
+          "score": "1-1",
+          "odds": "7.8倍",
+          "class": "favorite"
+        },
+        {
+          "type": "対抗",
+          "score": "0-1",
+          "odds": "9.2倍",
+          "class": "contender"
+        },
+        {
+          "type": "大穴",
+          "score": "2-2",
+          "odds": "20.4倍",
           "class": "longshot"
         }
       ]
