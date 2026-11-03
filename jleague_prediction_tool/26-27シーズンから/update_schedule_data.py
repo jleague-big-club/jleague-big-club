@@ -14,6 +14,7 @@ from selenium.common.exceptions import NoSuchElementException
 import os
 import re
 import unicodedata
+from datetime import date
 
 # --- 設定 ---
 SAVE_DIRECTORY = r'C:\Users\mura\Desktop\その他\webサイト\jleague-big-club\data'
@@ -62,134 +63,108 @@ def get_driver():
         print(f"エラー: ブラウザの起動に失敗しました。 {e}", file=sys.stderr)
         return None
 
-def scrape_top_page_results(driver):
-    """J1, J2, J3の各試合ページから試合結果のみを抽出する"""
+# 公式サイトとCSVで表記が違うチーム名（公式サイト側 → CSV側。全角は半角にした後の文字列で書く）
+# ここに無い食い違いがあると、そのチームの結果が一切取り込まれない。
+# 照合できないチーム名は実行時に警告が出るので、出たらここに足す。
+WEB_TO_CSV_NAME = {
+    'レイラック滋賀FC': 'レイラック滋賀',
+}
+
+# 各試合のリンク先（/match/j3/2026/080815/ など）から、大会名と対戦カード・スコアを読む
+SCRAPE_MATCHES_JS = """
+    return [...document.querySelectorAll('div.m-schedule--game-over')].map(m => {
+        // リンクは試合の枠の中だけを見る。親までさかのぼると隣の試合のリンクを拾ってしまい、
+        // ルヴァンカップの試合をJ1リーグ戦と取り違える（実際に起きた）
+        const link = m.querySelector('a[href*="/match/"]');
+        const href = link ? link.getAttribute('href') : '';
+        const team = side => m.querySelector('div.m-schedule__team-' + side + " span[data-media='pc']")?.textContent.trim() || '';
+        const scores = [...m.querySelectorAll('p.m-schedule__score')].map(p => p.textContent.trim());
+        return { href: href || '', home: team('home'), away: team('away'), homeScore: scores[0] || '', awayScore: scores[1] || '' };
+    });
+"""
+
+
+def detect_current_season(df):
+    """今のシーズンラベルと開幕日を schedule.csv から求める。
+
+    '年' 列はカレンダー年ではなくシーズン（2026 = 26-27シーズン = 26/8〜27/6）なので、
+    「すでに開幕しているシーズンのうち最も新しいもの」を試合日から選ぶ。
+    """
+    dates = pd.to_datetime(df['日付'], format='%y/%m/%d', errors='coerce')
+    starts = dates.groupby(df['年'].astype(str)).min().dropna()
+    today = pd.Timestamp.today().normalize()
+    started = starts[starts <= today]
+    label = started.idxmax() if not started.empty else starts.idxmin()
+    return label, starts[label].date()
+
+
+def to_csv_name(web_name):
+    name = normalize_text(web_name)
+    return WEB_TO_CSV_NAME.get(name, name)
+
+
+def scrape_season_results(driver, season_start):
+    """J1〜J3のシーズン開幕から今日までの全試合結果を取得する。
+
+    以前は「今週」のページだけを見ていたため、batを回すタイミング次第で
+    取りこぼした試合が二度と取り込まれなかった。期間を指定して毎回シーズン全体を取り直す。
+    カップ戦・天皇杯はリンク先の大会名（/match/leaguecup/ など）で除外する。
+    """
     results = {}
-    leagues = ['j1', 'j2', 'j3']
-    
+    today = date.today()
     try:
-        print("--- 新しいJリーグ日程ページから結果を取得中... ---")
-        
-        for league in leagues:
-            url = f"https://www.jleague.jp/{league}/match/"
+        print("--- Jリーグ公式サイトからシーズン全体の結果を取得中... ---")
+        for league in ['j1', 'j2', 'j3']:
+            url = (f"https://www.jleague.jp/{league}/match/"
+                   f"?startdate={season_start:%Y-%m-%d}&enddate={today:%Y-%m-%d}&period=custom")
             print(f"  -> {url} を取得中...")
             driver.get(url)
-            
-            # クッキー同意などがあればクリック
+
             try:
-                cookie_button_wait = WebDriverWait(driver, 5)
-                agree_button = cookie_button_wait.until(EC.element_to_be_clickable((By.ID, "onetrust-accept-btn-handler")))
+                agree_button = WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.ID, "onetrust-accept-btn-handler")))
                 agree_button.click()
                 time.sleep(2)
             except Exception:
                 pass
-            
-            # 試合終了の要素が現れるまで待機（最大15秒）
+
             try:
-                WebDriverWait(driver, 15).until(
+                WebDriverWait(driver, 20).until(
                     EC.presence_of_element_located((By.CSS_SELECTOR, "div.m-schedule--game-over"))
                 )
             except Exception:
                 print(f"    -> {league.upper()} に試合終了の試合が見当たりません。スキップします。")
                 continue
-            time.sleep(1)
-            
-            # ★★★ カップ戦除外のため、JavaScriptで各試合ブロックの直前の見出しを確認 ★★★
-            league_matches_js = driver.execute_script("""
-                const results = [];
-                const gameOverDivs = document.querySelectorAll('div.m-schedule--game-over');
-                for (const match of gameOverDivs) {
-                    let sectionTitle = '';
-                    let el = match;
-                    
-                    // BODYタグまで到達したら遡るのをやめる
-                    while (el && el.tagName !== 'BODY') {
-                        let prev = el.previousElementSibling;
-                        while (prev) {
-                            const text = (prev.textContent || '').replace(/\s+/g, ' ').trim();
-                            
-                            // テキストが長すぎる場合（サイト全体のメニューなど）は判定から除外して次へ
-                            if (text.length > 50) {
-                                prev = prev.previousElementSibling;
-                                continue;
-                            }
-                            
-                            if (text.includes('LEAGUE') || text.includes('リーグ')) {
-                                sectionTitle = text;
-                                break;
-                            }
-                            if (text.includes('杯') || text.includes('カップ') || text.includes('Cup') || text.includes('U-21') || text.includes('ACL')) {
-                                sectionTitle = text;
-                                break;
-                            }
-                            
-                            // 明らかに見出しタグ（h1〜h6）に到達した場合は、そこで探索を打ち切る
-                            if (/^H[1-6]$/i.test(prev.tagName)) {
-                                sectionTitle = text;
-                                break;
-                            }
-                            
-                            prev = prev.previousElementSibling;
-                        }
-                        if (sectionTitle) break;
-                        el = el.parentElement;
-                    }
-                    results.push({
-                        element: match,
-                        sectionTitle: sectionTitle
-                    });
-                }
-                return results.map(r => r.sectionTitle);
-            """)
 
-            
-            game_over_matches = driver.find_elements(By.CSS_SELECTOR, "div.m-schedule--game-over")
-            league_game_count = 0
-            skip_count = 0
-            
-            for i, match in enumerate(game_over_matches):
-                try:
-                    # 対応するセクションタイトルを取得
-                    section_title = league_matches_js[i] if i < len(league_matches_js) else ''
-                    
-                    # カップ戦・天皇杯などはスキップ（「LEAGUE」または「リーグ」を含まない場合）
-                    is_league_match = 'LEAGUE' in section_title or 'リーグ' in section_title
-                    # セクションタイトルが空の場合はリーグ戦と見なす（安全側に倒す）
-                    if section_title and not is_league_match:
-                        skip_count += 1
-                        print(f"      -> [スキップ] カップ戦のためスキップ: セクション={section_title[:30]}")
-                        continue
+            # 読み込みの途中で数えないよう、試合数が増えなくなるまで待つ
+            previous = -1
+            for _ in range(15):
+                count = len(driver.find_elements(By.CSS_SELECTOR, "div.m-schedule--game-over"))
+                if count == previous:
+                    break
+                previous = count
+                time.sleep(1)
 
-                    # チーム名はdata-media="pc"のspanから取得（textContentで非表示でも取得可能）
-                    home_el = match.find_element(By.CSS_SELECTOR, "div.m-schedule__team-home span[data-media='pc']")
-                    away_el = match.find_element(By.CSS_SELECTOR, "div.m-schedule__team-away span[data-media='pc']")
-                    
-                    home_team_raw = (home_el.get_attribute('textContent') or '').strip()
-                    away_team_raw = (away_el.get_attribute('textContent') or '').strip()
-                    
-                    if not home_team_raw or not away_team_raw:
-                        continue
-                    
-                    home_team_web = normalize_text(home_team_raw)
-                    away_team_web = normalize_text(away_team_raw)
-                    
-                    # スコアは2つのp.m-schedule__score要素に分かれている（ホーム/アウェイ）
-                    score_els = match.find_elements(By.CSS_SELECTOR, "p.m-schedule__score")
-                    if len(score_els) >= 2:
-                        home_score_text = score_els[0].text.strip()
-                        away_score_text = score_els[1].text.strip()
-                        
-                        if home_score_text.isdigit() and away_score_text.isdigit():
-                            home_score = float(home_score_text)
-                            away_score = float(away_score_text)
-                            results[(home_team_web, away_team_web)] = (home_score, away_score)
-                            league_game_count += 1
-                            print(f"      -> [結果取得] {league.upper()}: {home_team_raw} {int(home_score)}-{int(away_score)} {away_team_raw}")
-                except Exception:
+            league_results = {}
+            skipped = 0
+            no_link = 0
+            for row in driver.execute_script(SCRAPE_MATCHES_JS):
+                parts = row['href'].split('/')
+                category = parts[2] if len(parts) > 2 else ''
+                if not category:
+                    no_link += 1  # 大会が判別できない試合は取り込まない
                     continue
-            
-            print(f"    -> {league.upper()}: リーグ戦{league_game_count}件取得、カップ戦等{skip_count}件スキップ")
-                    
+                if category != league:
+                    skipped += 1  # 天皇杯・ルヴァンカップなど
+                    continue
+                if not (row['homeScore'].isdigit() and row['awayScore'].isdigit()):
+                    continue
+                key = (to_csv_name(row['home']), to_csv_name(row['away']))
+                league_results[key] = (float(row['homeScore']), float(row['awayScore']))
+
+            results[league.upper()] = league_results
+            print(f"    -> {league.upper()}: リーグ戦{len(league_results)}件取得、カップ戦等{skipped}件除外")
+            if no_link:
+                print(f"    ★警告★ {league.upper()}: 大会を判別できなかった試合が{no_link}件あり、取り込みませんでした。")
         return results
     except Exception as e:
         print(f"エラー: Jリーグ日程の取得に失敗しました。 ({type(e).__name__}) - {e}")
@@ -204,40 +179,62 @@ def update_schedule(driver, filepath):
         print(f"エラー: {filepath} が見つかりません。")
         return
 
-    all_results = scrape_top_page_results(driver)
+    season_label, season_start = detect_current_season(df)
+    print(f"対象シーズン: {season_label}（開幕 {season_start}）")
+
+    all_results = scrape_season_results(driver, season_start)
     if all_results is None:
         print("結果を取得できなかったため、処理を終了します。")
         return
 
-    print(f"\n{len(all_results)}件のリーグ戦試合結果を取得しました。CSVファイルと照合します...")
+    season_mask = df['年'].astype(str) == str(season_label)
+
+    # 公式サイトのチーム名がCSVに見つからない場合は、その結果が取り込めないので警告する
+    for league, league_results in all_results.items():
+        league_rows = df[season_mask & (df['リーグ'] == league)]
+        csv_names = {normalize_text(n) for n in pd.concat([league_rows['ホーム'], league_rows['アウェイ']]).dropna()}
+        web_names = {n for pair in league_results for n in pair}
+        unknown = sorted(web_names - csv_names)
+        if unknown:
+            print(f"\n★警告★ {league}: 公式サイトのチーム名がschedule.csvと一致しません: {', '.join(unknown)}")
+            print("        update_schedule_data.py の WEB_TO_CSV_NAME に対応を追加してください。")
+
+    total = sum(len(r) for r in all_results.values())
+    print(f"\n{total}件のリーグ戦試合結果を取得しました。CSVファイルと照合します...")
     updates_found = 0
-    
-    for index, row in df[df['ホーム得点'].isnull()].iterrows():
-        home_csv_full = normalize_text(row['ホーム'])
-        away_csv_full = normalize_text(row['アウェイ'])
-        
-        # サイトのチーム名（フルネーム）とCSVのチーム名（フルネーム）を直接照合
-        matched_key = None
-        for (home_web, away_web) in all_results.keys():
-            home_web_norm = normalize_text(home_web)
-            away_web_norm = normalize_text(away_web)
-            if home_web_norm == home_csv_full and away_web_norm == away_csv_full:
-                matched_key = (home_web, away_web)
-                break
-        
-        if matched_key:
-            home_score, away_score = all_results[matched_key]
+
+    # 今シーズンの、結果が未入力の試合だけを埋める（過去シーズンの未入力行には触れない）
+    for index, row in df[season_mask & df['ホーム得点'].isnull()].iterrows():
+        key = (normalize_text(row['ホーム']), normalize_text(row['アウェイ']))
+        result = all_results.get(row['リーグ'], {}).get(key)
+        if result:
+            home_score, away_score = result
             df.loc[index, 'ホーム得点'] = home_score
             df.loc[index, 'アウェイ得点'] = away_score
             updates_found += 1
             print(f"結果更新: {row['ホーム']} {int(home_score)} - {int(away_score)} {row['アウェイ']}")
-
 
     if updates_found > 0:
         df.to_csv(filepath, index=False, encoding='utf-8-sig')
         print(f"\n{updates_found}件の試合結果を更新し、{filepath} に保存しました。")
     else:
         print("\n更新対象となる試合結果はありませんでした。")
+
+    # 日付が過ぎたのに結果が無い試合（延期・中止など）を一覧にしておく
+    dates = pd.to_datetime(df['日付'], format='%y/%m/%d', errors='coerce')
+    pending = df[season_mask & df['ホーム得点'].isnull() & (dates < pd.Timestamp.today().normalize())]
+    if not pending.empty:
+        print(f"\n日付が過ぎたのに結果が無い試合が {len(pending)} 件あります（延期・中止なら問題なし）:")
+        for _, row in pending.iterrows():
+            print(f"  {row['リーグ']} {row['節']} {row['日付']} {row['ホーム']} vs {row['アウェイ']}")
+
+    # 未来の日付なのに結果が入っている試合は、カップ戦などを取り違えた可能性が高い
+    future_filled = df[season_mask & df['ホーム得点'].notna() & (dates > pd.Timestamp.today().normalize())]
+    if not future_filled.empty:
+        print(f"\n★警告★ 未来の日付なのに結果が入っている試合が {len(future_filled)} 件あります（前倒し開催でなければ誤り）:")
+        for _, row in future_filled.iterrows():
+            print(f"  {row['リーグ']} {row['節']} {row['日付']} {row['ホーム']} {int(row['ホーム得点'])}-{int(row['アウェイ得点'])} {row['アウェイ']}")
+
 
 def main():
     """メイン処理"""
