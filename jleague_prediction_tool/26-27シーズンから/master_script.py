@@ -1,6 +1,7 @@
 import re
 import subprocess
 import os
+from urllib.parse import quote
 
 # Jリーグのフォルダパス
 GIT_REPO_PATH_JLEAGUE = r'C:\Users\mura\Desktop\その他\webサイト\jleague-big-club'
@@ -14,6 +15,25 @@ def run_command(command, description, working_dir=None):
     except Exception as e:
         print(f"エラー: {e}")
         return False
+
+X_POST_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'x_post')
+
+
+def open_post_writing_session(leagues):
+    """デスクトップアプリのClaudeに、X投稿文づくりを依頼する新しいセッションを開く。
+
+    依頼文は入力欄に入るだけで、送信はされない（Enterを押すと始まる）。
+    """
+    guide = os.path.join(X_POST_DIR, '投稿文の作り方.md')
+    prompt = (f"X投稿文を作ってください（{' / '.join(leagues)}）。\n"
+              f"手順は {guide} に書いてあります。")
+    try:
+        os.startfile(f"claude://code/new?q={quote(prompt)}")
+        print("→ Claudeのアプリに投稿文づくりの依頼を開きました。アプリでEnterを押してください。")
+    except Exception as e:
+        print(f"警告: Claudeのアプリを開けませんでした。 - {e}")
+        print(f"  手動で依頼する場合: 「{guide} の手順でX投稿文を作って」")
+
 
 def ask_prediction_leagues():
     """シーズン予測を更新するリーグを聞く。何も入れずにEnterなら全リーグ。
@@ -49,6 +69,10 @@ def main():
     run_command(["python", "predict_match_v1_1.py"], "予測生成")
     run_command(["python", "create_prediction.py", *prediction_leagues], f"シーズン予測（{' / '.join(prediction_leagues)}）")
     run_command(["python", "update_script.py"], "日付更新")
+
+    # X投稿文の材料を作り、Claudeのアプリで投稿文づくりを始められるようにする
+    if run_command(["python", "make_post_materials.py", *prediction_leagues], "X投稿文の材料づくり", working_dir=X_POST_DIR):
+        open_post_writing_session(prediction_leagues)
 
     # Gitアップロード
     from datetime import datetime

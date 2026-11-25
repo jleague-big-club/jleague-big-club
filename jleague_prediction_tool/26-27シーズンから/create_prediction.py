@@ -22,6 +22,20 @@ SIMULATIONS = 10000
 SIM_SEED = 20260101
 # J1のACL圏（ACL Elite）の枠数
 ACL_SLOTS = 5
+
+# --- 解説用の記録（X投稿文の材料。data/prediction_details.json）。サイトの表示には使わない ---
+# ライン予想: その順位のチームが最終的に何点か（例: J3の2位の勝点 = 自動昇格ライン）
+DETAIL_LINES = {
+    'J1': {'ACL圏（5位）': 5, '残留（17位）': 17},
+    'J2': {'自動昇格（2位）': 2, '昇格PO圏（6位）': 6, '残留（17位）': 17},
+    'J3': {'自動昇格（2位）': 2, '昇格PO圏（6位）': 6, '自動降格回避（19位）': 19},
+}
+# 次節の試合の重みを出す確率の種類
+DETAIL_CATEGORIES = {
+    'J1': ['champion', 'acl', 'relegation'],
+    'J2': ['promotion', 'relegation'],
+    'J3': ['promotion', 'relegation'],
+}
 HISTORY_FACTOR = 0
 HOME_ADVANTAGE = 65
 RANDOMNESS_FACTOR = 70
@@ -60,6 +74,30 @@ def parse_match_dates(df):
     return dates
 
 
+# チーム名の表記ゆれ修正と略称表。投稿文の材料づくり（x_post/make_post_materials.py）からも使う
+# ▼▼▼【修正箇所1】team_name_mappingを修正。半角→全角ではなく、表記揺れの修正のみにする▼▼▼
+TEAM_NAME_MAPPING = {
+    # 'Y.S.C.C.横浜' と 'Y．S．C．C．横浜' のような表記揺れを統一
+    'Y.S.C.C.横浜': 'Y.S.C.C.横浜',
+    'Y．S．C．C．横浜': 'Y.S.C.C.横浜',
+    # '高知' を正式名称に統一
+    '高知': '高知ユナイテッドSC',
+    # 明らかな間違いを修正
+    '柏柏': '柏レイソル',
+    '滋賀': 'レイラック滋賀FC',
+    'レイラック滋賀': 'レイラック滋賀FC',
+}
+# ▲▲▲【修正完了1】▲▲▲
+
+# ▼▼▼【修正箇所2】abbreviation_mapのキー(チーム正式名称)をすべて半角に修正▼▼▼
+ABBREVIATION_MAP = {
+    'ヴィッセル神戸': '神戸', '鹿島アントラーズ': '鹿島', 'サンフレッチェ広島': '広島', 'ガンバ大阪': 'G大阪', 'FC町田ゼルビア': '町田', 'セレッソ大阪': 'C大阪', '浦和レッズ': '浦和', '柏レイソル': '柏', '名古屋グランパス': '名古屋', '東京ヴェルディ': '東京V', '川崎フロンターレ': '川崎F', '横浜F・マリノス': '横浜FM', 'アビスパ福岡': '福岡', '京都サンガF.C.': '京都', 'FC東京': 'FC東京', '湘南ベルマーレ': '湘南', 'アルビレックス新潟': '新潟', 'ジュビロ磐田': '磐田', 'サガン鳥栖': '鳥栖', '北海道コンサドーレ札幌': '札幌',
+    '清水エスパルス': '清水', '横浜FC': '横浜FC', 'V・ファーレン長崎': '長崎', 'ファジアーノ岡山': '岡山', 'ベガルタ仙台': '仙台', 'ジェフユナイテッド千葉': '千葉', 'いわきFC': 'いわき', '徳島ヴォルティス': '徳島', 'ヴァンフォーレ甲府': '甲府', 'モンテディオ山形': '山形', '愛媛FC': '愛媛', 'ブラウブリッツ秋田': '秋田', '大分トリニータ': '大分', 'レノファ山口FC': '山口', '鹿児島ユナイテッドFC': '鹿児島', '水戸ホーリーホック': '水戸', 'ロアッソ熊本': '熊本', '藤枝MYFC': '藤枝', '栃木SC': '栃木SC', 'ザスパ群馬': '群馬',
+    'RB大宮アルディージャ': '大宮', 'FC今治': '今治', 'カターレ富山': '富山', 'FC大阪': 'FC大阪', 'ツエーゲン金沢': '金沢', '松本山雅FC': '松本', 'ヴァンラーレ八戸': '八戸', 'ギラヴァンツ北九州': '北九州', 'テゲバジャーロ宮崎': '宮崎', '福島ユナイテッドFC': '福島', 'SC相模原': '相模原', '奈良クラブ': '奈良', 'ガイナーレ鳥取': '鳥取', 'FC琉球': '琉球', 'AC長野パルセイロ': '長野', 'カマタマーレ讃岐': '讃岐', 'アスルクラロ沼津': '沼津', 'FC岐阜': '岐阜', 'Y.S.C.C.横浜': 'YS横浜', '栃木シティ': '栃木C', '高知ユナイテッドSC': '高知', 'レイラック滋賀FC': '滋賀'
+}
+# ▲▲▲【修正完了2】▲▲▲
+
+
 def detect_current_season(schedule_df):
     """今のシーズンラベルを schedule.csv から判定する。
 
@@ -74,6 +112,62 @@ def detect_current_season(schedule_df):
     today = pd.Timestamp.today().normalize()
     started = starts[starts <= today]
     return str(started.idxmax() if not started.empty else starts.idxmin())
+
+
+def write_details(target_leagues, key_matches, match_tally, position_tally, line_tally):
+    """解説用の記録を data/prediction_details.json に書く。更新しないリーグは前回のまま残す。"""
+    path = os.path.join(DATA_DIR, 'prediction_details.json')
+    details = {}
+    if os.path.exists(path):
+        try:
+            with open(path, 'r', encoding='utf-8') as f:
+                details = json.load(f)
+        except Exception:
+            details = {}
+
+    def percentile(counter, q):
+        total, running = sum(counter.values()), 0
+        for value in sorted(counter):
+            running += counter[value]
+            if running >= total * q:
+                return value
+        return None
+
+    for league in target_leagues:
+        if league not in position_tally:
+            continue
+        positions = {}
+        for team, counts in position_tally[league].items():
+            total = sum(counts.values())
+            if not total:
+                continue
+            positions[team] = {
+                'most_likely': max(counts, key=counts.get),
+                'range_80': [percentile(counts, 0.1), percentile(counts, 0.9)],
+                'distribution': {str(p): round(c / total, 4) for p, c in sorted(counts.items())},
+            }
+        lines = {label: {'median': percentile(c, 0.5), 'range_80': [percentile(c, 0.1), percentile(c, 0.9)]}
+                 for label, c in line_tally[league].items() if c}
+        matches = []
+        for idx, m in key_matches.items():
+            if m['league'] != league:
+                continue
+            results = {}
+            for r, bucket in match_tally[idx].items():
+                n = bucket['n']
+                results[r] = {
+                    'share': round(n / SIMULATIONS, 4),
+                    'teams': {team: {cat: round(bucket['teams'][team].get(cat, 0) / n, 4) for cat in DETAIL_CATEGORIES[league]}
+                              for team in (m['home'], m['away'])} if n else {},
+                }
+            matches.append({'section': m['section'], 'date': m['date'], 'home': m['home'], 'away': m['away'], 'results': results})
+        details[league] = {'positions': positions, 'lines': lines, 'next_matches': matches}
+    details['updated_at'] = datetime.now().astimezone().isoformat(timespec='seconds')
+
+    with open(path + '.tmp', 'w', encoding='utf-8') as f:
+        json.dump(details, f, ensure_ascii=False, indent=2)
+    os.replace(path + '.tmp', path)
+    print(f"解説用の記録を保存しました: {path}")
 
 
 # --- メイン処理 ---
@@ -99,27 +193,8 @@ def main(target_leagues=None):
         print(f"エラー: データファイルが見つかりません。パスを確認してください。 - {e}")
         return
 
-    # ▼▼▼【修正箇所1】team_name_mappingを修正。半角→全角ではなく、表記揺れの修正のみにする▼▼▼
-    team_name_mapping = {
-        # 'Y.S.C.C.横浜' と 'Y．S．C．C．横浜' のような表記揺れを統一
-        'Y.S.C.C.横浜': 'Y.S.C.C.横浜',
-        'Y．S．C．C．横浜': 'Y.S.C.C.横浜',
-        # '高知' を正式名称に統一
-        '高知': '高知ユナイテッドSC',
-        # 明らかな間違いを修正
-        '柏柏': '柏レイソル',
-        '滋賀': 'レイラック滋賀FC',
-        'レイラック滋賀': 'レイラック滋賀FC',
-    }
-    # ▲▲▲【修正完了1】▲▲▲
-
-    # ▼▼▼【修正箇所2】abbreviation_mapのキー(チーム正式名称)をすべて半角に修正▼▼▼
-    abbreviation_map = {
-        'ヴィッセル神戸': '神戸', '鹿島アントラーズ': '鹿島', 'サンフレッチェ広島': '広島', 'ガンバ大阪': 'G大阪', 'FC町田ゼルビア': '町田', 'セレッソ大阪': 'C大阪', '浦和レッズ': '浦和', '柏レイソル': '柏', '名古屋グランパス': '名古屋', '東京ヴェルディ': '東京V', '川崎フロンターレ': '川崎F', '横浜F・マリノス': '横浜FM', 'アビスパ福岡': '福岡', '京都サンガF.C.': '京都', 'FC東京': 'FC東京', '湘南ベルマーレ': '湘南', 'アルビレックス新潟': '新潟', 'ジュビロ磐田': '磐田', 'サガン鳥栖': '鳥栖', '北海道コンサドーレ札幌': '札幌',
-        '清水エスパルス': '清水', '横浜FC': '横浜FC', 'V・ファーレン長崎': '長崎', 'ファジアーノ岡山': '岡山', 'ベガルタ仙台': '仙台', 'ジェフユナイテッド千葉': '千葉', 'いわきFC': 'いわき', '徳島ヴォルティス': '徳島', 'ヴァンフォーレ甲府': '甲府', 'モンテディオ山形': '山形', '愛媛FC': '愛媛', 'ブラウブリッツ秋田': '秋田', '大分トリニータ': '大分', 'レノファ山口FC': '山口', '鹿児島ユナイテッドFC': '鹿児島', '水戸ホーリーホック': '水戸', 'ロアッソ熊本': '熊本', '藤枝MYFC': '藤枝', '栃木SC': '栃木SC', 'ザスパ群馬': '群馬',
-        'RB大宮アルディージャ': '大宮', 'FC今治': '今治', 'カターレ富山': '富山', 'FC大阪': 'FC大阪', 'ツエーゲン金沢': '金沢', '松本山雅FC': '松本', 'ヴァンラーレ八戸': '八戸', 'ギラヴァンツ北九州': '北九州', 'テゲバジャーロ宮崎': '宮崎', '福島ユナイテッドFC': '福島', 'SC相模原': '相模原', '奈良クラブ': '奈良', 'ガイナーレ鳥取': '鳥取', 'FC琉球': '琉球', 'AC長野パルセイロ': '長野', 'カマタマーレ讃岐': '讃岐', 'アスルクラロ沼津': '沼津', 'FC岐阜': '岐阜', 'Y.S.C.C.横浜': 'YS横浜', '栃木シティ': '栃木C', '高知ユナイテッドSC': '高知', 'レイラック滋賀FC': '滋賀'
-    }
-    # ▲▲▲【修正完了2】▲▲▲
+    team_name_mapping = TEAM_NAME_MAPPING
+    abbreviation_map = ABBREVIATION_MAP
 
     all_dfs = [schedule_df, yearrank_df, all_teams_df, j1_df, j2_df, j3_df]
     for df in all_dfs:
@@ -188,6 +263,24 @@ def main(target_leagues=None):
             print(f"警告: {league}のデータ処理中にエラーが発生しました。スキップします。 - {e}")
             continue
 
+    # --- 解説用の記録の準備（X投稿文の材料に使う。乱数は使わないので確率には影響しない） ---
+    # 次節の各試合が「勝ち/分け/負け」だったとき、両チームの確率がどうなるかを数える
+    today = pd.Timestamp.today().normalize()
+    future_dates = parse_match_dates(future_games)
+    key_matches = {}
+    for league in league_teams:
+        upcoming = future_games[(future_games['リーグ'] == league) & (future_dates >= today)]
+        if upcoming.empty:
+            continue
+        next_section = upcoming.loc[future_dates[upcoming.index].idxmin(), '節']
+        for idx, g in upcoming[upcoming['節'] == next_section].iterrows():
+            key_matches[idx] = {'league': league, 'section': next_section, 'date': f"{future_dates[idx]:%m/%d}",
+                                'home': g['ホーム'], 'away': g['アウェイ']}
+    match_tally = {idx: {r: {'n': 0, 'teams': {m['home']: {}, m['away']: {}}} for r in 'HDA'}
+                   for idx, m in key_matches.items()}
+    position_tally = {lg: {tm: {} for tm in teams} for lg, teams in league_teams.items()}
+    line_tally = {lg: {label: {} for label in DETAIL_LINES.get(lg, {})} for lg in league_teams}
+
     random.seed(SIM_SEED)
     print(f"{SIMULATIONS}回のシミュレーションを開始します...")
     for i in range(SIMULATIONS):
@@ -207,8 +300,9 @@ def main(target_leagues=None):
                     sim_ratings[team] = (original_rating * (1 - REGRESSION_WEIGHT)) + (avg_rating * REGRESSION_WEIGHT)
 
         current_sim_standings = {lg: {tm: d.copy() for tm, d in data.items()} for lg, data in sim_standings.items()}
+        key_results = {}
 
-        for _, game in future_games.iterrows():
+        for game_idx, game in future_games.iterrows():
             league, home_team, away_team = game['リーグ'], game['ホーム'], game['アウェイ']
             if league not in current_sim_standings or home_team not in current_sim_standings[league] or away_team not in current_sim_standings[league]:
                 continue
@@ -238,6 +332,8 @@ def main(target_leagues=None):
             else: 
                 current_sim_standings[league][away_team]['勝点'] += 3
                 score_h, score_a = 0, 1
+            if game_idx in key_matches:
+                key_results[game_idx] = 'H' if score_h > score_a else ('A' if score_a > score_h else 'D')
 
             new_home_rating, new_away_rating = calculate_elo(home_rating, away_rating, score_h, score_a)
             sim_ratings[home_team] = new_home_rating
@@ -272,6 +368,33 @@ def main(target_leagues=None):
                     if team_name in promotion_teams: final_rankings_tally[league][team_name]['promotion'] += 1
                     elif team_name in relegation_teams: final_rankings_tally[league][team_name]['relegation'] += 1
                     else: final_rankings_tally[league][team_name]['safe'] += 1
+
+            # --- 解説用の記録 ---
+            # 最終順位の分布
+            for pos, (team_name, _) in enumerate(sorted_teams, start=1):
+                if team_name in position_tally.get(league, {}):
+                    position_tally[league][team_name][pos] = position_tally[league][team_name].get(pos, 0) + 1
+            # 昇格・残留ラインの勝点（その順位のチームの勝点）
+            for label, pos in DETAIL_LINES.get(league, {}).items():
+                if pos <= len(sorted_teams):
+                    pts = sorted_teams[pos - 1][1]['勝点']
+                    line_tally[league][label][pts] = line_tally[league][label].get(pts, 0) + 1
+            # 次節の各試合の結果ごとの確率
+            outcome_sets = {
+                'champion': {sorted_teams[0][0]} if league == 'J1' else set(),
+                'acl': {t[0] for t in sorted_teams[:ACL_SLOTS]} if league == 'J1' else set(),
+                'promotion': promotion_teams,
+                'relegation': relegation_teams,
+            }
+            for idx, m in key_matches.items():
+                if m['league'] != league or idx not in key_results:
+                    continue
+                bucket = match_tally[idx][key_results[idx]]
+                bucket['n'] += 1
+                for team in (m['home'], m['away']):
+                    for cat in DETAIL_CATEGORIES[league]:
+                        if team in outcome_sets[cat]:
+                            bucket['teams'][team][cat] = bucket['teams'][team].get(cat, 0) + 1
 
     # --- 前回データの読み込み & アーカイブ処理 ---
     output_path = os.path.join(DATA_DIR, 'prediction_probabilities.json')
@@ -357,6 +480,8 @@ def main(target_leagues=None):
         if os.path.exists(temp_output_path):
             os.remove(temp_output_path)
             
+    write_details(target_leagues, key_matches, match_tally, position_tally, line_tally)
+
     # 以前の「1節前の基準」方式で使っていたファイル。今は使わないので消す
     old_baseline_path = os.path.join(DATA_DIR, 'prediction_baseline.json')
     if os.path.exists(old_baseline_path):

@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     // === グローバル変数 ===
-    let clubData = [], attendanceData = [], predictionData = {}, updateDates = {}, playerData = [], postTexts = {}; // postTextsを追加
+    let clubData = [], attendanceData = [], predictionData = {}, updateDates = {}, playerData = [], postTexts = {}, analysisData = {}; // postTextsを追加
     let attendanceChart = null, customChart = null;
     const leagueColors = { J1: '#e60012', J2: '#00a0e9', J3: '#67b52d', other: '#888' };
 
@@ -61,6 +61,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (predRes) predictionData = await predRes.json();
         if (datesRes) updateDates = await datesRes.json();
         if (postRes) postTexts = await postRes.json(); // ★★★【修正】postTextsに格納 ★★★
+        // 予想を基にした解説。まだ作られていなくても、ほかの表示は止めない
+        const analysisRes = await fetch("data/prediction_analysis.json").catch(() => null);
+        if (analysisRes && analysisRes.ok) analysisData = await analysisRes.json().catch(() => ({}));
     }
     
     // === パネル切り替え ===
@@ -106,6 +109,14 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('prediction-cards-container')?.addEventListener('click', (e) => {
             const button = e.target.closest('.copy-btn[data-capture-id]');
             if (button) generateImage(button.dataset.captureId);
+            const textButton = e.target.closest('.copy-text-btn');
+            if (textButton) {
+                const text = textButton.closest('.post-text-box').querySelector('textarea').value;
+                navigator.clipboard.writeText(text).then(() => {
+                    textButton.textContent = 'コピーしました';
+                    setTimeout(() => { textButton.textContent = '投稿文をコピー'; }, 1500);
+                });
+            }
         });
 
         // ★★★【修正】SNSパネル用のイベントリスナーを追加 ★★★
@@ -310,6 +321,15 @@ function renderPredictionCards(league) {
         if (note) note.textContent = `データ更新日時: ${d.toLocaleString('ja-JP')}`;
     }
 
+    // Claudeが作ったX投稿文（data/latest_post_text.json）を、対応するカードの下に出す
+    const postHtml = (lg, catKey) => {
+        const text = (postTexts[lg] && typeof postTexts[lg] === 'object') ? postTexts[lg][catKey] : null;
+        if (!text) return '';
+        const escaped = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return `<div class="post-text-box"><textarea readonly rows="${text.split('\n').length + 1}">${escaped}</textarea>
+            <div class="actions"><button class="copy-btn copy-text-btn">投稿文をコピー</button></div></div>`;
+    };
+
     container.innerHTML = order.map(catKey => {
         const cat = cats[catKey];
         const sorted = teams.sort((a, b) => b[cat.key].prob - a[cat.key].prob).slice(0, 20);
@@ -328,7 +348,8 @@ function renderPredictionCards(league) {
             // 変化なしの行は空の枠だけ置いて、%の位置が他の行とずれないようにする
             let diffHtml = '';
             if (typeof probData.diff === 'number') {
-                if (probData.diff === 0) {
+                // 0.05pt未満の動きは「-0.0pt」と出てしまうので、変化なしと同じく空欄にする
+                if (Math.abs(probData.diff * 100) < 0.05) {
                     diffHtml = '<span class="prob-diff"></span>';
                 } else {
                     const pt = (probData.diff * 100).toFixed(1);
@@ -355,8 +376,40 @@ function renderPredictionCards(league) {
                 </div>
             </div>
             <div class="actions" style="margin-top: -5px;"><button class="copy-btn" data-capture-id="pred-card-${catKey}">コピー</button></div>
+            ${postHtml(league, catKey)}
         </div>`;
-    }).join('');
+    }).join('') + analysisHtml(league);
+}
+
+// 予想を基にした解説（data/prediction_analysis.json。batの「X投稿文の材料づくり」で作られる）
+function analysisHtml(league) {
+    const a = analysisData[league];
+    if (!a) return '';
+    const pct = x => (x === null || x === undefined) ? '-' : `${(x * 100).toFixed(1)}%`;
+    const section = (title, body) => `<div class="analysis-section"><h3>${title}</h3>${body}</div>`;
+    const table = (head, rows) => rows.length
+        ? `<table class="analysis-table"><thead><tr>${head.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table>`
+        : '<p class="placeholder">該当なし</p>';
+
+    const matchRows = [];
+    a.next_matches.forEach(m => m.rows.forEach((r, i) => matchRows.push([
+        i === 0 ? `${m.section} ${m.date}<br>${m.home}(${m.home_rank}位) vs ${m.away}(${m.away_rank}位)` : '',
+        `${r.team} ${r.label}`, pct(r.now), pct(r.win), pct(r.draw), pct(r.lose)])));
+    const spread = a.schedule.length ? a.schedule[0].avg - a.schedule[a.schedule.length - 1].avg : 0;
+
+    return `<div class="analysis-wrapper">
+        <h2 class="analysis-title">予想を基にした解説（${league}）</h2>
+        <p class="update-date-note">すべてシミュレーションの予想値です</p>
+        ${section('① 次節の試合の重み（結果ごとの確率）', table(['試合', 'クラブ・確率', '今', '勝ち', '分け', '負け'], matchRows))}
+        ${section('② ライン予想（その順位のチームの最終勝点）', table(['ライン', '予想', '8割の範囲'],
+            a.lines.map(l => [l.label, `勝点${l.median}前後`, `${l.low}〜${l.high}`])))}
+        ${section(`③ 残り日程の厳しさ（対戦相手のEloの平均。一番厳しい〜楽の差: ${spread}${spread < 20 ? '・ほぼ差なし' : ''}）`, table(['厳しさ', 'クラブ', '順位', '相手の平均', '残り試合'],
+            a.schedule.map(s => [s.hardness_rank, s.team, `${s.table_rank}位`, s.avg, s.games])))}
+        ${section('④ 実力（Elo）と順位のギャップ（差4以上）', table(['クラブ', '実際の順位', '実力', ''],
+            a.gaps.map(g => [g.team, `${g.table_rank}位`, `${g.elo_rank}番手`, g.note])))}
+        ${section('⑤ 最終順位の幅', table(['クラブ', '今の順位', '一番ありそう', '8割の範囲'],
+            a.positions.map(p => [p.team, `${p.table_rank}位`, `${p.most_likely}位`, `${p.low}〜${p.high}位`])))}
+    </div>`;
 }
 
     // ★★★【新規】SNS投稿案パネルのHTMLとロジック ★★★

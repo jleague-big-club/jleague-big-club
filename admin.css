@@ -342,3 +342,38 @@ body {
 }
 .prob-diff.up { color: var(--green-color); }
 .prob-diff.down { color: var(--red-color); }
+
+
+/* Claudeが作ったX投稿文 */
+.post-text-box { margin: -10px 0 25px; }
+.post-text-box textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    font: inherit;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text-color);
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    resize: vertical;
+}
+.post-text-box .actions { margin: 8px 0 0; }
+
+/* 予想を基にした解説 */
+.analysis-wrapper { margin-top: 10px; grid-column: 1 / -1; }  /* カードの2列の枠をまたいで横幅いっぱいに */
+.analysis-title { text-align: center; font-size: 1.15rem; margin: 10px 0 0; }
+.analysis-section {
+    background: var(--panel-bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    overflow-x: auto;
+}
+.analysis-section h3 { font-size: 1rem; margin: 0 0 10px; }
+.analysis-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+.analysis-table th, .analysis-table td { padding: 6px 8px; border-bottom: 1px solid var(--border-color); text-align: left; vertical-align: top; }
+.analysis-table th { color: var(--subtext-color); font-weight: 600; }
+.analysis-table tr:last-child td { border-bottom: none; }

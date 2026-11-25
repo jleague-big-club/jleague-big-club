@@ -2,3 +2,6 @@ node_modules/
 *.log
 .DS_Store
 __pycache__/
+
+# X投稿文の材料（batで毎回作り直す）
+jleague_prediction_tool/26-27シーズンから/x_post/今回の材料.md
