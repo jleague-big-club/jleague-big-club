@@ -1,0 +1,1370 @@
+{
+  "J1": {
+    "next_matches": [
+      {
+        "section": "第16節",
+        "date": "04/14",
+        "home": "京都",
+        "home_rank": 11,
+        "away": "神戸",
+        "away_rank": 6,
+        "swing": 0.24789999999999995,
+        "rows": [
+          {
+            "team": "京都",
+            "label": "ACL圏内確率",
+            "now": 0.0581,
+            "win": 0.1006,
+            "draw": 0.048,
+            "lose": 0.0238
+          },
+          {
+            "team": "京都",
+            "label": "降格確率",
+            "now": 0.0915,
+            "win": 0.0448,
+            "draw": 0.0928,
+            "lose": 0.1397
+          },
+          {
+            "team": "神戸",
+            "label": "優勝確率",
+            "now": 0.0517,
+            "win": 0.0802,
+            "draw": 0.0483,
+            "lose": 0.0283
+          },
+          {
+            "team": "神戸",
+            "label": "ACL圏内確率",
+            "now": 0.4838,
+            "win": 0.6192,
+            "draw": 0.469,
+            "lose": 0.3713
+          }
+        ]
+      },
+      {
+        "section": "第16節",
+        "date": "11/25",
+        "home": "長崎",
+        "home_rank": 18,
+        "away": "川崎F",
+        "away_rank": 5,
+        "swing": 0.22640000000000005,
+        "rows": [
+          {
+            "team": "長崎",
+            "label": "降格確率",
+            "now": 0.315,
+            "win": 0.22,
+            "draw": 0.3273,
+            "lose": 0.4038
+          },
+          {
+            "team": "川崎F",
+            "label": "優勝確率",
+            "now": 0.0436,
+            "win": 0.0644,
+            "draw": 0.0406,
+            "lose": 0.0271
+          },
+          {
+            "team": "川崎F",
+            "label": "ACL圏内確率",
+            "now": 0.4363,
+            "win": 0.5643,
+            "draw": 0.415,
+            "lose": 0.3379
+          }
+        ]
+      },
+      {
+        "section": "第16節",
+        "date": "11/25",
+        "home": "FC東京",
+        "home_rank": 1,
+        "away": "広島",
+        "away_rank": 2,
+        "swing": 0.22160000000000002,
+        "rows": [
+          {
+            "team": "FC東京",
+            "label": "優勝確率",
+            "now": 0.4155,
+            "win": 0.5208,
+            "draw": 0.3756,
+            "lose": 0.2992
+          },
+          {
+            "team": "FC東京",
+            "label": "ACL圏内確率",
+            "now": 0.904,
+            "win": 0.9463,
+            "draw": 0.8921,
+            "lose": 0.8525
+          },
+          {
+            "team": "広島",
+            "label": "優勝確率",
+            "now": 0.1569,
+            "win": 0.2541,
+            "draw": 0.1679,
+            "lose": 0.086
+          },
+          {
+            "team": "広島",
+            "label": "ACL圏内確率",
+            "now": 0.7106,
+            "win": 0.8097,
+            "draw": 0.7251,
+            "lose": 0.6358
+          }
+        ]
+      },
+      {
+        "section": "第16節",
+        "date": "11/25",
+        "home": "水戸",
+        "home_rank": 16,
+        "away": "東京V",
+        "away_rank": 15,
+        "swing": 0.22110000000000002,
+        "rows": [
+          {
+            "team": "水戸",
+            "label": "降格確率",
+            "now": 0.3259,
+            "win": 0.2218,
+            "draw": 0.3359,
+            "lose": 0.4429
+          },
+          {
+            "team": "東京V",
+            "label": "降格確率",
+            "now": 0.2804,
+            "win": 0.1796,
+            "draw": 0.282,
+            "lose": 0.3608
+          }
+        ]
+      },
+      {
+        "section": "第16節",
+        "date": "12/16",
+        "home": "鹿島",
+        "home_rank": 8,
+        "away": "町田",
+        "away_rank": 4,
+        "swing": 0.21619999999999995,
+        "rows": [
+          {
+            "team": "鹿島",
+            "label": "ACL圏内確率",
+            "now": 0.2403,
+            "win": 0.3408,
+            "draw": 0.2147,
+            "lose": 0.1451
+          },
+          {
+            "team": "町田",
+            "label": "優勝確率",
+            "now": 0.1158,
+            "win": 0.1657,
+            "draw": 0.1048,
+            "lose": 0.0856
+          },
+          {
+            "team": "町田",
+            "label": "ACL圏内確率",
+            "now": 0.6596,
+            "win": 0.7814,
+            "draw": 0.6553,
+            "lose": 0.5652
+          }
+        ]
+      },
+      {
+        "section": "第16節",
+        "date": "12/16",
+        "home": "G大阪",
+        "home_rank": 19,
+        "away": "柏",
+        "away_rank": 3,
+        "swing": 0.19840000000000002,
+        "rows": [
+          {
+            "team": "G大阪",
+            "label": "降格確率",
+            "now": 0.3485,
+            "win": 0.2434,
+            "draw": 0.3581,
+            "lose": 0.4418
+          },
+          {
+            "team": "柏",
+            "label": "優勝確率",
+            "now": 0.1546,
+            "win": 0.2258,
+            "draw": 0.1369,
+            "lose": 0.1002
+          },
+          {
+            "team": "柏",
+            "label": "ACL圏内確率",
+            "now": 0.7118,
+            "win": 0.8211,
+            "draw": 0.6854,
+            "lose": 0.6275
+          }
+        ]
+      }
+    ],
+    "lines": [
+      {
+        "label": "ACL圏（5位）",
+        "median": 65,
+        "low": 62,
+        "high": 69
+      },
+      {
+        "label": "残留（17位）",
+        "median": 43,
+        "low": 39,
+        "high": 46
+      }
+    ],
+    "schedule": [
+      {
+        "team": "広島",
+        "table_rank": 2,
+        "avg": 1510,
+        "games": 25,
+        "hardness_rank": 1
+      },
+      {
+        "team": "福岡",
+        "table_rank": 20,
+        "avg": 1509,
+        "games": 25,
+        "hardness_rank": 2
+      },
+      {
+        "team": "岡山",
+        "table_rank": 9,
+        "avg": 1506,
+        "games": 25,
+        "hardness_rank": 3
+      },
+      {
+        "team": "鹿島",
+        "table_rank": 8,
+        "avg": 1503,
+        "games": 25,
+        "hardness_rank": 4
+      },
+      {
+        "team": "C大阪",
+        "table_rank": 13,
+        "avg": 1503,
+        "games": 25,
+        "hardness_rank": 5
+      },
+      {
+        "team": "千葉",
+        "table_rank": 14,
+        "avg": 1503,
+        "games": 25,
+        "hardness_rank": 6
+      },
+      {
+        "team": "G大阪",
+        "table_rank": 19,
+        "avg": 1503,
+        "games": 25,
+        "hardness_rank": 7
+      },
+      {
+        "team": "清水",
+        "table_rank": 17,
+        "avg": 1501,
+        "games": 25,
+        "hardness_rank": 8
+      },
+      {
+        "team": "長崎",
+        "table_rank": 18,
+        "avg": 1500,
+        "games": 25,
+        "hardness_rank": 9
+      },
+      {
+        "team": "川崎F",
+        "table_rank": 5,
+        "avg": 1499,
+        "games": 25,
+        "hardness_rank": 10
+      },
+      {
+        "team": "浦和",
+        "table_rank": 10,
+        "avg": 1499,
+        "games": 25,
+        "hardness_rank": 11
+      },
+      {
+        "team": "FC東京",
+        "table_rank": 1,
+        "avg": 1498,
+        "games": 25,
+        "hardness_rank": 12
+      },
+      {
+        "team": "京都",
+        "table_rank": 11,
+        "avg": 1498,
+        "games": 25,
+        "hardness_rank": 13
+      },
+      {
+        "team": "水戸",
+        "table_rank": 16,
+        "avg": 1498,
+        "games": 25,
+        "hardness_rank": 14
+      },
+      {
+        "team": "横浜FM",
+        "table_rank": 7,
+        "avg": 1497,
+        "games": 25,
+        "hardness_rank": 15
+      },
+      {
+        "team": "東京V",
+        "table_rank": 15,
+        "avg": 1497,
+        "games": 25,
+        "hardness_rank": 16
+      },
+      {
+        "team": "町田",
+        "table_rank": 4,
+        "avg": 1496,
+        "games": 25,
+        "hardness_rank": 17
+      },
+      {
+        "team": "神戸",
+        "table_rank": 6,
+        "avg": 1495,
+        "games": 25,
+        "hardness_rank": 18
+      },
+      {
+        "team": "柏",
+        "table_rank": 3,
+        "avg": 1494,
+        "games": 25,
+        "hardness_rank": 19
+      },
+      {
+        "team": "名古屋",
+        "table_rank": 12,
+        "avg": 1492,
+        "games": 25,
+        "hardness_rank": 20
+      }
+    ],
+    "gaps": [
+      {
+        "team": "G大阪",
+        "table_rank": 19,
+        "elo_rank": 14,
+        "note": "実力の割に順位が低い（巻き返し候補）"
+      },
+      {
+        "team": "千葉",
+        "table_rank": 14,
+        "elo_rank": 18,
+        "note": "実力以上に勝点を取れている"
+      }
+    ],
+    "positions": [
+      {
+        "team": "FC東京",
+        "table_rank": 1,
+        "most_likely": 1,
+        "low": 1,
+        "high": 5
+      },
+      {
+        "team": "広島",
+        "table_rank": 2,
+        "most_likely": 2,
+        "low": 1,
+        "high": 8
+      },
+      {
+        "team": "柏",
+        "table_rank": 3,
+        "most_likely": 2,
+        "low": 1,
+        "high": 8
+      },
+      {
+        "team": "町田",
+        "table_rank": 4,
+        "most_likely": 2,
+        "low": 1,
+        "high": 9
+      },
+      {
+        "team": "川崎F",
+        "table_rank": 5,
+        "most_likely": 5,
+        "low": 2,
+        "high": 12
+      },
+      {
+        "team": "神戸",
+        "table_rank": 6,
+        "most_likely": 4,
+        "low": 2,
+        "high": 11
+      },
+      {
+        "team": "横浜FM",
+        "table_rank": 7,
+        "most_likely": 6,
+        "low": 3,
+        "high": 12
+      },
+      {
+        "team": "鹿島",
+        "table_rank": 8,
+        "most_likely": 8,
+        "low": 4,
+        "high": 14
+      },
+      {
+        "team": "岡山",
+        "table_rank": 9,
+        "most_likely": 11,
+        "low": 5,
+        "high": 16
+      },
+      {
+        "team": "浦和",
+        "table_rank": 10,
+        "most_likely": 10,
+        "low": 4,
+        "high": 15
+      },
+      {
+        "team": "京都",
+        "table_rank": 11,
+        "most_likely": 13,
+        "low": 7,
+        "high": 17
+      },
+      {
+        "team": "名古屋",
+        "table_rank": 12,
+        "most_likely": 11,
+        "low": 7,
+        "high": 18
+      },
+      {
+        "team": "C大阪",
+        "table_rank": 13,
+        "most_likely": 13,
+        "low": 8,
+        "high": 18
+      },
+      {
+        "team": "千葉",
+        "table_rank": 14,
+        "most_likely": 16,
+        "low": 9,
+        "high": 19
+      },
+      {
+        "team": "東京V",
+        "table_rank": 15,
+        "most_likely": 18,
+        "low": 9,
+        "high": 19
+      },
+      {
+        "team": "水戸",
+        "table_rank": 16,
+        "most_likely": 19,
+        "low": 10,
+        "high": 19
+      },
+      {
+        "team": "清水",
+        "table_rank": 17,
+        "most_likely": 18,
+        "low": 9,
+        "high": 19
+      },
+      {
+        "team": "長崎",
+        "table_rank": 18,
+        "most_likely": 18,
+        "low": 10,
+        "high": 19
+      },
+      {
+        "team": "G大阪",
+        "table_rank": 19,
+        "most_likely": 19,
+        "low": 10,
+        "high": 19
+      },
+      {
+        "team": "福岡",
+        "table_rank": 20,
+        "most_likely": 20,
+        "low": 15,
+        "high": 20
+      }
+    ]
+  },
+  "J2": {
+    "next_matches": [
+      {
+        "section": "第19節",
+        "date": "11/25",
+        "home": "鳥栖",
+        "home_rank": 10,
+        "away": "大分",
+        "away_rank": 13,
+        "swing": 0.0695,
+        "rows": [
+          {
+            "team": "鳥栖",
+            "label": "昇格確率",
+            "now": 0.0342,
+            "win": 0.054,
+            "draw": 0.0249,
+            "lose": 0.0166
+          },
+          {
+            "team": "大分",
+            "label": "降格確率",
+            "now": 0.066,
+            "win": 0.0281,
+            "draw": 0.0592,
+            "lose": 0.0976
+          }
+        ]
+      }
+    ],
+    "lines": [
+      {
+        "label": "自動昇格（2位）",
+        "median": 67,
+        "low": 64,
+        "high": 71
+      },
+      {
+        "label": "昇格PO圏（6位）",
+        "median": 60,
+        "low": 57,
+        "high": 62
+      },
+      {
+        "label": "残留（17位）",
+        "median": 41,
+        "low": 37,
+        "high": 44
+      }
+    ],
+    "schedule": [
+      {
+        "team": "甲府",
+        "table_rank": 20,
+        "avg": 1505,
+        "games": 19,
+        "hardness_rank": 1
+      },
+      {
+        "team": "藤枝",
+        "table_rank": 16,
+        "avg": 1503,
+        "games": 19,
+        "hardness_rank": 2
+      },
+      {
+        "team": "八戸",
+        "table_rank": 17,
+        "avg": 1503,
+        "games": 19,
+        "hardness_rank": 3
+      },
+      {
+        "team": "栃木C",
+        "table_rank": 19,
+        "avg": 1503,
+        "games": 19,
+        "hardness_rank": 4
+      },
+      {
+        "team": "山形",
+        "table_rank": 15,
+        "avg": 1502,
+        "games": 19,
+        "hardness_rank": 5
+      },
+      {
+        "team": "今治",
+        "table_rank": 18,
+        "avg": 1502,
+        "games": 19,
+        "hardness_rank": 6
+      },
+      {
+        "team": "秋田",
+        "table_rank": 12,
+        "avg": 1501,
+        "games": 19,
+        "hardness_rank": 7
+      },
+      {
+        "team": "徳島",
+        "table_rank": 14,
+        "avg": 1501,
+        "games": 19,
+        "hardness_rank": 8
+      },
+      {
+        "team": "鳥栖",
+        "table_rank": 10,
+        "avg": 1500,
+        "games": 20,
+        "hardness_rank": 9
+      },
+      {
+        "team": "いわき",
+        "table_rank": 11,
+        "avg": 1500,
+        "games": 19,
+        "hardness_rank": 10
+      },
+      {
+        "team": "大分",
+        "table_rank": 13,
+        "avg": 1500,
+        "games": 20,
+        "hardness_rank": 11
+      },
+      {
+        "team": "磐田",
+        "table_rank": 9,
+        "avg": 1499,
+        "games": 19,
+        "hardness_rank": 12
+      },
+      {
+        "team": "仙台",
+        "table_rank": 3,
+        "avg": 1498,
+        "games": 19,
+        "hardness_rank": 13
+      },
+      {
+        "team": "横浜FC",
+        "table_rank": 4,
+        "avg": 1498,
+        "games": 19,
+        "hardness_rank": 14
+      },
+      {
+        "team": "大宮",
+        "table_rank": 5,
+        "avg": 1498,
+        "games": 19,
+        "hardness_rank": 15
+      },
+      {
+        "team": "札幌",
+        "table_rank": 7,
+        "avg": 1498,
+        "games": 19,
+        "hardness_rank": 16
+      },
+      {
+        "team": "湘南",
+        "table_rank": 8,
+        "avg": 1498,
+        "games": 19,
+        "hardness_rank": 17
+      },
+      {
+        "team": "新潟",
+        "table_rank": 1,
+        "avg": 1497,
+        "games": 19,
+        "hardness_rank": 18
+      },
+      {
+        "team": "富山",
+        "table_rank": 2,
+        "avg": 1497,
+        "games": 19,
+        "hardness_rank": 19
+      },
+      {
+        "team": "宮崎",
+        "table_rank": 6,
+        "avg": 1497,
+        "games": 19,
+        "hardness_rank": 20
+      }
+    ],
+    "gaps": [
+      {
+        "team": "仙台",
+        "table_rank": 3,
+        "elo_rank": 7,
+        "note": "実力以上に勝点を取れている"
+      },
+      {
+        "team": "湘南",
+        "table_rank": 8,
+        "elo_rank": 4,
+        "note": "実力の割に順位が低い（巻き返し候補）"
+      }
+    ],
+    "positions": [
+      {
+        "team": "新潟",
+        "table_rank": 1,
+        "most_likely": 1,
+        "low": 1,
+        "high": 7
+      },
+      {
+        "team": "富山",
+        "table_rank": 2,
+        "most_likely": 1,
+        "low": 1,
+        "high": 9
+      },
+      {
+        "team": "仙台",
+        "table_rank": 3,
+        "most_likely": 2,
+        "low": 1,
+        "high": 10
+      },
+      {
+        "team": "横浜FC",
+        "table_rank": 4,
+        "most_likely": 3,
+        "low": 1,
+        "high": 10
+      },
+      {
+        "team": "大宮",
+        "table_rank": 5,
+        "most_likely": 4,
+        "low": 2,
+        "high": 11
+      },
+      {
+        "team": "宮崎",
+        "table_rank": 6,
+        "most_likely": 4,
+        "low": 2,
+        "high": 11
+      },
+      {
+        "team": "札幌",
+        "table_rank": 7,
+        "most_likely": 5,
+        "low": 2,
+        "high": 11
+      },
+      {
+        "team": "湘南",
+        "table_rank": 8,
+        "most_likely": 5,
+        "low": 2,
+        "high": 11
+      },
+      {
+        "team": "磐田",
+        "table_rank": 9,
+        "most_likely": 9,
+        "low": 3,
+        "high": 13
+      },
+      {
+        "team": "鳥栖",
+        "table_rank": 10,
+        "most_likely": 11,
+        "low": 4,
+        "high": 15
+      },
+      {
+        "team": "いわき",
+        "table_rank": 11,
+        "most_likely": 13,
+        "low": 6,
+        "high": 16
+      },
+      {
+        "team": "秋田",
+        "table_rank": 12,
+        "most_likely": 12,
+        "low": 8,
+        "high": 17
+      },
+      {
+        "team": "大分",
+        "table_rank": 13,
+        "most_likely": 13,
+        "low": 7,
+        "high": 17
+      },
+      {
+        "team": "徳島",
+        "table_rank": 14,
+        "most_likely": 14,
+        "low": 8,
+        "high": 18
+      },
+      {
+        "team": "山形",
+        "table_rank": 15,
+        "most_likely": 15,
+        "low": 10,
+        "high": 18
+      },
+      {
+        "team": "藤枝",
+        "table_rank": 16,
+        "most_likely": 18,
+        "low": 12,
+        "high": 19
+      },
+      {
+        "team": "八戸",
+        "table_rank": 17,
+        "most_likely": 18,
+        "low": 13,
+        "high": 20
+      },
+      {
+        "team": "今治",
+        "table_rank": 18,
+        "most_likely": 18,
+        "low": 12,
+        "high": 19
+      },
+      {
+        "team": "栃木C",
+        "table_rank": 19,
+        "most_likely": 19,
+        "low": 14,
+        "high": 20
+      },
+      {
+        "team": "甲府",
+        "table_rank": 20,
+        "most_likely": 20,
+        "low": 16,
+        "high": 20
+      }
+    ]
+  },
+  "J3": {
+    "next_matches": [
+      {
+        "section": "第20節",
+        "date": "11/29",
+        "home": "栃木SC",
+        "home_rank": 12,
+        "away": "相模原",
+        "away_rank": 1,
+        "swing": 0.23120000000000002,
+        "rows": [
+          {
+            "team": "栃木SC",
+            "label": "昇格確率",
+            "now": 0.0245,
+            "win": 0.0397,
+            "draw": 0.0221,
+            "lose": 0.0097
+          },
+          {
+            "team": "相模原",
+            "label": "昇格確率",
+            "now": 0.4362,
+            "win": 0.5646,
+            "draw": 0.4264,
+            "lose": 0.3334
+          }
+        ]
+      },
+      {
+        "section": "第20節",
+        "date": "11/28",
+        "home": "高知",
+        "home_rank": 20,
+        "away": "奈良",
+        "away_rank": 5,
+        "swing": 0.2098,
+        "rows": [
+          {
+            "team": "高知",
+            "label": "降格確率",
+            "now": 0.3799,
+            "win": 0.2592,
+            "draw": 0.3948,
+            "lose": 0.469
+          },
+          {
+            "team": "奈良",
+            "label": "昇格確率",
+            "now": 0.24,
+            "win": 0.3285,
+            "draw": 0.2175,
+            "lose": 0.1616
+          }
+        ]
+      },
+      {
+        "section": "第20節",
+        "date": "11/29",
+        "home": "熊本",
+        "home_rank": 11,
+        "away": "FC大阪",
+        "away_rank": 2,
+        "swing": 0.20130000000000003,
+        "rows": [
+          {
+            "team": "熊本",
+            "label": "昇格確率",
+            "now": 0.0342,
+            "win": 0.0561,
+            "draw": 0.0269,
+            "lose": 0.0177
+          },
+          {
+            "team": "FC大阪",
+            "label": "昇格確率",
+            "now": 0.3516,
+            "win": 0.4675,
+            "draw": 0.3314,
+            "lose": 0.2662
+          }
+        ]
+      },
+      {
+        "section": "第20節",
+        "date": "11/29",
+        "home": "金沢",
+        "home_rank": 10,
+        "away": "岐阜",
+        "away_rank": 3,
+        "swing": 0.1878,
+        "rows": [
+          {
+            "team": "金沢",
+            "label": "昇格確率",
+            "now": 0.0379,
+            "win": 0.0683,
+            "draw": 0.0263,
+            "lose": 0.011
+          },
+          {
+            "team": "岐阜",
+            "label": "昇格確率",
+            "now": 0.2479,
+            "win": 0.3593,
+            "draw": 0.2383,
+            "lose": 0.1715
+          }
+        ]
+      },
+      {
+        "section": "第20節",
+        "date": "11/29",
+        "home": "琉球",
+        "home_rank": 7,
+        "away": "山口",
+        "away_rank": 6,
+        "swing": 0.18400000000000002,
+        "rows": [
+          {
+            "team": "琉球",
+            "label": "昇格確率",
+            "now": 0.0562,
+            "win": 0.0911,
+            "draw": 0.0476,
+            "lose": 0.0203
+          },
+          {
+            "team": "山口",
+            "label": "昇格確率",
+            "now": 0.2153,
+            "win": 0.3209,
+            "draw": 0.2134,
+            "lose": 0.1369
+          }
+        ]
+      },
+      {
+        "section": "第20節",
+        "date": "11/29",
+        "home": "鹿児島",
+        "home_rank": 4,
+        "away": "讃岐",
+        "away_rank": 17,
+        "swing": 0.17830000000000001,
+        "rows": [
+          {
+            "team": "鹿児島",
+            "label": "昇格確率",
+            "now": 0.2745,
+            "win": 0.3467,
+            "draw": 0.2375,
+            "lose": 0.1684
+          },
+          {
+            "team": "讃岐",
+            "label": "降格確率",
+            "now": 0.0883,
+            "win": 0.0392,
+            "draw": 0.0823,
+            "lose": 0.1145
+          }
+        ]
+      }
+    ],
+    "lines": [
+      {
+        "label": "自動昇格（2位）",
+        "median": 68,
+        "low": 64,
+        "high": 72
+      },
+      {
+        "label": "昇格PO圏（6位）",
+        "median": 60,
+        "low": 57,
+        "high": 62
+      },
+      {
+        "label": "自動降格回避（19位）",
+        "median": 35,
+        "low": 31,
+        "high": 39
+      }
+    ],
+    "schedule": [
+      {
+        "team": "群馬",
+        "table_rank": 19,
+        "avg": 1504,
+        "games": 19,
+        "hardness_rank": 1
+      },
+      {
+        "team": "高知",
+        "table_rank": 20,
+        "avg": 1504,
+        "games": 19,
+        "hardness_rank": 2
+      },
+      {
+        "team": "松本",
+        "table_rank": 15,
+        "avg": 1503,
+        "games": 19,
+        "hardness_rank": 3
+      },
+      {
+        "team": "滋賀",
+        "table_rank": 16,
+        "avg": 1503,
+        "games": 19,
+        "hardness_rank": 4
+      },
+      {
+        "team": "鳥取",
+        "table_rank": 18,
+        "avg": 1503,
+        "games": 19,
+        "hardness_rank": 5
+      },
+      {
+        "team": "讃岐",
+        "table_rank": 17,
+        "avg": 1502,
+        "games": 19,
+        "hardness_rank": 6
+      },
+      {
+        "team": "北九州",
+        "table_rank": 14,
+        "avg": 1501,
+        "games": 19,
+        "hardness_rank": 7
+      },
+      {
+        "team": "長野",
+        "table_rank": 8,
+        "avg": 1500,
+        "games": 19,
+        "hardness_rank": 8
+      },
+      {
+        "team": "愛媛",
+        "table_rank": 9,
+        "avg": 1500,
+        "games": 19,
+        "hardness_rank": 9
+      },
+      {
+        "team": "福島",
+        "table_rank": 13,
+        "avg": 1500,
+        "games": 19,
+        "hardness_rank": 10
+      },
+      {
+        "team": "琉球",
+        "table_rank": 7,
+        "avg": 1499,
+        "games": 19,
+        "hardness_rank": 11
+      },
+      {
+        "team": "金沢",
+        "table_rank": 10,
+        "avg": 1499,
+        "games": 19,
+        "hardness_rank": 12
+      },
+      {
+        "team": "熊本",
+        "table_rank": 11,
+        "avg": 1499,
+        "games": 19,
+        "hardness_rank": 13
+      },
+      {
+        "team": "栃木SC",
+        "table_rank": 12,
+        "avg": 1499,
+        "games": 19,
+        "hardness_rank": 14
+      },
+      {
+        "team": "岐阜",
+        "table_rank": 3,
+        "avg": 1498,
+        "games": 19,
+        "hardness_rank": 15
+      },
+      {
+        "team": "鹿児島",
+        "table_rank": 4,
+        "avg": 1498,
+        "games": 19,
+        "hardness_rank": 16
+      },
+      {
+        "team": "奈良",
+        "table_rank": 5,
+        "avg": 1498,
+        "games": 19,
+        "hardness_rank": 17
+      },
+      {
+        "team": "山口",
+        "table_rank": 6,
+        "avg": 1498,
+        "games": 19,
+        "hardness_rank": 18
+      },
+      {
+        "team": "相模原",
+        "table_rank": 1,
+        "avg": 1497,
+        "games": 19,
+        "hardness_rank": 19
+      },
+      {
+        "team": "FC大阪",
+        "table_rank": 2,
+        "avg": 1496,
+        "games": 19,
+        "hardness_rank": 20
+      }
+    ],
+    "gaps": [
+      {
+        "team": "長野",
+        "table_rank": 8,
+        "elo_rank": 12,
+        "note": "実力以上に勝点を取れている"
+      },
+      {
+        "team": "愛媛",
+        "table_rank": 9,
+        "elo_rank": 13,
+        "note": "実力以上に勝点を取れている"
+      }
+    ],
+    "positions": [
+      {
+        "team": "相模原",
+        "table_rank": 1,
+        "most_likely": 1,
+        "low": 1,
+        "high": 8
+      },
+      {
+        "team": "FC大阪",
+        "table_rank": 2,
+        "most_likely": 1,
+        "low": 1,
+        "high": 9
+      },
+      {
+        "team": "岐阜",
+        "table_rank": 3,
+        "most_likely": 3,
+        "low": 1,
+        "high": 10
+      },
+      {
+        "team": "鹿児島",
+        "table_rank": 4,
+        "most_likely": 1,
+        "low": 1,
+        "high": 10
+      },
+      {
+        "team": "奈良",
+        "table_rank": 5,
+        "most_likely": 2,
+        "low": 1,
+        "high": 10
+      },
+      {
+        "team": "山口",
+        "table_rank": 6,
+        "most_likely": 3,
+        "low": 1,
+        "high": 10
+      },
+      {
+        "team": "琉球",
+        "table_rank": 7,
+        "most_likely": 9,
+        "low": 3,
+        "high": 13
+      },
+      {
+        "team": "長野",
+        "table_rank": 8,
+        "most_likely": 11,
+        "low": 4,
+        "high": 14
+      },
+      {
+        "team": "愛媛",
+        "table_rank": 9,
+        "most_likely": 10,
+        "low": 4,
+        "high": 14
+      },
+      {
+        "team": "金沢",
+        "table_rank": 10,
+        "most_likely": 10,
+        "low": 4,
+        "high": 14
+      },
+      {
+        "team": "熊本",
+        "table_rank": 11,
+        "most_likely": 10,
+        "low": 4,
+        "high": 14
+      },
+      {
+        "team": "栃木SC",
+        "table_rank": 12,
+        "most_likely": 10,
+        "low": 5,
+        "high": 15
+      },
+      {
+        "team": "福島",
+        "table_rank": 13,
+        "most_likely": 13,
+        "low": 6,
+        "high": 16
+      },
+      {
+        "team": "北九州",
+        "table_rank": 14,
+        "most_likely": 14,
+        "low": 8,
+        "high": 17
+      },
+      {
+        "team": "松本",
+        "table_rank": 15,
+        "most_likely": 18,
+        "low": 12,
+        "high": 20
+      },
+      {
+        "team": "滋賀",
+        "table_rank": 16,
+        "most_likely": 18,
+        "low": 12,
+        "high": 20
+      },
+      {
+        "team": "讃岐",
+        "table_rank": 17,
+        "most_likely": 17,
+        "low": 12,
+        "high": 19
+      },
+      {
+        "team": "鳥取",
+        "table_rank": 18,
+        "most_likely": 18,
+        "low": 13,
+        "high": 20
+      },
+      {
+        "team": "群馬",
+        "table_rank": 19,
+        "most_likely": 19,
+        "low": 14,
+        "high": 20
+      },
+      {
+        "team": "高知",
+        "table_rank": 20,
+        "most_likely": 20,
+        "low": 15,
+        "high": 20
+      }
+    ]
+  },
+  "updated_at": "2026-11-25T21:32:05+09:00"
+}
